@@ -15,7 +15,7 @@ package org.sonatype.security.realms.kenai.internal;
 import java.util.Collections;
 
 import org.sonatype.nexus.configuration.application.NexusConfiguration;
-import org.sonatype.security.SecuritySystem;
+import org.sonatype.nexus.security.SecuritySystem;
 
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.realm.Realm;

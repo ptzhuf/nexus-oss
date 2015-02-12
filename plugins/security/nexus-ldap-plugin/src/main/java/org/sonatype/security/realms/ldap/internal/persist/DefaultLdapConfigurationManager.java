@@ -22,7 +22,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.sonatype.security.SecuritySystem;
+import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.security.realms.ldap.LdapPlugin;
 import org.sonatype.security.realms.ldap.internal.events.LdapClearCacheEvent;
 import org.sonatype.security.realms.ldap.internal.persist.entity.LdapConfiguration;

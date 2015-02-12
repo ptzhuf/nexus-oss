@@ -24,7 +24,7 @@ import org.sonatype.configuration.validation.InvalidConfigurationException;
 import org.sonatype.nexus.capability.CapabilityReference;
 import org.sonatype.nexus.capability.CapabilityRegistry;
 import org.sonatype.nexus.capability.support.CapabilityReferenceFilterBuilder;
-import org.sonatype.security.SecuritySystem;
+import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.security.realms.kenai.Kenai;
 import org.sonatype.security.realms.kenai.KenaiConfiguration;
 import org.sonatype.security.realms.kenai.internal.capability.KenaiCapability;

@@ -15,8 +15,8 @@ package org.sonatype.security.usermanagement;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.security.AbstractSecurityTestCase;
-import org.sonatype.security.SecuritySystem;
 import org.sonatype.security.model.Configuration;
 
 import junit.framework.Assert;

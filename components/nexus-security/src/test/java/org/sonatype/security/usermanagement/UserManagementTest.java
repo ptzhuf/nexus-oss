@@ -16,8 +16,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.security.AbstractSecurityTest;
-import org.sonatype.security.SecuritySystem;
 
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Binder;

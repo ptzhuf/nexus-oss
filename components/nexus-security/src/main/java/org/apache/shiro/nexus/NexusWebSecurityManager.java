@@ -16,7 +16,7 @@ package org.apache.shiro.nexus;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-import org.sonatype.security.UserIdMdcHelper;
+import org.sonatype.nexus.security.UserIdMdcHelper;
 import org.sonatype.security.events.AuthenticationEvent;
 import org.sonatype.sisu.goodies.common.Time;
 import org.sonatype.sisu.goodies.eventbus.EventBus;

@@ -16,7 +16,8 @@ import java.io.File;
 import java.util.Properties;
 
 import org.sonatype.nexus.common.io.DirSupport;
-import org.sonatype.security.guice.SecurityModule;
+import org.sonatype.nexus.security.SecurityModule;
+import org.sonatype.nexus.security.SecuritySystem;
 
 import com.google.inject.Binder;
 import net.sf.ehcache.CacheManager;

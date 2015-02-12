@@ -20,10 +20,10 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.sonatype.configuration.validation.InvalidConfigurationException;
+import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.nexus.security.filter.authc.AuthenticationTokenFactory;
 import org.sonatype.nexus.security.filter.authc.HttpHeaderAuthenticationToken;
 import org.sonatype.nexus.security.filter.authc.HttpHeaderAuthenticationTokenFactorySupport;
-import org.sonatype.security.SecuritySystem;
 
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;

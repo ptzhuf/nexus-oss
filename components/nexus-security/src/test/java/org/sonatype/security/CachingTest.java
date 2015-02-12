@@ -12,6 +12,7 @@
  */
 package org.sonatype.security;
 
+import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.security.realms.MockRealmB;
 import org.sonatype.security.usermanagement.User;
 

@@ -11,7 +11,7 @@
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
 
-package org.sonatype.security;
+package org.sonatype.nexus.security;
 
 import java.util.ArrayList;
 import java.util.Collection;

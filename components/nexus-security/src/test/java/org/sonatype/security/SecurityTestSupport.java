@@ -12,9 +12,9 @@
  */
 package org.sonatype.security;
 
+import org.sonatype.nexus.security.SecurityModule;
 import org.sonatype.security.configuration.source.PreconfiguredSecurityConfigurationSource;
 import org.sonatype.security.configuration.source.SecurityConfigurationSource;
-import org.sonatype.security.guice.SecurityModule;
 import org.sonatype.sisu.litmus.testsupport.TestUtil;
 
 import com.google.inject.Binder;

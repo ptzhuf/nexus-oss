@@ -29,9 +29,9 @@ import org.sonatype.nexus.proxy.targets.TargetPrivilegeGroupPropertyDescriptor
 import org.sonatype.nexus.proxy.targets.TargetPrivilegeRepositoryPropertyDescriptor
 import org.sonatype.nexus.proxy.targets.TargetPrivilegeRepositoryTargetPropertyDescriptor
 import org.sonatype.nexus.proxy.targets.TargetRegistry
+import org.sonatype.nexus.security.SecuritySystem
 import org.sonatype.nexus.validation.Create
 import org.sonatype.nexus.validation.Validate
-import org.sonatype.security.SecuritySystem
 import org.sonatype.security.authorization.AuthorizationManager
 import org.sonatype.security.authorization.Privilege
 import org.sonatype.security.realms.privileges.PrivilegeDescriptor

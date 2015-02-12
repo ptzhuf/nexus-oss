@@ -12,8 +12,8 @@
  */
 package org.sonatype.security.realms;
 
+import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.security.AbstractSecurityTest;
-import org.sonatype.security.SecuritySystem;
 import org.sonatype.security.authentication.AuthenticationException;
 
 import com.google.inject.Binder;

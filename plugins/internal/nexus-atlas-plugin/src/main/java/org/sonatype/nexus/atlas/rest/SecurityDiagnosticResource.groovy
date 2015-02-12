@@ -13,7 +13,7 @@
 package org.sonatype.nexus.atlas.rest
 
 import org.apache.shiro.authz.annotation.RequiresPermissions
-import org.sonatype.security.SecuritySystem
+import org.sonatype.nexus.security.SecuritySystem
 import org.sonatype.security.authorization.NoSuchPrivilegeException
 import org.sonatype.security.authorization.NoSuchRoleException
 import org.sonatype.security.usermanagement.User

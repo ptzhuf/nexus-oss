@@ -14,8 +14,8 @@ package org.sonatype.security.web;
 
 import java.util.List;
 
+import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.security.AbstractSecurityTest;
-import org.sonatype.security.SecuritySystem;
 
 import junit.framework.Assert;
 import org.apache.shiro.mgt.RealmSecurityManager;

@@ -21,10 +21,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.sonatype.nexus.proxy.access.Action;
 import org.sonatype.nexus.security.ClientInfo;
+import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.nexus.security.auth.NexusAuthorizationEvent;
 import org.sonatype.nexus.security.auth.ResourceInfo;
 import org.sonatype.nexus.web.RemoteIPFinder;
-import org.sonatype.security.SecuritySystem;
 import org.sonatype.sisu.goodies.eventbus.EventBus;
 
 import org.apache.shiro.subject.Subject;

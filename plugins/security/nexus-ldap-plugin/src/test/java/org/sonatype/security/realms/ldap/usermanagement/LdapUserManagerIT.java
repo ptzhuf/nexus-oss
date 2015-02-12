@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.sonatype.ldaptestsuite.LdapServer;
-import org.sonatype.security.SecuritySystem;
+import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.security.authorization.Role;
 import org.sonatype.security.configuration.model.SecurityConfiguration;
 import org.sonatype.security.model.Configuration;
@@ -40,7 +40,6 @@ import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.mockito.Mockito.mock;
 
 public class LdapUserManagerIT
     extends LdapITSupport

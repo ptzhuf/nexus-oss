@@ -23,12 +23,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.sonatype.nexus.SystemStatus;
+import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.nexus.web.BaseUrlHolder;
 import org.sonatype.nexus.web.RemoteIPFinder;
 import org.sonatype.nexus.web.TemplateRenderer;
 import org.sonatype.nexus.web.TemplateRenderer.TemplateLocator;
 import org.sonatype.nexus.web.internal.BrowserDetector;
-import org.sonatype.security.SecuritySystem;
 import org.sonatype.sisu.goodies.common.Loggers;
 import org.sonatype.sisu.goodies.eventbus.EventBus;
 

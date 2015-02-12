@@ -15,7 +15,7 @@ package org.sonatype.security.authorization;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.sonatype.security.DefaultSecuritySystemTest;
+import org.sonatype.nexus.security.DefaultSecuritySystemTest;
 
 /**
  * @see DefaultSecuritySystemTest

@@ -16,10 +16,11 @@ import java.io.File;
 import java.util.Properties;
 
 import org.sonatype.nexus.common.io.DirSupport;
+import org.sonatype.nexus.security.SecurityModule;
+import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.security.configuration.model.SecurityConfiguration;
 import org.sonatype.security.configuration.source.PreconfiguredSecurityConfigurationSource;
 import org.sonatype.security.configuration.source.SecurityConfigurationSource;
-import org.sonatype.security.guice.SecurityModule;
 import org.sonatype.security.model.Configuration;
 import org.sonatype.security.model.SecurityModelConfiguration;
 import org.sonatype.security.model.source.PreconfiguredSecurityModelConfigurationSource;

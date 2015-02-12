@@ -17,8 +17,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.security.AbstractSecurityTestCase;
-import org.sonatype.security.SecuritySystem;
 import org.sonatype.security.model.CUser;
 import org.sonatype.security.model.CUserRoleMapping;
 import org.sonatype.security.model.Configuration;

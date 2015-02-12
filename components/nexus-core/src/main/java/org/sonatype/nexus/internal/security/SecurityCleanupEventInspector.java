@@ -26,7 +26,7 @@ import org.sonatype.nexus.proxy.targets.TargetPrivilegeDescriptor;
 import org.sonatype.nexus.proxy.targets.TargetPrivilegeGroupPropertyDescriptor;
 import org.sonatype.nexus.proxy.targets.TargetPrivilegeRepositoryPropertyDescriptor;
 import org.sonatype.nexus.proxy.targets.TargetPrivilegeRepositoryTargetPropertyDescriptor;
-import org.sonatype.security.SecuritySystem;
+import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.security.authorization.AuthorizationManagerImpl;
 import org.sonatype.security.authorization.NoSuchAuthorizationManagerException;
 import org.sonatype.security.authorization.NoSuchPrivilegeException;

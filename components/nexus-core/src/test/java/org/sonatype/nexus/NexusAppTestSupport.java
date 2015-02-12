@@ -23,11 +23,11 @@ import org.sonatype.nexus.proxy.events.NexusStoppedEvent;
 import org.sonatype.nexus.proxy.maven.routing.Config;
 import org.sonatype.nexus.proxy.maven.routing.internal.ConfigImpl;
 import org.sonatype.nexus.scheduling.TaskScheduler;
+import org.sonatype.nexus.security.SecurityModule;
 import org.sonatype.nexus.templates.TemplateManager;
 import org.sonatype.nexus.templates.TemplateSet;
 import org.sonatype.nexus.templates.repository.RepositoryTemplate;
 import org.sonatype.nexus.threads.FakeAlmightySubject;
-import org.sonatype.security.guice.SecurityModule;
 import org.sonatype.sisu.goodies.eventbus.EventBus;
 
 import com.google.inject.Binder;
