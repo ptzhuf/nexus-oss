@@ -13,22 +13,24 @@
 
 package org.sonatype.nexus.rapture.internal.anonymous;
 
+import java.util.Set;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
+import com.google.common.collect.Sets;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.subject.SimplePrincipalCollection;
+import org.apache.shiro.authz.Permission;
+import org.apache.shiro.authz.permission.RolePermissionResolver;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ThreadContext;
 import org.apache.shiro.web.servlet.AdviceFilter;
-import org.apache.shiro.web.subject.support.WebDelegatingSubject;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import org.apache.shiro.web.subject.WebSubject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Anonymous filter, that should be LAST in the filter chain for paths allowing anonymous users.
@@ -42,58 +44,65 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class AnonymousFilter
     extends AdviceFilter
 {
+  private static final Logger log = LoggerFactory.getLogger(AnonymousFilter.class);
+
   public static final String NAME = "anonymous";
 
-  private static final String ORIGINAL_SUBJECT = AnonymousFilter.class.getName() + ".originalSubject";
+  private final AnonymousConfiguration anonymousConfiguration;
 
-  private final AnonymousConfiguration configuration;
+  private final RolePermissionResolver rolePermissionResolver;
 
   @Inject
-  public AnonymousFilter(final AnonymousConfiguration configuration) {
-    this.configuration = checkNotNull(configuration);
+  public AnonymousFilter(final AnonymousConfiguration anonymousConfiguration,
+                         final RolePermissionResolver rolePermissionResolver)
+  {
+    this.anonymousConfiguration = anonymousConfiguration;
+    this.rolePermissionResolver = rolePermissionResolver;
   }
 
-  private Subject anonymousSubject(final ServletRequest request, final ServletResponse response) {
-    // todo: not using Subhect.builder as override is happening here as safety net
-    final WebDelegatingSubject result = new WebDelegatingSubject(
-        new SimplePrincipalCollection(configuration.getPrincipal(), AnonymousRealm.NAME),
-        false /*authenticated*/,
-        request.getRemoteHost(),
-        null/*session*/,
-        false /*sessionCreationEnabled*/,
-        request,
-        response,
-        SecurityUtils.getSecurityManager() // inject maybe
-    )
-    {
-      // TODO: this override here should go away, is just a safety net for now
-      @Override
-      public void login(final AuthenticationToken token) throws AuthenticationException {
-        throw new RuntimeException(getClass().getSimpleName() + " filter misplaced, should be last of authc filters");
-      }
-    };
-    return result;
+  private Set<Permission> resolvePermissions(final Set<String> roles) {
+    final Set<Permission> permissions = Sets.newHashSet();
+    for (String role : roles) {
+      permissions.addAll(rolePermissionResolver.resolvePermissionsInRole(role));
+    }
+    return permissions;
+  }
+
+  private AnonymousSubject getAndWrap() {
+    final Subject subject = SecurityUtils.getSubject();
+    if (subject instanceof AnonymousSubject) {
+      return (AnonymousSubject) subject;
+    }
+    final Set<String> roles = anonymousConfiguration.getRoles();
+    final Set<Permission> permissions = resolvePermissions(roles);
+    final AnonymousSubject wrapped;
+    if (subject instanceof WebSubject) {
+      wrapped = new AnonymousWebSubject(anonymousConfiguration, roles, permissions, (WebSubject) subject);
+    }
+    else {
+      wrapped = new AnonymousSubject(anonymousConfiguration, roles, permissions, subject);
+    }
+    return wrapped;
   }
 
   @Override
   protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
-    final Subject subject = SecurityUtils.getSubject();
-    // we filter out subjects w/o principals, rememberMe subjects has principal but isAuthenticated=false
+    final AnonymousSubject subject = getAndWrap();
+    ThreadContext.bind(subject);
     if (subject.getPrincipal() == null) {
-      request.setAttribute(ORIGINAL_SUBJECT, subject);
-      ThreadContext.bind(anonymousSubject(request, response));
+      log.info("Setting anonymous");
+      subject.setAnonymous();
     }
     return true;
   }
 
   @Override
   public void afterCompletion(ServletRequest request, ServletResponse response, Exception exception) throws Exception {
-    final Subject originalSubject = (Subject) request.getAttribute(ORIGINAL_SUBJECT);
-    if (originalSubject != null) {
-      ThreadContext.bind(originalSubject);
-    }
-    else {
-      ThreadContext.unbindSubject();
+    final Subject subject = SecurityUtils.getSubject();
+    if (subject instanceof AnonymousSubject) {
+      final AnonymousSubject anonymousSubject = (AnonymousSubject) subject;
+      anonymousSubject.unsetAnonymous();
+      ThreadContext.bind(anonymousSubject.getSubject());
     }
   }
 }

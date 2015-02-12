@@ -10,46 +10,41 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
+
 package org.sonatype.nexus.rapture.internal.anonymous;
 
 import java.util.Set;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 
-import com.google.common.collect.Sets;
+import org.apache.shiro.authz.Permission;
+import org.apache.shiro.authz.permission.RolePermissionResolver;
+import org.apache.shiro.web.subject.WebSubject;
 
-/**
- * Current example configuration. Limitation assumption: you can assign only roles to anonymous user, no direct
- * permission assignment possible!
- */
-@Singleton
-@Named
-public class AnonymousConfiguration
+public class AnonymousWebSubject
+    extends AnonymousSubject
+    implements WebSubject
 {
-  private final boolean enabled;
+  private final WebSubject webSubject;
 
-  private final String principal;
-
-  private final Set<String> roles;
-
-  @Inject
-  public AnonymousConfiguration() {
-    this.enabled = true;
-    this.principal = "anonymous";
-    this.roles = Sets.newHashSet("anonymous");
+  public AnonymousWebSubject(
+      final AnonymousConfiguration anonymousConfiguration,
+      final Set<String> roles,
+      final Set<Permission> permissions,
+      final WebSubject webSubject)
+  {
+    super(anonymousConfiguration, roles, permissions, webSubject);
+    this.webSubject = webSubject;
   }
 
-  public boolean isEnabled() {
-    return enabled;
+  @Override
+  public ServletRequest getServletRequest() {
+    return webSubject.getServletRequest();
   }
 
-  public String getPrincipal() {
-    return principal;
-  }
-
-  public Set<String> getRoles() {
-    return roles;
+  @Override
+  public ServletResponse getServletResponse() {
+    return webSubject.getServletResponse();
   }
 }

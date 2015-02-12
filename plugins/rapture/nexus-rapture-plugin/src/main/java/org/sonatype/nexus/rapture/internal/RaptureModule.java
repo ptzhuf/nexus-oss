@@ -13,6 +13,7 @@
 package org.sonatype.nexus.rapture.internal;
 
 import javax.inject.Named;
+import javax.inject.Singleton;
 
 import org.sonatype.nexus.guice.FilterChainModule;
 import org.sonatype.nexus.rapture.internal.anonymous.AnonymousFilter;
@@ -42,7 +43,7 @@ public class RaptureModule
   @Override
   protected void configure() {
     bind(filterKey(SessionAuthenticationFilter.NAME)).to(SessionAuthenticationFilter.class);
-    bind(filterKey(AnonymousFilter.NAME)).to(AnonymousFilter.class);
+    bind(filterKey(AnonymousFilter.NAME)).to(AnonymousFilter.class).in(Singleton.class);
 
     install(new ServletModule()
     {
