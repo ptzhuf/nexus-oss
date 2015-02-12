@@ -15,6 +15,7 @@ package org.sonatype.nexus.rapture.internal;
 import javax.inject.Named;
 
 import org.sonatype.nexus.guice.FilterChainModule;
+import org.sonatype.nexus.rapture.internal.anonymous.AnonymousFilter;
 import org.sonatype.nexus.web.CookieFilter;
 import org.sonatype.nexus.web.SecurityFilter;
 
@@ -36,9 +37,12 @@ public class RaptureModule
 
   private static final String SESSION_MP = MOUNT_POINT + "/session";
 
+  private static final String PING_MP = MOUNT_POINT + "/ping";
+
   @Override
   protected void configure() {
     bind(filterKey(SessionAuthenticationFilter.NAME)).to(SessionAuthenticationFilter.class);
+    bind(filterKey(AnonymousFilter.NAME)).to(AnonymousFilter.class);
 
     install(new ServletModule()
     {
@@ -50,11 +54,22 @@ public class RaptureModule
       }
     });
 
+    install(new ServletModule()
+    {
+      @Override
+      protected void configureServlets() {
+        serve(PING_MP).with(PingServlet.class);
+        filter(PING_MP).through(SecurityFilter.class);
+        filter(PING_MP).through(CookieFilter.class);
+      }
+    });
+
     install(new FilterChainModule()
     {
       @Override
       protected void configure() {
         addFilterChain(SESSION_MP, SessionAuthenticationFilter.NAME);
+        addFilterChain(PING_MP, AnonymousFilter.NAME);
       }
     });
   }
