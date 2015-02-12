@@ -10,34 +10,38 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.security.configuration.source
 
-import org.sonatype.security.configuration.model.SecurityConfiguration
+package org.sonatype.security.configuration.source;
+
+import org.sonatype.security.configuration.model.SecurityConfiguration;
 
 /**
  * Pre-configured security configuration source.
  *
  * @since 3.0
  */
-class PreconfiguredSecurityConfigurationSource
-implements SecurityConfigurationSource
+public class PreconfiguredSecurityConfigurationSource
+    implements SecurityConfigurationSource
 {
+  private final SecurityConfiguration configuration;
 
-  final SecurityConfiguration configuration
-
-  PreconfiguredSecurityConfigurationSource(final SecurityConfiguration configuration) {
-    this.configuration = configuration
+  public PreconfiguredSecurityConfigurationSource(final SecurityConfiguration configuration) {
+    this.configuration = configuration;
   }
 
   @Override
-  void storeConfiguration() {
+  public SecurityConfiguration getConfiguration() {
+    return configuration;
+  }
+
+  @Override
+  public void storeConfiguration() {
     // do nothing
   }
 
   @Override
-  SecurityConfiguration loadConfiguration() {
-    return getConfiguration()
+  public SecurityConfiguration loadConfiguration() {
+    return getConfiguration();
   }
-
 }
 
