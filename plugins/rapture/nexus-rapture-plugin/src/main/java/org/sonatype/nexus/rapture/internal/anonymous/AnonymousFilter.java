@@ -13,6 +13,7 @@
 
 package org.sonatype.nexus.rapture.internal.anonymous;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import javax.servlet.ServletRequest;
@@ -21,10 +22,13 @@ import javax.servlet.ServletResponse;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ThreadContext;
 import org.apache.shiro.web.servlet.AdviceFilter;
 import org.apache.shiro.web.subject.support.WebDelegatingSubject;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Anonymous filter, that should be LAST in the filter chain for paths allowing anonymous users.
@@ -42,10 +46,17 @@ public class AnonymousFilter
 
   private static final String ORIGINAL_SUBJECT = AnonymousFilter.class.getName() + ".originalSubject";
 
+  private final AnonymousConfiguration configuration;
+
+  @Inject
+  public AnonymousFilter(final AnonymousConfiguration configuration) {
+    this.configuration = checkNotNull(configuration);
+  }
+
   private Subject anonymousSubject(final ServletRequest request, final ServletResponse response) {
     // todo: not using Subhect.builder as override is happening here as safety net
     final WebDelegatingSubject result = new WebDelegatingSubject(
-        AnonymousRealm.PRINCIPAL_COLLECTION,
+        new SimplePrincipalCollection(configuration.getPrincipal(), AnonymousRealm.NAME),
         false /*authenticated*/,
         request.getRemoteHost(),
         null/*session*/,

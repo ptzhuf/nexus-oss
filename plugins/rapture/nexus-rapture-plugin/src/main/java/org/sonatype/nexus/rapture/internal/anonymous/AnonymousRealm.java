@@ -16,17 +16,14 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import com.google.common.collect.Sets;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.authz.permission.RolePermissionResolver;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.eclipse.sisu.Description;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -49,22 +46,16 @@ public class AnonymousRealm
 
   public static final String DESCRIPTION = "Anonymous Access Realm";
 
-  public static final Object PRINCIPAL = "anonymous";
-
-  public static final Object CREDENTIALS = null;
-
-  public static final PrincipalCollection PRINCIPAL_COLLECTION =
-      new SimplePrincipalCollection(PRINCIPAL, NAME);
-
-  public static final AuthenticationInfo AUTHENTICATION_INFO =
-      new SimpleAuthenticationInfo(PRINCIPAL_COLLECTION, CREDENTIALS);
+  private final AnonymousConfiguration configuration;
 
   @Inject
-  public AnonymousRealm(final RolePermissionResolver rolePermissionResolver) {
-    checkNotNull(rolePermissionResolver);
+  public AnonymousRealm(final AnonymousConfiguration configuration,
+                        final RolePermissionResolver rolePermissionResolver)
+  {
+    this.configuration = checkNotNull(configuration);
+    setRolePermissionResolver(checkNotNull(rolePermissionResolver));
     setName(NAME); // for cache naming
     setAuthorizationCachingEnabled(true); // do cache authz result
-    setRolePermissionResolver(rolePermissionResolver); // source to resolve configured role(s) for anonymous
   }
 
   @Override
@@ -74,17 +65,15 @@ public class AnonymousRealm
 
   @Override
   protected AuthenticationInfo doGetAuthenticationInfo(final AuthenticationToken token) throws AuthenticationException {
-    // just return the same immutable
-    return AUTHENTICATION_INFO;
+    // no account could be associated with the specified token
+    return null;
   }
 
   @Override
   protected AuthorizationInfo doGetAuthorizationInfo(final PrincipalCollection principals) {
     if (principals.getRealmNames().contains(getName())) {
       // lookup from config, as a) result is cached, b) configuration (anon roles) might change
-      // TODO: "anonymous" role name should/could come from configuration
-      return new SimpleAuthorizationInfo(
-          Sets.newHashSet("anonymous")); // that's all folks, and leave Shiro to resolve it
+      return new SimpleAuthorizationInfo(configuration.getRoles());
     }
     else {
       return null;
