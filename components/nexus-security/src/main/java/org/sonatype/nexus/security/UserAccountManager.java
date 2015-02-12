@@ -25,20 +25,14 @@ import org.sonatype.security.usermanagement.UserNotFoundException;
  */
 public interface UserAccountManager
 {
-
   /**
    * Read the user account info
    */
-  User readAccount(String userId)
-      throws UserNotFoundException, AuthorizationException;
+  User readAccount(String userId) throws UserNotFoundException, AuthorizationException;
 
   /**
    * Update the account info, but do not change password
    */
   User updateAccount(User user)
-      throws InvalidConfigurationException,
-             UserNotFoundException,
-             NoSuchUserManagerException,
-             AuthorizationException;
-
+      throws InvalidConfigurationException, UserNotFoundException, NoSuchUserManagerException, AuthorizationException;
 }
