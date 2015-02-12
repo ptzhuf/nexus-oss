@@ -42,7 +42,6 @@ import org.sonatype.nexus.proxy.repository.ShadowRepository;
 import org.sonatype.nexus.proxy.security.PlexusConfiguredRealm;
 import org.sonatype.nexus.proxy.targets.Target;
 import org.sonatype.nexus.proxy.targets.TargetRegistry;
-import org.sonatype.nexus.security.WebSecurityUtil;
 import org.sonatype.security.SecuritySystem;
 import org.sonatype.security.authentication.AuthenticationException;
 import org.sonatype.security.configuration.source.PreconfiguredSecurityConfigurationSource;
@@ -427,7 +426,7 @@ public class DefaultRepositoryRouterTest
   private Subject loginUser(String username)
       throws AuthenticationException
   {
-    WebSecurityUtil.setupWebContext(username);
+    //WebSecurityUtil.setupWebContext(username);
     return this.securitySystem.login(new UsernamePasswordToken(username, ""));
   }
 

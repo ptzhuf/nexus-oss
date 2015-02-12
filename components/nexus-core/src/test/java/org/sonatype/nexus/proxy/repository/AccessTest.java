@@ -29,7 +29,6 @@ import org.sonatype.nexus.proxy.maven.maven2.Maven2ContentClass;
 import org.sonatype.nexus.proxy.security.PlexusConfiguredRealm;
 import org.sonatype.nexus.proxy.targets.Target;
 import org.sonatype.nexus.proxy.targets.TargetRegistry;
-import org.sonatype.nexus.security.WebSecurityUtil;
 import org.sonatype.security.SecuritySystem;
 import org.sonatype.security.authentication.AuthenticationException;
 
@@ -182,7 +181,7 @@ public class AccessTest
   private StorageItem getItem(String username, String repositoryId, String path)
       throws AuthenticationException, Exception
   {
-    WebSecurityUtil.setupWebContext(username + "-" + repositoryId + "-" + path);
+    //WebSecurityUtil.setupWebContext(username + "-" + repositoryId + "-" + path);
 
     SecuritySystem securitySystem = this.lookup(SecuritySystem.class);
 
