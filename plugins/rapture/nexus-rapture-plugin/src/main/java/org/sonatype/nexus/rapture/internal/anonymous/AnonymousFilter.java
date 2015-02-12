@@ -38,6 +38,8 @@ import org.apache.shiro.web.subject.support.WebDelegatingSubject;
 public class AnonymousFilter
     extends AdviceFilter
 {
+  public static final String NAME = "anonymous";
+
   private static final String ORIGINAL_SUBJECT = AnonymousFilter.class.getName() + ".originalSubject";
 
   private Subject anonymousSubject(final ServletRequest request, final ServletResponse response) {

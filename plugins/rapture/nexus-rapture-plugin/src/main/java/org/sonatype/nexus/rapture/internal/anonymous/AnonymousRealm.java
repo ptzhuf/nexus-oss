@@ -21,13 +21,13 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
-import org.apache.shiro.authc.credential.AllowAllCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.authz.permission.RolePermissionResolver;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
+import org.eclipse.sisu.Description;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -41,10 +41,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 @Singleton
 @Named(AnonymousRealm.NAME)
+@Description(AnonymousRealm.DESCRIPTION)
 public class AnonymousRealm
     extends AuthorizingRealm
 {
   public static final String NAME = "Anonymous";
+
+  public static final String DESCRIPTION = "Anonymous Access Realm";
 
   public static final Object PRINCIPAL = "anonymous";
 
@@ -59,11 +62,14 @@ public class AnonymousRealm
   @Inject
   public AnonymousRealm(final RolePermissionResolver rolePermissionResolver) {
     checkNotNull(rolePermissionResolver);
-    setRolePermissionResolver(rolePermissionResolver); // source to resolve configured role(s) for anonymous
     setName(NAME); // for cache naming
     setAuthorizationCachingEnabled(true); // do cache authz result
-    setCredentialsMatcher(new AllowAllCredentialsMatcher()); // do not check credentials at all
-    setAuthenticationTokenClass(AnonymousToken.class); // realm should be invoked only for AnonymousToken
+    setRolePermissionResolver(rolePermissionResolver); // source to resolve configured role(s) for anonymous
+  }
+
+  @Override
+  public boolean supports(final AuthenticationToken token) {
+    return false;
   }
 
   @Override
