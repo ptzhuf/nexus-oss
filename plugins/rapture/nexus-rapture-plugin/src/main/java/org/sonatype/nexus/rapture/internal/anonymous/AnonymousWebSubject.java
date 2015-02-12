@@ -15,11 +15,12 @@ package org.sonatype.nexus.rapture.internal.anonymous;
 
 import java.util.Set;
 
+import javax.annotation.Nullable;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 import org.apache.shiro.authz.Permission;
-import org.apache.shiro.authz.permission.RolePermissionResolver;
+import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.web.subject.WebSubject;
 
 public class AnonymousWebSubject
@@ -29,12 +30,12 @@ public class AnonymousWebSubject
   private final WebSubject webSubject;
 
   public AnonymousWebSubject(
-      final AnonymousConfiguration anonymousConfiguration,
+      final @Nullable PrincipalCollection anonymousIdentity,
       final Set<String> roles,
       final Set<Permission> permissions,
       final WebSubject webSubject)
   {
-    super(anonymousConfiguration, roles, permissions, webSubject);
+    super(anonymousIdentity, roles, permissions, webSubject);
     this.webSubject = webSubject;
   }
 

@@ -13,6 +13,7 @@
 
 package org.sonatype.nexus.rapture.internal.anonymous;
 
+import java.util.Collections;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -25,6 +26,8 @@ import com.google.common.collect.Sets;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.Permission;
 import org.apache.shiro.authz.permission.RolePermissionResolver;
+import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ThreadContext;
 import org.apache.shiro.web.servlet.AdviceFilter;
@@ -73,14 +76,21 @@ public class AnonymousFilter
     if (subject instanceof AnonymousSubject) {
       return (AnonymousSubject) subject;
     }
-    final Set<String> roles = anonymousConfiguration.getRoles();
-    final Set<Permission> permissions = resolvePermissions(roles);
+    // don't spend cpu cycles if disabled, but still, the subject should be replaced
+    // TODO: if enabled, these things could be cached, and rebuilt on config change
+    final boolean enabled = anonymousConfiguration.isEnabled();
+    final PrincipalCollection anonymousIdentity = enabled ?
+        new SimplePrincipalCollection(anonymousConfiguration.getPrincipal(), "n/a") : null;
+    final Set<String> roles = enabled ?
+        anonymousConfiguration.getRoles() : Collections.<String>emptySet();
+    final Set<Permission> permissions = enabled ?
+        resolvePermissions(roles) : Collections.<Permission>emptySet();
     final AnonymousSubject wrapped;
     if (subject instanceof WebSubject) {
-      wrapped = new AnonymousWebSubject(anonymousConfiguration, roles, permissions, (WebSubject) subject);
+      wrapped = new AnonymousWebSubject(anonymousIdentity, roles, permissions, (WebSubject) subject);
     }
     else {
-      wrapped = new AnonymousSubject(anonymousConfiguration, roles, permissions, subject);
+      wrapped = new AnonymousSubject(anonymousIdentity, roles, permissions, subject);
     }
     return wrapped;
   }
@@ -98,11 +108,10 @@ public class AnonymousFilter
 
   @Override
   public void afterCompletion(ServletRequest request, ServletResponse response, Exception exception) throws Exception {
-    final Subject subject = SecurityUtils.getSubject();
-    if (subject instanceof AnonymousSubject) {
-      final AnonymousSubject anonymousSubject = (AnonymousSubject) subject;
-      anonymousSubject.unsetAnonymous();
-      ThreadContext.bind(anonymousSubject.getSubject());
+    final AnonymousSubject subject = getAndWrap();
+    if (subject.isAnonymous()) {
+      log.info("Unsetting anonymous");
+      subject.unsetAnonymous();
     }
   }
 }

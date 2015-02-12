@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
+import javax.annotation.Nullable;
+
 import org.sonatype.sisu.goodies.common.ComponentSupport;
 
 import org.apache.shiro.authc.AuthenticationException;
@@ -39,7 +41,7 @@ public class AnonymousSubject
     extends ComponentSupport
     implements Subject
 {
-  private final AnonymousConfiguration anonymousConfiguration;
+  private final PrincipalCollection anonymousIdentity;
 
   private final PermissionResolver permissionResolver;
 
@@ -51,12 +53,12 @@ public class AnonymousSubject
 
   private PrincipalCollection anonymous;
 
-  public AnonymousSubject(final AnonymousConfiguration anonymousConfiguration,
+  public AnonymousSubject(final @Nullable PrincipalCollection anonymousIdentity,
                           final Set<String> roles,
                           final Set<Permission> permissions,
                           final Subject subject)
   {
-    this.anonymousConfiguration = checkNotNull(anonymousConfiguration);
+    this.anonymousIdentity = anonymousIdentity;
     this.permissionResolver = new WildcardPermissionResolver(); // TODO: this to be injected?
     this.roles = checkNotNull(roles);
     this.permissions = checkNotNull(permissions);
@@ -89,8 +91,8 @@ public class AnonymousSubject
   }
 
   public void setAnonymous() {
-    if (anonymousConfiguration.isEnabled() && subject.getPrincipals() == null) {
-      this.anonymous = new SimplePrincipalCollection(anonymousConfiguration.getPrincipal(), "n/a");
+    if (anonymousIdentity != null && subject.getPrincipals() == null) {
+      this.anonymous = anonymousIdentity;
     }
   }
 
