@@ -26,7 +26,9 @@ public class NexusAuthorizationEvent
 
   private final boolean successful;
 
-  public NexusAuthorizationEvent(final Object sender, final ClientInfo info, final ResourceInfo resInfo,
+  public NexusAuthorizationEvent(final Object sender,
+                                 final ClientInfo info,
+                                 final ResourceInfo resInfo,
                                  final boolean successful)
   {
     super(sender, info);

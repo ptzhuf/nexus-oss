@@ -29,7 +29,9 @@ public class ResourceInfo
 
   private final String accessedUri;
 
-  public ResourceInfo(final String accessProtocol, final String accessMethod, final Action action,
+  public ResourceInfo(final String accessProtocol,
+                      final String accessMethod,
+                      final Action action,
                       final String accessedUri)
   {
     this.accessProtocol = accessProtocol;
