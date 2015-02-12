@@ -11,7 +11,7 @@
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
 
-package org.sonatype.nexus.security.targets;
+package org.sonatype.nexus.proxy.targets;
 
 import java.util.List;
 

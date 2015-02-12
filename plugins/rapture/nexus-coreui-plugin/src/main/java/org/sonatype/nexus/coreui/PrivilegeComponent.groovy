@@ -24,11 +24,11 @@ import org.sonatype.nexus.extdirect.DirectComponentSupport
 import org.sonatype.nexus.proxy.registry.RepositoryRegistry
 import org.sonatype.nexus.proxy.repository.GroupRepository
 import org.sonatype.nexus.proxy.repository.Repository
+import org.sonatype.nexus.proxy.targets.TargetPrivilegeDescriptor
+import org.sonatype.nexus.proxy.targets.TargetPrivilegeGroupPropertyDescriptor
+import org.sonatype.nexus.proxy.targets.TargetPrivilegeRepositoryPropertyDescriptor
+import org.sonatype.nexus.proxy.targets.TargetPrivilegeRepositoryTargetPropertyDescriptor
 import org.sonatype.nexus.proxy.targets.TargetRegistry
-import org.sonatype.nexus.security.targets.TargetPrivilegeDescriptor
-import org.sonatype.nexus.security.targets.TargetPrivilegeGroupPropertyDescriptor
-import org.sonatype.nexus.security.targets.TargetPrivilegeRepositoryPropertyDescriptor
-import org.sonatype.nexus.security.targets.TargetPrivilegeRepositoryTargetPropertyDescriptor
 import org.sonatype.nexus.validation.Create
 import org.sonatype.nexus.validation.Validate
 import org.sonatype.security.SecuritySystem
