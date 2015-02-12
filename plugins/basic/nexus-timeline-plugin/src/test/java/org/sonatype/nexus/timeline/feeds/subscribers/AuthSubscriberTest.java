@@ -13,7 +13,7 @@
 package org.sonatype.nexus.timeline.feeds.subscribers;
 
 import org.sonatype.nexus.configuration.application.NexusConfiguration;
-import org.sonatype.nexus.security.auth.ClientInfo;
+import org.sonatype.nexus.security.ClientInfo;
 import org.sonatype.nexus.security.auth.NexusAuthenticationEvent;
 import org.sonatype.sisu.litmus.testsupport.TestSupport;
 

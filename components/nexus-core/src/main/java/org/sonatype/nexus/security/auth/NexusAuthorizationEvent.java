@@ -12,6 +12,8 @@
  */
 package org.sonatype.nexus.security.auth;
 
+import org.sonatype.nexus.security.ClientInfo;
+
 /**
  * Event fired in case of an authorization is tried against given resource.
  *

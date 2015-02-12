@@ -12,6 +12,8 @@
  */
 package org.sonatype.nexus.security.auth;
 
+import org.sonatype.nexus.security.ClientInfo;
+
 /**
  * Event fired when authentication validation is performed (someone tries to log in).
  *

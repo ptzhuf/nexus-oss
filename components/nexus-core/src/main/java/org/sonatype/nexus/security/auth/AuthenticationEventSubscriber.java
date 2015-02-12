@@ -18,6 +18,8 @@ import javax.inject.Provider;
 import javax.inject.Singleton;
 
 import org.sonatype.nexus.events.EventSubscriber;
+import org.sonatype.nexus.security.ClientInfo;
+import org.sonatype.nexus.security.ClientInfoProvider;
 import org.sonatype.security.events.AuthenticationEvent;
 import org.sonatype.sisu.goodies.eventbus.EventBus;
 

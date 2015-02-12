@@ -18,13 +18,13 @@ import javax.inject.Provider;
 import javax.inject.Singleton;
 import javax.servlet.http.HttpServletRequest;
 
-import org.sonatype.nexus.security.auth.ClientInfo;
-import org.sonatype.nexus.security.auth.ClientInfoProvider;
+import org.sonatype.nexus.security.ClientInfo;
+import org.sonatype.nexus.security.ClientInfoProvider;
 import org.sonatype.nexus.web.RemoteIPFinder;
 
 import com.google.common.net.HttpHeaders;
-import com.google.inject.ProvisionException;
 import com.google.inject.OutOfScopeException;
+import com.google.inject.ProvisionException;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 

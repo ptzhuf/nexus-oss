@@ -16,13 +16,14 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.sonatype.nexus.security.FilterProviderSupport;
 import org.sonatype.nexus.security.filter.authc.NexusApiKeyAuthenticationFilter;
 import org.sonatype.nexus.security.filter.authc.NexusAuthenticationFilter;
 import org.sonatype.nexus.security.filter.authz.FailureLoggingHttpMethodPermissionFilter;
 
 import com.google.inject.AbstractModule;
 
-import static org.sonatype.nexus.security.filter.FilterProviderSupport.filterKey;
+import static org.sonatype.nexus.security.FilterProviderSupport.filterKey;
 
 /**
  * Sets up Nexus's security filter configuration; this is a @Named module so it will be auto-installed by Sisu.

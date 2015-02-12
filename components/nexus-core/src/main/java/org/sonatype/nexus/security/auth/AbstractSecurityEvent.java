@@ -14,6 +14,8 @@ package org.sonatype.nexus.security.auth;
 
 import java.util.Date;
 
+import org.sonatype.nexus.security.ClientInfo;
+
 /**
  * Abstract helper class for security related events. It carries the "minimal" subset of authc/authz events: the client
  * information ("who").
