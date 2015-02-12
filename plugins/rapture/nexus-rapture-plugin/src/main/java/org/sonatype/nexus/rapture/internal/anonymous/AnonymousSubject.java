@@ -89,7 +89,7 @@ public class AnonymousSubject
   }
 
   public void setAnonymous() {
-    if (anonymousConfiguration.isEnabled()) {
+    if (anonymousConfiguration.isEnabled() && subject.getPrincipals() == null) {
       this.anonymous = new SimplePrincipalCollection(anonymousConfiguration.getPrincipal(), "n/a");
     }
   }
