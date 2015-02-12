@@ -28,12 +28,14 @@ import org.sonatype.nexus.proxy.RequestContext;
 import org.sonatype.nexus.proxy.ResourceStoreRequest;
 import org.sonatype.nexus.proxy.access.Action;
 import org.sonatype.nexus.proxy.router.RepositoryRouter;
-import org.sonatype.nexus.security.filter.authz.AbstractNexusAuthorizationFilter;
+import org.sonatype.nexus.security.filter.authz.FailureLoggingHttpMethodPermissionFilter;
 import org.sonatype.sisu.goodies.common.Loggers;
 
 import com.google.common.base.Strings;
 import org.apache.shiro.web.util.WebUtils;
 import org.slf4j.Logger;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * A filter that maps the targetId from the Request.
@@ -41,7 +43,7 @@ import org.slf4j.Logger;
  * @author cstamas
  */
 public class NexusTargetMappingAuthorizationFilter
-    extends AbstractNexusAuthorizationFilter
+    extends FailureLoggingHttpMethodPermissionFilter
 {
   /**
    * Request attribute key used to cache action, as in case of PUT verb it is doing heavy lifting.
@@ -50,10 +52,38 @@ public class NexusTargetMappingAuthorizationFilter
 
   private static final Logger log = Loggers.getLogger(NexusTargetMappingAuthorizationFilter.class);
 
-  @Inject
-  private RepositoryRouter rootRouter;
+  private final RepositoryRouter rootRouter;
+
+  private Pattern pathPrefixPattern;
+
+  private String pathPrefix;
 
   private String pathReplacement;
+
+  @Inject
+  public NexusTargetMappingAuthorizationFilter(final RepositoryRouter rootRouter) {
+    this.rootRouter = checkNotNull(rootRouter);
+  }
+
+  public String getPathPrefix() {
+    return pathPrefix;
+  }
+
+  public void setPathPrefix(String pathPrefix) {
+    this.pathPrefix = pathPrefix;
+
+    if (pathPrefix != null) {
+      setPathPrefixPattern(Pattern.compile(pathPrefix));
+    }
+  }
+
+  protected void setPathPrefixPattern(Pattern pathPrefixPattern) {
+    this.pathPrefixPattern = pathPrefixPattern;
+  }
+
+  protected Pattern getPathPrefixPattern() {
+    return pathPrefixPattern;
+  }
 
   public String getPathReplacement() {
     if (pathReplacement == null) {
