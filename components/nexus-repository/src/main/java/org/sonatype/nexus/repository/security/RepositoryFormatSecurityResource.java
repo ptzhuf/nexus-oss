@@ -15,8 +15,8 @@ package org.sonatype.nexus.repository.security;
 
 import org.sonatype.nexus.repository.Format;
 import org.sonatype.nexus.repository.Repository;
+import org.sonatype.nexus.security.model.MutableDynamicSecurityResource;
 import org.sonatype.nexus.security.model.SecurityModelConfiguration;
-import org.sonatype.nexus.security.resource.MutableDynamicSecurityResource;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.sonatype.nexus.repository.security.BreadActions.ADD;

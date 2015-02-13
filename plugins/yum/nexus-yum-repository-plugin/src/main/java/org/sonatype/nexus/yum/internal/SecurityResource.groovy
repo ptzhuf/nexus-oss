@@ -15,7 +15,7 @@ package org.sonatype.nexus.yum.internal
 import org.sonatype.nexus.security.model.CPrivilege
 import org.sonatype.nexus.security.model.CRole
 import org.sonatype.nexus.security.model.Configuration
-import org.sonatype.nexus.security.resource.StaticSecurityResource
+import org.sonatype.nexus.security.model.StaticSecurityResource
 
 import javax.inject.Named
 import javax.inject.Singleton

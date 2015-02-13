@@ -10,33 +10,23 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.security.resource
+package org.sonatype.nexus.security.model
 
-import org.sonatype.nexus.security.model.CPrivilege
-import org.sonatype.nexus.security.model.CRole
-import org.sonatype.nexus.security.model.Configuration
+import javax.inject.Singleton
 
 /**
  * @since 3.0
  */
-class StaticSecurityResource3
+@Singleton
+class StaticSecurityResource2
 implements StaticSecurityResource
 {
-
-  private static int INSTANCE_COUNT = 1;
-
-  private String privId = "priv-" + INSTANCE_COUNT++;
-
-  public String getId() {
-    return privId;
-  }
-
   @Override
   Configuration getConfiguration() {
     return new Configuration(
         privileges: [
             new CPrivilege(
-                id: '4-test-' + privId,
+                id: '4-test',
                 type: 'method',
                 name: '4-test',
                 description: '',
@@ -46,7 +36,7 @@ implements StaticSecurityResource
                 ])
             ,
             new CPrivilege(
-                id: '5-test-' + privId,
+                id: '5-test',
                 type: 'method',
                 name: '5-test',
                 description: '',
@@ -56,7 +46,7 @@ implements StaticSecurityResource
                 ])
             ,
             new CPrivilege(
-                id: '6-test-' + privId,
+                id: '6-test',
                 type: 'method',
                 name: '6-test',
                 description: '',

@@ -11,15 +11,13 @@
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
 
-package org.sonatype.nexus.security.resource;
+package org.sonatype.nexus.security.model;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.sonatype.nexus.common.concurrent.Locks;
-import org.sonatype.nexus.security.model.Configuration;
-import org.sonatype.nexus.security.model.SecurityModelConfiguration;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
 
 import static com.google.common.base.Preconditions.checkNotNull;

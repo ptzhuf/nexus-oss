@@ -28,11 +28,11 @@ import org.sonatype.nexus.proxy.registry.ContentClass;
 import org.sonatype.nexus.proxy.registry.RepositoryRegistry;
 import org.sonatype.nexus.proxy.registry.RepositoryTypeRegistry;
 import org.sonatype.nexus.proxy.registry.RootContentClass;
+import org.sonatype.nexus.security.model.AbstractDynamicSecurityResource;
 import org.sonatype.nexus.security.model.CPrivilege;
 import org.sonatype.nexus.security.model.CRole;
 import org.sonatype.nexus.security.model.Configuration;
-import org.sonatype.nexus.security.resource.AbstractDynamicSecurityResource;
-import org.sonatype.nexus.security.resource.DynamicSecurityResource;
+import org.sonatype.nexus.security.model.DynamicSecurityResource;
 import org.sonatype.security.realms.tools.ConfigurationManager;
 import org.sonatype.sisu.goodies.eventbus.EventBus;
 
