@@ -17,10 +17,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.sonatype.configuration.validation.InvalidConfigurationException;
+import org.sonatype.nexus.security.model.CPrivilege;
+import org.sonatype.nexus.security.model.CRole;
+import org.sonatype.nexus.security.model.CUser;
 import org.sonatype.security.AbstractSecurityTestCase;
-import org.sonatype.security.model.CPrivilege;
-import org.sonatype.security.model.CRole;
-import org.sonatype.security.model.CUser;
 import org.sonatype.security.realms.tools.DefaultConfigurationManager;
 
 import com.google.common.base.Charsets;

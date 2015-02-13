@@ -10,28 +10,27 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.security.model.source;
-
-import org.sonatype.security.model.SecurityModelConfiguration;
+package org.sonatype.nexus.security.model
 
 /**
- * Source of {@link SecurityModelConfiguration}.
+ * Pre-configured security model configuration source.
+ *
+ * @since 3.0
  */
-public interface SecurityModelConfigurationSource
+class PreconfiguredSecurityModelConfigurationSource
+implements SecurityModelConfigurationSource
 {
 
-  /**
-   * Gets the current configuration.
-   *
-   * @return the configuration, null if not loaded
-   */
-  SecurityModelConfiguration getConfiguration();
+  SecurityModelConfiguration configuration
 
-  /**
-   * Forces reloading the user configuration.
-   *
-   * @return the configuration
-   */
-  SecurityModelConfiguration loadConfiguration();
+  PreconfiguredSecurityModelConfigurationSource(final SecurityModelConfiguration configuration) {
+    this.configuration = configuration
+  }
+
+  @Override
+  SecurityModelConfiguration loadConfiguration() {
+    return getConfiguration()
+  }
 
 }
+

@@ -15,10 +15,10 @@ package org.sonatype.nexus.security.user;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.sonatype.nexus.security.model.CUser;
+import org.sonatype.nexus.security.model.CUserRoleMapping;
+import org.sonatype.nexus.security.model.Configuration;
 import org.sonatype.security.AbstractSecurityTestCase;
-import org.sonatype.security.model.CUser;
-import org.sonatype.security.model.CUserRoleMapping;
-import org.sonatype.security.model.Configuration;
 import org.sonatype.security.realms.tools.ConfigurationManager;
 import org.sonatype.security.realms.tools.DefaultConfigurationManager;
 

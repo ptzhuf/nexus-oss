@@ -12,7 +12,7 @@
  */
 package org.sonatype.security.realms.tools;
 
-import org.sonatype.security.model.SecurityModelConfiguration;
+import org.sonatype.nexus.security.model.SecurityModelConfiguration;
 
 // FIXME: This appears to be unused, consider removing (and related bits in DefaultConfigurationManager)
 

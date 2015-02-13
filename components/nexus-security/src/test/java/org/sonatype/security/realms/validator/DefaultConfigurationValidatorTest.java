@@ -16,8 +16,8 @@ import java.util.ArrayList;
 
 import org.sonatype.configuration.validation.ValidationRequest;
 import org.sonatype.configuration.validation.ValidationResponse;
-import org.sonatype.security.model.CPrivilege;
-import org.sonatype.security.model.CRole;
+import org.sonatype.nexus.security.model.CPrivilege;
+import org.sonatype.nexus.security.model.CRole;
 
 import org.eclipse.sisu.launch.InjectedTestCase;
 

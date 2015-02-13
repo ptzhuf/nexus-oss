@@ -12,7 +12,7 @@
  */
 package org.sonatype.security.realms.tools;
 
-import org.sonatype.security.model.SecurityModelConfiguration;
+import org.sonatype.nexus.security.model.SecurityModelConfiguration;
 
 /**
  * Will handle cleaning existing configuration when an item is removed

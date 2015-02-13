@@ -16,9 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.sonatype.nexus.security.model.Configuration;
 import org.sonatype.nexus.security.role.RoleIdentifier;
 import org.sonatype.security.AbstractSecurityTestCase;
-import org.sonatype.security.model.Configuration;
 
 import junit.framework.Assert;
 

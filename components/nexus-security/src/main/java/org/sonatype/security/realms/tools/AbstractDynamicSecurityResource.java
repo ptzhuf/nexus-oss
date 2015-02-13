@@ -12,7 +12,7 @@
  */
 package org.sonatype.security.realms.tools;
 
-import org.sonatype.security.model.Configuration;
+import org.sonatype.nexus.security.model.Configuration;
 
 /**
  * An abstract class that removes the boiler plate code of reading in the dynamic security configuration.

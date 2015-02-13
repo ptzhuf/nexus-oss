@@ -12,11 +12,11 @@
  */
 package org.sonatype.nexus.security.user
 
-import org.sonatype.security.model.CPrivilege
-import org.sonatype.security.model.CRole
-import org.sonatype.security.model.CUser
-import org.sonatype.security.model.CUserRoleMapping
-import org.sonatype.security.model.Configuration
+import org.sonatype.nexus.security.model.CPrivilege
+import org.sonatype.nexus.security.model.CRole
+import org.sonatype.nexus.security.model.CUser
+import org.sonatype.nexus.security.model.CUserRoleMapping
+import org.sonatype.nexus.security.model.Configuration
 
 /**
  * @since 3.0

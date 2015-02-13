@@ -20,7 +20,7 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.sonatype.nexus.orient.OClassNameBuilder;
-import org.sonatype.security.model.CUserRoleMapping;
+import org.sonatype.nexus.security.model.CUserRoleMapping;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
 
 import com.google.common.base.Function;

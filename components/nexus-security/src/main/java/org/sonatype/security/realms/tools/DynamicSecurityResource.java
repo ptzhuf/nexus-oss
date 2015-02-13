@@ -12,7 +12,7 @@
  */
 package org.sonatype.security.realms.tools;
 
-import org.sonatype.security.model.SecurityModelConfiguration;
+import org.sonatype.nexus.security.model.SecurityModelConfiguration;
 
 /**
  * A DynamicSecurityResource all for other components/plugins to contributes users/roles/privileges to the security

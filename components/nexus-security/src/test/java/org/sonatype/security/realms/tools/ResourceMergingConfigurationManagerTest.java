@@ -15,10 +15,10 @@ package org.sonatype.security.realms.tools;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.sonatype.nexus.security.model.CPrivilege;
+import org.sonatype.nexus.security.model.CRole;
+import org.sonatype.nexus.security.model.Configuration;
 import org.sonatype.security.AbstractSecurityTestCase;
-import org.sonatype.security.model.CPrivilege;
-import org.sonatype.security.model.CRole;
-import org.sonatype.security.model.Configuration;
 
 import com.google.inject.Binder;
 import com.google.inject.name.Names;

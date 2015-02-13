@@ -17,14 +17,14 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.sonatype.nexus.security.model.CPrivilege;
+import org.sonatype.nexus.security.model.CRole;
+import org.sonatype.nexus.security.model.Configuration;
 import org.sonatype.nexus.security.privilege.NoSuchPrivilegeException;
 import org.sonatype.nexus.security.privilege.Privilege;
 import org.sonatype.nexus.security.role.NoSuchRoleException;
 import org.sonatype.nexus.security.role.Role;
 import org.sonatype.security.AbstractSecurityTestCase;
-import org.sonatype.security.model.CPrivilege;
-import org.sonatype.security.model.CRole;
-import org.sonatype.security.model.Configuration;
 import org.sonatype.security.realms.tools.ConfigurationManager;
 
 import junit.framework.Assert;

@@ -20,11 +20,11 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.sonatype.nexus.orient.MemoryDatabaseManager
 import org.sonatype.nexus.orient.MinimalDatabaseServer
-import org.sonatype.security.model.CPrivilege
-import org.sonatype.security.model.CRole
-import org.sonatype.security.model.CUserRoleMapping
-import org.sonatype.security.model.SecurityModelConfiguration
-import org.sonatype.security.model.source.StaticSecurityModelConfigurationSource
+import org.sonatype.nexus.security.model.CPrivilege
+import org.sonatype.nexus.security.model.CRole
+import org.sonatype.nexus.security.model.CUserRoleMapping
+import org.sonatype.nexus.security.model.SecurityModelConfiguration
+import org.sonatype.nexus.security.model.StaticSecurityModelConfigurationSource
 import org.sonatype.security.realms.tools.DefaultSecurityConfigurationCleaner
 import org.sonatype.security.realms.tools.SecurityConfigurationCleaner
 import org.sonatype.sisu.litmus.testsupport.TestSupport

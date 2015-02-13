@@ -22,12 +22,12 @@ import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.nexus.security.authc.AuthenticatingRealmImpl;
 import org.sonatype.nexus.security.authz.AuthorizationManager;
 import org.sonatype.nexus.security.authz.AuthorizingRealmImpl;
+import org.sonatype.nexus.security.model.CPrivilege;
 import org.sonatype.nexus.security.privilege.MethodPrivilegeDescriptor;
 import org.sonatype.nexus.security.user.User;
 import org.sonatype.nexus.security.user.UserSearchCriteria;
 import org.sonatype.nexus.security.user.UserStatus;
 import org.sonatype.security.AbstractSecurityTestCase;
-import org.sonatype.security.model.CPrivilege;
 import org.sonatype.security.realms.tools.DefaultConfigurationManager;
 
 import junit.framework.Assert;

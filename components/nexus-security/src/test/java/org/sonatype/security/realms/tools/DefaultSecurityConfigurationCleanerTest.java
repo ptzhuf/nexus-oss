@@ -12,9 +12,9 @@
  */
 package org.sonatype.security.realms.tools;
 
-import org.sonatype.security.model.CRole;
-import org.sonatype.security.model.CUserRoleMapping;
-import org.sonatype.security.model.Configuration;
+import org.sonatype.nexus.security.model.CRole;
+import org.sonatype.nexus.security.model.CUserRoleMapping;
+import org.sonatype.nexus.security.model.Configuration;
 import org.sonatype.sisu.litmus.testsupport.TestSupport;
 
 import org.junit.Before;

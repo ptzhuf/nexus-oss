@@ -16,11 +16,11 @@ import java.util.Set;
 
 import org.sonatype.configuration.validation.ValidationRequest;
 import org.sonatype.configuration.validation.ValidationResponse;
-import org.sonatype.security.model.CPrivilege;
-import org.sonatype.security.model.CRole;
-import org.sonatype.security.model.CUser;
-import org.sonatype.security.model.CUserRoleMapping;
-import org.sonatype.security.model.Configuration;
+import org.sonatype.nexus.security.model.CPrivilege;
+import org.sonatype.nexus.security.model.CRole;
+import org.sonatype.nexus.security.model.CUser;
+import org.sonatype.nexus.security.model.CUserRoleMapping;
+import org.sonatype.nexus.security.model.Configuration;
 
 public interface SecurityConfigurationValidator
 {

@@ -12,9 +12,9 @@
  */
 package org.sonatype.nexus.internal
 
-import org.sonatype.security.model.CPrivilege
-import org.sonatype.security.model.CRole
-import org.sonatype.security.model.Configuration
+import org.sonatype.nexus.security.model.CPrivilege
+import org.sonatype.nexus.security.model.CRole
+import org.sonatype.nexus.security.model.Configuration
 import org.sonatype.security.realms.tools.StaticSecurityResource
 
 import javax.inject.Named

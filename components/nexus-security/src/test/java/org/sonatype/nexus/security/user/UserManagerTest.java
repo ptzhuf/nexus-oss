@@ -18,12 +18,12 @@ import java.util.List;
 import java.util.Set;
 
 import org.sonatype.nexus.security.SecuritySystem;
+import org.sonatype.nexus.security.model.CUser;
+import org.sonatype.nexus.security.model.CUserRoleMapping;
+import org.sonatype.nexus.security.model.Configuration;
+import org.sonatype.nexus.security.model.SecurityModelConfiguration;
 import org.sonatype.nexus.security.role.RoleIdentifier;
 import org.sonatype.security.AbstractSecurityTestCase;
-import org.sonatype.security.model.CUser;
-import org.sonatype.security.model.CUserRoleMapping;
-import org.sonatype.security.model.Configuration;
-import org.sonatype.security.model.SecurityModelConfiguration;
 import org.sonatype.security.realms.tools.ConfigurationManager;
 
 import junit.framework.Assert;

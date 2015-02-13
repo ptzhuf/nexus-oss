@@ -12,9 +12,9 @@
  */
 package org.sonatype.security.realms.tools;
 
+import org.sonatype.nexus.security.model.CPrivilege;
+import org.sonatype.nexus.security.model.Configuration;
 import org.sonatype.nexus.security.privilege.MethodPrivilegeDescriptor;
-import org.sonatype.security.model.CPrivilege;
-import org.sonatype.security.model.Configuration;
 
 public class UnitTestDynamicSecurityResource
     extends AbstractDynamicSecurityResource

@@ -17,7 +17,7 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.sonatype.nexus.repository.Repository;
-import org.sonatype.security.model.SecurityModelConfiguration;
+import org.sonatype.nexus.security.model.SecurityModelConfiguration;
 import org.sonatype.security.realms.tools.MutableDynamicSecurityResource;
 
 import static com.google.common.base.Preconditions.checkNotNull;
