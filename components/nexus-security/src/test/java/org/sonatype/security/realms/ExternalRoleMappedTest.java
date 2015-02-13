@@ -19,11 +19,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.sonatype.nexus.security.SecuritySystem;
+import org.sonatype.nexus.security.privilege.MethodPrivilegeDescriptor;
 import org.sonatype.security.AbstractSecurityTestCase;
 import org.sonatype.security.authorization.AuthorizationException;
 import org.sonatype.security.authorization.Privilege;
 import org.sonatype.security.authorization.Role;
-import org.sonatype.security.realms.privileges.MethodPrivilegeDescriptor;
 import org.sonatype.security.usermanagement.MockUserManager;
 import org.sonatype.security.usermanagement.UserManager;
 

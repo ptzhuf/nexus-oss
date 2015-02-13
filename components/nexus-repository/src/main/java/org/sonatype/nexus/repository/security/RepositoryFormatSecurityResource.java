@@ -24,7 +24,7 @@ import static org.sonatype.nexus.repository.security.BreadActions.BROWSE;
 import static org.sonatype.nexus.repository.security.BreadActions.DELETE;
 import static org.sonatype.nexus.repository.security.BreadActions.EDIT;
 import static org.sonatype.nexus.repository.security.BreadActions.READ;
-import static org.sonatype.security.realms.privileges.PrivilegeDescriptorSupport.ALL;
+import static org.sonatype.nexus.security.privilege.PrivilegeDescriptorSupport.ALL;
 
 /**
  * Repository format security resource.

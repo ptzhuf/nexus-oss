@@ -25,13 +25,13 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.sonatype.nexus.security.privilege.PrivilegeDescriptor;
 import org.sonatype.security.authorization.NoSuchPrivilegeException;
 import org.sonatype.security.authorization.NoSuchRoleException;
 import org.sonatype.security.events.AuthorizationConfigurationChanged;
 import org.sonatype.security.events.SecurityConfigurationChanged;
 import org.sonatype.security.model.CPrivilege;
 import org.sonatype.security.model.CRole;
-import org.sonatype.security.realms.privileges.PrivilegeDescriptor;
 import org.sonatype.security.realms.tools.ConfigurationManager;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
 import org.sonatype.sisu.goodies.eventbus.EventBus;

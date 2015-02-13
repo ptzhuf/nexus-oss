@@ -18,10 +18,10 @@ import javax.inject.Singleton;
 
 import org.sonatype.configuration.validation.ValidationMessage;
 import org.sonatype.configuration.validation.ValidationResponse;
+import org.sonatype.nexus.security.privilege.AbstractPrivilegeDescriptor;
+import org.sonatype.nexus.security.privilege.MethodPrivilegeDescriptor;
+import org.sonatype.nexus.security.privilege.PrivilegeDescriptor;
 import org.sonatype.security.model.CPrivilege;
-import org.sonatype.security.realms.privileges.AbstractPrivilegeDescriptor;
-import org.sonatype.security.realms.privileges.MethodPrivilegeDescriptor;
-import org.sonatype.security.realms.privileges.PrivilegeDescriptor;
 import org.sonatype.security.realms.validator.SecurityValidationContext;
 
 import org.codehaus.plexus.util.StringUtils;

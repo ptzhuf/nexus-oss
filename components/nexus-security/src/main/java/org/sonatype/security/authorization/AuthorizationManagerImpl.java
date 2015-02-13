@@ -22,11 +22,11 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.sonatype.configuration.validation.InvalidConfigurationException;
+import org.sonatype.nexus.security.privilege.MethodPrivilegeDescriptor;
+import org.sonatype.nexus.security.privilege.PrivilegeDescriptor;
 import org.sonatype.security.events.AuthorizationConfigurationChanged;
 import org.sonatype.security.model.CPrivilege;
 import org.sonatype.security.model.CRole;
-import org.sonatype.security.realms.privileges.MethodPrivilegeDescriptor;
-import org.sonatype.security.realms.privileges.PrivilegeDescriptor;
 import org.sonatype.security.realms.tools.ConfigurationManager;
 import org.sonatype.sisu.goodies.eventbus.EventBus;
 
