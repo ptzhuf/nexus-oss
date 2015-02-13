@@ -10,12 +10,9 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.security;
+package org.sonatype.nexus.security.user;
 
 import org.sonatype.configuration.validation.InvalidConfigurationException;
-import org.sonatype.nexus.security.user.NoSuchUserManagerException;
-import org.sonatype.nexus.security.user.User;
-import org.sonatype.nexus.security.user.UserNotFoundException;
 import org.sonatype.security.authorization.AuthorizationException;
 
 /**
