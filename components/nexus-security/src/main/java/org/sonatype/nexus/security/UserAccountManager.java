@@ -13,10 +13,10 @@
 package org.sonatype.nexus.security;
 
 import org.sonatype.configuration.validation.InvalidConfigurationException;
+import org.sonatype.nexus.security.user.NoSuchUserManagerException;
+import org.sonatype.nexus.security.user.User;
+import org.sonatype.nexus.security.user.UserNotFoundException;
 import org.sonatype.security.authorization.AuthorizationException;
-import org.sonatype.security.usermanagement.NoSuchUserManagerException;
-import org.sonatype.security.usermanagement.User;
-import org.sonatype.security.usermanagement.UserNotFoundException;
 
 /**
  * Provides functionality to read and update basic user data.

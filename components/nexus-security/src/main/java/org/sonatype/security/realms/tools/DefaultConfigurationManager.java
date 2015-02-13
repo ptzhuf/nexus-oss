@@ -28,6 +28,8 @@ import org.sonatype.configuration.validation.InvalidConfigurationException;
 import org.sonatype.configuration.validation.ValidationMessage;
 import org.sonatype.configuration.validation.ValidationResponse;
 import org.sonatype.nexus.common.text.Strings2;
+import org.sonatype.nexus.security.user.UserManagerImpl;
+import org.sonatype.nexus.security.user.UserNotFoundException;
 import org.sonatype.security.authorization.NoSuchPrivilegeException;
 import org.sonatype.security.authorization.NoSuchRoleException;
 import org.sonatype.security.events.AuthorizationConfigurationChanged;
@@ -40,8 +42,6 @@ import org.sonatype.security.model.SecurityModelConfiguration;
 import org.sonatype.security.model.source.SecurityModelConfigurationSource;
 import org.sonatype.security.realms.validator.SecurityConfigurationValidator;
 import org.sonatype.security.realms.validator.SecurityValidationContext;
-import org.sonatype.security.usermanagement.UserManagerImpl;
-import org.sonatype.security.usermanagement.UserNotFoundException;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
 import org.sonatype.sisu.goodies.eventbus.EventBus;
 

@@ -16,8 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.sonatype.nexus.security.SecuritySystem;
+import org.sonatype.nexus.security.user.User;
 import org.sonatype.security.AbstractSecurityTest;
-import org.sonatype.security.usermanagement.User;
 
 import junit.framework.Assert;
 

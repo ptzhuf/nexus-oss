@@ -17,10 +17,10 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.sonatype.configuration.validation.InvalidConfigurationException;
+import org.sonatype.nexus.security.user.NoSuchUserManagerException;
+import org.sonatype.nexus.security.user.User;
+import org.sonatype.nexus.security.user.UserNotFoundException;
 import org.sonatype.security.authorization.AuthorizationException;
-import org.sonatype.security.usermanagement.NoSuchUserManagerException;
-import org.sonatype.security.usermanagement.User;
-import org.sonatype.security.usermanagement.UserNotFoundException;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
 
 /**

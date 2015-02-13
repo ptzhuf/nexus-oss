@@ -32,16 +32,16 @@ import org.sonatype.nexus.extdirect.model.Password
 import org.sonatype.nexus.extdirect.model.StoreLoadParameters
 import org.sonatype.nexus.security.SecuritySystem
 import org.sonatype.nexus.security.UserAccountManager
+import org.sonatype.nexus.security.user.RoleIdentifier
+import org.sonatype.nexus.security.user.User
+import org.sonatype.nexus.security.user.UserManager
+import org.sonatype.nexus.security.user.UserManagerImpl
+import org.sonatype.nexus.security.user.UserSearchCriteria
 import org.sonatype.nexus.util.Tokens
 import org.sonatype.nexus.validation.Create
 import org.sonatype.nexus.validation.Update
 import org.sonatype.nexus.validation.Validate
 import org.sonatype.nexus.wonderland.AuthTicketService
-import org.sonatype.security.usermanagement.RoleIdentifier
-import org.sonatype.security.usermanagement.User
-import org.sonatype.security.usermanagement.UserManager
-import org.sonatype.security.usermanagement.UserManagerImpl
-import org.sonatype.security.usermanagement.UserSearchCriteria
 
 import javax.annotation.Nullable
 import javax.inject.Inject

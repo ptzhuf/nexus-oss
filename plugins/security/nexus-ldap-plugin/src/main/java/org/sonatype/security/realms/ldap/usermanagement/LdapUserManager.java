@@ -20,19 +20,18 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.sonatype.nexus.security.user.AbstractReadOnlyUserManager;
+import org.sonatype.nexus.security.user.RoleIdentifier;
+import org.sonatype.nexus.security.user.User;
+import org.sonatype.nexus.security.user.UserNotFoundException;
+import org.sonatype.nexus.security.user.UserNotFoundTransientException;
+import org.sonatype.nexus.security.user.UserSearchCriteria;
+import org.sonatype.nexus.security.user.UserStatus;
 import org.sonatype.security.realms.ldap.LdapPlugin;
-
 import org.sonatype.security.realms.ldap.internal.connector.dao.LdapDAOException;
 import org.sonatype.security.realms.ldap.internal.connector.dao.LdapUser;
 import org.sonatype.security.realms.ldap.internal.connector.dao.NoSuchLdapUserException;
 import org.sonatype.security.realms.ldap.internal.realms.LdapManager;
-import org.sonatype.security.usermanagement.AbstractReadOnlyUserManager;
-import org.sonatype.security.usermanagement.User;
-import org.sonatype.security.usermanagement.RoleIdentifier;
-import org.sonatype.security.usermanagement.UserNotFoundException;
-import org.sonatype.security.usermanagement.UserNotFoundTransientException;
-import org.sonatype.security.usermanagement.UserSearchCriteria;
-import org.sonatype.security.usermanagement.UserStatus;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

@@ -16,9 +16,9 @@ import javax.enterprise.inject.Typed;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.sonatype.security.usermanagement.RoleIdentifier;
-import org.sonatype.security.usermanagement.User;
-import org.sonatype.security.usermanagement.UserManager;
+import org.sonatype.nexus.security.user.RoleIdentifier;
+import org.sonatype.nexus.security.user.User;
+import org.sonatype.nexus.security.user.UserManager;
 
 @Singleton
 @Typed(UserManager.class)

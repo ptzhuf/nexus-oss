@@ -13,9 +13,9 @@
 package org.sonatype.nexus.rutauth.internal;
 
 import org.sonatype.nexus.security.SecuritySystem;
-import org.sonatype.security.usermanagement.User;
-import org.sonatype.security.usermanagement.UserManager;
-import org.sonatype.security.usermanagement.UserNotFoundException;
+import org.sonatype.nexus.security.user.User;
+import org.sonatype.nexus.security.user.UserManager;
+import org.sonatype.nexus.security.user.UserNotFoundException;
 import org.sonatype.sisu.litmus.testsupport.TestSupport;
 
 import com.google.common.collect.ImmutableList;

@@ -27,6 +27,8 @@ import org.sonatype.nexus.events.EventSubscriber;
 import org.sonatype.nexus.orient.DatabaseInstance;
 import org.sonatype.nexus.proxy.events.NexusInitializedEvent;
 import org.sonatype.nexus.proxy.events.NexusStoppingEvent;
+import org.sonatype.nexus.security.user.UserManagerImpl;
+import org.sonatype.nexus.security.user.UserNotFoundException;
 import org.sonatype.security.authorization.NoSuchPrivilegeException;
 import org.sonatype.security.authorization.NoSuchRoleException;
 import org.sonatype.security.model.CPrivilege;
@@ -36,8 +38,6 @@ import org.sonatype.security.model.CUserRoleMapping;
 import org.sonatype.security.model.SecurityModelConfiguration;
 import org.sonatype.security.model.source.SecurityModelConfigurationSource;
 import org.sonatype.security.realms.tools.NoSuchRoleMappingException;
-import org.sonatype.security.usermanagement.UserManagerImpl;
-import org.sonatype.security.usermanagement.UserNotFoundException;
 import org.sonatype.sisu.goodies.lifecycle.LifecycleSupport;
 
 import com.google.common.collect.ImmutableList;

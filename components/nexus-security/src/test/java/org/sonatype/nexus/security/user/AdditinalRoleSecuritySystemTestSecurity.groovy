@@ -10,7 +10,7 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.security.usermanagement
+package org.sonatype.nexus.security.user
 
 import org.sonatype.security.model.CPrivilege
 import org.sonatype.security.model.CRole
@@ -21,7 +21,7 @@ import org.sonatype.security.model.Configuration
 /**
  * @since 3.0
  */
-class MissingRoleUserManagerTestSecurity
+class AdditinalRoleSecuritySystemTestSecurity
 {
 
   static Configuration securityModel() {
@@ -72,12 +72,12 @@ class MissingRoleUserManagerTestSecurity
             ),
             new CUserRoleMapping(
                 userId: 'jcoder',
-                source: 'MockUserLocatorA',
-                roles: ['INVALID-ROLE-BLA-BLA', 'Role1']
+                source: 'MockUserManagerA',
+                roles: ['Role1']
             ),
             new CUserRoleMapping(
                 userId: 'dknudsen',
-                source: 'MockUserLocatorA',
+                source: 'MockUserManagerA',
                 roles: ['Role2']
             )
         ],
@@ -140,7 +140,8 @@ class MissingRoleUserManagerTestSecurity
                 id: 'Role3',
                 name: 'RoleThree',
                 description: 'Role Three',
-                privileges: ['1', '4']
+                privileges: ['1', '4'],
+                roles: ['Role1']
             )
         ]
     )

@@ -10,7 +10,7 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.security.usermanagement
+package org.sonatype.nexus.security.user
 
 import org.sonatype.security.model.CPrivilege
 import org.sonatype.security.model.CRole
@@ -21,7 +21,7 @@ import org.sonatype.security.model.Configuration
 /**
  * @since 3.0
  */
-class UserManagerTestSecurity
+class EmptyRoleManagementTestSecurity
 {
 
   static Configuration securityModel() {
@@ -37,16 +37,21 @@ class UserManagerTestSecurity
             new CUser(
                 id: 'test-user',
                 password: 'b2a0e378437817cebdf753d7dff3dd75483af9e0',
-                firstName: 'Test',
-                lastName: 'User',
+                firstName: 'Test User',
                 status: 'active',
                 email: 'changeme1@yourcompany.com'
             ),
             new CUser(
+                id: 'test-user-with-empty-role',
+                password: 'b2a0e378437817cebdf753d7dff3dd75483af9e0',
+                firstName: 'Test User With Empty Role',
+                status: 'active',
+                email: 'empty-role@yourcompany.com'
+            ),
+            new CUser(
                 id: 'anonymous',
                 password: '0a92fab3230134cca6eadd9898325b9b2ae67998',
-                firstName: 'Anonynmous',
-                lastName: 'User',
+                firstName: 'Anonynmous User',
                 status: 'active',
                 email: 'changeme2@yourcompany.com'
             )
@@ -54,7 +59,7 @@ class UserManagerTestSecurity
         userRoleMappings: [
             new CUserRoleMapping(
                 userId: 'other-user',
-                source: 'default',
+                source: 'other-realm',
                 roles: ['role2', 'role3']
             ),
             new CUserRoleMapping(
@@ -66,6 +71,11 @@ class UserManagerTestSecurity
                 userId: 'test-user',
                 source: 'default',
                 roles: ['role1', 'role2']
+            ),
+            new CUserRoleMapping(
+                userId: 'test-user-with-empty-role',
+                source: 'default',
+                roles: ['empty-role', 'role1', 'role2']
             ),
             new CUserRoleMapping(
                 userId: 'anonymous',
@@ -81,7 +91,7 @@ class UserManagerTestSecurity
                 description: '',
                 properties: [
                     'method': 'read',
-                    'permission': '/some/path/'
+                    'permission': '/some/path1/'
                 ]
             ),
             new CPrivilege(
@@ -91,7 +101,7 @@ class UserManagerTestSecurity
                 description: '',
                 properties: [
                     'method': 'read',
-                    'permission': '/some/path/'
+                    'permission': '/some/path2/'
                 ]
             ),
             new CPrivilege(
@@ -133,6 +143,11 @@ class UserManagerTestSecurity
                 name: 'RoleThree',
                 description: 'Role Three',
                 privileges: ['1', '4']
+            ),
+            new CRole(
+                id: 'empty-role',
+                name: 'Empty Role',
+                description: 'Empty Role',
             )
         ]
     )

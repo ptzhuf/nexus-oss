@@ -12,9 +12,9 @@
  */
 package org.sonatype.security.realms.ldap.usermanagement;
 
+import org.sonatype.nexus.security.user.User;
 import org.sonatype.security.realms.ldap.internal.connector.dao.LdapUser;
 import org.sonatype.security.realms.ldap.internal.realms.LdapManager;
-import org.sonatype.security.usermanagement.User;
 import org.sonatype.sisu.litmus.testsupport.TestSupport;
 
 import org.junit.Before;

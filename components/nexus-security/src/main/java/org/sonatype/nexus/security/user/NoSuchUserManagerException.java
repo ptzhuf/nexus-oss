@@ -10,26 +10,28 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.security.usermanagement;
+package org.sonatype.nexus.security.user;
 
 /**
- * Thrown when a user could not be found due to a temporary condition, for example when an LDAP server is unavailable.
- * Repeating the operation may succeed in the future without any intervention by the application.
+ * Thrown when UserManager could not be found.
  */
-public class UserNotFoundTransientException
-    extends UserNotFoundException
+public class NoSuchUserManagerException
+    extends Exception
 {
-  private static final long serialVersionUID = 7565547428483146620L;
+  private static final long serialVersionUID = -2561129270233203244L;
 
-  public UserNotFoundTransientException(String userId, String message, Throwable cause) {
-    super(userId, message, cause);
+  public NoSuchUserManagerException() {
   }
 
-  public UserNotFoundTransientException(String userId, String message) {
-    super(userId, message);
+  public NoSuchUserManagerException(String message, Throwable cause) {
+    super(message, cause);
   }
 
-  public UserNotFoundTransientException(String userId) {
-    super(userId);
+  public NoSuchUserManagerException(String message) {
+    super(message);
+  }
+
+  public NoSuchUserManagerException(Throwable cause) {
+    super(cause);
   }
 }

@@ -16,13 +16,13 @@ import java.util.List;
 import java.util.Set;
 
 import org.sonatype.configuration.validation.InvalidConfigurationException;
+import org.sonatype.nexus.security.user.UserNotFoundException;
 import org.sonatype.security.authorization.NoSuchPrivilegeException;
 import org.sonatype.security.authorization.NoSuchRoleException;
 import org.sonatype.security.model.CPrivilege;
 import org.sonatype.security.model.CRole;
 import org.sonatype.security.model.CUser;
 import org.sonatype.security.model.CUserRoleMapping;
-import org.sonatype.security.usermanagement.UserNotFoundException;
 
 /**
  * The ConfigurationManager is a facade in front of the security modello model. It supports CRUD operations for

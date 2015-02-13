@@ -16,15 +16,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.sonatype.nexus.security.user.RoleIdentifier;
+import org.sonatype.nexus.security.user.User;
+import org.sonatype.nexus.security.user.UserStatus;
 import org.sonatype.security.AbstractSecurityTest;
 import org.sonatype.security.authentication.AuthenticationException;
 import org.sonatype.security.authorization.AuthorizationException;
 import org.sonatype.security.authorization.AuthorizationManager;
 import org.sonatype.security.authorization.MockAuthorizationManagerB;
 import org.sonatype.security.authorization.Role;
-import org.sonatype.security.usermanagement.RoleIdentifier;
-import org.sonatype.security.usermanagement.User;
-import org.sonatype.security.usermanagement.UserStatus;
 
 import com.google.inject.Binder;
 import com.google.inject.Singleton;

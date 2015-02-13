@@ -10,17 +10,28 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.security.usermanagement;
+package org.sonatype.nexus.security.user;
+
+import java.util.Set;
+
+import org.sonatype.configuration.validation.InvalidConfigurationException;
 
 /**
- * Thrown if the password isn't correct on reset password.
+ * Extends the UserManager interface to allow a UserManager to add roles to users from other UserManagers.
+ *
+ * For example, a User might come from a JDBC UserManager, but has additional roles mapped in Nexus.
  */
-public class InvalidCredentialsException
-    extends Exception
+public interface RoleMappingUserManager
+    extends UserManager
 {
-  private static final long serialVersionUID = 294536984704055394L;
+  /**
+   * Returns a list of roles for a user.
+   */
+  Set<RoleIdentifier> getUsersRoles(String userId, String userSource) throws UserNotFoundException;
 
-  public InvalidCredentialsException() {
-    super("Invalid credentials supplied!");
-  }
+  /**
+   * Sets a users roles.
+   */
+  void setUsersRoles(String userId, String userSource, Set<RoleIdentifier> roleIdentifiers)
+      throws UserNotFoundException, InvalidConfigurationException;
 }

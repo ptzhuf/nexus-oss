@@ -16,10 +16,10 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.sonatype.security.usermanagement.AbstractUserManager;
-import org.sonatype.security.usermanagement.User;
-import org.sonatype.security.usermanagement.UserNotFoundException;
-import org.sonatype.security.usermanagement.UserSearchCriteria;
+import org.sonatype.nexus.security.user.AbstractUserManager;
+import org.sonatype.nexus.security.user.User;
+import org.sonatype.nexus.security.user.UserNotFoundException;
+import org.sonatype.nexus.security.user.UserSearchCriteria;
 
 public abstract class MockUserManagerSupport
     extends AbstractUserManager

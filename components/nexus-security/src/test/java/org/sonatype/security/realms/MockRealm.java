@@ -18,9 +18,9 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.sonatype.security.usermanagement.RoleIdentifier;
-import org.sonatype.security.usermanagement.UserManager;
-import org.sonatype.security.usermanagement.UserNotFoundException;
+import org.sonatype.nexus.security.user.RoleIdentifier;
+import org.sonatype.nexus.security.user.UserManager;
+import org.sonatype.nexus.security.user.UserNotFoundException;
 
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;

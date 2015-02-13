@@ -13,12 +13,11 @@
 package org.sonatype.security.realms.ldap.usermanagement;
 
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 import org.sonatype.ldaptestsuite.LdapServerConfiguration;
+import org.sonatype.nexus.security.user.UserManager;
+import org.sonatype.nexus.security.user.UserNotFoundException;
 import org.sonatype.security.realms.ldap.internal.LdapITSupport;
-import org.sonatype.security.usermanagement.UserManager;
-import org.sonatype.security.usermanagement.UserNotFoundException;
 
 import com.google.common.collect.Maps;
 import org.junit.Test;
