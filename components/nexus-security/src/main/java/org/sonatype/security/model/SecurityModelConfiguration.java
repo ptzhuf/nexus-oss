@@ -17,9 +17,9 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 
+import org.sonatype.nexus.security.authz.NoSuchPrivilegeException;
+import org.sonatype.nexus.security.authz.NoSuchRoleException;
 import org.sonatype.nexus.security.user.UserNotFoundException;
-import org.sonatype.security.authorization.NoSuchPrivilegeException;
-import org.sonatype.security.authorization.NoSuchRoleException;
 import org.sonatype.security.realms.tools.NoSuchRoleMappingException;
 
 /**

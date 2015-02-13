@@ -19,7 +19,7 @@ import javax.inject.Inject;
 import org.sonatype.configuration.validation.ValidationMessage;
 import org.sonatype.configuration.validation.ValidationResponse;
 import org.sonatype.nexus.common.text.Strings2;
-import org.sonatype.security.authorization.WildcardPermission2;
+import org.sonatype.nexus.security.authz.WildcardPermission2;
 import org.sonatype.security.model.CPrivilege;
 import org.sonatype.security.realms.validator.ConfigurationIdGenerator;
 import org.sonatype.security.realms.validator.SecurityValidationContext;

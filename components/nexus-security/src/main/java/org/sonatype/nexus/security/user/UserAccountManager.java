@@ -13,7 +13,7 @@
 package org.sonatype.nexus.security.user;
 
 import org.sonatype.configuration.validation.InvalidConfigurationException;
-import org.sonatype.security.authorization.AuthorizationException;
+import org.sonatype.nexus.security.authz.AuthorizationException;
 
 /**
  * Provides functionality to read and update basic user data.

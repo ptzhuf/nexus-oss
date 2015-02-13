@@ -10,28 +10,27 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.security.authorization;
+package org.sonatype.nexus.security.authz;
+
+import org.apache.shiro.authz.permission.WildcardPermission;
 
 /**
- * Thrown when a Role could not be found.
+ * {@link WildcardPermission} which caches {@link #hashCode} for improved performance.
+ *
+ * @since 3.0
  */
-public class NoSuchRoleException
-    extends Exception
+public class WildcardPermission2
+  extends WildcardPermission
 {
-  private static final long serialVersionUID = -3551757972830003397L;
+  private final int cachedHash;
 
-  public NoSuchRoleException() {
+  public WildcardPermission2(final String wildcardString) {
+    super(wildcardString);
+    this.cachedHash = super.hashCode();
   }
 
-  public NoSuchRoleException(String message, Throwable cause) {
-    super(message, cause);
-  }
-
-  public NoSuchRoleException(String message) {
-    super(message);
-  }
-
-  public NoSuchRoleException(Throwable cause) {
-    super(cause);
+  @Override
+  public int hashCode() {
+    return cachedHash;
   }
 }

@@ -19,13 +19,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.sonatype.nexus.security.SecuritySystem;
+import org.sonatype.nexus.security.authz.AuthorizationException;
+import org.sonatype.nexus.security.authz.Privilege;
+import org.sonatype.nexus.security.authz.Role;
 import org.sonatype.nexus.security.privilege.MethodPrivilegeDescriptor;
 import org.sonatype.nexus.security.user.MockUserManager;
 import org.sonatype.nexus.security.user.UserManager;
 import org.sonatype.security.AbstractSecurityTestCase;
-import org.sonatype.security.authorization.AuthorizationException;
-import org.sonatype.security.authorization.Privilege;
-import org.sonatype.security.authorization.Role;
 
 import com.google.inject.Binder;
 import com.google.inject.Singleton;

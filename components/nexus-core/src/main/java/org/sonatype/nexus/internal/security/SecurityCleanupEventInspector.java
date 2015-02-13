@@ -24,10 +24,10 @@ import org.sonatype.nexus.proxy.events.RepositoryRegistryEventRemove;
 import org.sonatype.nexus.proxy.events.TargetRegistryEventRemove;
 import org.sonatype.nexus.proxy.targets.TargetPrivilegeDescriptor;
 import org.sonatype.nexus.security.SecuritySystem;
-import org.sonatype.security.authorization.AuthorizationManagerImpl;
-import org.sonatype.security.authorization.NoSuchAuthorizationManagerException;
-import org.sonatype.security.authorization.NoSuchPrivilegeException;
-import org.sonatype.security.authorization.Privilege;
+import org.sonatype.nexus.security.authz.AuthorizationManagerImpl;
+import org.sonatype.nexus.security.authz.NoSuchAuthorizationManagerException;
+import org.sonatype.nexus.security.authz.NoSuchPrivilegeException;
+import org.sonatype.nexus.security.authz.Privilege;
 import org.sonatype.security.realms.tools.ConfigurationManager;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
 

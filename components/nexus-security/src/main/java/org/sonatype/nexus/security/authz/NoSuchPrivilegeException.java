@@ -10,30 +10,28 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.security.authentication;
-
-// FIXME: Replace with Shiro version of this exception
+package org.sonatype.nexus.security.authz;
 
 /**
- * Thrown when a Subject or Principal could not be authenticated.
+ * Thrown when a Privilege could not be found.
  */
-public class AuthenticationException
+public class NoSuchPrivilegeException
     extends Exception
 {
-  private static final long serialVersionUID = 5307046352518675119L;
+  private static final long serialVersionUID = 820651866330926246L;
 
-  public AuthenticationException() {
+  public NoSuchPrivilegeException() {
   }
 
-  public AuthenticationException(String message) {
+  public NoSuchPrivilegeException(String message, Throwable cause) {
+    super(message, cause);
+  }
+
+  public NoSuchPrivilegeException(String message) {
     super(message);
   }
 
-  public AuthenticationException(Throwable cause) {
+  public NoSuchPrivilegeException(Throwable cause) {
     super(cause);
-  }
-
-  public AuthenticationException(String message, Throwable cause) {
-    super(message, cause);
   }
 }

@@ -10,32 +10,17 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.security.authorization;
+package org.sonatype.nexus.security.authz;
 
-// FIXME: Replace with Shiro version of this exception
+import java.util.List;
 
 /**
- * Thrown when authorization fails.
- *
- * @author Brian Demers
+ * Allows for an method to inherit from another. For example: 'delete' imply that a user has access to 'read'.
  */
-public class AuthorizationException
-    extends Exception
+public interface PrivilegeInheritanceManager
 {
-  private static final long serialVersionUID = -2410686526069723485L;
-
-  public AuthorizationException() {
-  }
-
-  public AuthorizationException(String message) {
-    super(message);
-  }
-
-  public AuthorizationException(Throwable cause) {
-    super(cause);
-  }
-
-  public AuthorizationException(String message, Throwable cause) {
-    super(message, cause);
-  }
+  /**
+   * Retrieve a list of methods that are inherited by the requested method
+   */
+  List<String> getInheritedMethods(String method);
 }

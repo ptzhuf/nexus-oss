@@ -18,7 +18,7 @@ import javax.inject.Singleton;
 import javax.naming.NamingException;
 import javax.naming.ldap.LdapContext;
 
-import org.sonatype.security.authentication.AuthenticationException;
+import org.sonatype.nexus.security.authc.AuthenticationException;
 import org.sonatype.security.realms.ldap.internal.connector.dao.LdapUser;
 import org.sonatype.security.realms.ldap.internal.connector.dao.password.PasswordEncoderManager;
 

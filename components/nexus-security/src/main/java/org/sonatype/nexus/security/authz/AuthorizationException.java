@@ -10,28 +10,32 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.security.authorization;
+package org.sonatype.nexus.security.authz;
+
+// FIXME: Replace with Shiro version of this exception
 
 /**
- * Thrown when an AuthorizationManager could not be found.
+ * Thrown when authorization fails.
+ *
+ * @author Brian Demers
  */
-public class NoSuchAuthorizationManagerException
+public class AuthorizationException
     extends Exception
 {
-  private static final long serialVersionUID = -9130834235862218360L;
+  private static final long serialVersionUID = -2410686526069723485L;
 
-  public NoSuchAuthorizationManagerException() {
+  public AuthorizationException() {
   }
 
-  public NoSuchAuthorizationManagerException(String message, Throwable cause) {
-    super(message, cause);
-  }
-
-  public NoSuchAuthorizationManagerException(String message) {
+  public AuthorizationException(String message) {
     super(message);
   }
 
-  public NoSuchAuthorizationManagerException(Throwable cause) {
+  public AuthorizationException(Throwable cause) {
     super(cause);
+  }
+
+  public AuthorizationException(String message, Throwable cause) {
+    super(message, cause);
   }
 }

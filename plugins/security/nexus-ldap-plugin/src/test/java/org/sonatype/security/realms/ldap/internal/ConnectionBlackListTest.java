@@ -16,7 +16,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.sonatype.ldaptestsuite.LdapServer;
-import org.sonatype.security.authentication.AuthenticationException;
+import org.sonatype.nexus.security.authc.AuthenticationException;
 import org.sonatype.security.realms.ldap.internal.connector.dao.LdapDAOException;
 import org.sonatype.security.realms.ldap.internal.connector.dao.LdapUser;
 import org.sonatype.security.realms.ldap.internal.connector.dao.NoLdapUserRolesFoundException;

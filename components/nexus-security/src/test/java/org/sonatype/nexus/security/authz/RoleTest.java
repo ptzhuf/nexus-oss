@@ -11,7 +11,7 @@
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
 
-package org.sonatype.security.authorization;
+package org.sonatype.nexus.security.authz;
 
 import org.sonatype.sisu.litmus.testsupport.TestSupport;
 

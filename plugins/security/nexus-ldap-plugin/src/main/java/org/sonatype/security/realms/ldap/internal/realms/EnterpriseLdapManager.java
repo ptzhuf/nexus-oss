@@ -27,7 +27,7 @@ import com.sonatype.nexus.ssl.model.TrustStoreKey;
 import com.sonatype.nexus.ssl.plugin.TrustStore;
 
 import org.sonatype.nexus.proxy.events.NexusStoppedEvent;
-import org.sonatype.security.authentication.AuthenticationException;
+import org.sonatype.nexus.security.authc.AuthenticationException;
 import org.sonatype.security.realms.ldap.internal.connector.DefaultLdapConnector;
 import org.sonatype.security.realms.ldap.internal.connector.FailoverLdapConnector;
 import org.sonatype.security.realms.ldap.internal.connector.LdapConnector;

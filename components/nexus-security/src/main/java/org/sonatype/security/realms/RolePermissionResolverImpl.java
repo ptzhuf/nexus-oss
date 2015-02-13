@@ -25,9 +25,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.sonatype.nexus.security.authz.NoSuchPrivilegeException;
+import org.sonatype.nexus.security.authz.NoSuchRoleException;
 import org.sonatype.nexus.security.privilege.PrivilegeDescriptor;
-import org.sonatype.security.authorization.NoSuchPrivilegeException;
-import org.sonatype.security.authorization.NoSuchRoleException;
 import org.sonatype.security.events.AuthorizationConfigurationChanged;
 import org.sonatype.security.events.SecurityConfigurationChanged;
 import org.sonatype.security.model.CPrivilege;

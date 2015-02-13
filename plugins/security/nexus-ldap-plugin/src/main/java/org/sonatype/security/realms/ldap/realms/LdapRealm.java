@@ -113,7 +113,7 @@ public class LdapRealm
       // creating AuthInfo with plain pass (relates to creds matcher too)
       return new SimpleAuthenticationInfo(username, pass.toCharArray(), getName());
     }
-    catch (org.sonatype.security.authentication.AuthenticationException e) {
+    catch (org.sonatype.nexus.security.authc.AuthenticationException e) {
       if (this.logger.isDebugEnabled()) {
         this.logger.debug("User: " + username + " could not be authenticated ", e);
       }

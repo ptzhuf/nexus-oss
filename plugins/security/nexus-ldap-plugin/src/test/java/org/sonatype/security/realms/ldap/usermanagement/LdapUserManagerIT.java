@@ -19,11 +19,11 @@ import java.util.Set;
 
 import org.sonatype.ldaptestsuite.LdapServer;
 import org.sonatype.nexus.security.SecuritySystem;
+import org.sonatype.nexus.security.authz.Role;
 import org.sonatype.nexus.security.user.RoleIdentifier;
 import org.sonatype.nexus.security.user.User;
 import org.sonatype.nexus.security.user.UserManager;
 import org.sonatype.nexus.security.user.UserSearchCriteria;
-import org.sonatype.security.authorization.Role;
 import org.sonatype.security.configuration.model.SecurityConfiguration;
 import org.sonatype.security.model.Configuration;
 import org.sonatype.security.realms.ldap.LdapPlugin;

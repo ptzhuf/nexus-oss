@@ -18,7 +18,7 @@ import javax.inject.Singleton;
 
 import org.sonatype.configuration.validation.InvalidConfigurationException;
 import org.sonatype.nexus.security.SecuritySystem;
-import org.sonatype.security.authorization.AuthorizationException;
+import org.sonatype.nexus.security.authz.AuthorizationException;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
 
 /**

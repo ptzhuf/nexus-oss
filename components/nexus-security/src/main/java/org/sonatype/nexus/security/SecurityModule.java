@@ -16,8 +16,8 @@ import java.lang.reflect.Constructor;
 
 import javax.inject.Singleton;
 
-import org.sonatype.security.authentication.FirstSuccessfulModularRealmAuthenticator;
-import org.sonatype.security.authorization.ExceptionCatchingModularRealmAuthorizer;
+import org.sonatype.nexus.security.authc.FirstSuccessfulModularRealmAuthenticator;
+import org.sonatype.nexus.security.authz.ExceptionCatchingModularRealmAuthorizer;
 
 import com.google.common.base.Throwables;
 import com.google.inject.binder.AnnotatedBindingBuilder;

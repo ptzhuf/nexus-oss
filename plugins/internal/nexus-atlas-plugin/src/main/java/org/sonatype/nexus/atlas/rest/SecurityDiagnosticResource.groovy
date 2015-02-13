@@ -14,10 +14,10 @@ package org.sonatype.nexus.atlas.rest
 
 import org.apache.shiro.authz.annotation.RequiresPermissions
 import org.sonatype.nexus.security.SecuritySystem
+import org.sonatype.nexus.security.authz.NoSuchPrivilegeException
+import org.sonatype.nexus.security.authz.NoSuchRoleException
 import org.sonatype.nexus.security.user.User
 import org.sonatype.nexus.security.user.UserNotFoundException
-import org.sonatype.security.authorization.NoSuchPrivilegeException
-import org.sonatype.security.authorization.NoSuchRoleException
 import org.sonatype.siesta.Resource
 import org.sonatype.sisu.goodies.common.ComponentSupport
 

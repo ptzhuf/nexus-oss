@@ -14,7 +14,7 @@ package org.sonatype.security;
 
 import java.util.Collections;
 
-import org.sonatype.security.authorization.ExceptionCatchingModularRealmAuthorizer;
+import org.sonatype.nexus.security.authz.ExceptionCatchingModularRealmAuthorizer;
 import org.sonatype.sisu.litmus.testsupport.TestSupport;
 
 import org.apache.shiro.authc.AuthenticationException;

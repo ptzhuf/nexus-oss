@@ -27,13 +27,13 @@ import org.sonatype.nexus.proxy.repository.Repository
 import org.sonatype.nexus.proxy.targets.TargetPrivilegeDescriptor
 import org.sonatype.nexus.proxy.targets.TargetRegistry
 import org.sonatype.nexus.security.SecuritySystem
+import org.sonatype.nexus.security.authz.AuthorizationManager
+import org.sonatype.nexus.security.authz.Privilege
 import org.sonatype.nexus.security.privilege.MethodPrivilegeDescriptor
 import org.sonatype.nexus.security.privilege.PrivilegeDescriptor
 import org.sonatype.nexus.security.user.UserManagerImpl
 import org.sonatype.nexus.validation.Create
 import org.sonatype.nexus.validation.Validate
-import org.sonatype.security.authorization.AuthorizationManager
-import org.sonatype.security.authorization.Privilege
 
 import javax.inject.Inject
 import javax.inject.Named
