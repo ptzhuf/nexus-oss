@@ -22,6 +22,8 @@ import javax.inject.Singleton;
 import org.sonatype.nexus.NexusAppTestSupport;
 import org.sonatype.nexus.NexusAppTestSupportSecurity;
 import org.sonatype.nexus.security.authc.AuthenticationException;
+import org.sonatype.nexus.security.config.PreconfiguredSecurityConfigurationSource;
+import org.sonatype.nexus.security.config.SecurityConfigurationSource;
 import org.sonatype.nexus.security.model.PreconfiguredSecurityModelConfigurationSource;
 import org.sonatype.nexus.security.model.SecurityModelConfigurationSource;
 import org.sonatype.nexus.security.user.AbstractReadOnlyUserManager;
@@ -31,8 +33,6 @@ import org.sonatype.nexus.security.user.UserManager;
 import org.sonatype.nexus.security.user.UserNotFoundException;
 import org.sonatype.nexus.security.user.UserSearchCriteria;
 import org.sonatype.nexus.security.user.UserStatus;
-import org.sonatype.security.configuration.source.PreconfiguredSecurityConfigurationSource;
-import org.sonatype.security.configuration.source.SecurityConfigurationSource;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;

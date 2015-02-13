@@ -19,8 +19,8 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.sonatype.nexus.orient.OClassNameBuilder;
-import org.sonatype.security.configuration.model.SecurityConfiguration;
-import org.sonatype.security.configuration.source.PasswordHelper;
+import org.sonatype.nexus.security.config.PasswordHelper;
+import org.sonatype.nexus.security.config.SecurityConfiguration;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
 
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;

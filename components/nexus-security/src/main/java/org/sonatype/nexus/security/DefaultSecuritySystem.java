@@ -33,6 +33,7 @@ import org.sonatype.nexus.security.authz.AuthorizationConfigurationChanged;
 import org.sonatype.nexus.security.authz.AuthorizationException;
 import org.sonatype.nexus.security.authz.AuthorizationManager;
 import org.sonatype.nexus.security.authz.NoSuchAuthorizationManagerException;
+import org.sonatype.nexus.security.config.SecurityConfigurationManager;
 import org.sonatype.nexus.security.privilege.Privilege;
 import org.sonatype.nexus.security.role.Role;
 import org.sonatype.nexus.security.role.RoleIdentifier;
@@ -44,7 +45,6 @@ import org.sonatype.nexus.security.user.UserManager;
 import org.sonatype.nexus.security.user.UserNotFoundException;
 import org.sonatype.nexus.security.user.UserSearchCriteria;
 import org.sonatype.nexus.security.user.UserStatus;
-import org.sonatype.security.configuration.SecurityConfigurationManager;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
 import org.sonatype.sisu.goodies.eventbus.EventBus;
 

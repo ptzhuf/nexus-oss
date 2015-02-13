@@ -18,14 +18,14 @@ import java.util.Properties;
 import org.sonatype.nexus.common.io.DirSupport;
 import org.sonatype.nexus.security.SecurityModule;
 import org.sonatype.nexus.security.SecuritySystem;
+import org.sonatype.nexus.security.config.PreconfiguredSecurityConfigurationSource;
+import org.sonatype.nexus.security.config.SecurityConfiguration;
+import org.sonatype.nexus.security.config.SecurityConfigurationSource;
 import org.sonatype.nexus.security.model.Configuration;
 import org.sonatype.nexus.security.model.PreconfiguredSecurityModelConfigurationSource;
 import org.sonatype.nexus.security.model.SecurityModelConfiguration;
 import org.sonatype.nexus.security.model.SecurityModelConfigurationSource;
 import org.sonatype.nexus.security.user.UserManager;
-import org.sonatype.security.configuration.model.SecurityConfiguration;
-import org.sonatype.security.configuration.source.PreconfiguredSecurityConfigurationSource;
-import org.sonatype.security.configuration.source.SecurityConfigurationSource;
 import org.sonatype.sisu.litmus.testsupport.TestUtil;
 
 import com.google.inject.Binder;

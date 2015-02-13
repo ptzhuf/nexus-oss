@@ -21,8 +21,8 @@ import org.sonatype.nexus.events.EventSubscriber;
 import org.sonatype.nexus.orient.DatabaseInstance;
 import org.sonatype.nexus.proxy.events.NexusInitializedEvent;
 import org.sonatype.nexus.proxy.events.NexusStoppingEvent;
-import org.sonatype.security.configuration.model.SecurityConfiguration;
-import org.sonatype.security.configuration.source.SecurityConfigurationSource;
+import org.sonatype.nexus.security.config.SecurityConfiguration;
+import org.sonatype.nexus.security.config.SecurityConfigurationSource;
 import org.sonatype.sisu.goodies.lifecycle.LifecycleSupport;
 
 import com.google.common.eventbus.Subscribe;

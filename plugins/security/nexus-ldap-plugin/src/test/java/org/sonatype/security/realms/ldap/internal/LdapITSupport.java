@@ -14,16 +14,13 @@ package org.sonatype.security.realms.ldap.internal;
 
 import java.io.File;
 import java.util.Hashtable;
-import java.util.Map;
 
 import javax.naming.Context;
 
 import org.sonatype.ldaptestsuite.LdapServer;
-import org.sonatype.security.configuration.model.SecurityConfiguration;
+import org.sonatype.nexus.security.config.SecurityConfiguration;
 import org.sonatype.security.realms.ldap.internal.persist.entity.LdapConfiguration;
 import org.sonatype.security.realms.ldap.internal.persist.entity.Mapping;
-
-import com.google.common.collect.Maps;
 
 /**
  * Support for LDAP ITs (slow UTs) with real OrientDB backed configuration source.

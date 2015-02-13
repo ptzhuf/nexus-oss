@@ -12,7 +12,7 @@
  */
 package org.sonatype.security
 
-import org.sonatype.security.configuration.model.SecurityConfiguration
+import org.sonatype.nexus.security.config.SecurityConfiguration
 
 /**
  * @since 3.0

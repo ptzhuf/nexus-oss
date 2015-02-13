@@ -10,33 +10,22 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.security.configuration.source;
+package org.sonatype.nexus.security.config;
 
-import org.sonatype.security.configuration.model.SecurityConfiguration;
+import org.sonatype.configuration.validation.ValidationContext;
 
-/**
- * Source of {@link SecurityConfiguration}.
- */
-public interface SecurityConfigurationSource
+public class SecurityValidationContext
+    implements ValidationContext
 {
 
-  /**
-   * Persists the current configuration.
-   */
-  void storeConfiguration();
+  private SecurityConfiguration securityConfiguration;
 
-  /**
-   * Gets the current configuration.
-   *
-   * @return the configuration, null if not loaded
-   */
-  SecurityConfiguration getConfiguration();
+  public SecurityConfiguration getSecurityConfiguration() {
+    return securityConfiguration;
+  }
 
-  /**
-   * Forces reloading the user configuration.
-   *
-   * @return the configuration
-   */
-  SecurityConfiguration loadConfiguration();
+  public void setSecurityConfiguration(SecurityConfiguration securityConfiguration) {
+    this.securityConfiguration = securityConfiguration;
+  }
 
 }

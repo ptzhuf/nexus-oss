@@ -10,38 +10,36 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.security.configuration.source
 
-import org.sonatype.security.configuration.model.SecurityConfiguration
-
-import javax.inject.Named
-import javax.inject.Singleton
+package org.sonatype.nexus.security.config;
 
 /**
- * Security configuration defaults.
+ * Pre-configured security configuration source.
  *
  * @since 3.0
  */
-@Named('static')
-@Singleton
-class StaticSecurityConfigurationSource
-extends PreconfiguredSecurityConfigurationSource
-implements SecurityConfigurationSource
+public class PreconfiguredSecurityConfigurationSource
+    implements SecurityConfigurationSource
 {
+  private final SecurityConfiguration configuration;
 
-  StaticSecurityConfigurationSource() {
-    super(new SecurityConfiguration(
-        anonymousAccessEnabled: true,
-        anonymousUsername: 'anonymous',
-        anonymousPassword: 'anonymous',
-        realms: ['NexusAuthenticatingRealm', 'NexusAuthorizingRealm']
-    ))
+  public PreconfiguredSecurityConfigurationSource(final SecurityConfiguration configuration) {
+    this.configuration = configuration;
   }
 
   @Override
-  void storeConfiguration() {
-    throw new UnsupportedOperationException("The ${this.class.simpleName} is static source!")
+  public SecurityConfiguration getConfiguration() {
+    return configuration;
   }
 
+  @Override
+  public void storeConfiguration() {
+    // do nothing
+  }
+
+  @Override
+  public SecurityConfiguration loadConfiguration() {
+    return getConfiguration();
+  }
 }
 

@@ -10,37 +10,31 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.security.configuration;
+package org.sonatype.nexus.security.config;
 
-import java.util.List;
-
-import org.sonatype.configuration.validation.InvalidConfigurationException;
-
-public interface SecurityConfigurationManager
+/**
+ * Source of {@link SecurityConfiguration}.
+ */
+public interface SecurityConfigurationSource
 {
-  void setAnonymousAccessEnabled(boolean anonymousAccessEnabled);
-
-  boolean isAnonymousAccessEnabled();
-
-  void setAnonymousUsername(String anonymousUsername) throws InvalidConfigurationException;
-
-  String getAnonymousUsername();
-
-  void setAnonymousPassword(String anonymousPassword) throws InvalidConfigurationException;
-
-  String getAnonymousPassword();
-
-  void setRealms(List<String> realms) throws InvalidConfigurationException;
-
-  List<String> getRealms();
 
   /**
-   * Clear the cache and reload from file
+   * Persists the current configuration.
    */
-  void clearCache();
+  void storeConfiguration();
 
   /**
-   * Save to disk what is currently cached in memory
+   * Gets the current configuration.
+   *
+   * @return the configuration, null if not loaded
    */
-  void save();
+  SecurityConfiguration getConfiguration();
+
+  /**
+   * Forces reloading the user configuration.
+   *
+   * @return the configuration
+   */
+  SecurityConfiguration loadConfiguration();
+
 }

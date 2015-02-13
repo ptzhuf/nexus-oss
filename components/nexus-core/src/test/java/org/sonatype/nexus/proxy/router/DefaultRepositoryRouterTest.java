@@ -44,8 +44,8 @@ import org.sonatype.nexus.proxy.targets.Target;
 import org.sonatype.nexus.proxy.targets.TargetRegistry;
 import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.nexus.security.authc.AuthenticationException;
-import org.sonatype.security.configuration.source.PreconfiguredSecurityConfigurationSource;
-import org.sonatype.security.configuration.source.SecurityConfigurationSource;
+import org.sonatype.nexus.security.config.PreconfiguredSecurityConfigurationSource;
+import org.sonatype.nexus.security.config.SecurityConfigurationSource;
 
 import com.google.common.collect.Maps;
 import com.google.inject.Binder;
