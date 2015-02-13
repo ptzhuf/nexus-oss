@@ -10,9 +10,7 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.security.config;
-
-public interface ConfigurationIdGenerator
-{
-  String generateId();
-}
+/**
+ * Detailed configuration security model and services.  Not to be confused to global configuration.
+ */
+package org.sonatype.nexus.security.model;
