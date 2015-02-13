@@ -25,8 +25,8 @@ import org.sonatype.configuration.validation.InvalidConfigurationException;
 import org.sonatype.security.events.AuthorizationConfigurationChanged;
 import org.sonatype.security.model.CPrivilege;
 import org.sonatype.security.model.CRole;
+import org.sonatype.security.realms.privileges.MethodPrivilegeDescriptor;
 import org.sonatype.security.realms.privileges.PrivilegeDescriptor;
-import org.sonatype.security.realms.privileges.application.ApplicationPrivilegeDescriptor;
 import org.sonatype.security.realms.tools.ConfigurationManager;
 import org.sonatype.sisu.goodies.eventbus.EventBus;
 
@@ -259,7 +259,7 @@ public class AuthorizationManagerImpl
   }
 
   private void addInheritedPrivileges(CPrivilege privilege) {
-    String methodProperty = privilege.getProperty(ApplicationPrivilegeDescriptor.P_METHOD);
+    String methodProperty = privilege.getProperty(MethodPrivilegeDescriptor.P_METHOD);
 
     if (methodProperty != null) {
       List<String> inheritedMethods = privInheritance.getInheritedMethods(methodProperty);
@@ -274,7 +274,7 @@ public class AuthorizationManagerImpl
       if (buf.length() > 0) {
         buf.setLength(buf.length() - 1);
 
-        privilege.setProperty(ApplicationPrivilegeDescriptor.P_METHOD, buf.toString());
+        privilege.setProperty(MethodPrivilegeDescriptor.P_METHOD, buf.toString());
       }
     }
   }
