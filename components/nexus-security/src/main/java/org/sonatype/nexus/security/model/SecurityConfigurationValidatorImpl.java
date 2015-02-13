@@ -19,7 +19,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.PatternSyntaxException;
 
-import javax.enterprise.inject.Typed;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -31,10 +30,9 @@ import org.sonatype.nexus.common.text.Strings2;
 import org.sonatype.nexus.security.privilege.PrivilegeDescriptor;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
 
+@Named
 @Singleton
-@Typed(SecurityConfigurationValidator.class)
-@Named("default")
-public class DefaultSecurityConfigurationValidator
+public class SecurityConfigurationValidatorImpl
     extends ComponentSupport
     implements SecurityConfigurationValidator
 {
@@ -45,8 +43,8 @@ public class DefaultSecurityConfigurationValidator
   private final List<PrivilegeDescriptor> privilegeDescriptors;
 
   @Inject
-  public DefaultSecurityConfigurationValidator(final List<PrivilegeDescriptor> privilegeDescriptors,
-                                               final ConfigurationIdGenerator idGenerator)
+  public SecurityConfigurationValidatorImpl(final List<PrivilegeDescriptor> privilegeDescriptors,
+                                            final ConfigurationIdGenerator idGenerator)
   {
     this.privilegeDescriptors = privilegeDescriptors;
     this.idGenerator = idGenerator;

@@ -20,12 +20,11 @@ import javax.inject.Singleton;
 import org.sonatype.configuration.validation.ValidationRequest;
 import org.sonatype.configuration.validation.ValidationResponse;
 
+@Named
 @Singleton
-@Named("default")
-public class DefaultSecurityConfigurationValidator
+public class SecurityConfigurationValidatorImpl
     implements SecurityConfigurationValidator
 {
-
   public ValidationResponse validateModel(SecurityValidationContext context,
                                           ValidationRequest<SecurityConfiguration> request)
   {
@@ -68,5 +67,4 @@ public class DefaultSecurityConfigurationValidator
 
     return validationResponse;
   }
-
 }

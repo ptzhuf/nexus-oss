@@ -24,9 +24,9 @@ import org.sonatype.configuration.validation.InvalidConfigurationException;
 import org.sonatype.configuration.validation.ValidationResponse;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
 
+@Named
 @Singleton
-@Named("default")
-public class DefaultSecurityConfigurationManager
+public class SecurityConfigurationManagerImpl
     extends ComponentSupport
     implements SecurityConfigurationManager
 {
@@ -42,8 +42,8 @@ public class DefaultSecurityConfigurationManager
   private ReentrantLock lock = new ReentrantLock();
 
   @Inject
-  public DefaultSecurityConfigurationManager(SecurityConfigurationSource configurationSource,
-                                             SecurityConfigurationValidator validator)
+  public SecurityConfigurationManagerImpl(SecurityConfigurationSource configurationSource,
+                                          SecurityConfigurationValidator validator)
   {
     this.configurationSource = configurationSource;
     this.validator = validator;
