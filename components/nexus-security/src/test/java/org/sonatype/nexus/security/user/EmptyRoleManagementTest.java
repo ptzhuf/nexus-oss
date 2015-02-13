@@ -14,6 +14,7 @@ package org.sonatype.nexus.security.user;
 
 import java.util.Set;
 
+import org.sonatype.nexus.security.role.RoleIdentifier;
 import org.sonatype.security.AbstractSecurityTestCase;
 import org.sonatype.security.model.CUser;
 import org.sonatype.security.model.CUserRoleMapping;

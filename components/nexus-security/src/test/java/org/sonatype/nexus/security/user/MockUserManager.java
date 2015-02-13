@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.sonatype.nexus.security.role.ExternalRoleMappedTest;
+import org.sonatype.nexus.security.role.RoleIdentifier;
 
 /**
  * @see ExternalRoleMappedTest

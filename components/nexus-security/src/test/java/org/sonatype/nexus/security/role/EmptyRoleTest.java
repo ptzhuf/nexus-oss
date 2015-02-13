@@ -23,7 +23,6 @@ import org.sonatype.nexus.security.authc.AuthenticatingRealmImpl;
 import org.sonatype.nexus.security.authz.AuthorizationManager;
 import org.sonatype.nexus.security.authz.AuthorizingRealmImpl;
 import org.sonatype.nexus.security.privilege.MethodPrivilegeDescriptor;
-import org.sonatype.nexus.security.user.RoleIdentifier;
 import org.sonatype.nexus.security.user.User;
 import org.sonatype.nexus.security.user.UserSearchCriteria;
 import org.sonatype.nexus.security.user.UserStatus;

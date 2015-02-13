@@ -15,6 +15,7 @@ package org.sonatype.nexus.security.user;
 import java.util.Set;
 
 import org.sonatype.configuration.validation.InvalidConfigurationException;
+import org.sonatype.nexus.security.role.RoleIdentifier;
 
 /**
  * Extends the UserManager interface to allow a UserManager to add roles to users from other UserManagers.

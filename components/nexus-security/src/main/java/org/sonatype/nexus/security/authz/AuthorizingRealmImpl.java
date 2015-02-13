@@ -23,7 +23,7 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.sonatype.nexus.security.SecuritySystem;
-import org.sonatype.nexus.security.user.RoleIdentifier;
+import org.sonatype.nexus.security.role.RoleIdentifier;
 import org.sonatype.nexus.security.user.RoleMappingUserManager;
 import org.sonatype.nexus.security.user.UserManager;
 import org.sonatype.nexus.security.user.UserNotFoundException;

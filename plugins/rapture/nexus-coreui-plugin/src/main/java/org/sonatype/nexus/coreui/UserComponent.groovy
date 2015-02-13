@@ -31,7 +31,7 @@ import org.sonatype.nexus.extdirect.DirectComponentSupport
 import org.sonatype.nexus.extdirect.model.Password
 import org.sonatype.nexus.extdirect.model.StoreLoadParameters
 import org.sonatype.nexus.security.SecuritySystem
-import org.sonatype.nexus.security.user.RoleIdentifier
+import org.sonatype.nexus.security.role.RoleIdentifier
 import org.sonatype.nexus.security.user.User
 import org.sonatype.nexus.security.user.UserAccountManager
 import org.sonatype.nexus.security.user.UserManager

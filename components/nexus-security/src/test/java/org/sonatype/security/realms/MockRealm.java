@@ -19,7 +19,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.sonatype.nexus.security.role.ExternalRoleMappedTest;
-import org.sonatype.nexus.security.user.RoleIdentifier;
+import org.sonatype.nexus.security.role.RoleIdentifier;
 import org.sonatype.nexus.security.user.UserManager;
 import org.sonatype.nexus.security.user.UserNotFoundException;
 
