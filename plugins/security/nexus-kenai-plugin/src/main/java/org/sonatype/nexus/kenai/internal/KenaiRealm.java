@@ -10,7 +10,7 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.security.realms.kenai.internal;
+package org.sonatype.nexus.kenai.internal;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,8 +21,8 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.sonatype.nexus.httpclient.HttpClientFactory;
-import org.sonatype.security.realms.kenai.Kenai;
-import org.sonatype.security.realms.kenai.KenaiConfiguration;
+import org.sonatype.nexus.kenai.Kenai;
+import org.sonatype.nexus.kenai.KenaiConfiguration;
 
 import com.google.common.collect.Lists;
 import org.apache.http.Consts;

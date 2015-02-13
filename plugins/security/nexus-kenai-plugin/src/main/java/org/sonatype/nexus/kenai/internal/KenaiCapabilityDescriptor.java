@@ -10,7 +10,7 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.security.realms.kenai.internal.capability;
+package org.sonatype.nexus.kenai.internal;
 
 import java.util.List;
 import java.util.Set;
@@ -28,8 +28,8 @@ import org.sonatype.nexus.capability.support.CapabilityDescriptorSupport;
 import org.sonatype.nexus.formfields.ComboboxFormField;
 import org.sonatype.nexus.formfields.FormField;
 import org.sonatype.nexus.formfields.StringTextFormField;
-import org.sonatype.security.realms.kenai.KenaiConfiguration;
-import org.sonatype.security.realms.kenai.KenaiPlugin;
+import org.sonatype.nexus.kenai.KenaiConfiguration;
+import org.sonatype.nexus.kenai.KenaiPlugin;
 import org.sonatype.sisu.goodies.i18n.I18N;
 import org.sonatype.sisu.goodies.i18n.MessageBundle;
 

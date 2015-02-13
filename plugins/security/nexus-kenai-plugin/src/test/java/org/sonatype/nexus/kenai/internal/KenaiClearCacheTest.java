@@ -10,11 +10,12 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.security.realms.kenai.internal;
+package org.sonatype.nexus.kenai.internal;
 
 import java.util.Collections;
 
 import org.sonatype.nexus.configuration.application.NexusConfiguration;
+import org.sonatype.nexus.kenai.AbstractKenaiRealmTest;
 import org.sonatype.nexus.security.SecuritySystem;
 
 import org.apache.shiro.authc.UsernamePasswordToken;
