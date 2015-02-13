@@ -10,7 +10,7 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.security.filter.authz;
+package org.sonatype.nexus.security.authz;
 
 import java.io.IOException;
 
@@ -21,9 +21,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.sonatype.nexus.proxy.access.Action;
 import org.sonatype.nexus.security.ClientInfo;
+import org.sonatype.nexus.security.ResourceInfo;
 import org.sonatype.nexus.security.SecuritySystem;
-import org.sonatype.nexus.security.auth.NexusAuthorizationEvent;
-import org.sonatype.nexus.security.auth.ResourceInfo;
 import org.sonatype.nexus.web.RemoteIPFinder;
 import org.sonatype.sisu.goodies.eventbus.EventBus;
 

@@ -10,11 +10,33 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.security.filter.authc;
+package org.sonatype.nexus.security;
+
+import java.util.Date;
 
 /**
- * Marker interface for API-Keys; use the HTTP header name as the component hint.
+ * Abstract helper class for security related events. It carries the "minimal" subset of authc/authz events: the client
+ * information ("who").
+ *
+ * @author cstamas
+ * @since 2.0
  */
-public interface NexusApiKey
+public abstract class AbstractSecurityEvent
 {
+  private final ClientInfo clientInfo;
+
+  private final Date date;
+
+  public AbstractSecurityEvent(final Object sender, final ClientInfo clientInfo) {
+    this.clientInfo = clientInfo;
+    this.date = new Date();
+  }
+
+  public ClientInfo getClientInfo() {
+    return clientInfo;
+  }
+
+  public Date getEventDate() {
+    return date;
+  }
 }

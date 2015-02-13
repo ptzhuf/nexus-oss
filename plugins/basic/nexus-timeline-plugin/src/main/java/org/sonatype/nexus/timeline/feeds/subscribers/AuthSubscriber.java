@@ -22,9 +22,9 @@ import org.sonatype.nexus.configuration.application.NexusConfiguration;
 import org.sonatype.nexus.events.Asynchronous;
 import org.sonatype.nexus.events.EventSubscriber;
 import org.sonatype.nexus.security.ClientInfo;
-import org.sonatype.nexus.security.auth.NexusAuthenticationEvent;
-import org.sonatype.nexus.security.auth.NexusAuthorizationEvent;
-import org.sonatype.nexus.security.auth.ResourceInfo;
+import org.sonatype.nexus.security.ResourceInfo;
+import org.sonatype.nexus.security.authc.NexusAuthenticationEvent;
+import org.sonatype.nexus.security.authz.NexusAuthorizationEvent;
 import org.sonatype.nexus.timeline.feeds.FeedEvent;
 import org.sonatype.nexus.timeline.feeds.FeedRecorder;
 

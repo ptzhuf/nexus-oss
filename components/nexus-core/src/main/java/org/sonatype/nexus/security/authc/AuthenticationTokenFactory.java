@@ -10,35 +10,26 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.security.auth;
+package org.sonatype.nexus.security.authc;
 
-import java.util.Date;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 
-import org.sonatype.nexus.security.ClientInfo;
+import org.apache.shiro.authc.AuthenticationToken;
 
 /**
- * Abstract helper class for security related events. It carries the "minimal" subset of authc/authz events: the client
- * information ("who").
+ * Factory of authentication tokens.
  *
- * @author cstamas
- * @since 2.0
+ * @since 2.7
  */
-public abstract class AbstractSecurityEvent
+public interface AuthenticationTokenFactory
 {
-  private final ClientInfo clientInfo;
 
-  private final Date date;
+  /**
+   * Creates an {@link AuthenticationToken} if able to do so, based on give request/response.
+   *
+   * @return created token or null if token cannot be created based on given request/response
+   */
+  AuthenticationToken createToken(ServletRequest request, ServletResponse response);
 
-  public AbstractSecurityEvent(final Object sender, final ClientInfo clientInfo) {
-    this.clientInfo = clientInfo;
-    this.date = new Date();
-  }
-
-  public ClientInfo getClientInfo() {
-    return clientInfo;
-  }
-
-  public Date getEventDate() {
-    return date;
-  }
 }

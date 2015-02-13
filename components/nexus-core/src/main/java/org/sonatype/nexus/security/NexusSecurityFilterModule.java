@@ -10,16 +10,15 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.security.filter;
+package org.sonatype.nexus.security;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.sonatype.nexus.security.FilterProviderSupport;
-import org.sonatype.nexus.security.filter.authc.NexusApiKeyAuthenticationFilter;
-import org.sonatype.nexus.security.filter.authc.NexusAuthenticationFilter;
-import org.sonatype.nexus.security.filter.authz.FailureLoggingHttpMethodPermissionFilter;
+import org.sonatype.nexus.security.authc.NexusApiKeyAuthenticationFilter;
+import org.sonatype.nexus.security.authc.NexusAuthenticationFilter;
+import org.sonatype.nexus.security.authz.FailureLoggingHttpMethodPermissionFilter;
 
 import com.google.inject.AbstractModule;
 

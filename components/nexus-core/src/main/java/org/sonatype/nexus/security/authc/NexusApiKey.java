@@ -10,26 +10,11 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.security.filter.authc;
-
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-
-import org.apache.shiro.authc.AuthenticationToken;
+package org.sonatype.nexus.security.authc;
 
 /**
- * Factory of authentication tokens.
- *
- * @since 2.7
+ * Marker interface for API-Keys; use the HTTP header name as the component hint.
  */
-public interface AuthenticationTokenFactory
+public interface NexusApiKey
 {
-
-  /**
-   * Creates an {@link AuthenticationToken} if able to do so, based on give request/response.
-   *
-   * @return created token or null if token cannot be created based on given request/response
-   */
-  AuthenticationToken createToken(ServletRequest request, ServletResponse response);
-
 }
