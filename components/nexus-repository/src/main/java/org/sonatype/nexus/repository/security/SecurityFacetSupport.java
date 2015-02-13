@@ -19,6 +19,7 @@ import org.sonatype.nexus.repository.FacetSupport;
 import org.sonatype.nexus.repository.Repository;
 import org.sonatype.nexus.repository.http.HttpMethods;
 import org.sonatype.nexus.repository.view.Request;
+import org.sonatype.nexus.security.SecurityHelper;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
