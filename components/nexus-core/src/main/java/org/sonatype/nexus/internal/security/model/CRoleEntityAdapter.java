@@ -10,7 +10,7 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.internal.security.source;
+package org.sonatype.nexus.internal.security.model;
 
 import java.util.List;
 import java.util.Set;
@@ -20,7 +20,7 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.sonatype.nexus.orient.OClassNameBuilder;
-import org.sonatype.nexus.security.model.CUserRoleMapping;
+import org.sonatype.nexus.security.model.CRole;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
 
 import com.google.common.base.Function;
@@ -38,20 +38,24 @@ import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * {@link CUserRoleMapping} entity adapter.
+ * {@link CRole} entity adapter.
  *
  * @since 3.0
  */
 @Named
 @Singleton
-public class CUserRoleMappingEntityAdapter
+public class CRoleEntityAdapter
     extends ComponentSupport
 {
-  public static final String DB_CLASS = new OClassNameBuilder().type("SecurityUserRoleMapping").build();
+  public static final String DB_CLASS = new OClassNameBuilder().type("SecurityRole").build();
 
-  public static final String P_USER_ID = "userId";
+  public static final String P_ID = "id";
 
-  public static final String P_SOURCE = "source";
+  public static final String P_NAME = "name";
+
+  public static final String P_DESCRIPTION = "description";
+
+  public static final String P_PRIVILEGES = "privileges";
 
   public static final String P_ROLES = "roles";
 
@@ -66,11 +70,13 @@ public class CUserRoleMappingEntityAdapter
     if (type == null) {
       type = schema.createClass(DB_CLASS);
 
-      type.createProperty(P_USER_ID, OType.STRING).setNotNull(true);
-      type.createProperty(P_SOURCE, OType.STRING).setNotNull(true);
+      type.createProperty(P_ID, OType.STRING).setNotNull(true);
+      type.createProperty(P_NAME, OType.STRING).setNotNull(true);
+      type.createProperty(P_DESCRIPTION, OType.STRING);
+      type.createProperty(P_PRIVILEGES, OType.EMBEDDEDSET);
       type.createProperty(P_ROLES, OType.EMBEDDEDSET);
 
-      type.createIndex(DB_CLASS + "_" + P_USER_ID + "_" + P_SOURCE + "idx", INDEX_TYPE.UNIQUE, P_USER_ID, P_SOURCE);
+      type.createIndex(DB_CLASS + "_" + P_ID + "idx", INDEX_TYPE.UNIQUE, P_ID);
 
       log.info("Created schema: {}, properties: {}", type, type.properties());
 
@@ -82,7 +88,7 @@ public class CUserRoleMappingEntityAdapter
   /**
    * Create a new document and write entity.
    */
-  public ODocument create(final ODatabaseDocumentTx db, final CUserRoleMapping entity) {
+  public ODocument create(final ODatabaseDocumentTx db, final CRole entity) {
     checkNotNull(db);
     checkNotNull(entity);
 
@@ -93,12 +99,14 @@ public class CUserRoleMappingEntityAdapter
   /**
    * Write entity to document.
    */
-  public ODocument write(final ODocument document, final CUserRoleMapping entity) {
+  public ODocument write(final ODocument document, final CRole entity) {
     checkNotNull(document);
     checkNotNull(entity);
 
-    document.field(P_USER_ID, entity.getUserId());
-    document.field(P_SOURCE, entity.getSource());
+    document.field(P_ID, entity.getId());
+    document.field(P_NAME, entity.getName());
+    document.field(P_DESCRIPTION, entity.getDescription());
+    document.field(P_PRIVILEGES, entity.getPrivileges());
     document.field(P_ROLES, entity.getRoles());
 
     return document.save();
@@ -107,13 +115,16 @@ public class CUserRoleMappingEntityAdapter
   /**
    * Read entity from document.
    */
-  public CUserRoleMapping read(final ODocument document) {
+  public CRole read(final ODocument document) {
     checkNotNull(document);
 
-    CUserRoleMapping entity = new CUserRoleMapping();
-    entity.setUserId(document.<String>field(P_USER_ID, OType.STRING));
-    entity.setSource(document.<String>field(P_SOURCE, OType.STRING));
+    CRole entity = new CRole();
+    entity.setId(document.<String>field(P_ID, OType.STRING));
+    entity.setName(document.<String>field(P_NAME, OType.STRING));
+    entity.setDescription(document.<String>field(P_DESCRIPTION, OType.STRING));
+    entity.setPrivileges(Sets.newHashSet(document.<Set<String>>field(P_PRIVILEGES, OType.EMBEDDEDSET)));
     entity.setRoles(Sets.newHashSet(document.<Set<String>>field(P_ROLES, OType.EMBEDDEDSET)));
+    entity.setReadOnly(false);
 
     entity.setVersion(String.valueOf(document.getVersion()));
 
@@ -129,30 +140,30 @@ public class CUserRoleMappingEntityAdapter
   }
 
   /**
-   * Get all user role mappings.
+   * Get all roles.
    */
-  public Iterable<CUserRoleMapping> get(final ODatabaseDocumentTx db) {
-    return Iterables.transform(browse(db), new Function<ODocument, CUserRoleMapping>()
+  public Iterable<CRole> get(final ODatabaseDocumentTx db) {
+    return Iterables.transform(browse(db), new Function<ODocument, CRole>()
     {
       @Nullable
       @Override
-      public CUserRoleMapping apply(@Nullable final ODocument input) {
+      public CRole apply(@Nullable final ODocument input) {
         return input == null ? null : read(input);
       }
     });
   }
 
   /**
-   * Retrieves a mapping document.
+   * Retrieves a role document.
    *
    * @return found document, null otherwise
    */
   @Nullable
-  public ODocument get(final ODatabaseDocumentTx db, final String userId, final String source) {
+  public ODocument get(final ODatabaseDocumentTx db, final String id) {
     OSQLSynchQuery<ODocument> query = new OSQLSynchQuery<>(
-        "SELECT FROM " + DB_CLASS + " WHERE " + P_USER_ID + " = ?" + " AND " + P_SOURCE + " = ?"
+        "SELECT FROM " + DB_CLASS + " WHERE " + P_ID + " = ?"
     );
-    List<ODocument> results = db.command(query).execute(userId, source);
+    List<ODocument> results = db.command(query).execute(id);
     if (results.isEmpty()) {
       return null;
     }
@@ -160,15 +171,15 @@ public class CUserRoleMappingEntityAdapter
   }
 
   /**
-   * Deletes a mapping.
+   * Deletes a role.
    *
-   * @return true if mapping was deleted
+   * @return true if role was deleted
    */
-  public boolean delete(final ODatabaseDocumentTx db, final String userId, final String source) {
+  public boolean delete(final ODatabaseDocumentTx db, final String id) {
     OCommandSQL command = new OCommandSQL(
-        "DELETE FROM " + DB_CLASS + " WHERE " + P_USER_ID + " = ?" + " AND " + P_SOURCE + " = ?"
+        "DELETE FROM " + DB_CLASS + " WHERE " + P_ID + " = ?"
     );
-    int records = db.command(command).execute(userId, source);
+    int records = db.command(command).execute(id);
     return records == 1;
   }
 
