@@ -28,42 +28,36 @@ import org.sonatype.sisu.goodies.common.ComponentSupport;
  */
 @Named
 @Singleton
-public class DefaultUserAccountManager
+public class UserAccountManagerImpl
     extends ComponentSupport
     implements UserAccountManager
 {
   private final SecuritySystem securitySystem;
 
   @Inject
-  public DefaultUserAccountManager(final SecuritySystem securitySystem) {
+  public UserAccountManagerImpl(final SecuritySystem securitySystem) {
     this.securitySystem = securitySystem;
   }
 
-  public User readAccount(String userId)
-      throws UserNotFoundException, AuthorizationException
-  {
+  public User readAccount(String userId) throws UserNotFoundException, AuthorizationException {
     checkPermission(userId);
 
     return securitySystem.getUser(userId);
   }
 
   public User updateAccount(User user)
-      throws InvalidConfigurationException, UserNotFoundException, NoSuchUserManagerException,
-             AuthorizationException
+      throws InvalidConfigurationException, UserNotFoundException, NoSuchUserManagerException, AuthorizationException
   {
     checkPermission(user.getUserId());
 
     return securitySystem.updateUser(user);
   }
 
-  protected void checkPermission(String userId)
-      throws AuthorizationException
-  {
+  private void checkPermission(String userId) throws AuthorizationException {
     if (securitySystem.getSubject().getPrincipal().equals(userId)) {
       return;
     }
 
     securitySystem.checkPermission(securitySystem.getSubject().getPrincipals(), "security:users");
   }
-
 }
