@@ -11,7 +11,7 @@
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
 
-package org.sonatype.security.realms;
+package org.sonatype.nexus.security.authc;
 
 import java.util.HashSet;
 import java.util.Set;

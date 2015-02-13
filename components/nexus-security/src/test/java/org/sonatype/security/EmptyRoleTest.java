@@ -19,7 +19,9 @@ import java.util.Set;
 
 import org.sonatype.configuration.validation.InvalidConfigurationException;
 import org.sonatype.nexus.security.SecuritySystem;
+import org.sonatype.nexus.security.authc.AuthenticatingRealmImpl;
 import org.sonatype.nexus.security.authz.AuthorizationManager;
+import org.sonatype.nexus.security.authz.AuthorizingRealmImpl;
 import org.sonatype.nexus.security.authz.Role;
 import org.sonatype.nexus.security.privilege.MethodPrivilegeDescriptor;
 import org.sonatype.nexus.security.user.RoleIdentifier;
@@ -27,8 +29,6 @@ import org.sonatype.nexus.security.user.User;
 import org.sonatype.nexus.security.user.UserSearchCriteria;
 import org.sonatype.nexus.security.user.UserStatus;
 import org.sonatype.security.model.CPrivilege;
-import org.sonatype.security.realms.AuthenticatingRealmImpl;
-import org.sonatype.security.realms.AuthorizingRealmImpl;
 import org.sonatype.security.realms.tools.DefaultConfigurationManager;
 
 import junit.framework.Assert;
