@@ -37,6 +37,8 @@ import org.sonatype.nexus.security.model.Configuration;
 import org.sonatype.nexus.security.model.SecurityModelConfiguration;
 import org.sonatype.nexus.security.model.SecurityModelConfigurationSource;
 import org.sonatype.nexus.security.privilege.NoSuchPrivilegeException;
+import org.sonatype.nexus.security.resource.DynamicSecurityResource;
+import org.sonatype.nexus.security.resource.StaticSecurityResource;
 import org.sonatype.nexus.security.role.NoSuchRoleException;
 import org.sonatype.nexus.security.user.NoSuchRoleMappingException;
 import org.sonatype.nexus.security.user.UserManagerImpl;

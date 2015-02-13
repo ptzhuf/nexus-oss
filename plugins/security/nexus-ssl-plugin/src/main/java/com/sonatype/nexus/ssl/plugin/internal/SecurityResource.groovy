@@ -15,7 +15,7 @@ package com.sonatype.nexus.ssl.plugin.internal
 import org.sonatype.nexus.security.model.CPrivilege
 import org.sonatype.nexus.security.model.CRole
 import org.sonatype.nexus.security.model.Configuration
-import org.sonatype.security.realms.tools.StaticSecurityResource
+import org.sonatype.nexus.security.resource.StaticSecurityResource
 
 import javax.inject.Named
 import javax.inject.Singleton

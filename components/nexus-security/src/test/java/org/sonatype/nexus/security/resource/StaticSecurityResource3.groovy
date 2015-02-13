@@ -10,7 +10,7 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.security.realms.tools
+package org.sonatype.nexus.security.resource
 
 import org.sonatype.nexus.security.model.CPrivilege
 import org.sonatype.nexus.security.model.CRole
@@ -19,43 +19,68 @@ import org.sonatype.nexus.security.model.Configuration
 /**
  * @since 3.0
  */
-class ResourceMergingConfigurationManagerTestSecurity
+class StaticSecurityResource3
+implements StaticSecurityResource
 {
 
-  static Configuration securityModel() {
+  private static int INSTANCE_COUNT = 1;
+
+  private String privId = "priv-" + INSTANCE_COUNT++;
+
+  public String getId() {
+    return privId;
+  }
+
+  @Override
+  Configuration getConfiguration() {
     return new Configuration(
         privileges: [
             new CPrivilege(
-                id: '1-test',
+                id: '4-test-' + privId,
                 type: 'method',
-                name: '1-test',
+                name: '4-test',
                 description: '',
                 properties: [
                     'method': 'read',
-                    'permission': '/some/path/'
-                ]
-            ),
+                    'permission': '/some/path4/'
+                ])
+            ,
             new CPrivilege(
-                id: '2-test',
+                id: '5-test-' + privId,
                 type: 'method',
-                name: '2-test',
+                name: '5-test',
                 description: '',
                 properties: [
                     'method': 'read',
-                    'permission': '/some/path/'
-                ]
-            )
+                    'permission': '/some/path5/'
+                ])
+            ,
+            new CPrivilege(
+                id: '6-test-' + privId,
+                type: 'method',
+                name: '6-test',
+                description: '',
+                properties: [
+                    'method': 'read',
+                    'permission': '/some/path6/'
+                ])
         ],
         roles: [
             new CRole(
-                id: 'test',
-                name: 'test Role',
-                description: 'Test Role Description',
-                privileges: ['2-test']
+                id: 'anon',
+                name: '',
+                description: '',
+                privileges: ['4-test'],
+                roles: ['other']
+            )
+            ,
+            new CRole(
+                id: 'other',
+                name: 'Other Role',
+                description: 'Other Role Description',
+                privileges: ['6-test']
             )
         ]
     )
   }
-
 }
-

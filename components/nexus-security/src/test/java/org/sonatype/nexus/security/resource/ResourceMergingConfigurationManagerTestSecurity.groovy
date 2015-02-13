@@ -10,71 +10,52 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.security.realms.tools
+package org.sonatype.nexus.security.resource
 
 import org.sonatype.nexus.security.model.CPrivilege
 import org.sonatype.nexus.security.model.CRole
 import org.sonatype.nexus.security.model.Configuration
 
-import javax.inject.Singleton
-
 /**
  * @since 3.0
  */
-@Singleton
-class StaticSecurityResource2
-implements StaticSecurityResource
+class ResourceMergingConfigurationManagerTestSecurity
 {
-  @Override
-  Configuration getConfiguration() {
+
+  static Configuration securityModel() {
     return new Configuration(
         privileges: [
             new CPrivilege(
-                id: '4-test',
+                id: '1-test',
                 type: 'method',
-                name: '4-test',
+                name: '1-test',
                 description: '',
                 properties: [
                     'method': 'read',
-                    'permission': '/some/path4/'
-                ])
-            ,
+                    'permission': '/some/path/'
+                ]
+            ),
             new CPrivilege(
-                id: '5-test',
+                id: '2-test',
                 type: 'method',
-                name: '5-test',
+                name: '2-test',
                 description: '',
                 properties: [
                     'method': 'read',
-                    'permission': '/some/path5/'
-                ])
-            ,
-            new CPrivilege(
-                id: '6-test',
-                type: 'method',
-                name: '6-test',
-                description: '',
-                properties: [
-                    'method': 'read',
-                    'permission': '/some/path6/'
-                ])
+                    'permission': '/some/path/'
+                ]
+            )
         ],
         roles: [
             new CRole(
-                id: 'anon',
-                name: '',
-                description: '',
-                privileges: ['4-test'],
-                roles: ['other']
-            )
-            ,
-            new CRole(
-                id: 'other',
-                name: 'Other Role',
-                description: 'Other Role Description',
-                privileges: ['6-test']
+                id: 'test',
+                name: 'test Role',
+                description: 'Test Role Description',
+                privileges: ['2-test']
             )
         ]
     )
   }
+
 }
+

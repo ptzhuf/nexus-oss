@@ -10,18 +10,23 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.security.realms.tools;
+package org.sonatype.nexus.security.resource;
 
 import org.sonatype.nexus.security.model.SecurityModelConfiguration;
 
 /**
- * A StaticSecurityResource all for other components/plugins to contributes users/roles/privileges to the security
+ * A DynamicSecurityResource all for other components/plugins to contributes users/roles/privileges to the security
  * model.
  */
-public interface StaticSecurityResource
+public interface DynamicSecurityResource
 {
   /**
    * Gets the security configuration.
    */
   SecurityModelConfiguration getConfiguration();
+
+  /**
+   * Marks the Configuration dirty so it can be reloaded.
+   */
+  boolean isDirty();
 }

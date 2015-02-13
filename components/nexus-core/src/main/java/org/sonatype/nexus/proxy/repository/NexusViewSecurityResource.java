@@ -31,9 +31,9 @@ import org.sonatype.nexus.proxy.registry.RootContentClass;
 import org.sonatype.nexus.security.model.CPrivilege;
 import org.sonatype.nexus.security.model.CRole;
 import org.sonatype.nexus.security.model.Configuration;
-import org.sonatype.security.realms.tools.AbstractDynamicSecurityResource;
+import org.sonatype.nexus.security.resource.AbstractDynamicSecurityResource;
+import org.sonatype.nexus.security.resource.DynamicSecurityResource;
 import org.sonatype.security.realms.tools.ConfigurationManager;
-import org.sonatype.security.realms.tools.DynamicSecurityResource;
 import org.sonatype.sisu.goodies.eventbus.EventBus;
 
 import com.google.common.eventbus.AllowConcurrentEvents;
