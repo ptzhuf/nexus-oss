@@ -18,6 +18,7 @@ import java.util.Set;
 import org.sonatype.configuration.validation.InvalidConfigurationException;
 import org.sonatype.nexus.security.privilege.NoSuchPrivilegeException;
 import org.sonatype.nexus.security.role.NoSuchRoleException;
+import org.sonatype.nexus.security.user.NoSuchRoleMappingException;
 import org.sonatype.nexus.security.user.UserNotFoundException;
 import org.sonatype.security.model.CPrivilege;
 import org.sonatype.security.model.CRole;
@@ -105,7 +106,8 @@ public interface ConfigurationManager
 
   void createUserRoleMapping(CUserRoleMapping userRoleMapping) throws InvalidConfigurationException;
 
-  void updateUserRoleMapping(CUserRoleMapping userRoleMapping) throws InvalidConfigurationException, NoSuchRoleMappingException;
+  void updateUserRoleMapping(CUserRoleMapping userRoleMapping) throws InvalidConfigurationException,
+                                                                      NoSuchRoleMappingException;
 
   CUserRoleMapping readUserRoleMapping(String userId, String source) throws NoSuchRoleMappingException;
 

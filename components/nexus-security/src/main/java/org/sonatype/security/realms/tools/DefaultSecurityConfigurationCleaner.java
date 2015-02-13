@@ -19,6 +19,7 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.sonatype.nexus.security.role.NoSuchRoleException;
+import org.sonatype.nexus.security.user.NoSuchRoleMappingException;
 import org.sonatype.security.model.CRole;
 import org.sonatype.security.model.CUserRoleMapping;
 import org.sonatype.security.model.SecurityModelConfiguration;

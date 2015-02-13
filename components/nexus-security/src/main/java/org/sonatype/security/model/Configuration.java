@@ -20,9 +20,9 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.sonatype.nexus.security.privilege.NoSuchPrivilegeException;
 import org.sonatype.nexus.security.role.NoSuchRoleException;
+import org.sonatype.nexus.security.user.NoSuchRoleMappingException;
 import org.sonatype.nexus.security.user.UserManagerImpl;
 import org.sonatype.nexus.security.user.UserNotFoundException;
-import org.sonatype.security.realms.tools.NoSuchRoleMappingException;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;

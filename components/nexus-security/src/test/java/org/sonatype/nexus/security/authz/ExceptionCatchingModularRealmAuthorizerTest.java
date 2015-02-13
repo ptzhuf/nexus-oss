@@ -10,11 +10,10 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.security;
+package org.sonatype.nexus.security.authz;
 
 import java.util.Collections;
 
-import org.sonatype.nexus.security.authz.ExceptionCatchingModularRealmAuthorizer;
 import org.sonatype.sisu.litmus.testsupport.TestSupport;
 
 import org.apache.shiro.authc.AuthenticationException;

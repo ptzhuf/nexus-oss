@@ -29,7 +29,6 @@ import org.sonatype.security.model.CRole;
 import org.sonatype.security.model.CUser;
 import org.sonatype.security.model.CUserRoleMapping;
 import org.sonatype.security.realms.tools.ConfigurationManager;
-import org.sonatype.security.realms.tools.NoSuchRoleMappingException;
 
 import org.apache.shiro.authc.credential.PasswordService;
 import org.eclipse.sisu.Description;

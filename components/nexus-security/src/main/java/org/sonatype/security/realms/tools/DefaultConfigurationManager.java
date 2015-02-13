@@ -31,6 +31,7 @@ import org.sonatype.nexus.common.text.Strings2;
 import org.sonatype.nexus.security.authz.AuthorizationConfigurationChanged;
 import org.sonatype.nexus.security.privilege.NoSuchPrivilegeException;
 import org.sonatype.nexus.security.role.NoSuchRoleException;
+import org.sonatype.nexus.security.user.NoSuchRoleMappingException;
 import org.sonatype.nexus.security.user.UserManagerImpl;
 import org.sonatype.nexus.security.user.UserNotFoundException;
 import org.sonatype.security.model.CPrivilege;
