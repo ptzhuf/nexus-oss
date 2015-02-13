@@ -28,8 +28,8 @@ import org.sonatype.nexus.proxy.targets.TargetPrivilegeDescriptor
 import org.sonatype.nexus.proxy.targets.TargetRegistry
 import org.sonatype.nexus.security.SecuritySystem
 import org.sonatype.nexus.security.authz.AuthorizationManager
-import org.sonatype.nexus.security.authz.Privilege
 import org.sonatype.nexus.security.privilege.MethodPrivilegeDescriptor
+import org.sonatype.nexus.security.privilege.Privilege
 import org.sonatype.nexus.security.privilege.PrivilegeDescriptor
 import org.sonatype.nexus.security.user.UserManagerImpl
 import org.sonatype.nexus.validation.Create

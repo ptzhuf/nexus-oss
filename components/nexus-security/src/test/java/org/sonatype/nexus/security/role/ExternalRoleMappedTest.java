@@ -10,7 +10,7 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.security.realms;
+package org.sonatype.nexus.security.role;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,12 +21,12 @@ import java.util.Map;
 import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.nexus.security.authz.AuthorizationException;
 import org.sonatype.nexus.security.authz.AuthorizingRealmImpl;
-import org.sonatype.nexus.security.authz.Privilege;
-import org.sonatype.nexus.security.authz.Role;
 import org.sonatype.nexus.security.privilege.MethodPrivilegeDescriptor;
+import org.sonatype.nexus.security.privilege.Privilege;
 import org.sonatype.nexus.security.user.MockUserManager;
 import org.sonatype.nexus.security.user.UserManager;
 import org.sonatype.security.AbstractSecurityTestCase;
+import org.sonatype.security.realms.MockRealm;
 
 import com.google.inject.Binder;
 import com.google.inject.Singleton;

@@ -18,8 +18,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
-import org.sonatype.nexus.security.authz.NoSuchPrivilegeException;
-import org.sonatype.nexus.security.authz.NoSuchRoleException;
+import org.sonatype.nexus.security.privilege.NoSuchPrivilegeException;
+import org.sonatype.nexus.security.role.NoSuchRoleException;
 import org.sonatype.nexus.security.user.UserManagerImpl;
 import org.sonatype.nexus.security.user.UserNotFoundException;
 import org.sonatype.security.realms.tools.NoSuchRoleMappingException;

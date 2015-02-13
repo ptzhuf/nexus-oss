@@ -16,6 +16,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.sonatype.nexus.security.DefaultSecuritySystemTest;
+import org.sonatype.nexus.security.privilege.NoSuchPrivilegeException;
+import org.sonatype.nexus.security.privilege.Privilege;
+import org.sonatype.nexus.security.role.NoSuchRoleException;
+import org.sonatype.nexus.security.role.Role;
 
 /**
  * @see DefaultSecuritySystemTest

@@ -10,28 +10,28 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.security.authz;
+package org.sonatype.nexus.security.role;
 
 /**
- * Thrown when a Privilege could not be found.
+ * Thrown when a Role could not be found.
  */
-public class NoSuchPrivilegeException
+public class NoSuchRoleException
     extends Exception
 {
-  private static final long serialVersionUID = 820651866330926246L;
+  private static final long serialVersionUID = -3551757972830003397L;
 
-  public NoSuchPrivilegeException() {
+  public NoSuchRoleException() {
   }
 
-  public NoSuchPrivilegeException(String message, Throwable cause) {
+  public NoSuchRoleException(String message, Throwable cause) {
     super(message, cause);
   }
 
-  public NoSuchPrivilegeException(String message) {
+  public NoSuchRoleException(String message) {
     super(message);
   }
 
-  public NoSuchPrivilegeException(Throwable cause) {
+  public NoSuchRoleException(Throwable cause) {
     super(cause);
   }
 }

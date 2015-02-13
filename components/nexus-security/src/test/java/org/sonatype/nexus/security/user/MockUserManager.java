@@ -15,7 +15,7 @@ package org.sonatype.nexus.security.user;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.sonatype.security.realms.ExternalRoleMappedTest;
+import org.sonatype.nexus.security.role.ExternalRoleMappedTest;
 
 /**
  * @see ExternalRoleMappedTest

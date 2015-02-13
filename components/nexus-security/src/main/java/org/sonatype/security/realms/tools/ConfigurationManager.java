@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.sonatype.configuration.validation.InvalidConfigurationException;
-import org.sonatype.nexus.security.authz.NoSuchPrivilegeException;
-import org.sonatype.nexus.security.authz.NoSuchRoleException;
+import org.sonatype.nexus.security.privilege.NoSuchPrivilegeException;
+import org.sonatype.nexus.security.role.NoSuchRoleException;
 import org.sonatype.nexus.security.user.UserNotFoundException;
 import org.sonatype.security.model.CPrivilege;
 import org.sonatype.security.model.CRole;

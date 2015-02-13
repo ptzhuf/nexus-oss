@@ -14,8 +14,8 @@ package org.sonatype.nexus.atlas.rest
 
 import org.apache.shiro.authz.annotation.RequiresPermissions
 import org.sonatype.nexus.security.SecuritySystem
-import org.sonatype.nexus.security.authz.NoSuchPrivilegeException
-import org.sonatype.nexus.security.authz.NoSuchRoleException
+import org.sonatype.nexus.security.privilege.NoSuchPrivilegeException
+import org.sonatype.nexus.security.role.NoSuchRoleException
 import org.sonatype.nexus.security.user.User
 import org.sonatype.nexus.security.user.UserNotFoundException
 import org.sonatype.siesta.Resource

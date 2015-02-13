@@ -26,7 +26,7 @@ import javax.inject.Singleton;
 import org.sonatype.nexus.extdirect.DirectComponentSupport;
 import org.sonatype.nexus.rapture.StateContributor;
 import org.sonatype.nexus.security.SecuritySystem;
-import org.sonatype.nexus.security.authz.Privilege;
+import org.sonatype.nexus.security.privilege.Privilege;
 import org.sonatype.nexus.util.Tokens;
 import org.sonatype.nexus.validation.Validate;
 import org.sonatype.nexus.wonderland.AuthTicketService;

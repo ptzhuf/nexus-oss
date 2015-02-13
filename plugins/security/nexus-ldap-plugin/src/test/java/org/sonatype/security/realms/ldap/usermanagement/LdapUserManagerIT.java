@@ -19,7 +19,7 @@ import java.util.Set;
 
 import org.sonatype.ldaptestsuite.LdapServer;
 import org.sonatype.nexus.security.SecuritySystem;
-import org.sonatype.nexus.security.authz.Role;
+import org.sonatype.nexus.security.role.Role;
 import org.sonatype.nexus.security.user.RoleIdentifier;
 import org.sonatype.nexus.security.user.User;
 import org.sonatype.nexus.security.user.UserManager;

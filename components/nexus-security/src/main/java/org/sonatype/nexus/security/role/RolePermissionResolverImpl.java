@@ -11,7 +11,7 @@
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
 
-package org.sonatype.security.realms;
+package org.sonatype.nexus.security.role;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -25,8 +25,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.sonatype.nexus.security.authz.NoSuchPrivilegeException;
-import org.sonatype.nexus.security.authz.NoSuchRoleException;
+import org.sonatype.nexus.security.privilege.NoSuchPrivilegeException;
 import org.sonatype.nexus.security.privilege.PrivilegeDescriptor;
 import org.sonatype.security.events.AuthorizationConfigurationChanged;
 import org.sonatype.security.events.SecurityConfigurationChanged;

@@ -19,7 +19,7 @@ import java.util.Set;
 
 import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.nexus.security.authz.AuthorizationManager;
-import org.sonatype.nexus.security.authz.Role;
+import org.sonatype.nexus.security.role.Role;
 import org.sonatype.security.AbstractSecurityTestCase;
 import org.sonatype.security.model.Configuration;
 

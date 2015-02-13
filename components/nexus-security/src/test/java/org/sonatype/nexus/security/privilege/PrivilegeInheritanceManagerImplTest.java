@@ -10,7 +10,7 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.security.authz;
+package org.sonatype.nexus.security.privilege;
 
 import java.util.List;
 
@@ -22,16 +22,16 @@ import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Tests for {@link DefaultPrivilegeInheritanceManager}.
+ * Tests for {@link PrivilegeInheritanceManagerImpl}.
  */
-public class DefaultPrivilegeInheritanceManagerTest
+public class PrivilegeInheritanceManagerImplTest
     extends TestSupport
 {
-  private DefaultPrivilegeInheritanceManager manager;
+  private PrivilegeInheritanceManagerImpl manager;
 
   @Before
   public void setUp() throws Exception {
-    manager = new DefaultPrivilegeInheritanceManager();
+    manager = new PrivilegeInheritanceManagerImpl();
   }
 
   @Test

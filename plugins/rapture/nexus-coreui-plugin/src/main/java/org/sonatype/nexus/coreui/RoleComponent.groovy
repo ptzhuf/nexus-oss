@@ -22,7 +22,7 @@ import org.sonatype.nexus.extdirect.DirectComponent
 import org.sonatype.nexus.extdirect.DirectComponentSupport
 import org.sonatype.nexus.security.SecuritySystem
 import org.sonatype.nexus.security.authz.AuthorizationManager
-import org.sonatype.nexus.security.authz.Role
+import org.sonatype.nexus.security.role.Role
 import org.sonatype.nexus.security.user.UserManagerImpl
 import org.sonatype.nexus.validation.Create
 import org.sonatype.nexus.validation.Update

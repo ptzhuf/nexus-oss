@@ -10,7 +10,7 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.security.authz;
+package org.sonatype.nexus.security.privilege;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,12 +21,10 @@ import javax.inject.Singleton;
 /**
  * Default implementation of PrivilegeInheritanceManager which adds read to each action. The way we see it, if you can
  * create/update/delete something then you automatically have access to 'read' it as well.
- *
- * @author Brian Demers
  */
+@Named
 @Singleton
-@Named("default")
-public class DefaultPrivilegeInheritanceManager
+public class PrivilegeInheritanceManagerImpl
     implements PrivilegeInheritanceManager
 {
   public List<String> getInheritedMethods(String method) {
