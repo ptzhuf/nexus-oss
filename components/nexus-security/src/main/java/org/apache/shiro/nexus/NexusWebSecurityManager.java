@@ -17,7 +17,7 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 
 import org.sonatype.nexus.security.UserIdMdcHelper;
-import org.sonatype.security.events.AuthenticationEvent;
+import org.sonatype.nexus.security.authc.AuthenticationEvent;
 import org.sonatype.sisu.goodies.common.Time;
 import org.sonatype.sisu.goodies.eventbus.EventBus;
 

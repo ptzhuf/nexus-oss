@@ -10,40 +10,37 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.security.events;
+package org.sonatype.nexus.security.authc;
 
 /**
- * An event fired when a user is removed from the system, so cached principals can be expired.
+ * An event fired when the an user is authorized.
+ *
+ * @since 3.0
  */
-public class UserPrincipalsExpired
+public class AuthenticationEvent
 {
   private final String userId;
 
-  private final String source;
+  private final boolean successful;
 
-  /**
-   * Applies to any cached user principals that have the given userId and UserManager source.
-   *
-   * @param userId The removed user's id
-   * @param source The UserManager source
-   */
-  public UserPrincipalsExpired(final String userId, final String source) {
+  public AuthenticationEvent(final String userId, final boolean successful) {
     this.userId = userId;
-    this.source = source;
-  }
-
-  /**
-   * Applies to all cached user principals that have an invalid userId or UserManager source.
-   */
-  public UserPrincipalsExpired() {
-    this(null, null);
+    this.successful = successful;
   }
 
   public String getUserId() {
     return userId;
   }
 
-  public String getSource() {
-    return source;
+  public boolean isSuccessful() {
+    return successful;
+  }
+
+  @Override
+  public String toString() {
+    return "AuthenticationEvent{" +
+        "userId=" + userId +
+        ", successful=" + successful +
+        '}';
   }
 }

@@ -29,6 +29,7 @@ import javax.inject.Singleton;
 import org.sonatype.configuration.validation.InvalidConfigurationException;
 import org.sonatype.nexus.common.text.Strings2;
 import org.sonatype.nexus.security.authc.AuthenticationException;
+import org.sonatype.nexus.security.authz.AuthorizationConfigurationChanged;
 import org.sonatype.nexus.security.authz.AuthorizationException;
 import org.sonatype.nexus.security.authz.AuthorizationManager;
 import org.sonatype.nexus.security.authz.NoSuchAuthorizationManagerException;
@@ -44,9 +45,6 @@ import org.sonatype.nexus.security.user.UserNotFoundException;
 import org.sonatype.nexus.security.user.UserSearchCriteria;
 import org.sonatype.nexus.security.user.UserStatus;
 import org.sonatype.security.configuration.SecurityConfigurationManager;
-import org.sonatype.security.events.AuthorizationConfigurationChanged;
-import org.sonatype.security.events.SecurityConfigurationChanged;
-import org.sonatype.security.events.UserPrincipalsExpired;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
 import org.sonatype.sisu.goodies.eventbus.EventBus;
 

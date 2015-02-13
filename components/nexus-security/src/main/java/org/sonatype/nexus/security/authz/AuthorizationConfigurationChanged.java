@@ -10,37 +10,12 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.security.events;
+package org.sonatype.nexus.security.authz;
 
 /**
- * An event fired when the an user is authorized.
- *
- * @since 3.0
+ * An event fired when the authorization configuration has changed.
  */
-public class AuthenticationEvent
+public class AuthorizationConfigurationChanged
 {
-  private final String userId;
-
-  private final boolean successful;
-
-  public AuthenticationEvent(final String userId, final boolean successful) {
-    this.userId = userId;
-    this.successful = successful;
-  }
-
-  public String getUserId() {
-    return userId;
-  }
-
-  public boolean isSuccessful() {
-    return successful;
-  }
-
-  @Override
-  public String toString() {
-    return "AuthenticationEvent{" +
-        "userId=" + userId +
-        ", successful=" + successful +
-        '}';
-  }
+  // empty
 }
