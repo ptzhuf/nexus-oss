@@ -21,7 +21,7 @@ import javax.inject.Provider;
 import org.sonatype.nexus.proxy.events.NexusStartedEvent;
 import org.sonatype.nexus.proxy.events.NexusStoppedEvent;
 import org.sonatype.nexus.security.FilterChain;
-import org.sonatype.security.web.ProtectedPathManager;
+import org.sonatype.nexus.security.ProtectedPathManager;
 import org.sonatype.sisu.goodies.eventbus.EventBus;
 
 import com.google.common.eventbus.Subscribe;

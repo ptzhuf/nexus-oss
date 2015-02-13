@@ -17,12 +17,12 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 
 import org.sonatype.nexus.internal.orient.OrientModule;
+import org.sonatype.nexus.security.WebSecurityModule;
 import org.sonatype.nexus.web.internal.BaseUrlHolderFilter;
 import org.sonatype.nexus.web.internal.ErrorPageFilter;
 import org.sonatype.nexus.web.internal.ErrorPageServlet;
 import org.sonatype.nexus.web.internal.StandardHttpResponseHeadersFilter;
 import org.sonatype.nexus.web.metrics.MetricsModule;
-import org.sonatype.security.web.SecurityWebModule;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.servlet.ServletModule;
@@ -83,7 +83,7 @@ public class NexusServletModule
 
     install(new MetricsModule());
 
-    install(new SecurityWebModule(servletContext));
+    install(new WebSecurityModule(servletContext));
 
     install(new OrientModule());
   }
