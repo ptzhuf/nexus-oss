@@ -12,10 +12,10 @@
  */
 package org.sonatype.nexus.security.authc;
 
+import org.sonatype.nexus.security.AbstractSecurityTest;
 import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.nexus.security.realm.FakeRealm1;
 import org.sonatype.nexus.security.realm.FakeRealm2;
-import org.sonatype.security.AbstractSecurityTest;
 
 import com.google.inject.Binder;
 import com.google.inject.Singleton;

@@ -12,10 +12,10 @@
  */
 package org.sonatype.nexus.security.authz;
 
+import org.sonatype.nexus.security.AbstractSecurityTest;
 import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.nexus.security.realm.MockRealmB;
 import org.sonatype.nexus.security.user.User;
-import org.sonatype.security.AbstractSecurityTest;
 
 import junit.framework.Assert;
 import org.apache.shiro.realm.Realm;

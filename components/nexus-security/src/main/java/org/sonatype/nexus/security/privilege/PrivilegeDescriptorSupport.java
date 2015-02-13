@@ -16,7 +16,7 @@ import java.util.List;
 
 import org.sonatype.configuration.validation.ValidationResponse;
 import org.sonatype.nexus.security.model.CPrivilege;
-import org.sonatype.security.realms.validator.SecurityValidationContext;
+import org.sonatype.nexus.security.model.SecurityValidationContext;
 
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;

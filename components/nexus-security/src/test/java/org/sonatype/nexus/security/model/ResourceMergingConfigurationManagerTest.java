@@ -15,8 +15,7 @@ package org.sonatype.nexus.security.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.sonatype.security.AbstractSecurityTestCase;
-import org.sonatype.security.realms.tools.ConfigurationManager;
+import org.sonatype.nexus.security.AbstractSecurityTestCase;
 
 import com.google.inject.Binder;
 import com.google.inject.name.Names;

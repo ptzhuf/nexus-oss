@@ -14,7 +14,7 @@ package org.sonatype.nexus.security.privilege;
 
 import org.sonatype.configuration.validation.ValidationResponse;
 import org.sonatype.nexus.security.model.CPrivilege;
-import org.sonatype.security.realms.validator.SecurityValidationContext;
+import org.sonatype.nexus.security.model.SecurityValidationContext;
 
 import org.apache.shiro.authz.Permission;
 

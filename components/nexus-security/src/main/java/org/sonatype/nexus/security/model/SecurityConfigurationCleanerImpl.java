@@ -10,17 +10,13 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.security.realms.tools;
+package org.sonatype.nexus.security.model;
 
 import java.util.ConcurrentModificationException;
 
-import javax.enterprise.inject.Typed;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.sonatype.nexus.security.model.CRole;
-import org.sonatype.nexus.security.model.CUserRoleMapping;
-import org.sonatype.nexus.security.model.SecurityModelConfiguration;
 import org.sonatype.nexus.security.role.NoSuchRoleException;
 import org.sonatype.nexus.security.user.NoSuchRoleMappingException;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
@@ -32,10 +28,9 @@ import org.sonatype.sisu.goodies.common.ComponentSupport;
  * be updated so the permission reference can removed. When a Role is removed references are removed from other roles
  * and users.
  */
+@Named
 @Singleton
-@Typed(SecurityConfigurationCleaner.class)
-@Named("default")
-public class DefaultSecurityConfigurationCleaner
+public class SecurityConfigurationCleanerImpl
     extends ComponentSupport
     implements SecurityConfigurationCleaner
 {
@@ -87,6 +82,7 @@ public class DefaultSecurityConfigurationCleaner
       }
       while (concurrentlyUpdated);
     }
+
     for (CUserRoleMapping mapping : configuration.getUserRoleMappings()) {
       boolean concurrentlyUpdated;
       do {

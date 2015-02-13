@@ -10,7 +10,7 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.security.realms.tools;
+package org.sonatype.nexus.security.model;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -29,22 +29,11 @@ import org.sonatype.configuration.validation.ValidationMessage;
 import org.sonatype.configuration.validation.ValidationResponse;
 import org.sonatype.nexus.common.text.Strings2;
 import org.sonatype.nexus.security.authz.AuthorizationConfigurationChanged;
-import org.sonatype.nexus.security.model.CPrivilege;
-import org.sonatype.nexus.security.model.CRole;
-import org.sonatype.nexus.security.model.CUser;
-import org.sonatype.nexus.security.model.CUserRoleMapping;
-import org.sonatype.nexus.security.model.Configuration;
-import org.sonatype.nexus.security.model.DynamicSecurityResource;
-import org.sonatype.nexus.security.model.SecurityModelConfiguration;
-import org.sonatype.nexus.security.model.SecurityModelConfigurationSource;
-import org.sonatype.nexus.security.model.StaticSecurityResource;
 import org.sonatype.nexus.security.privilege.NoSuchPrivilegeException;
 import org.sonatype.nexus.security.role.NoSuchRoleException;
 import org.sonatype.nexus.security.user.NoSuchRoleMappingException;
 import org.sonatype.nexus.security.user.UserManagerImpl;
 import org.sonatype.nexus.security.user.UserNotFoundException;
-import org.sonatype.security.realms.validator.SecurityConfigurationValidator;
-import org.sonatype.security.realms.validator.SecurityValidationContext;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
 import org.sonatype.sisu.goodies.eventbus.EventBus;
 
@@ -59,7 +48,7 @@ import static com.google.common.base.Preconditions.checkState;
  */
 @Named
 @Singleton
-public class DefaultConfigurationManager
+public class ConfigurationManagerImpl
     extends ComponentSupport
     implements ConfigurationManager
 {
@@ -84,14 +73,14 @@ public class DefaultConfigurationManager
   private volatile SecurityModelConfiguration mergedConfiguration;
 
   @Inject
-  public DefaultConfigurationManager(final SecurityModelConfigurationSource configurationSource,
-                                     final List<StaticSecurityResource> staticResources,
-                                     final List<DynamicSecurityResource> dynamicResources,
-                                     final List<SecurityConfigurationModifier> configurationModifiers,
-                                     final SecurityConfigurationCleaner configCleaner,
-                                     final SecurityConfigurationValidator validator,
-                                     final PasswordService passwordService,
-                                     final EventBus eventBus)
+  public ConfigurationManagerImpl(final SecurityModelConfigurationSource configurationSource,
+                                  final List<StaticSecurityResource> staticResources,
+                                  final List<DynamicSecurityResource> dynamicResources,
+                                  final List<SecurityConfigurationModifier> configurationModifiers,
+                                  final SecurityConfigurationCleaner configCleaner,
+                                  final SecurityConfigurationValidator validator,
+                                  final PasswordService passwordService,
+                                  final EventBus eventBus)
   {
     this.configurationSource = configurationSource;
     this.dynamicResources = dynamicResources;

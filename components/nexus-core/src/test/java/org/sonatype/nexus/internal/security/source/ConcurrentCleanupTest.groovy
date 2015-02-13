@@ -23,10 +23,10 @@ import org.sonatype.nexus.orient.MinimalDatabaseServer
 import org.sonatype.nexus.security.model.CPrivilege
 import org.sonatype.nexus.security.model.CRole
 import org.sonatype.nexus.security.model.CUserRoleMapping
+import org.sonatype.nexus.security.model.SecurityConfigurationCleaner
+import org.sonatype.nexus.security.model.SecurityConfigurationCleanerImpl
 import org.sonatype.nexus.security.model.SecurityModelConfiguration
 import org.sonatype.nexus.security.model.StaticSecurityModelConfigurationSource
-import org.sonatype.security.realms.tools.DefaultSecurityConfigurationCleaner
-import org.sonatype.security.realms.tools.SecurityConfigurationCleaner
 import org.sonatype.sisu.litmus.testsupport.TestSupport
 
 import java.util.concurrent.CountDownLatch
@@ -79,7 +79,7 @@ extends TestSupport
     source.start()
     source.loadConfiguration()
     configuration = source.configuration
-    cleaner = new DefaultSecurityConfigurationCleaner()
+    cleaner = new SecurityConfigurationCleanerImpl()
   }
 
   @After

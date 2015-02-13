@@ -15,12 +15,12 @@ package org.sonatype.nexus.security.user;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.sonatype.nexus.security.AbstractSecurityTestCase;
 import org.sonatype.nexus.security.model.CUser;
 import org.sonatype.nexus.security.model.CUserRoleMapping;
 import org.sonatype.nexus.security.model.Configuration;
-import org.sonatype.security.AbstractSecurityTestCase;
-import org.sonatype.security.realms.tools.ConfigurationManager;
-import org.sonatype.security.realms.tools.DefaultConfigurationManager;
+import org.sonatype.nexus.security.model.ConfigurationManager;
+import org.sonatype.nexus.security.model.ConfigurationManagerImpl;
 
 import junit.framework.Assert;
 
@@ -33,7 +33,7 @@ public class UserRoleMappingTest
   }
 
   public ConfigurationManager getConfigManager() throws Exception {
-    return this.lookup(DefaultConfigurationManager.class);
+    return this.lookup(ConfigurationManagerImpl.class);
   }
 
   public void testGetUser() throws Exception {

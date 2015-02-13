@@ -15,7 +15,7 @@ package org.sonatype.nexus.security.config;
 import java.util.Collections;
 import java.util.List;
 
-import org.sonatype.security.AbstractSecurityTest;
+import org.sonatype.nexus.security.AbstractSecurityTest;
 
 import junit.framework.Assert;
 

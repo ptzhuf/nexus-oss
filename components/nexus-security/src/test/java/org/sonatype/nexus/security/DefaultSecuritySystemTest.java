@@ -24,7 +24,6 @@ import org.sonatype.nexus.security.role.Role;
 import org.sonatype.nexus.security.role.RoleIdentifier;
 import org.sonatype.nexus.security.user.User;
 import org.sonatype.nexus.security.user.UserStatus;
-import org.sonatype.security.AbstractSecurityTest;
 
 import com.google.inject.Binder;
 import com.google.inject.Singleton;

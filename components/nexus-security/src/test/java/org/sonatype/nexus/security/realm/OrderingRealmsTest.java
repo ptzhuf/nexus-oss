@@ -15,9 +15,9 @@ package org.sonatype.nexus.security.realm;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.sonatype.nexus.security.AbstractSecurityTest;
 import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.nexus.security.user.User;
-import org.sonatype.security.AbstractSecurityTest;
 
 import junit.framework.Assert;
 

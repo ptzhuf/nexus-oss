@@ -25,7 +25,7 @@ import javax.inject.Singleton;
 import org.sonatype.nexus.common.text.Strings2;
 import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.nexus.security.model.CUserRoleMapping;
-import org.sonatype.security.realms.tools.ConfigurationManager;
+import org.sonatype.nexus.security.model.ConfigurationManager;
 
 import com.google.common.collect.Sets;
 import org.eclipse.sisu.Description;

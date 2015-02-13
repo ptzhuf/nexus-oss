@@ -16,8 +16,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.sonatype.security.AbstractSecurityTestCase;
-import org.sonatype.security.realms.tools.ConfigurationManager;
+import org.sonatype.nexus.security.AbstractSecurityTestCase;
 
 import com.google.inject.Binder;
 import com.google.inject.name.Names;

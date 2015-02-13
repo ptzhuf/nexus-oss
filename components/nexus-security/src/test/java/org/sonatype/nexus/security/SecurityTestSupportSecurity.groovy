@@ -10,22 +10,30 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.security.realms.tools;
+package org.sonatype.nexus.security
 
-import org.sonatype.nexus.security.model.SecurityModelConfiguration;
+import org.sonatype.nexus.security.config.SecurityConfiguration
 
 /**
- * Will handle cleaning existing configuration when an item is removed
+ * @since 3.0
  */
-public interface SecurityConfigurationCleaner
+class SecurityTestSupportSecurity
 {
-  /**
-   * Called when a role is removed so additional cleanup logic can be done.
-   */
-  void roleRemoved(SecurityModelConfiguration configuration, String roleId);
 
-  /**
-   * Called when a privilege is removed so additional cleanup logic can be done.
-   */
-  void privilegeRemoved(SecurityModelConfiguration configuration, String privilegeId);
+  static SecurityConfiguration security() {
+    return new SecurityConfiguration(
+        anonymousAccessEnabled: false,
+        anonymousUsername: 'anonymous-user',
+        anonymousPassword: 'anonymous-pass',
+        realms: [
+            'MockRealmA',
+            'ExceptionThrowingMockRealm',
+            'MockRealmB',
+            'FakeRealm1',
+            'FakeRealm2'
+        ]
+    )
+  }
+
 }
+

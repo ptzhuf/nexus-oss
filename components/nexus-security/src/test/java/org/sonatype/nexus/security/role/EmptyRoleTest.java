@@ -18,17 +18,17 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.sonatype.configuration.validation.InvalidConfigurationException;
+import org.sonatype.nexus.security.AbstractSecurityTestCase;
 import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.nexus.security.authc.AuthenticatingRealmImpl;
 import org.sonatype.nexus.security.authz.AuthorizationManager;
 import org.sonatype.nexus.security.authz.AuthorizingRealmImpl;
 import org.sonatype.nexus.security.model.CPrivilege;
+import org.sonatype.nexus.security.model.ConfigurationManagerImpl;
 import org.sonatype.nexus.security.privilege.MethodPrivilegeDescriptor;
 import org.sonatype.nexus.security.user.User;
 import org.sonatype.nexus.security.user.UserSearchCriteria;
 import org.sonatype.nexus.security.user.UserStatus;
-import org.sonatype.security.AbstractSecurityTestCase;
-import org.sonatype.security.realms.tools.DefaultConfigurationManager;
 
 import junit.framework.Assert;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -160,7 +160,7 @@ public class EmptyRoleTest
     priv.setProperty(MethodPrivilegeDescriptor.P_PERMISSION, "app:config");
     priv.setProperty(MethodPrivilegeDescriptor.P_METHOD, "read");
 
-    this.lookup(DefaultConfigurationManager.class).createPrivilege(priv);
+    this.lookup(ConfigurationManagerImpl.class).createPrivilege(priv);
 
     return priv.getId();
   }

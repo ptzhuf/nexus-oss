@@ -19,7 +19,7 @@ import org.sonatype.configuration.validation.ValidationMessage;
 import org.sonatype.configuration.validation.ValidationResponse;
 import org.sonatype.nexus.common.text.Strings2;
 import org.sonatype.nexus.security.model.CPrivilege;
-import org.sonatype.security.realms.validator.SecurityValidationContext;
+import org.sonatype.nexus.security.model.SecurityValidationContext;
 
 @Named
 @Singleton

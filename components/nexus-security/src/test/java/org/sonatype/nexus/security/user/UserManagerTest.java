@@ -17,14 +17,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.sonatype.nexus.security.AbstractSecurityTestCase;
 import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.nexus.security.model.CUser;
 import org.sonatype.nexus.security.model.CUserRoleMapping;
 import org.sonatype.nexus.security.model.Configuration;
+import org.sonatype.nexus.security.model.ConfigurationManager;
 import org.sonatype.nexus.security.model.SecurityModelConfiguration;
 import org.sonatype.nexus.security.role.RoleIdentifier;
-import org.sonatype.security.AbstractSecurityTestCase;
-import org.sonatype.security.realms.tools.ConfigurationManager;
 
 import junit.framework.Assert;
 import org.apache.shiro.authc.credential.PasswordService;

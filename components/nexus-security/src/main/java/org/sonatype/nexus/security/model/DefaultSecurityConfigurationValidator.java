@@ -10,7 +10,7 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.security.realms.validator;
+package org.sonatype.nexus.security.model;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -29,11 +29,6 @@ import org.sonatype.configuration.validation.ValidationRequest;
 import org.sonatype.configuration.validation.ValidationResponse;
 import org.sonatype.nexus.common.text.Strings2;
 import org.sonatype.nexus.security.config.ConfigurationIdGenerator;
-import org.sonatype.nexus.security.model.CPrivilege;
-import org.sonatype.nexus.security.model.CRole;
-import org.sonatype.nexus.security.model.CUser;
-import org.sonatype.nexus.security.model.CUserRoleMapping;
-import org.sonatype.nexus.security.model.Configuration;
 import org.sonatype.nexus.security.privilege.PrivilegeDescriptor;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
 

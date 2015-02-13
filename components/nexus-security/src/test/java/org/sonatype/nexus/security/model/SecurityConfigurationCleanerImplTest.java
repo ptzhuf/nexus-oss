@@ -10,11 +10,8 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.security.realms.tools;
+package org.sonatype.nexus.security.model;
 
-import org.sonatype.nexus.security.model.CRole;
-import org.sonatype.nexus.security.model.CUserRoleMapping;
-import org.sonatype.nexus.security.model.Configuration;
 import org.sonatype.sisu.litmus.testsupport.TestSupport;
 
 import org.junit.Before;
@@ -23,18 +20,18 @@ import org.junit.Test;
 import static org.junit.Assert.assertFalse;
 
 /**
- * Tests for {@link DefaultSecurityConfigurationCleaner}.
+ * Tests for {@link SecurityConfigurationCleanerImpl}.
  */
-public class DefaultSecurityConfigurationCleanerTest
+public class SecurityConfigurationCleanerImplTest
     extends TestSupport
 {
-  private DefaultSecurityConfigurationCleaner underTest;
+  private SecurityConfigurationCleanerImpl underTest;
 
   private Configuration configuration;
 
   @Before
   public void setUp() throws Exception {
-    underTest = new DefaultSecurityConfigurationCleaner();
+    underTest = new SecurityConfigurationCleanerImpl();
     configuration = DefaultSecurityConfigurationCleanerTestSecurity.securityModel();
   }
 

@@ -22,7 +22,7 @@ import org.sonatype.nexus.common.text.Strings2;
 import org.sonatype.nexus.security.authz.WildcardPermission2;
 import org.sonatype.nexus.security.config.ConfigurationIdGenerator;
 import org.sonatype.nexus.security.model.CPrivilege;
-import org.sonatype.security.realms.validator.SecurityValidationContext;
+import org.sonatype.nexus.security.model.SecurityValidationContext;
 
 import org.apache.shiro.authz.Permission;
 

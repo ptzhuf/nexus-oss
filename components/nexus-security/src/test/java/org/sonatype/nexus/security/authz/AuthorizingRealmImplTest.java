@@ -16,13 +16,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.sonatype.configuration.validation.InvalidConfigurationException;
+import org.sonatype.nexus.security.AbstractSecurityTestCase;
 import org.sonatype.nexus.security.model.CPrivilege;
 import org.sonatype.nexus.security.model.CRole;
 import org.sonatype.nexus.security.model.CUser;
+import org.sonatype.nexus.security.model.ConfigurationManagerImpl;
 import org.sonatype.nexus.security.privilege.MethodPrivilegeDescriptor;
 import org.sonatype.nexus.security.user.UserStatus;
-import org.sonatype.security.AbstractSecurityTestCase;
-import org.sonatype.security.realms.tools.DefaultConfigurationManager;
 
 import junit.framework.Assert;
 import org.apache.shiro.authz.permission.RolePermissionResolver;
@@ -38,7 +38,7 @@ public class AuthorizingRealmImplTest
 {
   private AuthorizingRealmImpl realm;
 
-  private DefaultConfigurationManager configurationManager;
+  private ConfigurationManagerImpl configurationManager;
 
   @Override
   protected void setUp() throws Exception {
@@ -47,7 +47,7 @@ public class AuthorizingRealmImplTest
     realm = (AuthorizingRealmImpl) lookup(Realm.class, "NexusAuthorizingRealm");
     realm.setRolePermissionResolver(this.lookup(RolePermissionResolver.class));
 
-    configurationManager = lookup(DefaultConfigurationManager.class);
+    configurationManager = lookup(ConfigurationManagerImpl.class);
   }
 
   public void testAuthorization() throws Exception {
