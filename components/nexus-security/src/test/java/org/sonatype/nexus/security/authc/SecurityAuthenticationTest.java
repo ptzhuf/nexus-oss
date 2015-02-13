@@ -10,10 +10,11 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.security.realms;
+package org.sonatype.nexus.security.authc;
 
 import org.sonatype.nexus.security.SecuritySystem;
-import org.sonatype.nexus.security.authc.AuthenticationException;
+import org.sonatype.nexus.security.realm.FakeRealm1;
+import org.sonatype.nexus.security.realm.FakeRealm2;
 import org.sonatype.security.AbstractSecurityTest;
 
 import com.google.inject.Binder;

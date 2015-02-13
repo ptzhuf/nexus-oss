@@ -10,16 +10,11 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.security.realms;
+package org.sonatype.nexus.security.user;
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.sonatype.nexus.security.user.AbstractUserManager;
-import org.sonatype.nexus.security.user.User;
-import org.sonatype.nexus.security.user.UserNotFoundException;
-import org.sonatype.nexus.security.user.UserSearchCriteria;
 
 public abstract class MockUserManagerSupport
     extends AbstractUserManager

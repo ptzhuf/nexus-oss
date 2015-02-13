@@ -23,10 +23,10 @@ import org.sonatype.nexus.security.authz.AuthorizationException;
 import org.sonatype.nexus.security.authz.AuthorizingRealmImpl;
 import org.sonatype.nexus.security.privilege.MethodPrivilegeDescriptor;
 import org.sonatype.nexus.security.privilege.Privilege;
+import org.sonatype.nexus.security.realm.MockRealm;
 import org.sonatype.nexus.security.user.MockUserManager;
 import org.sonatype.nexus.security.user.UserManager;
 import org.sonatype.security.AbstractSecurityTestCase;
-import org.sonatype.security.realms.MockRealm;
 
 import com.google.inject.Binder;
 import com.google.inject.Singleton;

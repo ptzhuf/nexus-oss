@@ -10,9 +10,11 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.security.realms;
+package org.sonatype.nexus.security.realm;
 
 import java.util.Collections;
+
+import org.sonatype.nexus.security.authc.SecurityAuthenticationTest;
 
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -29,18 +31,18 @@ import org.apache.shiro.subject.PrincipalCollection;
 /**
  * @see SecurityAuthenticationTest
  */
-public class FakeRealm1
+public class FakeRealm2
     extends AuthorizingRealm
 {
   @Override
   public String getName() {
-    return FakeRealm1.class.getName();
+    return FakeRealm2.class.getName();
   }
 
   @Override
   protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection arg0) {
     SimpleAuthorizationInfo info = new SimpleAuthorizationInfo(Collections.singleton("role"));
-    Permission permission = new WildcardPermission("test:perm");
+    Permission permission = new WildcardPermission("other:perm");
     info.setObjectPermissions(Collections.singleton(permission));
     return info;
   }
