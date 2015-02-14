@@ -18,15 +18,15 @@ import org.apache.shiro.authc.HostAuthenticationToken;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * {@link AuthenticationToken} with a principal extracted from an HTTP header. The principal is equal to HTTP header
- * value.
+ * {@link AuthenticationToken} with a principal extracted from an HTTP header.
+ *
+ * The principal is equal to HTTP header value.
  *
  * @since 2.7
  */
 public class HttpHeaderAuthenticationToken
     implements HostAuthenticationToken
 {
-
   private final String headerName;
 
   private final String headerValue;
@@ -71,5 +71,4 @@ public class HttpHeaderAuthenticationToken
     }
     return buf.toString();
   }
-
 }

@@ -56,11 +56,11 @@ public class AuthenticatingRealmImpl
 
   public static final String ROLE = "NexusAuthenticatingRealm";
 
+  private static final int MAX_LEGACY_PASSWORD_LENGTH = 40;
+
   private ConfigurationManager configuration;
 
   private PasswordService passwordService;
-
-  private final int MAX_LEGACY_PASSWORD_LENGTH = 40;
 
   @Inject
   public AuthenticatingRealmImpl(final ConfigurationManager configuration,

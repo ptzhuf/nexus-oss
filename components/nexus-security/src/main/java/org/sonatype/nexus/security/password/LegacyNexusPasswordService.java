@@ -12,7 +12,6 @@
  */
 package org.sonatype.nexus.security.password;
 
-import javax.enterprise.inject.Typed;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
@@ -26,15 +25,14 @@ import org.apache.shiro.crypto.hash.format.HexFormat;
  *
  * PasswordService for handling legacy passwords (SHA-1 and MD5).
  */
-@Singleton
-@Typed(PasswordService.class)
 @Named("legacy")
+@Singleton
 public class LegacyNexusPasswordService
     implements PasswordService
 {
-  DefaultPasswordService sha1PasswordService;
+  private final DefaultPasswordService sha1PasswordService;
 
-  DefaultPasswordService md5PasswordService;
+  private final DefaultPasswordService md5PasswordService;
 
   public LegacyNexusPasswordService() {
     //Initialize and configure sha1 password service
@@ -57,12 +55,13 @@ public class LegacyNexusPasswordService
   }
 
   @Override
-  public String encryptPassword(Object plaintextPassword) {
+  public String encryptPassword(final Object plaintextPassword) {
+    // FIXME: throw UnsupportedOperationException instead?
     throw new IllegalArgumentException("Not supported");
   }
 
   @Override
-  public boolean passwordsMatch(Object submittedPlaintext, String encrypted) {
+  public boolean passwordsMatch(final Object submittedPlaintext, final String encrypted) {
     //Legacy passwords can be hashed with sha-1 or md5, check both
 
     return sha1PasswordService.passwordsMatch(submittedPlaintext, encrypted) ||

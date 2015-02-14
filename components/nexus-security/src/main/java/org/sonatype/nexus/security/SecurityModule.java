@@ -57,7 +57,7 @@ public class SecurityModule
   }
 
   @Override
-  protected void bindSecurityManager(AnnotatedBindingBuilder<? super SecurityManager> bind) {
+  protected void bindSecurityManager(final AnnotatedBindingBuilder<? super SecurityManager> bind) {
     // prefer the default constructor; we'll set the realms programatically
     bind(DefaultSecurityManager.class).toConstructor(ctor(DefaultSecurityManager.class)).asEagerSingleton();
 
@@ -70,7 +70,7 @@ public class SecurityModule
   }
 
   @Override
-  protected void bindSessionManager(AnnotatedBindingBuilder<SessionManager> bind) {
+  protected void bindSessionManager(final AnnotatedBindingBuilder<SessionManager> bind) {
     // workaround for NEXUS-5727, see NexusDefaultSessionManager javadoc for clues
     bind.to(NexusDefaultSessionManager.class).asEagerSingleton();
     // this is a PrivateModule, so explicitly binding the NexusDefaultSessionManager class
@@ -88,11 +88,11 @@ public class SecurityModule
       return getClass().getName();
     }
 
-    public boolean supports(AuthenticationToken token) {
+    public boolean supports(final AuthenticationToken token) {
       return false;
     }
 
-    public AuthenticationInfo getAuthenticationInfo(AuthenticationToken token) {
+    public AuthenticationInfo getAuthenticationInfo(final AuthenticationToken token) {
       return null;
     }
   }

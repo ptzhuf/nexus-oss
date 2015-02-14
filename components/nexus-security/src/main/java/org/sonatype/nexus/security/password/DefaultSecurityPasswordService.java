@@ -23,6 +23,8 @@ import org.apache.shiro.authc.credential.PasswordService;
 import org.apache.shiro.crypto.hash.DefaultHashService;
 import org.apache.shiro.crypto.hash.Hash;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Default {@link PasswordService}.
  *
@@ -56,9 +58,9 @@ public class DefaultSecurityPasswordService
   private final PasswordService legacyPasswordService;
 
   @Inject
-  public DefaultSecurityPasswordService(@Named("legacy") PasswordService legacyPasswordService) {
+  public DefaultSecurityPasswordService(final @Named("legacy") PasswordService legacyPasswordService) {
     this.passwordService = new DefaultPasswordService();
-    this.legacyPasswordService = legacyPasswordService;
+    this.legacyPasswordService = checkNotNull(legacyPasswordService);
 
     //Create and set a hash service according to our hashing policies
     DefaultHashService hashService = new DefaultHashService();
@@ -69,12 +71,12 @@ public class DefaultSecurityPasswordService
   }
 
   @Override
-  public String encryptPassword(Object plaintextPassword) {
+  public String encryptPassword(final Object plaintextPassword) {
     return passwordService.encryptPassword(plaintextPassword);
   }
 
   @Override
-  public boolean passwordsMatch(Object submittedPlaintext, String encrypted) {
+  public boolean passwordsMatch(final Object submittedPlaintext, final String encrypted) {
     //When hash is just a string, it could be a legacy password. Check both
     //current and legacy password services
 
@@ -83,12 +85,12 @@ public class DefaultSecurityPasswordService
   }
 
   @Override
-  public Hash hashPassword(Object plaintext) {
+  public Hash hashPassword(final Object plaintext) {
     return passwordService.hashPassword(plaintext);
   }
 
   @Override
-  public boolean passwordsMatch(Object plaintext, Hash savedPasswordHash) {
+  public boolean passwordsMatch(final Object plaintext, final Hash savedPasswordHash) {
     return passwordService.passwordsMatch(plaintext, savedPasswordHash);
   }
 }

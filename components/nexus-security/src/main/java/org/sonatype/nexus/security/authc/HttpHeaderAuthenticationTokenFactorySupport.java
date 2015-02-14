@@ -14,6 +14,7 @@ package org.sonatype.nexus.security.authc;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +25,7 @@ import org.apache.shiro.web.util.WebUtils;
 /**
  * Support class for {@link AuthenticationTokenFactory}s that creates {@link AuthenticationToken}s based on HTTP
  * headers.
+ *
  * Looks up given HTTP header names. If found will create an {@link HttpHeaderAuthenticationToken}.
  *
  * @since 2.7
@@ -31,8 +33,8 @@ import org.apache.shiro.web.util.WebUtils;
 public abstract class HttpHeaderAuthenticationTokenFactorySupport
     implements AuthenticationTokenFactory
 {
-
   @Override
+  @Nullable
   public AuthenticationToken createToken(ServletRequest request, ServletResponse response) {
     List<String> headerNames = getHttpHeaderNames();
     if (headerNames != null) {
@@ -67,5 +69,4 @@ public abstract class HttpHeaderAuthenticationTokenFactorySupport
         + getHttpHeaderNames()
         + ")";
   }
-
 }

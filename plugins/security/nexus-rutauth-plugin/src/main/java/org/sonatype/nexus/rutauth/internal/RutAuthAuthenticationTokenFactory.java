@@ -42,7 +42,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class RutAuthAuthenticationTokenFactory
     extends HttpHeaderAuthenticationTokenFactorySupport
 {
-
   private static final Logger log = LoggerFactory.getLogger(RutAuthAuthenticationTokenFactory.class);
 
   private final SecuritySystem securitySystem;
@@ -86,5 +85,4 @@ public class RutAuthAuthenticationTokenFactory
       }
     }
   }
-
 }
