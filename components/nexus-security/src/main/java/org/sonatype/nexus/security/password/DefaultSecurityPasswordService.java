@@ -34,9 +34,9 @@ import org.apache.shiro.crypto.hash.Hash;
  * This class is just a wrapper around DefaultPasswordService to apply the default password policy,
  * and provide backward compatibility with legacy SHA1 and MD5 based passwords.
  */
+@Named("default")
 @Singleton
 @Typed(PasswordService.class)
-@Named("default")
 public class DefaultSecurityPasswordService
     implements HashingPasswordService
 {

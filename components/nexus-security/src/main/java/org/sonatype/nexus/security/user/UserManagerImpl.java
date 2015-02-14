@@ -36,9 +36,9 @@ import org.eclipse.sisu.Description;
 /**
  * Default {@link UserManager}.
  */
+@Named("default")
 @Singleton
 @Typed(UserManager.class)
-@Named("default")
 @Description("Default")
 public class UserManagerImpl
     extends AbstractUserManager

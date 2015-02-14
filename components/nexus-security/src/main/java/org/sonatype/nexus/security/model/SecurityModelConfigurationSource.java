@@ -17,7 +17,6 @@ package org.sonatype.nexus.security.model;
  */
 public interface SecurityModelConfigurationSource
 {
-
   /**
    * Gets the current configuration.
    *
@@ -31,5 +30,4 @@ public interface SecurityModelConfigurationSource
    * @return the configuration
    */
   SecurityModelConfiguration loadConfiguration();
-
 }

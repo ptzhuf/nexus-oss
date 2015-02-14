@@ -20,7 +20,6 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Nullable;
-import javax.enterprise.inject.Typed;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -48,9 +47,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Default {@link RolePermissionResolver}.
  */
-@Singleton
-@Typed(RolePermissionResolver.class)
 @Named("default")
+@Singleton
 public class RolePermissionResolverImpl
     extends ComponentSupport
     implements RolePermissionResolver
