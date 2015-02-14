@@ -46,7 +46,7 @@ import static com.google.common.base.Preconditions.checkState;
 /**
  * Default {@link ConfigurationManager}.
  */
-@Named
+@Named("default")
 @Singleton
 public class ConfigurationManagerImpl
     extends ComponentSupport
