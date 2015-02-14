@@ -21,17 +21,17 @@ import javax.inject.Provider;
 import org.sonatype.nexus.proxy.events.NexusStartedEvent;
 import org.sonatype.nexus.proxy.events.NexusStoppedEvent;
 import org.sonatype.nexus.security.FilterChain;
-import org.sonatype.nexus.security.ProtectedPathManager;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
 import org.sonatype.sisu.goodies.eventbus.EventBus;
 
 import com.google.common.eventbus.Subscribe;
+import org.apache.shiro.web.filter.mgt.FilterChainManager;
 import org.eclipse.sisu.EagerSingleton;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Installs configured {@link FilterChain}s with {@link ProtectedPathManager}.
+ * Installs configured {@link FilterChain}s with {@link FilterChainManager}.
  *
  * @since 2.5
  */
@@ -42,17 +42,17 @@ public class FilterChainInstaller
 {
   private final EventBus eventBus;
 
-  private final Provider<ProtectedPathManager> protectedPathManager;
+  private final Provider<FilterChainManager> filterChainManager;
 
   private final List<FilterChain> filterChains;
 
   @Inject
   public FilterChainInstaller(final EventBus eventBus,
-                              final Provider<ProtectedPathManager> protectedPathManager,
+                              final Provider<FilterChainManager> filterChainManager,
                               final List<FilterChain> filterChains)
   {
     this.eventBus = checkNotNull(eventBus);
-    this.protectedPathManager = checkNotNull(protectedPathManager);
+    this.filterChainManager = checkNotNull(filterChainManager);
     this.filterChains = checkNotNull(filterChains);
 
     eventBus.register(this);
@@ -61,10 +61,8 @@ public class FilterChainInstaller
   @Subscribe
   public void onEvent(final NexusStartedEvent event) {
     for (FilterChain filterChain : filterChains) {
-      log.debug("Installing filter-chain: {}", filterChain);
-      protectedPathManager.get().addProtectedResource(
-          filterChain.getPathPattern(), filterChain.getFilterExpression()
-      );
+      log.info("Installing filter-chain: {}", filterChain);
+      filterChainManager.get().createChain(filterChain.getPathPattern(), filterChain.getFilterExpression());
     }
   }
 

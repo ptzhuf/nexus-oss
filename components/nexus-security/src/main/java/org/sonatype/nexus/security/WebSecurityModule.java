@@ -73,19 +73,18 @@ public class WebSecurityModule
     bind(SessionDAO.class).to(EnterpriseCacheSessionDAO.class).asEagerSingleton();
     bind(Authenticator.class).to(FirstSuccessfulModularRealmAuthenticator.class).in(Singleton.class);
     bind(Authorizer.class).to(ExceptionCatchingModularRealmAuthorizer.class).in(Singleton.class);
-    bind(ProtectedPathManager.class).to(ProtectedPathManagerImpl.class).in(Singleton.class);
 
     // override the default resolver with one backed by a FilterChainManager using an injected filter map
     bind(FilterChainResolver.class).toConstructor(ctor(PathMatchingFilterChainResolver.class)).asEagerSingleton();
     bind(FilterChainManager.class).toProvider(FilterChainManagerProvider.class).in(Singleton.class);
 
     // bindings used by external modules
-    expose(ProtectedPathManager.class);
     expose(FilterChainResolver.class);
+    expose(FilterChainManager.class);
   }
 
   @Override
-  protected void bindWebSecurityManager(AnnotatedBindingBuilder<? super WebSecurityManager> bind) {
+  protected void bindWebSecurityManager(final AnnotatedBindingBuilder<? super WebSecurityManager> bind) {
     bind(NexusWebSecurityManager.class).asEagerSingleton();
 
     // bind RealmSecurityManager and WebSecurityManager to _same_ component
@@ -98,7 +97,7 @@ public class WebSecurityModule
   }
 
   @Override
-  protected void bindSessionManager(AnnotatedBindingBuilder<SessionManager> bind) {
+  protected void bindSessionManager(final AnnotatedBindingBuilder<SessionManager> bind) {
     // use native web session management instead of delegating to servlet container
     // workaround for NEXUS-5727, see NexusDefaultWebSessionManager javadoc for clues
     bind.to(NexusDefaultWebSessionManager.class).asEagerSingleton();
@@ -117,11 +116,11 @@ public class WebSecurityModule
       return getClass().getName();
     }
 
-    public boolean supports(AuthenticationToken token) {
+    public boolean supports(final AuthenticationToken token) {
       return false;
     }
 
-    public AuthenticationInfo getAuthenticationInfo(AuthenticationToken token) {
+    public AuthenticationInfo getAuthenticationInfo(final AuthenticationToken token) {
       return null;
     }
   }
@@ -129,7 +128,7 @@ public class WebSecurityModule
   /**
    * @return Public constructor with given parameterTypes; wraps checked exceptions
    */
-  private static <T> Constructor<T> ctor(Class<T> clazz, Class<?>... parameterTypes) {
+  private static <T> Constructor<T> ctor(final Class<T> clazz, final Class<?>... parameterTypes) {
     try {
       return clazz.getConstructor(parameterTypes);
     }
@@ -150,8 +149,8 @@ public class WebSecurityModule
     private final BeanLocator beanLocator;
 
     @Inject
-    private FilterChainManagerProvider(@Named("SHIRO") ServletContext servletContext,
-                                       BeanLocator beanLocator)
+    private FilterChainManagerProvider(final @Named("SHIRO") ServletContext servletContext,
+                                       final BeanLocator beanLocator)
     {
       // simple configuration so we can initialize filters as we add them
       this.filterConfig = new SimpleFilterConfig("SHIRO", servletContext);
@@ -183,7 +182,7 @@ public class WebSecurityModule
 
     private final ServletContext servletContext;
 
-    SimpleFilterConfig(String filterName, ServletContext servletContext) {
+    SimpleFilterConfig(final String filterName, final ServletContext servletContext) {
       this.filterName = filterName;
       this.servletContext = servletContext;
     }
@@ -200,7 +199,7 @@ public class WebSecurityModule
       return servletContext.getInitParameter(name);
     }
 
-    public Enumeration getInitParameterNames() {
+    public Enumeration<String> getInitParameterNames() {
       return servletContext.getInitParameterNames();
     }
   }
