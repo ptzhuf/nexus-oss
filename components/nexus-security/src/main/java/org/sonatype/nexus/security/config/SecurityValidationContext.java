@@ -17,7 +17,6 @@ import org.sonatype.configuration.validation.ValidationContext;
 public class SecurityValidationContext
     implements ValidationContext
 {
-
   private SecurityConfiguration securityConfiguration;
 
   public SecurityConfiguration getSecurityConfiguration() {
@@ -27,5 +26,4 @@ public class SecurityValidationContext
   public void setSecurityConfiguration(SecurityConfiguration securityConfiguration) {
     this.securityConfiguration = securityConfiguration;
   }
-
 }

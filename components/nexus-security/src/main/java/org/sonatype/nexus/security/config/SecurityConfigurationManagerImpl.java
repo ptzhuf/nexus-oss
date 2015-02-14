@@ -42,8 +42,8 @@ public class SecurityConfigurationManagerImpl
   private ReentrantLock lock = new ReentrantLock();
 
   @Inject
-  public SecurityConfigurationManagerImpl(SecurityConfigurationSource configurationSource,
-                                          SecurityConfigurationValidator validator)
+  public SecurityConfigurationManagerImpl(final SecurityConfigurationSource configurationSource,
+                                          final SecurityConfigurationValidator validator)
   {
     this.configurationSource = configurationSource;
     this.validator = validator;

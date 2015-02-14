@@ -20,6 +20,8 @@ import org.sonatype.sisu.goodies.crypto.CryptoHelper;
 import org.sonatype.sisu.goodies.crypto.maven.MavenCipher;
 import org.sonatype.sisu.goodies.crypto.maven.PasswordCipherMavenImpl;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * FIXME This needs to be abstracted, as this is just a copy of the class in nexus. The problem is if we move this to
  * base-configuration (or something) it becomes less secure, as we are using the same key for everything)
@@ -34,16 +36,16 @@ public class PasswordHelper
 
   @Inject
   public PasswordHelper(final CryptoHelper cryptoHelper) {
+    checkNotNull(cryptoHelper);
     this.mavenCipher = new MavenCipher(new PasswordCipherMavenImpl(cryptoHelper));
   }
 
-  public String encrypt(String password)
+  public String encrypt(final String password)
   {
     return encrypt(password, ENC);
   }
 
-  public String encrypt(String password, String encoding)
-  {
+  public String encrypt(final String password,final  String encoding) {
     if (password != null) {
       return mavenCipher.encrypt(password, encoding);
     }
@@ -51,13 +53,12 @@ public class PasswordHelper
     return null;
   }
 
-  public String decrypt(String encodedPassword)
+  public String decrypt(final String encodedPassword)
   {
     return decrypt(encodedPassword, ENC);
   }
 
-  public String decrypt(String encodedPassword, String encoding)
-  {
+  public String decrypt(final String encodedPassword, final String encoding) {
     // check if the password is encrypted
     if (!mavenCipher.isPasswordCipher(encodedPassword)) {
       return encodedPassword;

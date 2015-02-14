@@ -17,7 +17,6 @@ package org.sonatype.nexus.security.config;
  */
 public interface SecurityConfigurationSource
 {
-
   /**
    * Persists the current configuration.
    */
@@ -36,5 +35,4 @@ public interface SecurityConfigurationSource
    * @return the configuration
    */
   SecurityConfiguration loadConfiguration();
-
 }
