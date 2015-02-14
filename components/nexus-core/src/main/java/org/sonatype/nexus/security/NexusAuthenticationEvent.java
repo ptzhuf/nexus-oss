@@ -12,31 +12,34 @@
  */
 package org.sonatype.nexus.security;
 
+import java.util.Date;
+
 /**
  * Event fired when authentication validation is performed (someone tries to log in).
- *
- * @author cstamas
  */
 public class NexusAuthenticationEvent
-    extends AbstractSecurityEvent
 {
+  private final ClientInfo clientInfo;
+
   private final boolean successful;
 
-  public NexusAuthenticationEvent(final Object sender, final ClientInfo info, final boolean successful) {
-    super(sender, info);
+  private final Date date;
+
+  public NexusAuthenticationEvent(final ClientInfo info, final boolean successful) {
+    this.clientInfo = info;
     this.successful = successful;
+    this.date = new Date();
+  }
+
+  public ClientInfo getClientInfo() {
+    return clientInfo;
   }
 
   public boolean isSuccessful() {
     return successful;
   }
 
-  @Override
-  public String toString() {
-    return getClass().getSimpleName() + "{" +
-        "userId='" + getClientInfo().getUserid() + "'," +
-        "remoteIp='" + getClientInfo().getRemoteIP() + "'," +
-        "successful=" + successful +
-        '}';
+  public Date getEventDate() {
+    return date;
   }
 }

@@ -12,26 +12,30 @@
  */
 package org.sonatype.nexus.security;
 
+import java.util.Date;
+
 /**
  * Event fired in case of an authorization is tried against given resource.
- *
- * @author cstamas
  */
 public class NexusAuthorizationEvent
-    extends AbstractSecurityEvent
 {
+  private final ClientInfo clientInfo;
+
   private final ResourceInfo resourceInfo;
 
   private final boolean successful;
 
-  public NexusAuthorizationEvent(final Object sender,
-                                 final ClientInfo info,
-                                 final ResourceInfo resInfo,
-                                 final boolean successful)
-  {
-    super(sender, info);
+  private final Date date;
+
+  public NexusAuthorizationEvent(final ClientInfo info, final ResourceInfo resInfo, final boolean successful) {
+    this.clientInfo = info;
     this.resourceInfo = resInfo;
     this.successful = successful;
+    this.date = new Date();
+  }
+
+  public ClientInfo getClientInfo() {
+    return clientInfo;
   }
 
   public ResourceInfo getResourceInfo() {
@@ -40,5 +44,9 @@ public class NexusAuthorizationEvent
 
   public boolean isSuccessful() {
     return successful;
+  }
+
+  public Date getEventDate() {
+    return date;
   }
 }

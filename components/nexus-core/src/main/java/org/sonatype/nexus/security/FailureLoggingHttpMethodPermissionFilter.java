@@ -41,9 +41,7 @@ public class FailureLoggingHttpMethodPermissionFilter
   private EventBus eventBus;
 
   @Override
-  protected boolean onAccessDenied(ServletRequest request, ServletResponse response)
-      throws IOException
-  {
+  protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws IOException {
     recordAuthzFailureEvent(request, response);
 
     request.setAttribute(org.sonatype.nexus.web.Constants.ATTR_KEY_REQUEST_IS_AUTHZ_REJECTED, Boolean.TRUE);
@@ -73,6 +71,6 @@ public class FailureLoggingHttpMethodPermissionFilter
         getHttpMethodAction(request),
         ((HttpServletRequest) request).getRequestURI());
 
-    eventBus.post(new NexusAuthorizationEvent(this, clientInfo, resInfo, false));
+    eventBus.post(new NexusAuthorizationEvent(clientInfo, resInfo, false));
   }
 }
