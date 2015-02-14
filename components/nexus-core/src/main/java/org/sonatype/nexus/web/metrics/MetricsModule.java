@@ -12,7 +12,7 @@
  */
 package org.sonatype.nexus.web.metrics;
 
-import org.sonatype.nexus.guice.FilterChainModule;
+import org.sonatype.nexus.security.FilterChainModule;
 import org.sonatype.nexus.web.SecurityFilter;
 
 import com.codahale.metrics.Clock;

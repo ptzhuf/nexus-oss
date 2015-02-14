@@ -10,9 +10,8 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.guice;
 
-import org.sonatype.nexus.security.FilterChain;
+package org.sonatype.nexus.security;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
@@ -25,12 +24,9 @@ import com.google.inject.name.Names;
 public abstract class FilterChainModule
     extends AbstractModule
 {
-
   protected void addFilterChain(final String pathPattern, final String filterExpression) {
     bind(FilterChain.class)
         .annotatedWith(Names.named(pathPattern))
-        .toInstance(new FilterChain(pathPattern, filterExpression)
-        );
+        .toInstance(new FilterChain(pathPattern, filterExpression));
   }
-
 }

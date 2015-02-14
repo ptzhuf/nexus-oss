@@ -16,8 +16,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.sonatype.nexus.guice.FilterChainModule;
 import org.sonatype.nexus.proxy.targets.NexusTargetMappingAuthorizationFilter;
+import org.sonatype.nexus.security.FilterChainModule;
 import org.sonatype.nexus.security.FilterProviderSupport;
 import org.sonatype.nexus.web.SecurityFilter;
 
