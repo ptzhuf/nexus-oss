@@ -20,7 +20,6 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 import javax.servlet.http.HttpServletResponse;
 
-import org.sonatype.nexus.SystemStatus;
 import org.sonatype.nexus.common.io.StreamSupport;
 import org.sonatype.nexus.common.property.SystemPropertiesHelper;
 
@@ -34,8 +33,9 @@ import org.sonatype.nexus.common.property.SystemPropertiesHelper;
 public class WebUtils
 {
   /**
-   * Buffer size to be used when pushing content to the {@link HttpServletResponse#getOutputStream()} stream. Default
-   * is Jetty default or 8KB.
+   * Buffer size to be used when pushing content to the {@link HttpServletResponse#getOutputStream()} stream.
+   *
+   * Default is Jetty default or 8KB.
    */
   private static final int BUFFER_SIZE = SystemPropertiesHelper
       .getInteger(WebUtils.class.getName() + ".BUFFER_SIZE", -1);
