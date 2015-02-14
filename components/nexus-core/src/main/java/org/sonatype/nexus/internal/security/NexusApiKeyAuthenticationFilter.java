@@ -12,7 +12,6 @@
  */
 package org.sonatype.nexus.internal.security;
 
-import java.util.Collections;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -28,14 +27,20 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
 import org.apache.shiro.web.util.WebUtils;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * {@link AuthenticatingFilter} that looks for credentials in known {@link NexusApiKey} HTTP headers.
  */
 public class NexusApiKeyAuthenticationFilter
     extends NexusHttpAuthenticationFilter
 {
+  private final Map<String, NexusApiKey> apiKeys;
+
   @Inject
-  private Map<String, NexusApiKey> apiKeys = Collections.emptyMap();
+  public NexusApiKeyAuthenticationFilter(final Map<String, NexusApiKey> apiKeys) {
+    this.apiKeys = checkNotNull(apiKeys);
+  }
 
   @Override
   protected boolean isLoginAttempt(ServletRequest request, ServletResponse response) {
