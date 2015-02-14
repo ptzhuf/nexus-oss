@@ -13,13 +13,10 @@
 package org.sonatype.nexus.security.role;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 /**
  * A simple bean that represents a security Role.
- *
- * @author Brian Demers
  */
 public class Role
     implements Comparable<Role>
@@ -43,13 +40,13 @@ public class Role
   public Role() {
   }
 
-  public Role(String roleId,
-              String name,
-              String description,
-              String source,
-              boolean readOnly,
-              Set<String> roles,
-              Set<String> privileges)
+  public Role(final String roleId,
+              final String name,
+              final String description,
+              final String source,
+              final boolean readOnly,
+              final Set<String> roles,
+              final Set<String> privileges)
   {
     this.roleId = roleId;
     this.name = name;
@@ -168,86 +165,54 @@ public class Role
   }
 
   @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((description == null) ? 0 : description.hashCode());
-    result = prime * result + ((name == null) ? 0 : name.hashCode());
-    result = prime * result + ((privileges == null) ? 0 : privileges.hashCode());
-    result = prime * result + (readOnly ? 1231 : 1237);
-    result = prime * result + ((roleId == null) ? 0 : roleId.hashCode());
-    result = prime * result + ((roles == null) ? 0 : roles.hashCode());
-    result = prime * result + ((source == null) ? 0 : source.hashCode());
-    result = prime * result + ((version == null) ? 0 : version.hashCode());
-    return result;
+  public boolean equals(final Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    Role role = (Role) o;
+
+    if (readOnly != role.readOnly) {
+      return false;
+    }
+    if (description != null ? !description.equals(role.description) : role.description != null) {
+      return false;
+    }
+    if (name != null ? !name.equals(role.name) : role.name != null) {
+      return false;
+    }
+    if (privileges != null ? !privileges.equals(role.privileges) : role.privileges != null) {
+      return false;
+    }
+    if (roleId != null ? !roleId.equals(role.roleId) : role.roleId != null) {
+      return false;
+    }
+    if (roles != null ? !roles.equals(role.roles) : role.roles != null) {
+      return false;
+    }
+    if (source != null ? !source.equals(role.source) : role.source != null) {
+      return false;
+    }
+    if (version != null ? !version.equals(role.version) : role.version != null) {
+      return false;
+    }
+
+    return true;
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    Role other = (Role) obj;
-    if (description == null) {
-      if (other.description != null) {
-        return false;
-      }
-    }
-    else if (!description.equals(other.description)) {
-      return false;
-    }
-    if (name == null) {
-      if (other.name != null) {
-        return false;
-      }
-    }
-    else if (!name.equals(other.name)) {
-      return false;
-    }
-    if (privileges == null) {
-      if (other.privileges != null) {
-        return false;
-      }
-    }
-    else if (!privileges.equals(other.privileges)) {
-      return false;
-    }
-    if (readOnly != other.readOnly) {
-      return false;
-    }
-    if (roleId == null) {
-      if (other.roleId != null) {
-        return false;
-      }
-    }
-    else if (!roleId.equals(other.roleId)) {
-      return false;
-    }
-    if (roles == null) {
-      if (other.roles != null) {
-        return false;
-      }
-    }
-    else if (!roles.equals(other.roles)) {
-      return false;
-    }
-    if (source == null) {
-      if (other.source != null) {
-        return false;
-      }
-    }
-    else if (!source.equals(other.source)) {
-      return false;
-    }
-    if (!Objects.equals(version, other.source)) {
-      return false;
-    }
-    return true;
+  public int hashCode() {
+    int result = roleId != null ? roleId.hashCode() : 0;
+    result = 31 * result + (name != null ? name.hashCode() : 0);
+    result = 31 * result + (description != null ? description.hashCode() : 0);
+    result = 31 * result + (source != null ? source.hashCode() : 0);
+    result = 31 * result + (readOnly ? 1 : 0);
+    result = 31 * result + (roles != null ? roles.hashCode() : 0);
+    result = 31 * result + (privileges != null ? privileges.hashCode() : 0);
+    result = 31 * result + (version != null ? version.hashCode() : 0);
+    return result;
   }
 }
