@@ -52,9 +52,11 @@ import org.eclipse.sisu.Mediator;
 import org.eclipse.sisu.inject.BeanLocator;
 
 /**
- * Extends ShiroWebModule to configure commonly set components such as SessionDAO, Authenticator, Authorizer, etc.
+ * Shiro security configuration Guice module for the runtime server.
  *
  * @since 2.6.1
+ *
+ * @see SecurityModule
  */
 public class WebSecurityModule
     extends ShiroWebModule

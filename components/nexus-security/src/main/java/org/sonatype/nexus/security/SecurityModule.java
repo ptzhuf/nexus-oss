@@ -37,9 +37,11 @@ import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
 
 /**
- * Extends ShiroModule to configure commonly set components such as SessionDAO, Authenticator, Authorizer, etc.
+ * Shiro security configuration Guice module for tests.
  *
  * @since 2.6.1
+ *
+ * @see WebSecurityModule
  */
 public class SecurityModule
     extends ShiroModule
