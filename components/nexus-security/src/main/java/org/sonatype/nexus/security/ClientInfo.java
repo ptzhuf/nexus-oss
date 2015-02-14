@@ -14,8 +14,6 @@ package org.sonatype.nexus.security;
 
 /**
  * Client info about WHO is doing something.
- *
- * @author cstamas
  */
 public class ClientInfo
 {
@@ -44,52 +42,35 @@ public class ClientInfo
   }
 
   @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((remoteIP == null) ? 0 : remoteIP.hashCode());
-    result = prime * result + ((userAgent == null) ? 0 : userAgent.hashCode());
-    result = prime * result + ((userid == null) ? 0 : userid.hashCode());
-    return result;
+  public boolean equals(final Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    ClientInfo that = (ClientInfo) o;
+
+    if (remoteIP != null ? !remoteIP.equals(that.remoteIP) : that.remoteIP != null) {
+      return false;
+    }
+    if (userAgent != null ? !userAgent.equals(that.userAgent) : that.userAgent != null) {
+      return false;
+    }
+    if (userid != null ? !userid.equals(that.userid) : that.userid != null) {
+      return false;
+    }
+
+    return true;
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    ClientInfo other = (ClientInfo) obj;
-    if (remoteIP == null) {
-      if (other.remoteIP != null) {
-        return false;
-      }
-    }
-    else if (!remoteIP.equals(other.remoteIP)) {
-      return false;
-    }
-    if (userAgent == null) {
-      if (other.userAgent != null) {
-        return false;
-      }
-    }
-    else if (!userAgent.equals(other.userAgent)) {
-      return false;
-    }
-    if (userid == null) {
-      if (other.userid != null) {
-        return false;
-      }
-    }
-    else if (!userid.equals(other.userid)) {
-      return false;
-    }
-    return true;
+  public int hashCode() {
+    int result = userid != null ? userid.hashCode() : 0;
+    result = 31 * result + (remoteIP != null ? remoteIP.hashCode() : 0);
+    result = 31 * result + (userAgent != null ? userAgent.hashCode() : 0);
+    return result;
   }
 
   @Override
