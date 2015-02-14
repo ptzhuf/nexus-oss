@@ -46,7 +46,7 @@ public class RemoteIPFinder
   /**
    * Returns the *left-most* resolvable IP from the given XFF string; otherwise null.
    */
-  public static String getFirstForwardedIp(final String forwardedFor) {
+  private static String getFirstForwardedIp(final String forwardedFor) {
     if (!StringUtils.isEmpty(forwardedFor)) {
       return resolveIp(forwardedFor.split("\\s*,\\s*"));
     }
@@ -56,7 +56,7 @@ public class RemoteIPFinder
   /**
    * Returns the *left-most* resolvable IP from the given sequence.
    */
-  public static String resolveIp(final String[] ipAddresses) {
+  private static String resolveIp(final String[] ipAddresses) {
     for (String ip : ipAddresses) {
       InetAddress ipAdd;
       try {
