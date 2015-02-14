@@ -10,39 +10,35 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.security.realms.ldap.api.dto;
+package org.sonatype.nexus.ldap.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
- * Response wrapper object that contains the list of ldap schema templates
+ * Request wrapper object that contains the ordered list of ldap server ids.
  */
-@XStreamAlias(value = "templateList")
-@XmlRootElement(name = "templateList")
-public class LdapSchemaTemplateListResponse
+@XStreamAlias(value = "orderRequest")
+@XmlRootElement(name = "orderRequest")
+public class LdapServerOrderRequest
 {
-  private List<LdapSchemaTemplateDTO> data;
+  private List<String> data = new ArrayList<String>();
 
   /**
-   * Get the list of ldap schema templates.
+   * Get the ordered list of LDAP server ids.
    */
-  @XmlElementWrapper(name = "data")
-  @XmlElement(name = "ldapSchemaTemplate")
-  public List<LdapSchemaTemplateDTO> getData() {
+  public List<String> getData() {
     return data;
   }
 
   /**
-   * Set the list of ldap schema templates.
+   * Set the ordered list of LDAP server ids.
    */
-  public void setData(List<LdapSchemaTemplateDTO> data) {
+  public void setData(List<String> data) {
     this.data = data;
   }
-
 }

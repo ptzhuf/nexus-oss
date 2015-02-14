@@ -18,17 +18,17 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.sonatype.security.realms.ldap.internal.capabilities.LdapConditions;
 import com.sonatype.nexus.ssl.plugin.TrustStore;
-import org.sonatype.security.realms.ldap.internal.persist.LdapConfigurationManager;
 
 import org.sonatype.nexus.capability.Condition;
 import org.sonatype.nexus.capability.support.CapabilitySupport;
+import org.sonatype.security.realms.ldap.internal.capabilities.LdapConditions;
+import org.sonatype.security.realms.ldap.internal.persist.LdapConfigurationManager;
 import org.sonatype.sisu.goodies.i18n.I18N;
 import org.sonatype.sisu.goodies.i18n.MessageBundle;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.sonatype.security.realms.ldap.api.dto.LdapTrustStoreKey.ldapTrustStoreKey;
+import static org.sonatype.nexus.ldap.model.LdapTrustStoreKey.ldapTrustStoreKey;
 
 /**
  * LDAP capability (enables Nexus SSL Trust Store / LDAP server).

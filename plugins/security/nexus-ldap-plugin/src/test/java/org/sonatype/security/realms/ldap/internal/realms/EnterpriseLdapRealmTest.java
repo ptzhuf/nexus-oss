@@ -12,7 +12,7 @@
  */
 package org.sonatype.security.realms.ldap.internal.realms;
 
-import org.sonatype.security.realms.ldap.LdapPlugin;
+import org.sonatype.nexus.ldap.LdapPlugin;
 import org.sonatype.security.realms.ldap.internal.LdapTestSupport;
 
 import org.apache.shiro.authc.AuthenticationInfo;

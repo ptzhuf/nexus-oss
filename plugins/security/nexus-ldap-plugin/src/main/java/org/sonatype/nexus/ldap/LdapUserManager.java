@@ -10,7 +10,7 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.security.realms.ldap.usermanagement;
+package org.sonatype.nexus.ldap;
 
 import java.util.Collection;
 import java.util.Set;
@@ -27,7 +27,6 @@ import org.sonatype.nexus.security.user.UserNotFoundException;
 import org.sonatype.nexus.security.user.UserNotFoundTransientException;
 import org.sonatype.nexus.security.user.UserSearchCriteria;
 import org.sonatype.nexus.security.user.UserStatus;
-import org.sonatype.security.realms.ldap.LdapPlugin;
 import org.sonatype.security.realms.ldap.internal.connector.dao.LdapDAOException;
 import org.sonatype.security.realms.ldap.internal.connector.dao.LdapUser;
 import org.sonatype.security.realms.ldap.internal.connector.dao.NoSuchLdapUserException;
@@ -48,9 +47,7 @@ public class LdapUserManager
   }
 
   @Override
-  public User getUser(String userId)
-      throws UserNotFoundException
-  {
+  public User getUser(String userId) throws UserNotFoundException {
     if (this.isEnabled()) {
       try {
         return toPlexusUser(this.ldapManager.getUser(userId));
@@ -150,10 +147,8 @@ public class LdapUserManager
     return this.filterListInMemeory(users, criteria);
   }
 
-
   @Override
   public String getAuthenticationRealmName() {
     return LdapPlugin.REALM_NAME;
   }
-
 }

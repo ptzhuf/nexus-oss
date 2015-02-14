@@ -16,11 +16,8 @@ import java.util.Set;
 import java.util.SortedSet;
 
 import org.sonatype.ldaptestsuite.LdapServer;
-import org.sonatype.ldaptestsuite.LdapServerConfiguration;
-import org.sonatype.security.realms.ldap.LdapPlugin;
-
+import org.sonatype.nexus.ldap.LdapPlugin;
 import org.sonatype.security.realms.ldap.internal.LdapITSupport;
-import org.sonatype.security.realms.ldap.internal.LdapTestSupport;
 import org.sonatype.security.realms.ldap.internal.connector.dao.LdapDAOException;
 import org.sonatype.security.realms.ldap.internal.connector.dao.LdapUser;
 import org.sonatype.security.realms.ldap.internal.connector.dao.NoSuchLdapGroupException;
@@ -32,11 +29,9 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.realm.Realm;
-import org.codehaus.plexus.context.Context;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;

@@ -10,35 +10,35 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.security.realms.ldap.api.dto;
-
-import java.util.ArrayList;
-import java.util.List;
+package org.sonatype.nexus.ldap.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
- * Request wrapper object that contains the ordered list of ldap server ids.
+ * Request wrapper object that contains the connection info
  */
-@XStreamAlias(value = "orderRequest")
-@XmlRootElement(name = "orderRequest")
-public class LdapServerOrderRequest
+@XStreamAlias(value = "connectionInfoTest")
+@XmlRootElement(name = "connectionInfoTest")
+public class LdapAuthenticationTestRequest
 {
-  private List<String> data = new ArrayList<String>();
+
+  private LdapConnectionInfoDTO data;
 
   /**
-   * Get the ordered list of LDAP server ids.
+   * Get the ldap connection info.
    */
-  public List<String> getData() {
+  public LdapConnectionInfoDTO getData() {
     return data;
   }
 
   /**
-   * Set the ordered list of LDAP server ids.
+   * Set the ldap connection info.
    */
-  public void setData(List<String> data) {
+  public void setData(LdapConnectionInfoDTO data) {
     this.data = data;
   }
+
+
 }

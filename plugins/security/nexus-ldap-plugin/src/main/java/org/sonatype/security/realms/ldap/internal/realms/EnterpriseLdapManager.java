@@ -55,7 +55,7 @@ import org.apache.shiro.realm.ldap.LdapContextFactory;
 import org.codehaus.plexus.util.StringUtils;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.sonatype.security.realms.ldap.api.dto.LdapTrustStoreKey.ldapTrustStoreKey;
+import static org.sonatype.nexus.ldap.model.LdapTrustStoreKey.ldapTrustStoreKey;
 
 // TODO: this really should be threaded so we make multiple parallel requests
 

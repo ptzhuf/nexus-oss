@@ -10,35 +10,32 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.security.realms.ldap.api.dto;
+package org.sonatype.nexus.ldap.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
- * Request wrapper object that contains the connection info
+ * Request wrapper object that contains the ldap login test details.
  */
-@XStreamAlias(value = "connectionInfoTest")
-@XmlRootElement(name = "connectionInfoTest")
-public class LdapAuthenticationTestRequest
+@XStreamAlias(value = "loginTestRequest")
+@XmlRootElement(name = "loginTestRequest")
+public class LdapServerLoginTestRequest
 {
-
-  private LdapConnectionInfoDTO data;
+  LdapServerLoginTestDTO data;
 
   /**
-   * Get the ldap connection info.
+   * Get the ldap login test object.
    */
-  public LdapConnectionInfoDTO getData() {
+  public LdapServerLoginTestDTO getData() {
     return data;
   }
 
   /**
-   * Set the ldap connection info.
+   * Set the ldap login test object.
    */
-  public void setData(LdapConnectionInfoDTO data) {
+  public void setData(LdapServerLoginTestDTO data) {
     this.data = data;
   }
-
-
 }

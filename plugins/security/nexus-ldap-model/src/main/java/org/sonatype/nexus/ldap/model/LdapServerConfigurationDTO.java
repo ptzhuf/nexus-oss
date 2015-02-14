@@ -17,7 +17,7 @@
  ==============================================================
  */
 
-package org.sonatype.security.realms.ldap.api.dto;
+package org.sonatype.nexus.ldap.model;
 
 import javax.xml.bind.annotation.XmlType;
 

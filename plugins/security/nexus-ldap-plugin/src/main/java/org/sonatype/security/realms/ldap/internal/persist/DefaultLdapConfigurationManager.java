@@ -22,12 +22,12 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.sonatype.nexus.ldap.LdapPlugin;
+import org.sonatype.nexus.ldap.LdapRealm;
 import org.sonatype.nexus.security.SecuritySystem;
-import org.sonatype.security.realms.ldap.LdapPlugin;
 import org.sonatype.security.realms.ldap.internal.events.LdapClearCacheEvent;
 import org.sonatype.security.realms.ldap.internal.persist.entity.LdapConfiguration;
 import org.sonatype.security.realms.ldap.internal.persist.entity.Validator;
-import org.sonatype.security.realms.ldap.realms.LdapRealm;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
 import org.sonatype.sisu.goodies.eventbus.EventBus;
 

@@ -10,7 +10,7 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.security.realms.ldap;
+package org.sonatype.nexus.ldap;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -29,7 +29,6 @@ import org.eclipse.sisu.EagerSingleton;
 public class LdapPlugin
     extends PluginIdentity
 {
-
   /**
    * Prefix for ID-like things.
    */
@@ -71,10 +70,7 @@ public class LdapPlugin
   public static final String USER_SOURCE = "LDAP";
 
   @Inject
-  public LdapPlugin()
-      throws Exception
-  {
+  public LdapPlugin() throws Exception {
     super(GROUP_ID, ARTIFACT_ID);
   }
-
 }

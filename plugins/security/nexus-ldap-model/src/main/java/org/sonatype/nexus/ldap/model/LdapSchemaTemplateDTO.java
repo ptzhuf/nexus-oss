@@ -10,78 +10,46 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.security.realms.ldap.api.dto;
+package org.sonatype.nexus.ldap.model;
 
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * List entry of an ldap server.
+ * LDAP schema template object, contains defaults for a schema
  */
-@XmlType(name = "ldapServerListEntry")
-public class LdapServerListEntryDTO
+@XmlType(name = "ldapSchemaTemplate")
+public class LdapSchemaTemplateDTO
 {
-  private String id;
-
   private String name;
 
-  private String url;
-
-  private String ldapUrl;
+  private LdapUserAndGroupAuthConfigurationDTO userAndGroupConfig;
 
   /**
-   * Get the id of the ldap server.
-   */
-  public String getId() {
-    return id;
-  }
-
-  /**
-   * Set the id of the ldap server.
-   */
-  public void setId(String id) {
-    this.id = id;
-  }
-
-  /**
-   * Get the name of the ldap server.
+   * Get the name of the template.
    */
   public String getName() {
     return name;
   }
 
   /**
-   * Set the name of the ldap server.
+   * Set the name of the template.
    */
   public void setName(String name) {
     this.name = name;
   }
 
   /**
-   * Get the url used to manage the ldap server in nexus.
+   * Get the template configuration.
    */
-  public String getUrl() {
-    return url;
+  public LdapUserAndGroupAuthConfigurationDTO getUserAndGroupConfig() {
+    return userAndGroupConfig;
   }
 
   /**
-   * Set the url used to manage the ldap server in nexus.
+   * Set the template configuration.
    */
-  public void setUrl(String url) {
-    this.url = url;
-  }
-
-  /**
-   * Get the url used to access the remote ldap server.
-   */
-  public String getLdapUrl() {
-    return ldapUrl;
-  }
-
-  /**
-   * Set the url used to access the remote ldap server.
-   */
-  public void setLdapUrl(String ldapUrl) {
-    this.ldapUrl = ldapUrl;
+  public void setUserAndGroupConfig(LdapUserAndGroupAuthConfigurationDTO userAndGroupConfig) {
+    this.userAndGroupConfig = userAndGroupConfig;
   }
 
 }
