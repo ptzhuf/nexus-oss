@@ -55,6 +55,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isIn;
 
+// FIXME: This lives in nexus-core due to heavy reliance on legacy UT classes
+
 /**
  * Tests for {@link UserPrincipalsHelper}.
  */
