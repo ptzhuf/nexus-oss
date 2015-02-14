@@ -26,9 +26,7 @@ import org.apache.shiro.authc.AuthenticationToken;
 public interface AuthenticationTokenFactory
 {
   /**
-   * Creates an {@link AuthenticationToken} if able to do so, based on give request/response.
-   *
-   * @return created token or null if token cannot be created based on given request/response
+   * Creates an {@link AuthenticationToken} based on give request/response, or if unable.
    */
   @Nullable
   AuthenticationToken createToken(ServletRequest request, ServletResponse response);

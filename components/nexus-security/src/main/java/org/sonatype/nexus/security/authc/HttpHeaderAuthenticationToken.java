@@ -33,7 +33,7 @@ public class HttpHeaderAuthenticationToken
 
   private final String host;
 
-  public HttpHeaderAuthenticationToken(String headerName, String headerValue, String host) {
+  public HttpHeaderAuthenticationToken(final String headerName, final String headerValue, final String host) {
     this.headerName = checkNotNull(headerName);
     this.headerValue = checkNotNull(headerValue);
     this.host = host;
