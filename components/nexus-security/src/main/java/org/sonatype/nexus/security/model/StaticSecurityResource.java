@@ -13,7 +13,7 @@
 package org.sonatype.nexus.security.model;
 
 /**
- * Allows static contribution to security module.
+ * Allows static contribution to security model.
  */
 public interface StaticSecurityResource
 {
