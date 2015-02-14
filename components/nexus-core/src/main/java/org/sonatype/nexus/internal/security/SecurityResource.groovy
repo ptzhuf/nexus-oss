@@ -10,6 +10,7 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
+
 package org.sonatype.nexus.internal.security
 
 import org.sonatype.nexus.security.model.CPrivilege
@@ -28,7 +29,7 @@ import javax.inject.Singleton
 @Named
 @Singleton
 class SecurityResource
-implements StaticSecurityResource
+    implements StaticSecurityResource
 {
   @Override
   Configuration getConfiguration() {
@@ -40,7 +41,7 @@ implements StaticSecurityResource
                 name: 'Metrics Endpoints',
                 description: 'Allows access to metrics endpoints.',
                 properties: [
-                    'method': '*',
+                    'method'    : '*',
                     'permission': 'nexus:metrics-endpoints'
                 ]
             ),
@@ -50,10 +51,10 @@ implements StaticSecurityResource
                 name: 'All M2 Repositories - (read)',
                 description: 'Give permission to read any content in any Maven 2 type repositories.',
                 properties: [
-                    'method': 'read',
+                    'method'            : 'read',
                     'repositoryTargetId': '1',
-                    'repositoryId': '',
-                    'repositoryGroupId': ''
+                    'repositoryId'      : '',
+                    'repositoryGroupId' : ''
                 ]
             ),
             new CPrivilege(
@@ -62,10 +63,10 @@ implements StaticSecurityResource
                 name: 'All M1 Repositories - (read)',
                 description: 'Give permission to read any content in any Maven 1 type repositories.',
                 properties: [
-                    'method': 'read',
+                    'method'            : 'read',
                     'repositoryTargetId': '2',
-                    'repositoryId': '',
-                    'repositoryGroupId': ''
+                    'repositoryId'      : '',
+                    'repositoryGroupId' : ''
                 ]
             ),
             new CPrivilege(
@@ -74,10 +75,10 @@ implements StaticSecurityResource
                 name: 'All M2 Repositories - (update)',
                 description: 'Give permission to update any content in any Maven 2 type repositories.',
                 properties: [
-                    'method': 'update,read',
+                    'method'            : 'update,read',
                     'repositoryTargetId': '1',
-                    'repositoryId': '',
-                    'repositoryGroupId': ''
+                    'repositoryId'      : '',
+                    'repositoryGroupId' : ''
                 ]
             ),
             new CPrivilege(
@@ -86,10 +87,10 @@ implements StaticSecurityResource
                 name: 'All M1 Repositories - (update)',
                 description: 'Give permission to update any content in any Maven 1 type repositories.',
                 properties: [
-                    'method': 'update,read',
+                    'method'            : 'update,read',
                     'repositoryTargetId': '2',
-                    'repositoryId': '',
-                    'repositoryGroupId': ''
+                    'repositoryId'      : '',
+                    'repositoryGroupId' : ''
                 ]
             ),
             new CPrivilege(
@@ -98,10 +99,10 @@ implements StaticSecurityResource
                 name: 'All M2 Repositories - (create)',
                 description: 'Give permission to create any content in any Maven 2 type repositories.',
                 properties: [
-                    'method': 'create,read',
+                    'method'            : 'create,read',
                     'repositoryTargetId': '1',
-                    'repositoryId': '',
-                    'repositoryGroupId': ''
+                    'repositoryId'      : '',
+                    'repositoryGroupId' : ''
                 ]
             ),
             new CPrivilege(
@@ -110,10 +111,10 @@ implements StaticSecurityResource
                 name: 'All M1 Repositories - (create)',
                 description: 'Give permission to create any content in any Maven 1 type repositories.',
                 properties: [
-                    'method': 'create,read',
+                    'method'            : 'create,read',
                     'repositoryTargetId': '2',
-                    'repositoryId': '',
-                    'repositoryGroupId': ''
+                    'repositoryId'      : '',
+                    'repositoryGroupId' : ''
                 ]
             ),
             new CPrivilege(
@@ -122,10 +123,10 @@ implements StaticSecurityResource
                 name: 'All M2 Repositories - (delete)',
                 description: 'Give permission to delete any content in any Maven 2 type repositories.',
                 properties: [
-                    'method': 'delete,read',
+                    'method'            : 'delete,read',
                     'repositoryTargetId': '1',
-                    'repositoryId': '',
-                    'repositoryGroupId': ''
+                    'repositoryId'      : '',
+                    'repositoryGroupId' : ''
                 ]
             ),
             new CPrivilege(
@@ -134,10 +135,10 @@ implements StaticSecurityResource
                 name: 'All M1 Repositories - (delete)',
                 description: 'Give permission to delete any content in any Maven 1 type repositories.',
                 properties: [
-                    'method': 'delete,read',
+                    'method'            : 'delete,read',
                     'repositoryTargetId': '2',
-                    'repositoryId': '',
-                    'repositoryGroupId': ''
+                    'repositoryId'      : '',
+                    'repositoryGroupId' : ''
                 ]
             ),
             new CPrivilege(
@@ -146,10 +147,10 @@ implements StaticSecurityResource
                 name: 'All Repositories - (read)',
                 description: 'Give permission to read any content in any repository.',
                 properties: [
-                    'method': 'read',
+                    'method'            : 'read',
                     'repositoryTargetId': 'any',
-                    'repositoryId': '',
-                    'repositoryGroupId': ''
+                    'repositoryId'      : '',
+                    'repositoryGroupId' : ''
                 ]
             ),
             new CPrivilege(
@@ -158,10 +159,10 @@ implements StaticSecurityResource
                 name: 'All Repositories - (update)',
                 description: 'Give permission to update any content in any repository.',
                 properties: [
-                    'method': 'update,read',
+                    'method'            : 'update,read',
                     'repositoryTargetId': 'any',
-                    'repositoryId': '',
-                    'repositoryGroupId': ''
+                    'repositoryId'      : '',
+                    'repositoryGroupId' : ''
                 ]
             ),
             new CPrivilege(
@@ -170,10 +171,10 @@ implements StaticSecurityResource
                 name: 'All Repositories - (create)',
                 description: 'Give permission to create any content in any repository.',
                 properties: [
-                    'method': 'create,read',
+                    'method'            : 'create,read',
                     'repositoryTargetId': 'any',
-                    'repositoryId': '',
-                    'repositoryGroupId': ''
+                    'repositoryId'      : '',
+                    'repositoryGroupId' : ''
                 ]
             ),
             new CPrivilege(
@@ -182,10 +183,10 @@ implements StaticSecurityResource
                 name: 'All Repositories - (delete)',
                 description: 'Give permission to delete any content in any repository.',
                 properties: [
-                    'method': 'delete,read',
+                    'method'            : 'delete,read',
                     'repositoryTargetId': 'any',
-                    'repositoryId': '',
-                    'repositoryGroupId': ''
+                    'repositoryId'      : '',
+                    'repositoryGroupId' : ''
                 ]
             ),
             new CPrivilege(
@@ -194,7 +195,7 @@ implements StaticSecurityResource
                 name: 'Administrator privilege (ALL)',
                 description: 'Give permission to everything available in nexus.',
                 properties: [
-                    'method': '*',
+                    'method'    : '*',
                     'permission': 'nexus:*'
                 ]
             ),
@@ -204,7 +205,7 @@ implements StaticSecurityResource
                 name: 'Status - (read)',
                 description: 'Give permission to query the nexus server for it\'s status.  This privilege is required by the anonymous user so that the UI can retrieve anonymous permissions on startup.',
                 properties: [
-                    'method': 'read',
+                    'method'    : 'read',
                     'permission': 'nexus:status'
                 ]
             ),
@@ -214,7 +215,7 @@ implements StaticSecurityResource
                 name: 'Sign-in',
                 description: 'Give permission to allow a user to sign-in to nexus.',
                 properties: [
-                    'method': 'read',
+                    'method'    : 'read',
                     'permission': 'nexus:authentication'
                 ]
             ),
@@ -224,7 +225,7 @@ implements StaticSecurityResource
                 name: 'Server Settings - (read)',
                 description: 'Give permission to read the nexus server settings.',
                 properties: [
-                    'method': 'read',
+                    'method'    : 'read',
                     'permission': 'nexus:settings'
                 ]
             ),
@@ -234,7 +235,7 @@ implements StaticSecurityResource
                 name: 'Server Settings - (update,read)',
                 description: 'Give permission to update,read the nexus server settings.',
                 properties: [
-                    'method': 'update,read',
+                    'method'    : 'update,read',
                     'permission': 'nexus:settings'
                 ]
             ),
@@ -244,7 +245,7 @@ implements StaticSecurityResource
                 name: 'Repositories - (create,read)',
                 description: 'Give permission to create,read new repositories.',
                 properties: [
-                    'method': 'create,read',
+                    'method'    : 'create,read',
                     'permission': 'nexus:repositories'
                 ]
             ),
@@ -254,7 +255,7 @@ implements StaticSecurityResource
                 name: 'Repositories - (read)',
                 description: 'Give permission to read existing repository configuration.',
                 properties: [
-                    'method': 'read',
+                    'method'    : 'read',
                     'permission': 'nexus:repositories'
                 ]
             ),
@@ -264,7 +265,7 @@ implements StaticSecurityResource
                 name: 'Repositories - (update,read)',
                 description: 'Give permission to update,read existing repository configuration.',
                 properties: [
-                    'method': 'update,read',
+                    'method'    : 'update,read',
                     'permission': 'nexus:repositories'
                 ]
             ),
@@ -274,7 +275,7 @@ implements StaticSecurityResource
                 name: 'Repositories - (delete,read)',
                 description: 'Give permission to delete,read existing repositories.',
                 properties: [
-                    'method': 'delete,read',
+                    'method'    : 'delete,read',
                     'permission': 'nexus:repositories'
                 ]
             ),
@@ -284,7 +285,7 @@ implements StaticSecurityResource
                 name: 'Repository Templates - (create,read)',
                 description: 'Give permission to create,read new repository templates.  Note that this privilege is not currently invoked by the Nexus UI.',
                 properties: [
-                    'method': 'create,read',
+                    'method'    : 'create,read',
                     'permission': 'nexus:repotemplates'
                 ]
             ),
@@ -294,17 +295,17 @@ implements StaticSecurityResource
                 name: 'Repository Templates - (read)',
                 description: 'Give permission to read existing repository template configuration.  This privilege is required to add a new Repository in the UI, as the default values are retrieved from the template on the server.',
                 properties: [
-                    'method': 'read',
+                    'method'    : 'read',
                     'permission': 'nexus:repotemplates'
                 ]
             ),
             new CPrivilege(
-                id: 'repotemplates-update',  // 11
+                id: 'repotemplates-update', // 11
                 type: 'method',
                 name: 'Repository Templates - (update,read)',
                 description: 'Give permission to update,read existing repository template configuration.  Note that this privilege is not currently invoked by the Nexus UI.',
                 properties: [
-                    'method': 'update,read',
+                    'method'    : 'update,read',
                     'permission': 'nexus:repotemplates'
                 ]
             ),
@@ -314,7 +315,7 @@ implements StaticSecurityResource
                 name: 'Repository Templates - (delete,read)',
                 description: 'Give permission to delete,read existing repository templates.  Note that this privilege is not currently invoked by the Nexus UI.',
                 properties: [
-                    'method': 'delete,read',
+                    'method'    : 'delete,read',
                     'permission': 'nexus:repotemplates'
                 ]
             ),
@@ -324,7 +325,7 @@ implements StaticSecurityResource
                 name: 'Repository Groups - (create,read)',
                 description: 'Give permission to create,read new repository groups.',
                 properties: [
-                    'method': 'create,read',
+                    'method'    : 'create,read',
                     'permission': 'nexus:repogroups'
                 ]
             ),
@@ -334,7 +335,7 @@ implements StaticSecurityResource
                 name: 'Repository Groups - (read)',
                 description: 'Give permission to read existing repository group configuration.',
                 properties: [
-                    'method': 'read',
+                    'method'    : 'read',
                     'permission': 'nexus:repogroups'
                 ]
             ),
@@ -344,7 +345,7 @@ implements StaticSecurityResource
                 name: 'Repository Groups - (update,read)',
                 description: 'Give permission to update,read existing repository group configuration.',
                 properties: [
-                    'method': 'update,read',
+                    'method'    : 'update,read',
                     'permission': 'nexus:repogroups'
                 ]
             ),
@@ -354,7 +355,7 @@ implements StaticSecurityResource
                 name: 'Repository Groups - (delete,read)',
                 description: 'Give permission to delete,read existing repository groups.',
                 properties: [
-                    'method': 'delete,read',
+                    'method'    : 'delete,read',
                     'permission': 'nexus:repogroups'
                 ]
             ),
@@ -364,7 +365,7 @@ implements StaticSecurityResource
                 name: 'Rebuild Repository Attributes',
                 description: 'Give permission to rebuild the attributes of repository content.  The extents of this privilege are related to the allowed targets.',
                 properties: [
-                    'method': 'delete,read',
+                    'method'    : 'delete,read',
                     'permission': 'nexus:attributes'
                 ]
             ),
@@ -374,7 +375,7 @@ implements StaticSecurityResource
                 name: 'Clear Repository Cache',
                 description: 'Give permission to clear the content of a repositories not found cache.  The extents of this privilege are related to the allowed targets.',
                 properties: [
-                    'method': 'delete,read',
+                    'method'    : 'delete,read',
                     'permission': 'nexus:cache'
                 ]
             ),
@@ -384,7 +385,7 @@ implements StaticSecurityResource
                 name: 'Repository Routes - (create,read)',
                 description: 'Give permission to create,read repository routes.',
                 properties: [
-                    'method': 'create,read',
+                    'method'    : 'create,read',
                     'permission': 'nexus:routes'
                 ]
             ),
@@ -394,7 +395,7 @@ implements StaticSecurityResource
                 name: 'Repository Routes - (read)',
                 description: 'Give permission to read existing repository route configuration.',
                 properties: [
-                    'method': 'read',
+                    'method'    : 'read',
                     'permission': 'nexus:routes'
                 ]
             ),
@@ -404,7 +405,7 @@ implements StaticSecurityResource
                 name: 'Repository Routes - (update,read)',
                 description: 'Give permission to update,read existing repository route configuration.',
                 properties: [
-                    'method': 'update,read',
+                    'method'    : 'update,read',
                     'permission': 'nexus:routes'
                 ]
             ),
@@ -414,7 +415,7 @@ implements StaticSecurityResource
                 name: 'Repository Routes - (delete,read)',
                 description: 'Give permission to delete,read existing repository routes.',
                 properties: [
-                    'method': 'delete,read',
+                    'method'    : 'delete,read',
                     'permission': 'nexus:routes'
                 ]
             ),
@@ -424,7 +425,7 @@ implements StaticSecurityResource
                 name: 'Scheduled Tasks - (create,read)',
                 description: 'Give permission to create,read scheduled tasks.',
                 properties: [
-                    'method': 'create,read',
+                    'method'    : 'create,read',
                     'permission': 'nexus:tasks'
                 ]
             ),
@@ -434,7 +435,7 @@ implements StaticSecurityResource
                 name: 'Scheduled Tasks - (read)',
                 description: 'Give permission to read existing scheduled task configuration.',
                 properties: [
-                    'method': 'read',
+                    'method'    : 'read',
                     'permission': 'nexus:tasks'
                 ]
             ),
@@ -444,7 +445,7 @@ implements StaticSecurityResource
                 name: 'Scheduled Tasks - (update,read)',
                 description: 'Give permission to update,read existing scheduled task configuration.',
                 properties: [
-                    'method': 'update,read',
+                    'method'    : 'update,read',
                     'permission': 'nexus:tasks'
                 ]
             ),
@@ -454,7 +455,7 @@ implements StaticSecurityResource
                 name: 'Scheduled Tasks - (delete,read)',
                 description: 'Give permission to delete,read existing scheduled tasks.',
                 properties: [
-                    'method': 'delete,read',
+                    'method'    : 'delete,read',
                     'permission': 'nexus:tasks'
                 ]
             ),
@@ -464,7 +465,7 @@ implements StaticSecurityResource
                 name: 'Logs - (read)',
                 description: 'Give permission to retrieve the nexus log files.',
                 properties: [
-                    'method': 'read',
+                    'method'    : 'read',
                     'permission': 'nexus:logs'
                 ]
             ),
@@ -474,7 +475,7 @@ implements StaticSecurityResource
                 name: 'Configuration - (read)',
                 description: 'Give permission to retrieve the nexus configuration.',
                 properties: [
-                    'method': 'read',
+                    'method'    : 'read',
                     'permission': 'nexus:configuration'
                 ]
             ),
@@ -484,7 +485,7 @@ implements StaticSecurityResource
                 name: 'Repository Targets - (create,read)',
                 description: 'Give permission to create,read repository targets.',
                 properties: [
-                    'method': 'create,read',
+                    'method'    : 'create,read',
                     'permission': 'nexus:targets'
                 ]
             ),
@@ -494,7 +495,7 @@ implements StaticSecurityResource
                 name: 'Repository Targets - (read)',
                 description: 'Give permission to read existing repository target configuration.',
                 properties: [
-                    'method': 'read',
+                    'method'    : 'read',
                     'permission': 'nexus:targets'
                 ]
             ),
@@ -504,7 +505,7 @@ implements StaticSecurityResource
                 name: 'Repository Targets - (update,read)',
                 description: 'Give permission to update,read existing repository target configuration.',
                 properties: [
-                    'method': 'update,read',
+                    'method'    : 'update,read',
                     'permission': 'nexus:targets'
                 ]
             ),
@@ -514,7 +515,7 @@ implements StaticSecurityResource
                 name: 'Repository Targets - (delete,read)',
                 description: 'Give permission to delete,read existing repository targets.',
                 properties: [
-                    'method': 'delete,read',
+                    'method'    : 'delete,read',
                     'permission': 'nexus:targets'
                 ]
             ),
@@ -524,7 +525,7 @@ implements StaticSecurityResource
                 name: 'Wastebasket - (read)',
                 description: 'Give permission to read the contents of the nexus trash.  Note that this privilege is not currently invoked by the Nexus UI.',
                 properties: [
-                    'method': 'read',
+                    'method'    : 'read',
                     'permission': 'nexus:wastebasket'
                 ]
             ),
@@ -534,7 +535,7 @@ implements StaticSecurityResource
                 name: 'Wastebasket - (delete,read)',
                 description: 'Give permission to delete,read the contents of the nexus trash.',
                 properties: [
-                    'method': 'delete,read',
+                    'method'    : 'delete,read',
                     'permission': 'nexus:wastebasket'
                 ]
             ),
@@ -544,7 +545,7 @@ implements StaticSecurityResource
                 name: 'Artifact Download',
                 description: 'Give permission to download artifacts (using /artifact service, not the /content url).  The extents of this privilege are related to the allowed targets..  Note that this privilege is not currently invoked by the Nexus UI.',
                 properties: [
-                    'method': 'read',
+                    'method'    : 'read',
                     'permission': 'nexus:artifact'
                 ]
             ),
@@ -554,7 +555,7 @@ implements StaticSecurityResource
                 name: 'Read Repository Status',
                 description: 'Give permission to retrieve the status of a repository.',
                 properties: [
-                    'method': 'read',
+                    'method'    : 'read',
                     'permission': 'nexus:repostatus'
                 ]
             ),
@@ -564,7 +565,7 @@ implements StaticSecurityResource
                 name: 'Update Repository Status',
                 description: 'Give permission to update the status of a repository.',
                 properties: [
-                    'method': 'update',
+                    'method'    : 'update',
                     'permission': 'nexus:repostatus'
                 ]
             ),
@@ -574,7 +575,7 @@ implements StaticSecurityResource
                 name: 'Artifact Upload',
                 description: 'Give permission to upload artifacts (using /artifact service, not the /content service).  The extents of this privilege are related to the allowed targets.',
                 properties: [
-                    'method': 'create,read',
+                    'method'    : 'create,read',
                     'permission': 'nexus:artifact'
                 ]
             ),
@@ -584,7 +585,7 @@ implements StaticSecurityResource
                 name: 'Repository Summary Info (read)',
                 description: 'Give permission to read the repository summary information.',
                 properties: [
-                    'method': 'read',
+                    'method'    : 'read',
                     'permission': 'nexus:repometa'
                 ]
             ),
@@ -594,7 +595,7 @@ implements StaticSecurityResource
                 name: 'Scheduled Tasks - (run,stop)',
                 description: 'Give permission to run and stop existing scheduled tasks manually.',
                 properties: [
-                    'method': 'read,delete',
+                    'method'    : 'read,delete',
                     'permission': 'nexus:tasksrun'
                 ]
             ),
@@ -604,7 +605,7 @@ implements StaticSecurityResource
                 name: 'Scheduled Task Types - (read)',
                 description: 'Give permission to retrieve list of support task types available in nexus.',
                 properties: [
-                    'method': 'read',
+                    'method'    : 'read',
                     'permission': 'nexus:tasktypes'
                 ]
             ),
@@ -614,7 +615,7 @@ implements StaticSecurityResource
                 name: 'Repository Content Classes Component - (read)',
                 description: 'Give permission to retrieve the list of repository content classes supported by nexus.',
                 properties: [
-                    'method': 'read',
+                    'method'    : 'read',
                     'permission': 'nexus:componentscontentclasses'
                 ]
             ),
@@ -624,7 +625,7 @@ implements StaticSecurityResource
                 name: 'Scheduled Task Types Component - (read)',
                 description: 'Give permission to retrieve list of support task types available in nexus.',
                 properties: [
-                    'method': 'read',
+                    'method'    : 'read',
                     'permission': 'nexus:componentscheduletypes'
                 ]
             ),
@@ -634,7 +635,7 @@ implements StaticSecurityResource
                 name: 'Realm Types Component - (read)',
                 description: 'Give permission to retrieve list of support realms available in nexus.',
                 properties: [
-                    'method': 'read',
+                    'method'    : 'read',
                     'permission': 'nexus:componentrealmtypes'
                 ]
             ),
@@ -644,7 +645,7 @@ implements StaticSecurityResource
                 name: 'Repository Types - (read)',
                 description: 'Give permission to retrieve the list of repository types supported by nexus.',
                 properties: [
-                    'method': 'read',
+                    'method'    : 'read',
                     'permission': 'nexus:componentsrepotypes'
                 ]
             ),
@@ -654,7 +655,7 @@ implements StaticSecurityResource
                 name: 'Rebuild Maven Metadata',
                 description: 'Give permission to rebuild the maven metadata of repository content.  The extents of this privilege are related to the allowed targets.',
                 properties: [
-                    'method': 'delete,read',
+                    'method'    : 'delete,read',
                     'permission': 'nexus:metadata'
                 ]
             ),
@@ -664,7 +665,7 @@ implements StaticSecurityResource
                 name: 'Log Configuration - (read,update)',
                 description: 'Give permission to read and update log configuration',
                 properties: [
-                    'method': 'read,update',
+                    'method'    : 'read,update',
                     'permission': 'nexus:logconfig'
                 ]
             ),
@@ -674,7 +675,7 @@ implements StaticSecurityResource
                 name: 'Repository Mirrors - (read)',
                 description: 'Give permission to read repository mirror configuration',
                 properties: [
-                    'method': 'read',
+                    'method'    : 'read',
                     'permission': 'nexus:repositorymirrors'
                 ]
             ),
@@ -684,7 +685,7 @@ implements StaticSecurityResource
                 name: 'Repository Mirrors - (create,read)',
                 description: 'Give permission to create repository mirror configuration',
                 properties: [
-                    'method': 'create,read',
+                    'method'    : 'create,read',
                     'permission': 'nexus:repositorymirrors'
                 ]
             ),
@@ -694,7 +695,7 @@ implements StaticSecurityResource
                 name: 'Repository Mirrors, Retrieve Predefined List - (read)',
                 description: 'Give permission to retrieve predefined list of mirrors from the server',
                 properties: [
-                    'method': 'read',
+                    'method'    : 'read',
                     'permission': 'nexus:repositorypredefinedmirrors'
                 ]
             ),
@@ -704,7 +705,7 @@ implements StaticSecurityResource
                 name: 'Repository Mirrors, Retrieve Mirror Status - (read)',
                 description: 'Give permission to retrieve mirror status from the server',
                 properties: [
-                    'method': 'read',
+                    'method'    : 'read',
                     'permission': 'nexus:repositorymirrorsstatus'
                 ]
             ),
@@ -714,7 +715,7 @@ implements StaticSecurityResource
                 name: 'API-Key Access',
                 description: 'Give permission to use an API-Key to access the server.',
                 properties: [
-                    'method': '*',
+                    'method'    : '*',
                     'permission': 'apikey:access'
                 ]
             ),
@@ -724,7 +725,7 @@ implements StaticSecurityResource
                 name: 'Security administrator privilege (ALL)',
                 description: 'Give permission to everything security related.',
                 properties: [
-                    'method': '*',
+                    'method'    : '*',
                     'permission': 'security:*'
                 ]
             ),
@@ -734,7 +735,7 @@ implements StaticSecurityResource
                 name: 'User Privileges - (create,read)',
                 description: 'Give permission to create,read privileges.',
                 properties: [
-                    'method': 'create,read',
+                    'method'    : 'create,read',
                     'permission': 'security:privileges'
                 ]
             ),
@@ -744,7 +745,7 @@ implements StaticSecurityResource
                 name: 'User Privileges - (read)',
                 description: 'Give permission to read existing privilege configuration.',
                 properties: [
-                    'method': 'read',
+                    'method'    : 'read',
                     'permission': 'security:privileges'
                 ]
             ),
@@ -754,7 +755,7 @@ implements StaticSecurityResource
                 name: 'User Privileges - (update,read)',
                 description: 'Give permission to update,read existing privilege configuration.',
                 properties: [
-                    'method': 'update,read',
+                    'method'    : 'update,read',
                     'permission': 'security:privileges'
                 ]
             ),
@@ -764,7 +765,7 @@ implements StaticSecurityResource
                 name: 'User Privileges - (delete,read)',
                 description: 'Give permission to delete,read existing privileges.',
                 properties: [
-                    'method': 'delete,read',
+                    'method'    : 'delete,read',
                     'permission': 'security:privileges'
                 ]
             ),
@@ -774,7 +775,7 @@ implements StaticSecurityResource
                 name: 'User Roles - (create,read)',
                 description: 'Give permission to create,read user roles.',
                 properties: [
-                    'method': 'create,read',
+                    'method'    : 'create,read',
                     'permission': 'security:roles'
                 ]
             ),
@@ -784,7 +785,7 @@ implements StaticSecurityResource
                 name: 'User Roles - (read)',
                 description: 'Give permission to read existing user role configuration.',
                 properties: [
-                    'method': 'read',
+                    'method'    : 'read',
                     'permission': 'security:roles'
                 ]
             ),
@@ -794,7 +795,7 @@ implements StaticSecurityResource
                 name: 'User Roles - (update,read)',
                 description: 'Give permission to update,read existing user role configuration.',
                 properties: [
-                    'method': 'update,read',
+                    'method'    : 'update,read',
                     'permission': 'security:roles'
                 ]
             ),
@@ -804,7 +805,7 @@ implements StaticSecurityResource
                 name: 'User Roles - (delete,read)',
                 description: 'Give permission to delete,read existing user roles.',
                 properties: [
-                    'method': 'delete,read',
+                    'method'    : 'delete,read',
                     'permission': 'security:roles'
                 ]
             ),
@@ -814,7 +815,7 @@ implements StaticSecurityResource
                 name: 'Users - (create,read)',
                 description: 'Give permission to create,read users.',
                 properties: [
-                    'method': 'create,read',
+                    'method'    : 'create,read',
                     'permission': 'security:users'
                 ]
             ),
@@ -824,7 +825,7 @@ implements StaticSecurityResource
                 name: 'Users - (read)',
                 description: 'Give permission to read existing user configuration.',
                 properties: [
-                    'method': 'read',
+                    'method'    : 'read',
                     'permission': 'security:users'
                 ]
             ),
@@ -834,7 +835,7 @@ implements StaticSecurityResource
                 name: 'Users - (update,read)',
                 description: 'Give permission to update,read existing user configuration.',
                 properties: [
-                    'method': 'update,read',
+                    'method'    : 'update,read',
                     'permission': 'security:users'
                 ]
             ),
@@ -844,7 +845,7 @@ implements StaticSecurityResource
                 name: 'Users - (delete,read)',
                 description: 'Give permission to delete,read existing users.',
                 properties: [
-                    'method': 'delete,read',
+                    'method'    : 'delete,read',
                     'permission': 'security:users'
                 ]
             ),
@@ -854,7 +855,7 @@ implements StaticSecurityResource
                 name: 'User Forgot Password - (create,read)',
                 description: 'Give permission to request that a password be generated an emailed to a certain user.',
                 properties: [
-                    'method': 'create,read',
+                    'method'    : 'create,read',
                     'permission': 'security:usersforgotpw'
                 ]
             ),
@@ -864,7 +865,7 @@ implements StaticSecurityResource
                 name: 'User Forgot User Id - (create,read)',
                 description: 'Give permission to request that a username be emailed to a certain email address.',
                 properties: [
-                    'method': 'create,read',
+                    'method'    : 'create,read',
                     'permission': 'security:usersforgotid'
                 ]
             ),
@@ -874,7 +875,7 @@ implements StaticSecurityResource
                 name: 'User Reset Password - (delete,read)',
                 description: 'Give permission to reset any user\'s password.',
                 properties: [
-                    'method': 'delete,read',
+                    'method'    : 'delete,read',
                     'permission': 'security:usersreset'
                 ]
             ),
@@ -884,7 +885,7 @@ implements StaticSecurityResource
                 name: 'User Change Password - (create,read)',
                 description: 'Give permission to change a user\'s password.',
                 properties: [
-                    'method': 'create,read',
+                    'method'    : 'create,read',
                     'permission': 'security:userschangepw'
                 ]
             ),
@@ -894,7 +895,7 @@ implements StaticSecurityResource
                 name: 'User Set Password - (create,read)',
                 description: 'Give permission to set a user\'s password.',
                 properties: [
-                    'method': 'create,read',
+                    'method'    : 'create,read',
                     'permission': 'security:userssetpw'
                 ]
             ),
@@ -904,7 +905,7 @@ implements StaticSecurityResource
                 name: 'User Locator Types Component - (read)',
                 description: 'Give permission to retrieve the list of User Locator types supported by nexus.',
                 properties: [
-                    'method': 'read',
+                    'method'    : 'read',
                     'permission': 'security:componentsuserlocatortypes'
                 ]
             ),
@@ -914,7 +915,7 @@ implements StaticSecurityResource
                 name: 'User Privilege Types - (read)',
                 description: 'Give permission to read existing privilege types.',
                 properties: [
-                    'method': 'read',
+                    'method'    : 'read',
                     'permission': 'security:privilegetypes'
                 ]
             )
