@@ -19,14 +19,14 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.sonatype.nexus.ldap.internal.connector.dao.LdapDAOException;
+import org.sonatype.nexus.ldap.internal.connector.dao.NoSuchLdapGroupException;
+import org.sonatype.nexus.ldap.internal.realms.LdapManager;
 import org.sonatype.nexus.security.authz.AbstractReadOnlyAuthorizationManager;
 import org.sonatype.nexus.security.privilege.NoSuchPrivilegeException;
 import org.sonatype.nexus.security.privilege.Privilege;
 import org.sonatype.nexus.security.role.NoSuchRoleException;
 import org.sonatype.nexus.security.role.Role;
-import org.sonatype.security.realms.ldap.internal.connector.dao.LdapDAOException;
-import org.sonatype.security.realms.ldap.internal.connector.dao.NoSuchLdapGroupException;
-import org.sonatype.security.realms.ldap.internal.realms.LdapManager;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

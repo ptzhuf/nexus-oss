@@ -10,51 +10,31 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.ldap;
+package org.sonatype.nexus.ldap.internal.connector.dao.password;
 
-import org.sonatype.nexus.ldap.internal.connector.dao.LdapUser;
-import org.sonatype.nexus.ldap.internal.realms.LdapManager;
-import org.sonatype.nexus.security.user.User;
+import org.sonatype.nexus.ldap.internal.connector.dao.password.hash.MD5Crypt;
 import org.sonatype.sisu.litmus.testsupport.TestSupport;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.when;
 
-/**
- * Tests for {@link LdapUserManager}.
- */
-public class LdapUserManagerMockedTest
+public class MD5CryptPasswordEncoderTest
     extends TestSupport
 {
-
-  private LdapUserManager underTest;
-
-  @Mock
-  private LdapManager ldapManager;
-
-  @Mock
-  private LdapUser user;
-
-  @Before
-  public void setup() {
-    this.underTest = new LdapUserManager(ldapManager);
-  }
-
   @Test
-  public void stripEmailWhitespace()
+  public void testEncryptAndVerify()
       throws Exception
   {
-    when(ldapManager.getUser("test")).thenReturn(user);
-    when(user.getEmail()).thenReturn(" email@with.whitespace.invalid ");
-
-    final User user = underTest.getUser("test");
-
-    assertThat(user.getEmailAddress(), is("email@with.whitespace.invalid"));
+    final PasswordEncoder encoder = new MD5CryptPasswordEncoder();
+    String crypted = encoder.encodePassword("test", null);
+    int lastIdx = crypted.lastIndexOf('$');
+    int firstIdx = crypted.indexOf('$');
+    String salt = crypted.substring(firstIdx + "$1$".length(), lastIdx);
+    String check = "{CRYPT}" + new MD5Crypt().crypt("test", salt);
+    assertThat(check, equalTo(crypted));
+    assertThat(encoder.isPasswordValid(crypted, "test", null), is(true));
   }
-
 }

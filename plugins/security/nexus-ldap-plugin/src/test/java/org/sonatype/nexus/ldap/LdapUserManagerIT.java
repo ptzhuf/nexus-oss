@@ -18,6 +18,10 @@ import java.util.List;
 import java.util.Set;
 
 import org.sonatype.ldaptestsuite.LdapServer;
+import org.sonatype.nexus.ldap.internal.LdapITSupport;
+import org.sonatype.nexus.ldap.internal.SecurityTestSupportSecurity;
+import org.sonatype.nexus.ldap.internal.persist.entity.LdapConfiguration;
+import org.sonatype.nexus.ldap.internal.persist.entity.Mapping;
 import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.nexus.security.config.SecurityConfiguration;
 import org.sonatype.nexus.security.model.Configuration;
@@ -26,10 +30,6 @@ import org.sonatype.nexus.security.role.RoleIdentifier;
 import org.sonatype.nexus.security.user.User;
 import org.sonatype.nexus.security.user.UserManager;
 import org.sonatype.nexus.security.user.UserSearchCriteria;
-import org.sonatype.security.realms.ldap.internal.LdapITSupport;
-import org.sonatype.security.realms.ldap.internal.SecurityTestSupportSecurity;
-import org.sonatype.security.realms.ldap.internal.persist.entity.LdapConfiguration;
-import org.sonatype.security.realms.ldap.internal.persist.entity.Mapping;
 
 import org.junit.Assert;
 import org.junit.Test;

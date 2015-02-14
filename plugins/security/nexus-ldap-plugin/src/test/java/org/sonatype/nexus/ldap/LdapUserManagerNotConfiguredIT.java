@@ -15,9 +15,9 @@ package org.sonatype.nexus.ldap;
 import java.util.LinkedHashMap;
 
 import org.sonatype.ldaptestsuite.LdapServerConfiguration;
+import org.sonatype.nexus.ldap.internal.LdapITSupport;
 import org.sonatype.nexus.security.user.UserManager;
 import org.sonatype.nexus.security.user.UserNotFoundException;
-import org.sonatype.security.realms.ldap.internal.LdapITSupport;
 
 import com.google.common.collect.Maps;
 import org.junit.Test;

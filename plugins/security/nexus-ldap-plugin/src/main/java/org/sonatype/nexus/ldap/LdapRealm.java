@@ -21,10 +21,10 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 import javax.naming.NamingException;
 
-import org.sonatype.security.realms.ldap.internal.connector.dao.LdapDAOException;
-import org.sonatype.security.realms.ldap.internal.connector.dao.NoLdapUserRolesFoundException;
-import org.sonatype.security.realms.ldap.internal.events.LdapClearCacheEvent;
-import org.sonatype.security.realms.ldap.internal.realms.LdapManager;
+import org.sonatype.nexus.ldap.internal.connector.dao.LdapDAOException;
+import org.sonatype.nexus.ldap.internal.connector.dao.NoLdapUserRolesFoundException;
+import org.sonatype.nexus.ldap.internal.events.LdapClearCacheEvent;
+import org.sonatype.nexus.ldap.internal.realms.LdapManager;
 import org.sonatype.sisu.goodies.common.Loggers;
 import org.sonatype.sisu.goodies.eventbus.EventBus;
 
