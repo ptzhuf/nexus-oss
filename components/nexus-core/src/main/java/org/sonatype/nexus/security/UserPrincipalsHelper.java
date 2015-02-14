@@ -29,6 +29,8 @@ import org.sonatype.sisu.goodies.common.ComponentSupport;
 
 import org.apache.shiro.subject.PrincipalCollection;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Helper component to map user principals to associated information.
  */
@@ -37,8 +39,12 @@ import org.apache.shiro.subject.PrincipalCollection;
 public class UserPrincipalsHelper
   extends ComponentSupport
 {
+  private final List<UserManager> userManagers;
+
   @Inject
-  private List<UserManager> userManagers;
+  public UserPrincipalsHelper(final List<UserManager> userManagers) {
+    this.userManagers = checkNotNull(userManagers);
+  }
 
   /**
    * Searches records to find the status of the user associated with the given principals.
