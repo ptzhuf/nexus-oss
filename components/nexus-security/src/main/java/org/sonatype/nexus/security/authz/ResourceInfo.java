@@ -53,55 +53,38 @@ public class ResourceInfo
   }
 
   @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((accessMethod == null) ? 0 : accessMethod.hashCode());
-    result = prime * result + ((accessProtocol == null) ? 0 : accessProtocol.hashCode());
-    result = prime * result + ((accessedUri == null) ? 0 : accessedUri.hashCode());
-    result = prime * result + ((action == null) ? 0 : action.hashCode());
-    return result;
+  public boolean equals(final Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    ResourceInfo that = (ResourceInfo) o;
+
+    if (accessMethod != null ? !accessMethod.equals(that.accessMethod) : that.accessMethod != null) {
+      return false;
+    }
+    if (accessProtocol != null ? !accessProtocol.equals(that.accessProtocol) : that.accessProtocol != null) {
+      return false;
+    }
+    if (accessedUri != null ? !accessedUri.equals(that.accessedUri) : that.accessedUri != null) {
+      return false;
+    }
+    if (action != null ? !action.equals(that.action) : that.action != null) {
+      return false;
+    }
+
+    return true;
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    ResourceInfo other = (ResourceInfo) obj;
-    if (accessMethod == null) {
-      if (other.accessMethod != null) {
-        return false;
-      }
-    }
-    else if (!accessMethod.equals(other.accessMethod)) {
-      return false;
-    }
-    if (accessProtocol == null) {
-      if (other.accessProtocol != null) {
-        return false;
-      }
-    }
-    else if (!accessProtocol.equals(other.accessProtocol)) {
-      return false;
-    }
-    if (accessedUri == null) {
-      if (other.accessedUri != null) {
-        return false;
-      }
-    }
-    else if (!accessedUri.equals(other.accessedUri)) {
-      return false;
-    }
-    if (action != other.action) {
-      return false;
-    }
-    return true;
+  public int hashCode() {
+    int result = accessProtocol != null ? accessProtocol.hashCode() : 0;
+    result = 31 * result + (accessMethod != null ? accessMethod.hashCode() : 0);
+    result = 31 * result + (action != null ? action.hashCode() : 0);
+    result = 31 * result + (accessedUri != null ? accessedUri.hashCode() : 0);
+    return result;
   }
 }
