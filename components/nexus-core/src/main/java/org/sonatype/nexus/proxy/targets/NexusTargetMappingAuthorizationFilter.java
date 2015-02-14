@@ -28,7 +28,7 @@ import org.sonatype.nexus.proxy.RequestContext;
 import org.sonatype.nexus.proxy.ResourceStoreRequest;
 import org.sonatype.nexus.proxy.access.Action;
 import org.sonatype.nexus.proxy.router.RepositoryRouter;
-import org.sonatype.nexus.security.FailureLoggingHttpMethodPermissionFilter;
+import org.sonatype.nexus.web.FailureLoggingHttpMethodPermissionFilter;
 import org.sonatype.sisu.goodies.common.Loggers;
 
 import com.google.common.base.Strings;

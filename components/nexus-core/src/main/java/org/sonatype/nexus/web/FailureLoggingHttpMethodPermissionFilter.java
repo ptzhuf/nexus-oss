@@ -11,7 +11,7 @@
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
 
-package org.sonatype.nexus.security;
+package org.sonatype.nexus.web;
 
 import java.io.IOException;
 
@@ -20,9 +20,10 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import org.sonatype.nexus.security.ClientInfo;
+import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.nexus.security.authz.NexusAuthorizationEvent;
 import org.sonatype.nexus.security.authz.ResourceInfo;
-import org.sonatype.nexus.web.RemoteIPFinder;
 import org.sonatype.sisu.goodies.eventbus.EventBus;
 
 import org.apache.shiro.subject.Subject;

@@ -19,9 +19,9 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
-import org.sonatype.nexus.security.NexusHttpAuthenticationFilter;
 import org.sonatype.nexus.security.authc.NexusApiKey;
 import org.sonatype.nexus.security.authc.NexusApiKeyAuthenticationToken;
+import org.sonatype.nexus.web.NexusHttpAuthenticationFilter;
 
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.web.filter.authc.AuthenticatingFilter;

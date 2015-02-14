@@ -18,8 +18,8 @@ import javax.inject.Inject;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-import org.sonatype.nexus.security.NexusHttpAuthenticationFilter;
 import org.sonatype.nexus.security.authc.AuthenticationTokenFactory;
+import org.sonatype.nexus.web.NexusHttpAuthenticationFilter;
 
 import com.google.common.collect.Lists;
 import org.apache.shiro.authc.AuthenticationToken;
