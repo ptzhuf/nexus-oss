@@ -21,7 +21,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class FilterChain
 {
-
   private final String pathPattern;
 
   private final String filterExpression;
@@ -39,4 +38,11 @@ public class FilterChain
     return filterExpression;
   }
 
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "{" +
+        "pathPattern='" + pathPattern + '\'' +
+        ", filterExpression='" + filterExpression + '\'' +
+        '}';
+  }
 }

@@ -10,7 +10,7 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.web.internal;
+package org.sonatype.nexus.internal.security;
 
 import java.util.List;
 
@@ -22,6 +22,7 @@ import org.sonatype.nexus.proxy.events.NexusStartedEvent;
 import org.sonatype.nexus.proxy.events.NexusStoppedEvent;
 import org.sonatype.nexus.security.FilterChain;
 import org.sonatype.nexus.security.ProtectedPathManager;
+import org.sonatype.sisu.goodies.common.ComponentSupport;
 import org.sonatype.sisu.goodies.eventbus.EventBus;
 
 import com.google.common.eventbus.Subscribe;
@@ -37,8 +38,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @Named
 @EagerSingleton
 public class FilterChainInstaller
+  extends ComponentSupport
 {
-
   private final EventBus eventBus;
 
   private final Provider<ProtectedPathManager> protectedPathManager;
@@ -59,7 +60,8 @@ public class FilterChainInstaller
 
   @Subscribe
   public void onEvent(final NexusStartedEvent event) {
-    for (final FilterChain filterChain : filterChains) {
+    for (FilterChain filterChain : filterChains) {
+      log.debug("Installing filter-chain: {}", filterChain);
       protectedPathManager.get().addProtectedResource(
           filterChain.getPathPattern(), filterChain.getFilterExpression()
       );
@@ -70,5 +72,4 @@ public class FilterChainInstaller
   public void onEvent(final NexusStoppedEvent event) {
     eventBus.unregister(this);
   }
-
 }
