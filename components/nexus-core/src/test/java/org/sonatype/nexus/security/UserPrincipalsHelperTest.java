@@ -55,10 +55,15 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isIn;
 
+/**
+ * Tests for {@link UserPrincipalsHelper}.
+ */
 public class UserPrincipalsHelperTest
     extends NexusAppTestSupport
 {
-  private SecuritySystem securitySystem = null;
+  private SecuritySystem securitySystem;
+
+  private UserPrincipalsHelper underTest;
 
   @Override
   protected boolean runWithSecurityDisabled() {
@@ -83,11 +88,9 @@ public class UserPrincipalsHelperTest
       }
     });
   }
-
+  
   @Override
-  protected void setUp()
-      throws Exception
-  {
+  protected void setUp() throws Exception {
     TestUserManager.status = UserStatus.active;
     TestUserManager.userDeleted = false;
 
@@ -95,12 +98,12 @@ public class UserPrincipalsHelperTest
 
     securitySystem = lookup(SecuritySystem.class);
     securitySystem.start();
+    
+    underTest = lookup(UserPrincipalsHelper.class);
   }
 
   @Override
-  public void tearDown()
-      throws Exception
-  {
+  public void tearDown() throws Exception {
     try {
       ThreadContext.remove();
       lookup(CacheManager.class).shutdown();
@@ -111,9 +114,9 @@ public class UserPrincipalsHelperTest
   }
 
   @Test
-  public void testFindUserManagerHandlesNull() {
+  public void testFindUserManagerHandlesNull() throws Exception {
     try {
-      helper().findUserManager(null);
+      underTest.findUserManager(null);
 
       assertThat("Expected NoSuchUserManagerException", false);
     }
@@ -123,9 +126,9 @@ public class UserPrincipalsHelperTest
   }
 
   @Test
-  public void testNoSuchUserManager() {
+  public void testNoSuchUserManager() throws Exception {
     try {
-      helper().findUserManager(new SimplePrincipalCollection("badUser", "badRealm"));
+      underTest.findUserManager(new SimplePrincipalCollection("badUser", "badRealm"));
 
       assertThat("Expected NoSuchUserManagerException", false);
     }
@@ -135,13 +138,11 @@ public class UserPrincipalsHelperTest
   }
 
   @Test
-  public void testFindUserManager()
-      throws NoSuchUserManagerException, AuthenticationException
-  {
+  public void testFindUserManager() throws Exception {
     final Subject subject = login("deployment", "deployment123");
     try {
       final PrincipalCollection principals = subject.getPrincipals();
-      final UserManager userManager = helper().findUserManager(principals);
+      final UserManager userManager = underTest.findUserManager(principals);
 
       assertThat(principals.getPrimaryPrincipal().toString(), isIn(userManager.listUserIds()));
       assertThat(userManager.getAuthenticationRealmName(), isIn(principals.getRealmNames()));
@@ -152,9 +153,7 @@ public class UserPrincipalsHelperTest
   }
 
   @Test
-  public void testFindUserManagerNonDefaultRealm()
-      throws Exception
-  {
+  public void testFindUserManagerNonDefaultRealm() throws Exception {
     final List<String> realms = securitySystem.getRealms();
     realms.add("TestPrincipalsRealm");
     securitySystem.setRealms(realms);
@@ -162,7 +161,7 @@ public class UserPrincipalsHelperTest
     final Subject subject = login("tempUser", "tempPass");
     try {
       final PrincipalCollection principals = subject.getPrincipals();
-      final UserManager userManager = helper().findUserManager(principals);
+      final UserManager userManager = underTest.findUserManager(principals);
 
       assertThat(principals.getPrimaryPrincipal().toString(), isIn(userManager.listUserIds()));
       assertThat(userManager.getAuthenticationRealmName(), isIn(principals.getRealmNames()));
@@ -173,9 +172,9 @@ public class UserPrincipalsHelperTest
   }
 
   @Test
-  public void testGetUserStatusHandlesNull() {
+  public void testGetUserStatusHandlesNull() throws Exception {
     try {
-      helper().getUserStatus(null);
+      underTest.getUserStatus(null);
 
       assertThat("Expected UserNotFoundException", false);
     }
@@ -185,9 +184,9 @@ public class UserPrincipalsHelperTest
   }
 
   @Test
-  public void testUnknownUser() {
+  public void testUnknownUser() throws Exception {
     try {
-      helper().getUserStatus(new SimplePrincipalCollection("badUser", "badRealm"));
+      underTest.getUserStatus(new SimplePrincipalCollection("badUser", "badRealm"));
 
       assertThat("Expected UserNotFoundException", false);
     }
@@ -197,14 +196,12 @@ public class UserPrincipalsHelperTest
   }
 
   @Test
-  public void testGetUserStatus()
-      throws UserNotFoundException, AuthenticationException
-  {
+  public void testGetUserStatus() throws Exception {
     final Subject subject = login("deployment", "deployment123");
     try {
       final PrincipalCollection principals = subject.getPrincipals();
 
-      assertThat(helper().getUserStatus(principals), is(UserStatus.active));
+      assertThat(underTest.getUserStatus(principals), is(UserStatus.active));
     }
     finally {
       subject.logout();
@@ -212,9 +209,7 @@ public class UserPrincipalsHelperTest
   }
 
   @Test
-  public void testGetUserStatusNonDefaultRealm()
-      throws Exception
-  {
+  public void testGetUserStatusNonDefaultRealm() throws Exception {
     final List<String> realms = securitySystem.getRealms();
     realms.add("TestPrincipalsRealm");
     securitySystem.setRealms(realms);
@@ -224,18 +219,18 @@ public class UserPrincipalsHelperTest
       final PrincipalCollection principals = subject.getPrincipals();
 
       // check status is passed through
-      assertThat(helper().getUserStatus(principals), is(UserStatus.active));
+      assertThat(underTest.getUserStatus(principals), is(UserStatus.active));
       TestUserManager.status = UserStatus.disabled;
-      assertThat(helper().getUserStatus(principals), is(UserStatus.disabled));
+      assertThat(underTest.getUserStatus(principals), is(UserStatus.disabled));
       TestUserManager.status = UserStatus.locked;
-      assertThat(helper().getUserStatus(principals), is(UserStatus.locked));
+      assertThat(underTest.getUserStatus(principals), is(UserStatus.locked));
       TestUserManager.status = UserStatus.active;
-      assertThat(helper().getUserStatus(principals), is(UserStatus.active));
+      assertThat(underTest.getUserStatus(principals), is(UserStatus.active));
 
       TestUserManager.userDeleted = true;
 
       try {
-        helper().getUserStatus(principals);
+        underTest.getUserStatus(principals);
 
         assertThat("Expected UserNotFoundException", false);
       }
@@ -248,18 +243,7 @@ public class UserPrincipalsHelperTest
     }
   }
 
-  private UserPrincipalsHelper helper() {
-    try {
-      return lookup(UserPrincipalsHelper.class);
-    }
-    catch (final Exception e) {
-      throw new RuntimeException(e);
-    }
-  }
-
-  private Subject login(String username, String password)
-      throws AuthenticationException
-  {
+  private Subject login(String username, String password) throws AuthenticationException {
     return securitySystem.login(new UsernamePasswordToken(username, password));
   }
 
