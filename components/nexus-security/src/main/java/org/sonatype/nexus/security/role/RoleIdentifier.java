@@ -16,9 +16,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Identifies a role and what source it comes from.
- *
- * Its basically a just a complex key for a role.
+ * Role identifier encompassing source and role identifiers.
  */
 public class RoleIdentifier
 {
@@ -47,46 +45,6 @@ public class RoleIdentifier
     this.roleId = roleId;
   }
 
-  @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((roleId == null) ? 0 : roleId.hashCode());
-    result = prime * result + ((source == null) ? 0 : source.hashCode());
-    return result;
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    RoleIdentifier other = (RoleIdentifier) obj;
-    if (roleId == null) {
-      if (other.roleId != null) {
-        return false;
-      }
-    }
-    else if (!roleId.equals(other.roleId)) {
-      return false;
-    }
-    if (source == null) {
-      if (other.source != null) {
-        return false;
-      }
-    }
-    else if (!source.equals(other.source)) {
-      return false;
-    }
-    return true;
-  }
-
   public static Set<RoleIdentifier> getRoleIdentifiersForSource(String source, Set<RoleIdentifier> roleIdentifiers) {
     Set<RoleIdentifier> sourceRoleIdentifiers = new HashSet<RoleIdentifier>();
 
@@ -102,7 +60,38 @@ public class RoleIdentifier
   }
 
   @Override
+  public boolean equals(final Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    RoleIdentifier that = (RoleIdentifier) o;
+
+    if (roleId != null ? !roleId.equals(that.roleId) : that.roleId != null) {
+      return false;
+    }
+    if (source != null ? !source.equals(that.source) : that.source != null) {
+      return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = source != null ? source.hashCode() : 0;
+    result = 31 * result + (roleId != null ? roleId.hashCode() : 0);
+    return result;
+  }
+
+  @Override
   public String toString() {
-    return "source: " + this.source + ", roleId: " + this.roleId;
+    return getClass().getSimpleName() + "{" +
+        "source='" + source + '\'' +
+        ", roleId='" + roleId + '\'' +
+        '}';
   }
 }
