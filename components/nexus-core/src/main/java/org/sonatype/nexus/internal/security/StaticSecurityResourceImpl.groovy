@@ -28,7 +28,7 @@ import javax.inject.Singleton
  */
 @Named
 @Singleton
-class SecurityResource
+class StaticSecurityResourceImpl
     implements StaticSecurityResource
 {
   @Override
