@@ -20,8 +20,8 @@ import javax.inject.Singleton;
 import org.sonatype.nexus.events.EventSubscriber;
 import org.sonatype.nexus.security.ClientInfo;
 import org.sonatype.nexus.security.ClientInfoProvider;
-import org.sonatype.nexus.security.NexusAuthenticationEvent;
 import org.sonatype.nexus.security.authc.AuthenticationEvent;
+import org.sonatype.nexus.security.authc.NexusAuthenticationEvent;
 import org.sonatype.sisu.goodies.eventbus.EventBus;
 
 import com.google.common.eventbus.Subscribe;
