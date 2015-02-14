@@ -10,6 +10,7 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
+
 package org.sonatype.nexus.security;
 
 import java.io.IOException;
@@ -19,7 +20,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
-import org.sonatype.nexus.proxy.access.Action;
 import org.sonatype.nexus.web.RemoteIPFinder;
 import org.sonatype.sisu.goodies.eventbus.EventBus;
 
@@ -34,7 +34,6 @@ import org.apache.shiro.web.filter.authz.HttpMethodPermissionFilter;
 public class FailureLoggingHttpMethodPermissionFilter
     extends HttpMethodPermissionFilter
 {
-
   @Inject
   private SecuritySystem securitySystem;
 
@@ -63,16 +62,17 @@ public class FailureLoggingHttpMethodPermissionFilter
       return;
     }
 
-    final Action action = Action.valueOf(getHttpMethodAction(request));
+    final ClientInfo clientInfo = new ClientInfo(
+        String.valueOf(subject.getPrincipal()),
+        RemoteIPFinder.findIP((HttpServletRequest) request),
+        "n/a");
 
-    final ClientInfo clientInfo =
-        new ClientInfo(String.valueOf(subject.getPrincipal()),
-            RemoteIPFinder.findIP((HttpServletRequest) request), "n/a");
-    final ResourceInfo resInfo =
-        new ResourceInfo("HTTP", ((HttpServletRequest) request).getMethod(), action,
-            ((HttpServletRequest) request).getRequestURI());
+    final ResourceInfo resInfo = new ResourceInfo(
+        "HTTP",
+        ((HttpServletRequest) request).getMethod(),
+        getHttpMethodAction(request),
+        ((HttpServletRequest) request).getRequestURI());
 
     eventBus.post(new NexusAuthorizationEvent(this, clientInfo, resInfo, false));
   }
-
 }

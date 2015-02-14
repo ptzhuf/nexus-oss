@@ -12,12 +12,8 @@
  */
 package org.sonatype.nexus.security;
 
-import org.sonatype.nexus.proxy.access.Action;
-
 /**
  * Resource info collects the description of HOW and WHAT has been accessed.
- *
- * @author cstamas
  */
 public class ResourceInfo
 {
@@ -25,13 +21,13 @@ public class ResourceInfo
 
   private final String accessMethod;
 
-  private final Action action;
+  private final String action;
 
   private final String accessedUri;
 
   public ResourceInfo(final String accessProtocol,
                       final String accessMethod,
-                      final Action action,
+                      final String action,
                       final String accessedUri)
   {
     this.accessProtocol = accessProtocol;
@@ -48,7 +44,7 @@ public class ResourceInfo
     return accessMethod;
   }
 
-  public Action getAction() {
+  public String getAction() {
     return action;
   }
 

@@ -105,7 +105,7 @@ public class AuthSubscriber
     putIfNotNull(data, "userUa", ai.getUserAgent());
     putIfNotNull(data, "resProto", ri.getAccessProtocol());
     putIfNotNull(data, "resMethod", ri.getAccessMethod());
-    putIfNotNull(data, "resAction", ri.getAction().name());
+    putIfNotNull(data, "resAction", ri.getAction());
     putIfNotNull(data, "resUri", ri.getAccessedUri());
     final FeedEvent fe = new FeedEvent(
         FeedRecorder.FAMILY_AUTH,
