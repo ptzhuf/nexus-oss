@@ -52,9 +52,7 @@ public class UserPrincipalsHelper
    * @param principals Identifying principals
    * @return User status
    */
-  public UserStatus getUserStatus(final PrincipalCollection principals)
-      throws UserNotFoundException
-  {
+  public UserStatus getUserStatus(final PrincipalCollection principals) throws UserNotFoundException {
     String userId = null;
     if (principals != null) {
       userId = principals.getPrimaryPrincipal().toString();
@@ -88,9 +86,7 @@ public class UserPrincipalsHelper
    * @param principals Identifying principals
    * @return UserManager component
    */
-  public UserManager findUserManager(final PrincipalCollection principals)
-      throws NoSuchUserManagerException
-  {
+  public UserManager findUserManager(final PrincipalCollection principals) throws NoSuchUserManagerException {
     String primaryRealmName = null;
     if (principals != null) {
       final Iterator<String> itr = principals.getRealmNames().iterator();

@@ -11,7 +11,7 @@
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
 
-package org.sonatype.nexus.proxy.targets;
+package org.sonatype.nexus.security;
 
 import java.io.IOException;
 
@@ -20,8 +20,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
-import org.sonatype.nexus.security.ClientInfo;
-import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.nexus.security.authz.NexusAuthorizationEvent;
 import org.sonatype.nexus.security.authz.ResourceInfo;
 import org.sonatype.nexus.web.RemoteIPFinder;
@@ -30,14 +28,14 @@ import org.sonatype.sisu.goodies.eventbus.EventBus;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authz.HttpMethodPermissionFilter;
 
-// FIXME: Kill this, used by one sub-class
-
 /**
  * A filter that maps the action from the HTTP Verb.
  */
-class FailureLoggingHttpMethodPermissionFilter
+public class FailureLoggingHttpMethodPermissionFilter
     extends HttpMethodPermissionFilter
 {
+  public static final String ATTR_KEY_REQUEST_IS_AUTHZ_REJECTED = "request.is.authz.rejected";
+
   @Inject
   private SecuritySystem securitySystem;
 
@@ -48,7 +46,7 @@ class FailureLoggingHttpMethodPermissionFilter
   protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws IOException {
     recordAuthzFailureEvent(request, response);
 
-    request.setAttribute(org.sonatype.nexus.web.Constants.ATTR_KEY_REQUEST_IS_AUTHZ_REJECTED, Boolean.TRUE);
+    request.setAttribute(ATTR_KEY_REQUEST_IS_AUTHZ_REJECTED, Boolean.TRUE);
 
     // NOTE: not calling super which is odd here due to NX anonymous user muck which has to be handled
     // NOTE: specially and adds lots of complication, consider removing the need for this in the future
