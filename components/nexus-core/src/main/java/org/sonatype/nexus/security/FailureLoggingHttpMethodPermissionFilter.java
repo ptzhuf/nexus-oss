@@ -62,17 +62,21 @@ public class FailureLoggingHttpMethodPermissionFilter
       return;
     }
 
-    final ClientInfo clientInfo = new ClientInfo(
+    HttpServletRequest httpRequest = (HttpServletRequest)request;
+
+    ClientInfo clientInfo = new ClientInfo(
         String.valueOf(subject.getPrincipal()),
-        RemoteIPFinder.findIP((HttpServletRequest) request),
-        "n/a");
+        RemoteIPFinder.findIP(httpRequest),
+        "n/a"
+    );
 
-    final ResourceInfo resInfo = new ResourceInfo(
+    ResourceInfo resourceInfo = new ResourceInfo(
         "HTTP",
-        ((HttpServletRequest) request).getMethod(),
+        httpRequest.getMethod(),
         getHttpMethodAction(request),
-        ((HttpServletRequest) request).getRequestURI());
+        httpRequest.getRequestURI()
+    );
 
-    eventBus.post(new NexusAuthorizationEvent(clientInfo, resInfo, false));
+    eventBus.post(new NexusAuthorizationEvent(clientInfo, resourceInfo, false));
   }
 }
