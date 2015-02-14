@@ -23,6 +23,7 @@ import org.sonatype.sisu.goodies.common.ComponentSupport;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.Permission;
+import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.subject.Subject;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -33,6 +34,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Security helper.
  *
+ * Exposed to add additional support around security as well as to promote testability via mocks.
+ *
  * @since 3.0
  */
 @Named
@@ -40,6 +43,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class SecurityHelper
     extends ComponentSupport
 {
+  /**
+   * Returns current security manager.
+   */
+  public SecurityManager getSecurityManager() {
+    return SecurityUtils.getSecurityManager();
+  }
+
   /**
    * Returns current subject.
    */
