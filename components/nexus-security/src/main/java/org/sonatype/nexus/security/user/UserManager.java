@@ -23,6 +23,8 @@ import org.apache.shiro.realm.Realm;
  */
 public interface UserManager
 {
+  String DEFAULT_SOURCE = "default";
+
   /**
    * Get the source string of this UserManager
    */

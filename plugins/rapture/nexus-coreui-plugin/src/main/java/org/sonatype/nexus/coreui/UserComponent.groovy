@@ -35,7 +35,6 @@ import org.sonatype.nexus.security.role.RoleIdentifier
 import org.sonatype.nexus.security.user.User
 import org.sonatype.nexus.security.user.UserAccountManager
 import org.sonatype.nexus.security.user.UserManager
-import org.sonatype.nexus.security.user.UserManagerImpl
 import org.sonatype.nexus.security.user.UserSearchCriteria
 import org.sonatype.nexus.util.Tokens
 import org.sonatype.nexus.validation.Create
@@ -63,7 +62,7 @@ class UserComponent
 extends DirectComponentSupport
 {
 
-  public static final String DEFAULT_SOURCE = UserManagerImpl.SOURCE
+  public static final String DEFAULT_SOURCE = UserManager.DEFAULT_SOURCE
 
   @Inject
   SecuritySystem securitySystem

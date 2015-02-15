@@ -36,7 +36,7 @@ import org.sonatype.nexus.security.model.SecurityModelConfigurationSource;
 import org.sonatype.nexus.security.privilege.NoSuchPrivilegeException;
 import org.sonatype.nexus.security.role.NoSuchRoleException;
 import org.sonatype.nexus.security.user.NoSuchRoleMappingException;
-import org.sonatype.nexus.security.user.UserManagerImpl;
+import org.sonatype.nexus.security.user.UserManager;
 import org.sonatype.nexus.security.user.UserNotFoundException;
 import org.sonatype.sisu.goodies.lifecycle.LifecycleSupport;
 
@@ -289,7 +289,7 @@ public class OrientSecurityModelConfigurationSource
 
       try (ODatabaseDocumentTx db = openDb()) {
         if (userEntityAdapter.delete(db, id)) {
-          removeUserRoleMapping(id, UserManagerImpl.SOURCE);
+          removeUserRoleMapping(id, UserManager.DEFAULT_SOURCE);
           return true;
         }
         return false;
@@ -560,7 +560,7 @@ public class OrientSecurityModelConfigurationSource
     private CUserRoleMapping mapping(final String userId, final Set<String> roles) {
       CUserRoleMapping mapping = new CUserRoleMapping();
       mapping.setUserId(userId);
-      mapping.setSource(UserManagerImpl.SOURCE);
+      mapping.setSource(UserManager.DEFAULT_SOURCE);
       mapping.setRoles(roles);
       return mapping;
     }

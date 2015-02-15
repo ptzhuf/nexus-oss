@@ -23,7 +23,7 @@ import org.sonatype.nexus.extdirect.DirectComponentSupport
 import org.sonatype.nexus.security.SecuritySystem
 import org.sonatype.nexus.security.authz.AuthorizationManager
 import org.sonatype.nexus.security.role.Role
-import org.sonatype.nexus.security.user.UserManagerImpl
+import org.sonatype.nexus.security.user.UserManager
 import org.sonatype.nexus.validation.Create
 import org.sonatype.nexus.validation.Update
 import org.sonatype.nexus.validation.Validate
@@ -47,7 +47,7 @@ class RoleComponent
 extends DirectComponentSupport
 {
 
-  public static final String DEFAULT_SOURCE = UserManagerImpl.SOURCE
+  public static final String DEFAULT_SOURCE = UserManager.DEFAULT_SOURCE
 
   @Inject
   SecuritySystem securitySystem

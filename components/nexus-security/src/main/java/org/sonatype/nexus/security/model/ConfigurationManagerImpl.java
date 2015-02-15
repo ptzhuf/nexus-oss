@@ -32,7 +32,7 @@ import org.sonatype.nexus.security.authz.AuthorizationConfigurationChanged;
 import org.sonatype.nexus.security.privilege.NoSuchPrivilegeException;
 import org.sonatype.nexus.security.role.NoSuchRoleException;
 import org.sonatype.nexus.security.user.NoSuchRoleMappingException;
-import org.sonatype.nexus.security.user.UserManagerImpl;
+import org.sonatype.nexus.security.user.UserManager;
 import org.sonatype.nexus.security.user.UserNotFoundException;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
 import org.sonatype.sisu.goodies.eventbus.EventBus;
@@ -312,7 +312,7 @@ public class ConfigurationManagerImpl
   public void updateUser(CUser user) throws InvalidConfigurationException, UserNotFoundException {
     Set<String> roles = Collections.emptySet();
     try {
-      roles = readUserRoleMapping(user.getId(), UserManagerImpl.SOURCE).getRoles();
+      roles = readUserRoleMapping(user.getId(), UserManager.DEFAULT_SOURCE).getRoles();
     }
     catch (NoSuchRoleMappingException e) {
       log.debug("User: {} has no roles", user.getId());

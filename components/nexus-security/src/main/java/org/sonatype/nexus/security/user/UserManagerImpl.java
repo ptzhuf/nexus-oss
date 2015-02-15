@@ -45,7 +45,7 @@ public class UserManagerImpl
     extends AbstractUserManager
     implements RoleMappingUserManager
 {
-  public static final String SOURCE = "default";
+  public static final String DEFAULT_SOURCE = "default";
 
   private final ConfigurationManager configuration;
 
@@ -93,15 +93,16 @@ public class UserManagerImpl
     user.setFirstName(cUser.getFirstName());
     user.setLastName(cUser.getLastName());
     user.setEmailAddress(cUser.getEmail());
-    user.setSource(SOURCE);
+    user.setSource(DEFAULT_SOURCE);
     user.setStatus(UserStatus.valueOf(cUser.getStatus()));
 
     try {
-      user.setRoles(this.getUsersRoles(cUser.getId(), SOURCE));
+      user.setRoles(this.getUsersRoles(cUser.getId(), DEFAULT_SOURCE));
     }
     catch (UserNotFoundException e) {
       // We should NEVER get here
-      log.warn("Could not find user: '{}' of source: '{}' while looking up the users roles.", cUser.getId(), SOURCE, e);
+      log.warn("Could not find user: '{}' of source: '{}' while looking up the users roles.", cUser.getId(),
+          DEFAULT_SOURCE, e);
     }
 
     return user;
@@ -115,7 +116,7 @@ public class UserManagerImpl
     try {
       CRole role = configuration.readRole(roleId);
 
-      return new RoleIdentifier(SOURCE, role.getId());
+      return new RoleIdentifier(DEFAULT_SOURCE, role.getId());
     }
     catch (NoSuchRoleException e) {
       return null;
@@ -147,7 +148,7 @@ public class UserManagerImpl
   }
 
   public String getSource() {
-    return SOURCE;
+    return DEFAULT_SOURCE;
   }
 
   public boolean supportsWrite() {
@@ -216,7 +217,7 @@ public class UserManagerImpl
 
     List<CUserRoleMapping> roleMappings = configuration.listUserRoleMappings();
     for (CUserRoleMapping roleMapping : roleMappings) {
-      if (!SOURCE.equals(roleMapping.getSource())) {
+      if (!DEFAULT_SOURCE.equals(roleMapping.getSource())) {
         if (matchesCriteria(roleMapping.getUserId(), roleMapping.getSource(), roleMapping.getRoles(),
             criteria)) {
           try {

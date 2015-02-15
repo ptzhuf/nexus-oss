@@ -68,7 +68,7 @@ import org.sonatype.nexus.proxy.storage.remote.RemoteStorageContext;
 import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.nexus.security.user.NoSuchUserManagerException;
 import org.sonatype.nexus.security.user.User;
-import org.sonatype.nexus.security.user.UserManagerImpl;
+import org.sonatype.nexus.security.user.UserManager;
 import org.sonatype.nexus.security.user.UserNotFoundException;
 import org.sonatype.nexus.security.user.UserStatus;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
@@ -583,7 +583,7 @@ public class DefaultNexusConfiguration
       throws InvalidConfigurationException
   {
     try {
-      final User anonymousUser = getSecuritySystem().getUser(anonymousUsername, UserManagerImpl.SOURCE);
+      final User anonymousUser = getSecuritySystem().getUser(anonymousUsername, UserManager.DEFAULT_SOURCE);
       final UserStatus oldStatus = anonymousUser.getStatus();
       if (enabled) {
         anonymousUser.setStatus(UserStatus.active);

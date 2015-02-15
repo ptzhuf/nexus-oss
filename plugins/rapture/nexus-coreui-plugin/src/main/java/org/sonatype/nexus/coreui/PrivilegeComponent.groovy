@@ -31,7 +31,7 @@ import org.sonatype.nexus.security.authz.AuthorizationManager
 import org.sonatype.nexus.security.privilege.MethodPrivilegeDescriptor
 import org.sonatype.nexus.security.privilege.Privilege
 import org.sonatype.nexus.security.privilege.PrivilegeDescriptor
-import org.sonatype.nexus.security.user.UserManagerImpl
+import org.sonatype.nexus.security.user.UserManager
 import org.sonatype.nexus.validation.Create
 import org.sonatype.nexus.validation.Validate
 
@@ -54,7 +54,7 @@ class PrivilegeComponent
 extends DirectComponentSupport
 {
 
-  public static final String DEFAULT_SOURCE = UserManagerImpl.SOURCE
+  public static final String DEFAULT_SOURCE = UserManager.DEFAULT_SOURCE
 
   @Inject
   SecuritySystem securitySystem
