@@ -13,8 +13,8 @@
 
 package org.sonatype.nexus.security.config
 
-import org.sonatype.nexus.security.authc.AuthenticatingRealmImpl
-import org.sonatype.nexus.security.authz.AuthorizingRealmImpl
+import org.sonatype.nexus.security.internal.AuthenticatingRealmImpl
+import org.sonatype.nexus.security.internal.AuthorizingRealmImpl
 
 import javax.inject.Named
 import javax.inject.Singleton

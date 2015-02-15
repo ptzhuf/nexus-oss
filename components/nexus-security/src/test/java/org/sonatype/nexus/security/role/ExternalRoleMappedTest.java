@@ -20,7 +20,7 @@ import java.util.Map;
 
 import org.sonatype.nexus.security.AbstractSecurityTestCase;
 import org.sonatype.nexus.security.SecuritySystem;
-import org.sonatype.nexus.security.authz.AuthorizingRealmImpl;
+import org.sonatype.nexus.security.internal.AuthorizingRealmImpl;
 import org.sonatype.nexus.security.privilege.MethodPrivilegeDescriptor;
 import org.sonatype.nexus.security.privilege.Privilege;
 import org.sonatype.nexus.security.realm.MockRealm;

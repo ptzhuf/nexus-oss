@@ -23,8 +23,8 @@ import org.sonatype.nexus.ldap.internal.SecurityTestSupportSecurity;
 import org.sonatype.nexus.ldap.internal.persist.entity.LdapConfiguration;
 import org.sonatype.nexus.ldap.internal.persist.entity.Mapping;
 import org.sonatype.nexus.security.SecuritySystem;
-import org.sonatype.nexus.security.authc.AuthenticatingRealmImpl;
 import org.sonatype.nexus.security.config.SecurityConfiguration;
+import org.sonatype.nexus.security.internal.AuthenticatingRealmImpl;
 import org.sonatype.nexus.security.model.Configuration;
 import org.sonatype.nexus.security.role.Role;
 import org.sonatype.nexus.security.role.RoleIdentifier;
@@ -98,7 +98,6 @@ public class LdapUserManagerIT
 
   @Test
   public void testGetUserFromUserManager() throws Exception {
-
     SecuritySystem securitySystem = this.getSecuritySystem();
     securitySystem.start();
     User user = securitySystem.getUser("cstamas");
