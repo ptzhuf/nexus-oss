@@ -49,7 +49,7 @@ import org.slf4j.LoggerFactory;
  */
 @Singleton
 @Typed(Realm.class)
-@Named(AuthorizingRealmImpl.ROLE)
+@Named(AuthorizingRealmImpl.NAME)
 @Description("Nexus Authorizing Realm")
 public class AuthorizingRealmImpl
     extends AuthorizingRealm
@@ -57,7 +57,7 @@ public class AuthorizingRealmImpl
 {
   private static final Logger logger = LoggerFactory.getLogger(AuthorizingRealmImpl.class);
 
-  public static final String ROLE = "NexusAuthorizingRealm";
+  public static final String NAME = "NexusAuthorizingRealm";
 
   private final UserManager userManager;
 
@@ -74,7 +74,7 @@ public class AuthorizingRealmImpl
     this.securitySystem = securitySystem;
     this.userManagerMap = userManagerMap;
     setCredentialsMatcher(new Sha1CredentialsMatcher());
-    setName(ROLE);
+    setName(NAME);
     setAuthenticationCachingEnabled(false); // we authz only, no authc done by this realm
     setAuthorizationCachingEnabled(true);
   }

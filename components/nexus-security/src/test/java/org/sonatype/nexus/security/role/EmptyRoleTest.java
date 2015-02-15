@@ -85,7 +85,7 @@ public class EmptyRoleTest
 
   public void testAuthorizeUserWithEmptyRole() throws Exception {
     SecuritySystem securitySystem = this.lookup(SecuritySystem.class);
-    securitySystem.setRealms(Arrays.asList(AuthenticatingRealmImpl.ROLE, AuthorizingRealmImpl.ROLE));
+    securitySystem.setRealms(Arrays.asList(AuthenticatingRealmImpl.NAME, AuthorizingRealmImpl.NAME));
     AuthorizationManager authManager = securitySystem.getAuthorizationManager("default");
 
     // create an empty role

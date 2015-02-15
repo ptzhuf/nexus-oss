@@ -36,8 +36,8 @@ class StaticSecurityConfigurationSource
         anonymousUsername: 'anonymous',
         anonymousPassword: 'anonymous',
         realms: [
-            AuthenticatingRealmImpl.ROLE,
-            AuthorizingRealmImpl.ROLE
+            AuthenticatingRealmImpl.NAME,
+            AuthorizingRealmImpl.NAME
         ]
     ))
   }

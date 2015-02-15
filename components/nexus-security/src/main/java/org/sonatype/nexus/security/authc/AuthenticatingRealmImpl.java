@@ -46,7 +46,7 @@ import org.slf4j.LoggerFactory;
  */
 @Singleton
 @Typed(Realm.class)
-@Named(AuthenticatingRealmImpl.ROLE)
+@Named(AuthenticatingRealmImpl.NAME)
 @Description("Nexus Authenticating Realm")
 public class AuthenticatingRealmImpl
     extends AuthenticatingRealm
@@ -54,7 +54,7 @@ public class AuthenticatingRealmImpl
 {
   private static final Logger logger = LoggerFactory.getLogger(AuthenticatingRealmImpl.class);
 
-  public static final String ROLE = "NexusAuthenticatingRealm";
+  public static final String NAME = "NexusAuthenticatingRealm";
 
   private static final int MAX_LEGACY_PASSWORD_LENGTH = 40;
 
@@ -72,7 +72,7 @@ public class AuthenticatingRealmImpl
     PasswordMatcher passwordMatcher = new PasswordMatcher();
     passwordMatcher.setPasswordService(this.passwordService);
     setCredentialsMatcher(passwordMatcher);
-    setName(ROLE);
+    setName(NAME);
     setAuthenticationCachingEnabled(true);
   }
 

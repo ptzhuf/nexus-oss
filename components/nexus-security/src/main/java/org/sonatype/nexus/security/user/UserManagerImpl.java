@@ -292,7 +292,7 @@ public class UserManagerImpl
   }
 
   public String getAuthenticationRealmName() {
-    return AuthenticatingRealmImpl.ROLE;
+    return AuthenticatingRealmImpl.NAME;
   }
 
   private Set<String> getRoleIdsFromUser(User user) {
