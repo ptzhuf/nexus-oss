@@ -10,7 +10,7 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.security.settings;
+package org.sonatype.nexus.security.internal;
 
 import java.util.List;
 
@@ -19,6 +19,9 @@ import javax.inject.Singleton;
 
 import org.sonatype.configuration.validation.ValidationRequest;
 import org.sonatype.configuration.validation.ValidationResponse;
+import org.sonatype.nexus.security.settings.SecuritySettings;
+import org.sonatype.nexus.security.settings.SecuritySettingsValidationContext;
+import org.sonatype.nexus.security.settings.SecuritySettingsValidator;
 
 @Named
 @Singleton
