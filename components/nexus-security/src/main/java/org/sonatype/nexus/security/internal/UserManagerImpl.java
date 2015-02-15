@@ -10,7 +10,7 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.security.user;
+package org.sonatype.nexus.security.internal;
 
 import java.util.HashSet;
 import java.util.List;
@@ -23,13 +23,21 @@ import javax.inject.Singleton;
 
 import org.sonatype.configuration.validation.InvalidConfigurationException;
 import org.sonatype.nexus.security.SecuritySystem;
-import org.sonatype.nexus.security.internal.AuthenticatingRealmImpl;
 import org.sonatype.nexus.security.model.CRole;
 import org.sonatype.nexus.security.model.CUser;
 import org.sonatype.nexus.security.model.CUserRoleMapping;
 import org.sonatype.nexus.security.model.ConfigurationManager;
 import org.sonatype.nexus.security.role.NoSuchRoleException;
 import org.sonatype.nexus.security.role.RoleIdentifier;
+import org.sonatype.nexus.security.user.AbstractUserManager;
+import org.sonatype.nexus.security.user.NoSuchRoleMappingException;
+import org.sonatype.nexus.security.user.NoSuchUserManagerException;
+import org.sonatype.nexus.security.user.RoleMappingUserManager;
+import org.sonatype.nexus.security.user.User;
+import org.sonatype.nexus.security.user.UserManager;
+import org.sonatype.nexus.security.user.UserNotFoundException;
+import org.sonatype.nexus.security.user.UserSearchCriteria;
+import org.sonatype.nexus.security.user.UserStatus;
 
 import org.apache.shiro.authc.credential.PasswordService;
 import org.eclipse.sisu.Description;
@@ -45,8 +53,6 @@ public class UserManagerImpl
     extends AbstractUserManager
     implements RoleMappingUserManager
 {
-  public static final String DEFAULT_SOURCE = "default";
-
   private final ConfigurationManager configuration;
 
   private final SecuritySystem securitySystem;
