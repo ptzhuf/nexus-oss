@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.sonatype.configuration.validation.InvalidConfigurationException;
-import org.sonatype.nexus.security.authc.AuthenticationException;
 import org.sonatype.nexus.security.authz.AuthorizationManager;
 import org.sonatype.nexus.security.authz.NoSuchAuthorizationManagerException;
 import org.sonatype.nexus.security.privilege.Privilege;
@@ -28,6 +27,7 @@ import org.sonatype.nexus.security.user.User;
 import org.sonatype.nexus.security.user.UserNotFoundException;
 import org.sonatype.nexus.security.user.UserSearchCriteria;
 
+import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authz.AuthorizationException;

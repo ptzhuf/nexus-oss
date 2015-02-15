@@ -27,10 +27,10 @@ import org.sonatype.nexus.ldap.internal.persist.LdapConfigurationManager;
 import org.sonatype.nexus.ldap.internal.persist.entity.LdapConfiguration;
 import org.sonatype.nexus.ldap.internal.realms.EnterpriseLdapManager;
 import org.sonatype.nexus.ldap.internal.realms.LdapManager;
-import org.sonatype.nexus.security.authc.AuthenticationException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Throwables;
+import org.apache.shiro.authc.AuthenticationException;
 import org.junit.Assert;
 import org.junit.Test;
 

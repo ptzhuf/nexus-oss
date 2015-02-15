@@ -30,13 +30,13 @@ import org.sonatype.nexus.proxy.security.PlexusConfiguredRealm;
 import org.sonatype.nexus.proxy.targets.Target;
 import org.sonatype.nexus.proxy.targets.TargetRegistry;
 import org.sonatype.nexus.security.SecuritySystem;
-import org.sonatype.nexus.security.authc.AuthenticationException;
 
 import com.google.common.collect.Maps;
 import com.google.inject.Binder;
 import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.name.Names;
+import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.subject.Subject;

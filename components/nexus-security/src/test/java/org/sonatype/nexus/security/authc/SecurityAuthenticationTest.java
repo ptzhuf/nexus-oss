@@ -20,6 +20,7 @@ import org.sonatype.nexus.security.realm.FakeRealm2;
 import com.google.inject.Binder;
 import com.google.inject.Singleton;
 import com.google.inject.name.Names;
+import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.subject.SimplePrincipalCollection;

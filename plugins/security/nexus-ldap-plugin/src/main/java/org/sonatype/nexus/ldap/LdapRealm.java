@@ -107,17 +107,10 @@ public class LdapRealm
       throw new AuthenticationException("Password must not be empty");
     }
 
-    try {
-      this.ldapManager.authenticateUser(username, pass);
-      // creating AuthInfo with plain pass (relates to creds matcher too)
-      return new SimpleAuthenticationInfo(username, pass.toCharArray(), getName());
-    }
-    catch (org.sonatype.nexus.security.authc.AuthenticationException e) {
-      if (this.logger.isDebugEnabled()) {
-        this.logger.debug("User: " + username + " could not be authenticated ", e);
-      }
-      throw new org.apache.shiro.authc.AuthenticationException(e.getMessage());
-    }
+    this.ldapManager.authenticateUser(username, pass);
+
+    // creating AuthInfo with plain pass (relates to creds matcher too)
+    return new SimpleAuthenticationInfo(username, pass.toCharArray(), getName());
   }
 
   @Override

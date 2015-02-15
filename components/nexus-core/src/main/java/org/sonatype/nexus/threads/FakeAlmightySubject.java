@@ -106,30 +106,22 @@ public class FakeAlmightySubject
   }
 
   @Override
-  public void checkPermission(final String permission)
-      throws AuthorizationException
-  {
+  public void checkPermission(final String permission) throws AuthorizationException {
     // do nothing
   }
 
   @Override
-  public void checkPermission(final Permission permission)
-      throws AuthorizationException
-  {
+  public void checkPermission(final Permission permission) throws AuthorizationException {
     // do nothing
   }
 
   @Override
-  public void checkPermissions(final String... permissions)
-      throws AuthorizationException
-  {
+  public void checkPermissions(final String... permissions) throws AuthorizationException {
     // do nothing
   }
 
   @Override
-  public void checkPermissions(final Collection<Permission> permissions)
-      throws AuthorizationException
-  {
+  public void checkPermissions(final Collection<Permission> permissions) throws AuthorizationException {
     // do nothing
   }
 
@@ -149,30 +141,22 @@ public class FakeAlmightySubject
   }
 
   @Override
-  public void checkRole(final String roleIdentifier)
-      throws AuthorizationException
-  {
+  public void checkRole(final String roleIdentifier) throws AuthorizationException {
     // do nothing
   }
 
   @Override
-  public void checkRoles(final Collection<String> roleIdentifiers)
-      throws AuthorizationException
-  {
+  public void checkRoles(final Collection<String> roleIdentifiers) throws AuthorizationException {
     // do nothing
   }
 
   @Override
-  public void checkRoles(final String... roleIdentifiers)
-      throws AuthorizationException
-  {
+  public void checkRoles(final String... roleIdentifiers) throws AuthorizationException {
     // do nothing
   }
 
   @Override
-  public void login(final AuthenticationToken token)
-      throws AuthenticationException
-  {
+  public void login(final AuthenticationToken token) throws AuthenticationException {
     // do nothing
   }
 
@@ -202,9 +186,7 @@ public class FakeAlmightySubject
   }
 
   @Override
-  public <V> V execute(final Callable<V> callable)
-      throws ExecutionException
-  {
+  public <V> V execute(final Callable<V> callable) throws ExecutionException {
     try {
       return associateWith(callable).call();
     }
@@ -229,9 +211,7 @@ public class FakeAlmightySubject
   }
 
   @Override
-  public void runAs(final PrincipalCollection principals)
-      throws NullPointerException, IllegalStateException
-  {
+  public void runAs(final PrincipalCollection principals) {
     throw new IllegalStateException("The " + getClass().getName() + " subject does not support runAs");
   }
 
@@ -250,9 +230,7 @@ public class FakeAlmightySubject
     return null;
   }
 
-  // ==
-
-  protected boolean[] repeat(final boolean val, final int count) {
+  private boolean[] repeat(final boolean val, final int count) {
     checkArgument(count > -1);
     final boolean[] result = new boolean[count];
     Arrays.fill(result, val);

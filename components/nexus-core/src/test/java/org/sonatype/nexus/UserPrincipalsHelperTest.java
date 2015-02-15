@@ -21,7 +21,6 @@ import javax.inject.Singleton;
 
 import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.nexus.security.UserPrincipalsHelper;
-import org.sonatype.nexus.security.authc.AuthenticationException;
 import org.sonatype.nexus.security.config.PreconfiguredSecurityConfigurationSource;
 import org.sonatype.nexus.security.config.SecurityConfigurationSource;
 import org.sonatype.nexus.security.model.PreconfiguredSecurityModelConfigurationSource;
@@ -38,6 +37,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.google.inject.name.Names;
 import net.sf.ehcache.CacheManager;
+import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;

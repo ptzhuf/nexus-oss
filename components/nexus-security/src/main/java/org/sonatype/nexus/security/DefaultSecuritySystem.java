@@ -28,7 +28,6 @@ import javax.inject.Singleton;
 
 import org.sonatype.configuration.validation.InvalidConfigurationException;
 import org.sonatype.nexus.common.text.Strings2;
-import org.sonatype.nexus.security.authc.AuthenticationException;
 import org.sonatype.nexus.security.authz.AuthorizationConfigurationChanged;
 import org.sonatype.nexus.security.authz.AuthorizationManager;
 import org.sonatype.nexus.security.authz.NoSuchAuthorizationManagerException;
@@ -51,6 +50,7 @@ import com.google.common.collect.Lists;
 import com.google.common.eventbus.Subscribe;
 import net.sf.ehcache.CacheManager;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -116,23 +116,13 @@ public class DefaultSecuritySystem
   }
 
   public Subject login(AuthenticationToken token) throws AuthenticationException {
-    try {
-      Subject subject = this.getSubject();
-      subject.login(token);
-      return subject;
-    }
-    catch (org.apache.shiro.authc.AuthenticationException e) {
-      throw new AuthenticationException(e.getMessage(), e);
-    }
+    Subject subject = this.getSubject();
+    subject.login(token);
+    return subject;
   }
 
   public AuthenticationInfo authenticate(AuthenticationToken token) throws AuthenticationException {
-    try {
-      return this.getSecurityManager().authenticate(token);
-    }
-    catch (org.apache.shiro.authc.AuthenticationException e) {
-      throw new AuthenticationException(e.getMessage(), e);
-    }
+    return getSecurityManager().authenticate(token);
   }
 
   public Subject getSubject() {
@@ -301,9 +291,7 @@ public class DefaultSecuritySystem
     return user;
   }
 
-  public void deleteUser(String userId)
-      throws UserNotFoundException
-  {
+  public void deleteUser(String userId) throws UserNotFoundException {
     User user = this.getUser(userId);
     try {
       this.deleteUser(userId, user.getSource());
@@ -552,7 +540,7 @@ public class DefaultSecuritySystem
         throw new InvalidCredentialsException();
       }
     }
-    catch (org.apache.shiro.authc.AuthenticationException e) {
+    catch (AuthenticationException e) {
       log.debug("User failed to change password reason: " + e.getMessage(), e);
       throw new InvalidCredentialsException();
     }

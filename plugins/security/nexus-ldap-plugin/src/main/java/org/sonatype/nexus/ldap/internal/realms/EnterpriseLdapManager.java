@@ -44,13 +44,13 @@ import org.sonatype.nexus.ldap.internal.persist.entity.Connection.Protocol;
 import org.sonatype.nexus.ldap.internal.persist.entity.LdapConfiguration;
 import org.sonatype.nexus.ldap.internal.ssl.SSLLdapContextFactory;
 import org.sonatype.nexus.proxy.events.NexusStoppedEvent;
-import org.sonatype.nexus.security.authc.AuthenticationException;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
 import org.sonatype.sisu.goodies.eventbus.EventBus;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.eventbus.AllowConcurrentEvents;
 import com.google.common.eventbus.Subscribe;
+import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.realm.ldap.LdapContextFactory;
 import org.codehaus.plexus.util.StringUtils;
 

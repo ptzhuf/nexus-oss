@@ -14,6 +14,7 @@ package org.sonatype.nexus.security.authc;
 
 import java.util.Collection;
 
+import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.pam.ModularRealmAuthenticator;
@@ -61,7 +62,7 @@ public class FirstSuccessfulModularRealmAuthenticator
       }
     }
 
-    throw new org.apache.shiro.authc.AuthenticationException("Authentication token of type [" + token.getClass()
+    throw new AuthenticationException("Authentication token of type [" + token.getClass()
         + "] could not be authenticated by any configured realms.  Please ensure that at least one realm can "
         + "authenticate these tokens.");
   }

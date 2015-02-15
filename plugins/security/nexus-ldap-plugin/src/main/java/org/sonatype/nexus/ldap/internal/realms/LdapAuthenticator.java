@@ -20,8 +20,8 @@ import javax.naming.ldap.LdapContext;
 
 import org.sonatype.nexus.ldap.internal.connector.dao.LdapUser;
 import org.sonatype.nexus.ldap.internal.connector.dao.password.PasswordEncoderManager;
-import org.sonatype.nexus.security.authc.AuthenticationException;
 
+import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.realm.ldap.LdapContextFactory;
 import org.apache.shiro.realm.ldap.LdapUtils;
 

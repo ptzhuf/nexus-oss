@@ -27,9 +27,9 @@ import org.sonatype.nexus.ldap.internal.persist.entity.Connection.Host;
 import org.sonatype.nexus.ldap.internal.persist.entity.Connection.Protocol;
 import org.sonatype.nexus.ldap.internal.persist.entity.LdapConfiguration;
 import org.sonatype.nexus.ldap.internal.persist.entity.Mapping;
-import org.sonatype.nexus.security.authc.AuthenticationException;
 
 import com.google.common.collect.Maps;
+import org.apache.shiro.authc.AuthenticationException;
 import org.junit.Assert;
 import org.junit.Test;
 

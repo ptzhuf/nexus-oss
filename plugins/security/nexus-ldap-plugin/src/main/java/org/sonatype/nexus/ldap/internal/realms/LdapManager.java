@@ -20,8 +20,8 @@ import org.sonatype.nexus.ldap.internal.connector.dao.LdapUser;
 import org.sonatype.nexus.ldap.internal.connector.dao.NoLdapUserRolesFoundException;
 import org.sonatype.nexus.ldap.internal.connector.dao.NoSuchLdapGroupException;
 import org.sonatype.nexus.ldap.internal.connector.dao.NoSuchLdapUserException;
-import org.sonatype.nexus.security.authc.AuthenticationException;
 
+import org.apache.shiro.authc.AuthenticationException;
 
 public interface LdapManager
 {
