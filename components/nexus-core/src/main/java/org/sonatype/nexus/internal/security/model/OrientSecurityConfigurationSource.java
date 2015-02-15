@@ -64,7 +64,6 @@ public class OrientSecurityConfigurationSource
     extends LifecycleSupport
     implements SecurityConfigurationSource, EventSubscriber
 {
-
   /**
    * Security database.
    */
@@ -564,13 +563,11 @@ public class OrientSecurityConfigurationSource
       mapping.setRoles(roles);
       return mapping;
     }
-
   }
 
   private class CachingOrientSecurityConfiguration
       extends OrientSecurityConfiguration
   {
-
     private final ConcurrentMap<String, CUserRoleMapping> userRoleMappings;
 
     private CachingOrientSecurityConfiguration() {
@@ -615,5 +612,4 @@ public class OrientSecurityConfigurationSource
       return userId + "|" + source;
     }
   }
-
 }

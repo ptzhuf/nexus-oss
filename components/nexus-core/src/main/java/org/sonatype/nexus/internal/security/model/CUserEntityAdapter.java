@@ -45,7 +45,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class CUserEntityAdapter
     extends ComponentSupport
 {
-  public static final String DB_CLASS = new OClassNameBuilder().type("SecurityUser").build();
+  public static final String DB_CLASS = new OClassNameBuilder()
+      .prefix("security")
+      .type("user")
+      .build();
 
   public static final String P_ID = "id";
 
@@ -184,5 +187,4 @@ public class CUserEntityAdapter
     int records = db.command(command).execute(id);
     return records == 1;
   }
-
 }

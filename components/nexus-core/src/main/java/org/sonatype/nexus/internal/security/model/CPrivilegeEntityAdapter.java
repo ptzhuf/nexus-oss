@@ -47,7 +47,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class CPrivilegeEntityAdapter
     extends ComponentSupport
 {
-  public static final String DB_CLASS = new OClassNameBuilder().type("SecurityPrivilege").build();
+  public static final String DB_CLASS = new OClassNameBuilder()
+      .prefix("security")
+      .type("privilege")
+      .build();
 
   public static final String P_ID = "id";
 
@@ -182,5 +185,4 @@ public class CPrivilegeEntityAdapter
     int records = db.command(command).execute(id);
     return records == 1;
   }
-
 }

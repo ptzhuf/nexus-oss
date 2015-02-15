@@ -47,7 +47,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class CUserRoleMappingEntityAdapter
     extends ComponentSupport
 {
-  public static final String DB_CLASS = new OClassNameBuilder().type("SecurityUserRoleMapping").build();
+  public static final String DB_CLASS = new OClassNameBuilder()
+      .prefix("security")
+      .type("user-role-mapping")
+      .build();
 
   public static final String P_USER_ID = "userId";
 
@@ -171,5 +174,4 @@ public class CUserRoleMappingEntityAdapter
     int records = db.command(command).execute(userId, source);
     return records == 1;
   }
-
 }

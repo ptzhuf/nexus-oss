@@ -38,10 +38,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 @Named
 @Singleton
-public class SecurityConfigurationEntityAdapter
+public class SecuritySettingsEntityAdapter
     extends ComponentSupport
 {
-  public static final String DB_CLASS = new OClassNameBuilder().type("SecurityConfiguration").build();
+  public static final String DB_CLASS = new OClassNameBuilder()
+      .prefix("security")
+      .type("settings")
+      .build();
 
   public static final String P_ANONYMOUS_ACCESS_ENABLED = "anonymousAccessEnabled";
 
@@ -54,7 +57,7 @@ public class SecurityConfigurationEntityAdapter
   private final PasswordHelper passwordHelper;
 
   @Inject
-  public SecurityConfigurationEntityAdapter(final PasswordHelper passwordHelper) {
+  public SecuritySettingsEntityAdapter(final PasswordHelper passwordHelper) {
     this.passwordHelper = checkNotNull(passwordHelper);
   }
 
@@ -144,5 +147,4 @@ public class SecurityConfigurationEntityAdapter
     checkNotNull(db);
     return db.browseClass(DB_CLASS);
   }
-
 }

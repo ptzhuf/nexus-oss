@@ -47,7 +47,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class CRoleEntityAdapter
     extends ComponentSupport
 {
-  public static final String DB_CLASS = new OClassNameBuilder().type("SecurityRole").build();
+  public static final String DB_CLASS = new OClassNameBuilder()
+      .prefix("security")
+      .type("role")
+      .build();
 
   public static final String P_ID = "id";
 
@@ -182,5 +185,4 @@ public class CRoleEntityAdapter
     int records = db.command(command).execute(id);
     return records == 1;
   }
-
 }

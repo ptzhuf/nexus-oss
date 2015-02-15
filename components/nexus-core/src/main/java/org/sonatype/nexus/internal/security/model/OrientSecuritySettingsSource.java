@@ -44,7 +44,6 @@ public class OrientSecuritySettingsSource
     extends LifecycleSupport
     implements SecuritySettingsSource, EventSubscriber
 {
-
   /**
    * Configuration database.
    */
@@ -58,7 +57,7 @@ public class OrientSecuritySettingsSource
   /**
    * {@link SecuritySettings} entity adapter.
    */
-  private final SecurityConfigurationEntityAdapter entityAdapter;
+  private final SecuritySettingsEntityAdapter entityAdapter;
 
   /**
    * The configuration.
@@ -68,7 +67,7 @@ public class OrientSecuritySettingsSource
   @Inject
   public OrientSecuritySettingsSource(final @Named("security") Provider<DatabaseInstance> databaseInstance,
                                       final @Named("static") SecuritySettingsSource securityDefaults,
-                                      final SecurityConfigurationEntityAdapter entityAdapter)
+                                      final SecuritySettingsEntityAdapter entityAdapter)
   {
     this.databaseInstance = checkNotNull(databaseInstance);
     this.securityDefaults = checkNotNull(securityDefaults);
@@ -155,5 +154,4 @@ public class OrientSecuritySettingsSource
   public void on(final NexusStoppingEvent event) throws Exception {
     stop();
   }
-
 }
