@@ -38,7 +38,7 @@ public class LegacyNexusPasswordServiceTest
     String password = "admin123";
     String sha1Hash = "f865b53623b121fd34ee5426c792e5c33af8c227";
 
-    assertThat(this.underTest.passwordsMatch(password, sha1Hash), is(true));
+    assertThat(underTest.passwordsMatch(password, sha1Hash), is(true));
   }
 
   @Test
@@ -46,7 +46,7 @@ public class LegacyNexusPasswordServiceTest
     String password = "admin123";
     String md5Hash = "0192023a7bbd73250516f069df18b500";
 
-    assertThat(this.underTest.passwordsMatch(password, md5Hash), is(true));
+    assertThat(underTest.passwordsMatch(password, md5Hash), is(true));
   }
 
   @Test
@@ -54,7 +54,7 @@ public class LegacyNexusPasswordServiceTest
     String password = "admin123";
     String sha1Hash = "f865b53623b121fd34ee5426c792e5c33af8c228";
 
-    assertThat(this.underTest.passwordsMatch(password, sha1Hash), is(false));
+    assertThat(underTest.passwordsMatch(password, sha1Hash), is(false));
   }
 
   @Test
@@ -62,6 +62,6 @@ public class LegacyNexusPasswordServiceTest
     String password = "admin123";
     String md5Hash = "0192023a7bbd73250516f069df18b501";
 
-    assertThat(this.underTest.passwordsMatch(password, md5Hash), is(false));
+    assertThat(underTest.passwordsMatch(password, md5Hash), is(false));
   }
 }
