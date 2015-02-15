@@ -148,11 +148,6 @@ public class User
     this.version = version;
   }
 
-  @Override
-  public String toString() {
-    return "UserId: " + this.userId + ", Name: " + this.firstName + " " + this.lastName;
-  }
-
   public int compareTo(User o) {
     final int before = -1;
     final int equal = 0;
@@ -189,42 +184,40 @@ public class User
   }
 
   @Override
+  public boolean equals(final Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    User user = (User) o;
+
+    if (source != null ? !source.equals(user.source) : user.source != null) {
+      return false;
+    }
+    if (userId != null ? !userId.equals(user.userId) : user.userId != null) {
+      return false;
+    }
+
+    return true;
+  }
+
+  @Override
   public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((source == null) ? 0 : source.hashCode());
-    result = prime * result + ((userId == null) ? 0 : userId.hashCode());
+    int result = userId != null ? userId.hashCode() : 0;
+    result = 31 * result + (source != null ? source.hashCode() : 0);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    final User other = (User) obj;
-    if (source == null) {
-      if (other.getSource() != null) {
-        return false;
-      }
-    }
-    else if (!source.equals(other.getSource())) {
-      return false;
-    }
-    if (userId == null) {
-      if (other.getUserId() != null) {
-        return false;
-      }
-    }
-    else if (!userId.equals(other.getUserId())) {
-      return false;
-    }
-    return true;
+  public String toString() {
+    return getClass().getSimpleName() + "{" +
+        "userId='" + userId + '\'' +
+        ", firstName='" + firstName + '\'' +
+        ", lastName='" + lastName + '\'' +
+        ", source='" + source + '\'' +
+        '}';
   }
 }
