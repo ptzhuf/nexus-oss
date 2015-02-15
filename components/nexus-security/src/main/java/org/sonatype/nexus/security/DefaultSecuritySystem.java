@@ -135,20 +135,6 @@ public class DefaultSecuritySystem
     }
   }
 
-  // public Subject runAs( PrincipalCollection principal )
-  // {
-  // // TODO: we might need to bind this to the ThreadContext for this thread
-  // // however if we do this we would need to unbind it so it doesn't leak
-  // DelegatingSubject fakeLoggedInSubject = new DelegatingSubject( principal, true, null, null,
-  // this.getApplicationSecurityManager() );
-  //
-  // // fake the login
-  // ThreadContext.bind( fakeLoggedInSubject );
-  // // this is un-bind when the user logs out.
-  //
-  // return fakeLoggedInSubject;
-  // }
-
   public Subject getSubject() {
     // this gets the currently bound Subject to the thread
     return SecurityUtils.getSubject();
@@ -173,7 +159,6 @@ public class DefaultSecuritySystem
     catch (org.apache.shiro.authz.AuthorizationException e) {
       throw new AuthorizationException(e.getMessage(), e);
     }
-
   }
 
   private Collection<Realm> getRealmsFromConfigSource() {
@@ -263,8 +248,8 @@ public class DefaultSecuritySystem
                   user.getRoles()));
         }
         catch (UserNotFoundException e) {
-          log.debug("User '" + user.getUserId() + "' is not managed by the usermanager: "
-              + tmpUserManager.getSource());
+          log.debug("User '{}' is not managed by the usermanager: {}",
+              user.getUserId(), tmpUserManager.getSource());
         }
       }
     }
@@ -304,8 +289,8 @@ public class DefaultSecuritySystem
                   user.getRoles()));
         }
         catch (UserNotFoundException e) {
-          log.debug("User '" + user.getUserId() + "' is not managed by the usermanager: "
-              + tmpUserManager.getSource());
+          log.debug("User '{}' is not managed by the usermanager: {}",
+              user.getUserId(), tmpUserManager.getSource());
         }
       }
     }
@@ -375,8 +360,8 @@ public class DefaultSecuritySystem
                   roleIdentifiers));
         }
         catch (UserNotFoundException e) {
-          log.debug("User '" + userId + "' is not managed by the usermanager: "
-              + tmpUserManager.getSource());
+          log.debug("User '{}' is not managed by the usermanager: {}",
+              userId, tmpUserManager.getSource());
         }
       }
     }
@@ -460,7 +445,7 @@ public class DefaultSecuritySystem
         users.addAll(getUserManager(criteria.getSource()).searchUsers(criteria));
       }
       catch (NoSuchUserManagerException e) {
-        log.warn("UserManager: " + criteria.getSource() + " was not found.", e);
+        log.warn("UserManager: {} was not found.", criteria.getSource(), e);
       }
     }
 
@@ -475,8 +460,9 @@ public class DefaultSecuritySystem
 
   /**
    * We need to order the UserManagers the same way as the Realms are ordered. We need to be able to find a user
-   * based
-   * on the ID. This my never go away, but the current reason why we need it is:
+   * based on the ID.
+   *
+   * This my never go away, but the current reason why we need it is:
    * https://issues.apache.org/jira/browse/KI-77 There is no (clean) way to resolve a realms roles into permissions.
    * take a look at the issue and VOTE!
    *
@@ -530,8 +516,8 @@ public class DefaultSecuritySystem
           }
         }
         catch (UserNotFoundException e) {
-          log.debug("User '" + user.getUserId() + "' is not managed by the usermanager: "
-              + tmpUserManager.getSource());
+          log.debug("User '{}' is not managed by the usermanager: {}",
+              user.getUserId(), tmpUserManager.getSource());
         }
       }
     }
@@ -586,8 +572,8 @@ public class DefaultSecuritySystem
     }
     catch (NoSuchUserManagerException e) {
       // this should NEVER happen
-      log.warn("User '" + userId + "' with source: '" + user.getSource()
-          + "' but could not find the UserManager for that source.");
+      log.warn("User '{}' with source: '{}' but could not find the UserManager for that source.",
+          userId, user.getSource());
     }
 
     // flush authc
