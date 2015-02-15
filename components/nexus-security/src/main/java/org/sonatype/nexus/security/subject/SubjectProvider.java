@@ -17,7 +17,6 @@ import org.apache.shiro.subject.Subject;
 /**
  * Subject provider that provides Subject instance to bind the Runnable or Callable against.
  *
- * @author cstamas
  * @since 2.6
  */
 public interface SubjectProvider

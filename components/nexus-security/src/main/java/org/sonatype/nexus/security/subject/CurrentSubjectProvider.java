@@ -19,7 +19,6 @@ import org.apache.shiro.subject.Subject;
  * {@link SubjectProvider} implementation that uses Shiro's {@link SecurityUtils#getSubject()} to grab the current
  * {@link Subject}.
  *
- * @author cstamas
  * @since 2.6
  */
 public class CurrentSubjectProvider

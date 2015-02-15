@@ -54,5 +54,4 @@ public class NexusThreadFactory
     result.setPriority(this.threadPriority);
     return result;
   }
-
 }

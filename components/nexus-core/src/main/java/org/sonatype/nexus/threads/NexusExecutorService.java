@@ -26,11 +26,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * A modification of Shiro's {@link org.apache.shiro.concurrent.SubjectAwareExecutorService} that in turn returns
- * always
- * the same, supplied
- * {@link org.apache.shiro.subject.Subject} to bind threads with.
+ * always the same, supplied {@link org.apache.shiro.subject.Subject} to bind threads with.
  *
- * @author cstamas
  * @since 2.6
  */
 public class NexusExecutorService

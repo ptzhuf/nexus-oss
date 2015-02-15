@@ -38,7 +38,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * An "almighty" subject, that has all permissions, all roles, has all. Mostly to be used in thread pools and executor
  * services, as security subject for task execution.
  *
- * @author cstamas
  * @since 2.6
  */
 public class FakeAlmightySubject

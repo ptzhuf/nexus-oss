@@ -19,7 +19,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * {@link SubjectProvider} implementation that always returns the "fixed" subject.
  *
- * @author cstamas
  * @since 2.6
  */
 public class FixedSubjectProvider
