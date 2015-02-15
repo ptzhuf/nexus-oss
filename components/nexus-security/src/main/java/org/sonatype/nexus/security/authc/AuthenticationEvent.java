@@ -38,8 +38,8 @@ public class AuthenticationEvent
 
   @Override
   public String toString() {
-    return "AuthenticationEvent{" +
-        "userId=" + userId +
+    return getClass().getSimpleName() + "{" +
+        "userId='" + userId + '\'' +
         ", successful=" + successful +
         '}';
   }

@@ -16,6 +16,8 @@ import java.util.Date;
 
 import org.sonatype.nexus.security.ClientInfo;
 
+// FIXME: Sort out why we have 2 events: NexusAuthenticationEvent and AuthenticationEvent
+
 /**
  * Event fired when authentication validation is performed (someone tries to log in).
  */
