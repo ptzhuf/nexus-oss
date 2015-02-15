@@ -44,7 +44,7 @@ public class AuthorizingRealmImplTest
   protected void setUp() throws Exception {
     super.setUp();
 
-    realm = (AuthorizingRealmImpl) lookup(Realm.class, "NexusAuthorizingRealm");
+    realm = (AuthorizingRealmImpl) lookup(Realm.class, AuthorizingRealmImpl.ROLE);
     realm.setRolePermissionResolver(this.lookup(RolePermissionResolver.class));
 
     configurationManager = lookup(ConfigurationManagerImpl.class);

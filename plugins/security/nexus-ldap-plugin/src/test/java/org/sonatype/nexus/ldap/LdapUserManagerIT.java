@@ -23,6 +23,7 @@ import org.sonatype.nexus.ldap.internal.SecurityTestSupportSecurity;
 import org.sonatype.nexus.ldap.internal.persist.entity.LdapConfiguration;
 import org.sonatype.nexus.ldap.internal.persist.entity.Mapping;
 import org.sonatype.nexus.security.SecuritySystem;
+import org.sonatype.nexus.security.authc.AuthenticatingRealmImpl;
 import org.sonatype.nexus.security.config.SecurityConfiguration;
 import org.sonatype.nexus.security.model.Configuration;
 import org.sonatype.nexus.security.role.Role;
@@ -227,7 +228,7 @@ public class LdapUserManagerIT
     securitySystem.start();
 
     List<String> realms = new ArrayList<String>();
-    realms.add("NexusAuthenticatingRealm");
+    realms.add(AuthenticatingRealmImpl.ROLE);
     realms.add(LdapPlugin.REALM_NAME);
 
     securitySystem.setRealms(realms);
@@ -238,7 +239,7 @@ public class LdapUserManagerIT
 
     realms.clear();
     realms.add(LdapPlugin.REALM_NAME);
-    realms.add("NexusAuthenticatingRealm");
+    realms.add(AuthenticatingRealmImpl.ROLE);
     securitySystem.setRealms(realms);
 
     // now the user should belong to the LDAP realm

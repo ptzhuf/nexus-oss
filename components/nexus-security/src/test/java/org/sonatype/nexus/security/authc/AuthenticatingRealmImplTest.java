@@ -49,7 +49,7 @@ public class AuthenticatingRealmImplTest
   protected void setUp() throws Exception {
     super.setUp();
 
-    realm = (AuthenticatingRealmImpl) lookup(Realm.class, "NexusAuthenticatingRealm");
+    realm = (AuthenticatingRealmImpl) lookup(Realm.class, AuthenticatingRealmImpl.ROLE);
     configurationManager = lookup(ConfigurationManagerImpl.class);
     passwordService = lookup(PasswordService.class, "default");
   }
