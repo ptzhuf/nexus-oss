@@ -17,7 +17,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.enterprise.inject.Typed;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -36,7 +35,6 @@ import org.eclipse.sisu.Description;
  * added to them.
  */
 @Singleton
-@Typed(UserManager.class)
 @Named("allConfigured")
 @Description("All Configured Users")
 public class ConfiguredUsersUserManager

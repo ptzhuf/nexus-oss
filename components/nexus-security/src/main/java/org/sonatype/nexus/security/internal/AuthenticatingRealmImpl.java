@@ -14,7 +14,6 @@ package org.sonatype.nexus.security.internal;
 
 import java.util.ConcurrentModificationException;
 
-import javax.enterprise.inject.Typed;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -45,7 +44,6 @@ import org.slf4j.LoggerFactory;
  * This realm ONLY handles authentication.
  */
 @Singleton
-@Typed(Realm.class)
 @Named(AuthenticatingRealmImpl.NAME)
 @Description("Nexus Authenticating Realm")
 public class AuthenticatingRealmImpl

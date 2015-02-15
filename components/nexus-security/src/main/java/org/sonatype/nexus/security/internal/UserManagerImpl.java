@@ -16,7 +16,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.enterprise.inject.Typed;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -47,7 +46,6 @@ import org.eclipse.sisu.Description;
  */
 @Named("default")
 @Singleton
-@Typed(UserManager.class)
 @Description("Default")
 public class UserManagerImpl
     extends AbstractUserManager

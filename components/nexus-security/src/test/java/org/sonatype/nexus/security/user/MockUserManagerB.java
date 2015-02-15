@@ -12,14 +12,12 @@
  */
 package org.sonatype.nexus.security.user;
 
-import javax.enterprise.inject.Typed;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.sonatype.nexus.security.role.RoleIdentifier;
 
 @Singleton
-@Typed(UserManager.class)
 @Named("MockUserManagerB")
 public class MockUserManagerB
     extends MockUserManagerSupport

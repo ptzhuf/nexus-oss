@@ -17,7 +17,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import javax.enterprise.inject.Typed;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -48,7 +47,6 @@ import org.slf4j.LoggerFactory;
  * This realm ONLY handles authorization.
  */
 @Singleton
-@Typed(Realm.class)
 @Named(AuthorizingRealmImpl.NAME)
 @Description("Nexus Authorizing Realm")
 public class AuthorizingRealmImpl

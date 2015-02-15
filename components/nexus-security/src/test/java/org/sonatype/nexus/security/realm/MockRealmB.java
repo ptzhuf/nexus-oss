@@ -12,7 +12,6 @@
  */
 package org.sonatype.nexus.security.realm;
 
-import javax.enterprise.inject.Typed;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
@@ -24,11 +23,9 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
-import org.apache.shiro.realm.Realm;
 import org.apache.shiro.subject.PrincipalCollection;
 
 @Singleton
-@Typed(Realm.class)
 @Named("MockRealmB")
 public class MockRealmB
     extends AuthorizingRealm

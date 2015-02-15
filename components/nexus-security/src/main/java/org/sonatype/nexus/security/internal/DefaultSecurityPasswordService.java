@@ -12,7 +12,6 @@
  */
 package org.sonatype.nexus.security.internal;
 
-import javax.enterprise.inject.Typed;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -38,7 +37,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 @Named("default")
 @Singleton
-@Typed(PasswordService.class)
 public class DefaultSecurityPasswordService
     implements HashingPasswordService
 {
