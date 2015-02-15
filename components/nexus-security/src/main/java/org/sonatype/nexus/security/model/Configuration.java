@@ -36,7 +36,6 @@ import static com.google.common.base.Preconditions.checkState;
 public class Configuration
     implements SecurityModelConfiguration, Serializable, Cloneable
 {
-
   private final ConcurrentMap<String, CUser> users;
 
   private final ConcurrentMap<String, CRole> roles;
@@ -268,8 +267,7 @@ public class Configuration
 
   }
 
-  protected String userRoleMappingKey(final String userId, final String source) {
+  private String userRoleMappingKey(final String userId, final String source) {
     return userId + "|" + source;
   }
-
 }
