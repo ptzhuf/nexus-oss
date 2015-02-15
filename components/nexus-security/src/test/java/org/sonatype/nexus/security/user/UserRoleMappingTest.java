@@ -18,9 +18,9 @@ import java.util.Set;
 import org.sonatype.nexus.security.AbstractSecurityTestCase;
 import org.sonatype.nexus.security.model.CUser;
 import org.sonatype.nexus.security.model.CUserRoleMapping;
-import org.sonatype.nexus.security.model.Configuration;
-import org.sonatype.nexus.security.model.ConfigurationManager;
-import org.sonatype.nexus.security.model.ConfigurationManagerImpl;
+import org.sonatype.nexus.security.model.MemorySecurityConfiguration;
+import org.sonatype.nexus.security.model.SecurityConfigurationManager;
+import org.sonatype.nexus.security.model.SecurityConfigurationManagerImpl;
 
 import junit.framework.Assert;
 
@@ -28,16 +28,16 @@ public class UserRoleMappingTest
     extends AbstractSecurityTestCase
 {
   @Override
-  protected Configuration getSecurityModelConfig() {
+  protected MemorySecurityConfiguration getSecurityModelConfig() {
     return UserRoleMappingTestSecurity.securityModel();
   }
 
-  public ConfigurationManager getConfigManager() throws Exception {
-    return this.lookup(ConfigurationManagerImpl.class);
+  public SecurityConfigurationManager getConfigManager() throws Exception {
+    return this.lookup(SecurityConfigurationManagerImpl.class);
   }
 
   public void testGetUser() throws Exception {
-    ConfigurationManager config = this.getConfigManager();
+    SecurityConfigurationManager config = this.getConfigManager();
 
     CUser user = config.readUser("test-user");
     Assert.assertEquals(user.getId(), "test-user");
@@ -55,7 +55,7 @@ public class UserRoleMappingTest
   }
 
   public void testGetUserWithEmptyRole() throws Exception {
-    ConfigurationManager config = this.getConfigManager();
+    SecurityConfigurationManager config = this.getConfigManager();
 
     CUser user = config.readUser("test-user-with-empty-role");
     Assert.assertEquals(user.getId(), "test-user-with-empty-role");
@@ -85,7 +85,7 @@ public class UserRoleMappingTest
   }
 
   public void testUpdateUsersRoles() throws Exception {
-    ConfigurationManager config = this.getConfigManager();
+    SecurityConfigurationManager config = this.getConfigManager();
 
     // make sure we have exactly 4 user role mappings
     Assert.assertEquals(5, config.listUserRoleMappings().size());

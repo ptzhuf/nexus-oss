@@ -18,7 +18,7 @@ import javax.inject.Singleton;
 import org.sonatype.configuration.validation.ValidationResponse;
 import org.sonatype.nexus.proxy.access.NexusItemAuthorizer;
 import org.sonatype.nexus.security.model.CPrivilege;
-import org.sonatype.nexus.security.model.SecurityValidationContext;
+import org.sonatype.nexus.security.model.SecurityConfigurationValidationContext;
 import org.sonatype.nexus.security.privilege.AbstractPrivilegeDescriptor;
 import org.sonatype.nexus.security.privilege.PrivilegeDescriptor;
 
@@ -55,7 +55,7 @@ public class RepositoryViewPrivilegeDescriptor
   }
 
   @Override
-  public ValidationResponse validatePrivilege(CPrivilege privilege, SecurityValidationContext ctx, boolean update) {
+  public ValidationResponse validatePrivilege(CPrivilege privilege, SecurityConfigurationValidationContext ctx, boolean update) {
     ValidationResponse response = super.validatePrivilege(privilege, ctx, update);
 
     if (!TYPE.equals(privilege.getType())) {

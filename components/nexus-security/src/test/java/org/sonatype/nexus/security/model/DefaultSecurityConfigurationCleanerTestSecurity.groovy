@@ -18,8 +18,8 @@ package org.sonatype.nexus.security.model
 class DefaultSecurityConfigurationCleanerTestSecurity
 {
 
-  static Configuration securityModel() {
-    return new Configuration(
+  static MemorySecurityConfiguration securityModel() {
+    return new MemorySecurityConfiguration(
         users: [
             new CUser(
                 id: 'user1',

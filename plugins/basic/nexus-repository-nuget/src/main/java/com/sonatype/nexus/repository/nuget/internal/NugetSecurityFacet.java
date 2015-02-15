@@ -30,7 +30,7 @@ public class NugetSecurityFacet
 {
   @Inject
   public NugetSecurityFacet(final SecurityHelper securityHelper,
-                            final NugetFormatSecurityResource securityResource)
+                            final NugetFormatSecurityConfigurationResource securityResource)
   {
     super(securityHelper, securityResource);
   }

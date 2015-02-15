@@ -20,7 +20,7 @@ import java.util.Set;
 import org.sonatype.nexus.security.AbstractSecurityTestCase;
 import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.nexus.security.authz.AuthorizationManager;
-import org.sonatype.nexus.security.model.Configuration;
+import org.sonatype.nexus.security.model.MemorySecurityConfiguration;
 import org.sonatype.nexus.security.role.Role;
 import org.sonatype.nexus.security.role.RoleIdentifier;
 
@@ -39,7 +39,7 @@ public class AdditinalRoleSecuritySystemTest
   }
 
   @Override
-  protected Configuration getSecurityModelConfig() {
+  protected MemorySecurityConfiguration getSecurityModelConfig() {
     return AdditinalRoleSecuritySystemTestSecurity.securityModel();
   }
 

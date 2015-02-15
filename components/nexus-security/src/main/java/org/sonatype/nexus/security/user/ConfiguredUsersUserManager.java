@@ -25,7 +25,7 @@ import javax.inject.Singleton;
 import org.sonatype.nexus.common.text.Strings2;
 import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.nexus.security.model.CUserRoleMapping;
-import org.sonatype.nexus.security.model.ConfigurationManager;
+import org.sonatype.nexus.security.model.SecurityConfigurationManager;
 
 import com.google.common.collect.Sets;
 import org.eclipse.sisu.Description;
@@ -44,13 +44,13 @@ public class ConfiguredUsersUserManager
 {
   private final SecuritySystem securitySystem;
 
-  private final ConfigurationManager configuration;
+  private final SecurityConfigurationManager configuration;
 
   public static final String SOURCE = "allConfigured";
 
   @Inject
   public ConfiguredUsersUserManager(final SecuritySystem securitySystem,
-                                    final ConfigurationManager configuration)
+                                    final SecurityConfigurationManager configuration)
   {
     this.securitySystem = securitySystem;
     this.configuration = configuration;

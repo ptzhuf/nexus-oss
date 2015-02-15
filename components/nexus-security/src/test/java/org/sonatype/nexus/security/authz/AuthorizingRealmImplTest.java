@@ -21,7 +21,7 @@ import org.sonatype.nexus.security.internal.AuthorizingRealmImpl;
 import org.sonatype.nexus.security.model.CPrivilege;
 import org.sonatype.nexus.security.model.CRole;
 import org.sonatype.nexus.security.model.CUser;
-import org.sonatype.nexus.security.model.ConfigurationManagerImpl;
+import org.sonatype.nexus.security.model.SecurityConfigurationManagerImpl;
 import org.sonatype.nexus.security.privilege.MethodPrivilegeDescriptor;
 import org.sonatype.nexus.security.user.UserStatus;
 
@@ -39,7 +39,7 @@ public class AuthorizingRealmImplTest
 {
   private AuthorizingRealmImpl realm;
 
-  private ConfigurationManagerImpl configurationManager;
+  private SecurityConfigurationManagerImpl configurationManager;
 
   @Override
   protected void setUp() throws Exception {
@@ -48,7 +48,7 @@ public class AuthorizingRealmImplTest
     realm = (AuthorizingRealmImpl) lookup(Realm.class, AuthorizingRealmImpl.NAME);
     realm.setRolePermissionResolver(this.lookup(RolePermissionResolver.class));
 
-    configurationManager = lookup(ConfigurationManagerImpl.class);
+    configurationManager = lookup(SecurityConfigurationManagerImpl.class);
   }
 
   public void testAuthorization() throws Exception {

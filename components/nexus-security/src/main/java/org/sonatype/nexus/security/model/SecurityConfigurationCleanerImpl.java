@@ -34,7 +34,7 @@ public class SecurityConfigurationCleanerImpl
     extends ComponentSupport
     implements SecurityConfigurationCleaner
 {
-  public void privilegeRemoved(SecurityModelConfiguration configuration, String privilegeId) {
+  public void privilegeRemoved(SecurityConfiguration configuration, String privilegeId) {
     log.debug("Cleaning privilege id {} from roles.", privilegeId);
     for (CRole role : configuration.getRoles()) {
       boolean concurrentlyUpdated;
@@ -59,7 +59,7 @@ public class SecurityConfigurationCleanerImpl
     }
   }
 
-  public void roleRemoved(SecurityModelConfiguration configuration, String roleId) {
+  public void roleRemoved(SecurityConfiguration configuration, String roleId) {
     log.debug("Cleaning role id {} from users and roles.", roleId);
     for (CRole role : configuration.getRoles()) {
       boolean concurrentlyUpdated;

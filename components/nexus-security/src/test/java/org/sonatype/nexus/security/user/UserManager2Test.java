@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.sonatype.nexus.security.AbstractSecurityTestCase;
-import org.sonatype.nexus.security.model.Configuration;
+import org.sonatype.nexus.security.model.MemorySecurityConfiguration;
 import org.sonatype.nexus.security.role.RoleIdentifier;
 
 import junit.framework.Assert;
@@ -39,7 +39,7 @@ public class UserManager2Test
   }
 
   @Override
-  protected Configuration getSecurityModelConfig() {
+  protected MemorySecurityConfiguration getSecurityModelConfig() {
     return UserManager2TestSecurity.securityModel();
   }
 

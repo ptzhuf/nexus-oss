@@ -26,7 +26,7 @@ import org.sonatype.nexus.proxy.targets.TargetPrivilegeDescriptor;
 import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.nexus.security.authz.NoSuchAuthorizationManagerException;
 import org.sonatype.nexus.security.internal.AuthorizationManagerImpl;
-import org.sonatype.nexus.security.model.ConfigurationManager;
+import org.sonatype.nexus.security.model.SecurityConfigurationManager;
 import org.sonatype.nexus.security.privilege.NoSuchPrivilegeException;
 import org.sonatype.nexus.security.privilege.Privilege;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
@@ -42,12 +42,12 @@ public class SecurityCleanupEventInspector
     extends ComponentSupport
     implements EventSubscriber
 {
-  private final ConfigurationManager configManager;
+  private final SecurityConfigurationManager configManager;
 
   private final SecuritySystem security;
 
   @Inject
-  public SecurityCleanupEventInspector(ConfigurationManager configManager, SecuritySystem security) {
+  public SecurityCleanupEventInspector(SecurityConfigurationManager configManager, SecuritySystem security) {
     this.configManager = checkNotNull(configManager);
     this.security = checkNotNull(security);
   }

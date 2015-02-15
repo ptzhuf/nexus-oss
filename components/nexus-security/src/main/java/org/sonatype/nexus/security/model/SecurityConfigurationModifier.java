@@ -16,5 +16,5 @@ package org.sonatype.nexus.security.model;
 
 public interface SecurityConfigurationModifier
 {
-  boolean apply(SecurityModelConfiguration configuration);
+  boolean apply(SecurityConfiguration configuration);
 }

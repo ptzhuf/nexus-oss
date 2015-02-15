@@ -34,11 +34,11 @@ public class SecurityFacetSupport
 {
   private final SecurityHelper securityHelper;
 
-  private final RepositoryFormatSecurityResource securityResource;
+  private final RepositoryFormatSecurityConfigurationResource securityResource;
 
   @Inject
   public SecurityFacetSupport(final SecurityHelper securityHelper,
-                              final RepositoryFormatSecurityResource securityResource)
+                              final RepositoryFormatSecurityConfigurationResource securityResource)
   {
     this.securityHelper = checkNotNull(securityHelper);
     this.securityResource = checkNotNull(securityResource);

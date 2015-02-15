@@ -20,10 +20,10 @@ public interface SecurityConfigurationCleaner
   /**
    * Called when a role is removed so additional cleanup logic can be done.
    */
-  void roleRemoved(SecurityModelConfiguration configuration, String roleId);
+  void roleRemoved(SecurityConfiguration configuration, String roleId);
 
   /**
    * Called when a privilege is removed so additional cleanup logic can be done.
    */
-  void privilegeRemoved(SecurityModelConfiguration configuration, String privilegeId);
+  void privilegeRemoved(SecurityConfiguration configuration, String privilegeId);
 }

@@ -50,13 +50,13 @@ public class SecurityConfigurationValidatorImpl
     this.idGenerator = idGenerator;
   }
 
-  public ValidationResponse validateModel(ValidationRequest<Configuration> request) {
+  public ValidationResponse validateModel(ValidationRequest<MemorySecurityConfiguration> request) {
     ValidationResponse response = new ValidationResponse();
-    response.setContext(new SecurityValidationContext());
+    response.setContext(new SecurityConfigurationValidationContext());
 
-    Configuration model = (Configuration) request.getConfiguration();
+    MemorySecurityConfiguration model = (MemorySecurityConfiguration) request.getConfiguration();
 
-    SecurityValidationContext context = (SecurityValidationContext) response.getContext();
+    SecurityConfigurationValidationContext context = (SecurityConfigurationValidationContext) response.getContext();
 
     List<CPrivilege> privs = model.getPrivileges();
 
@@ -132,7 +132,7 @@ public class SecurityConfigurationValidatorImpl
     return response;
   }
 
-  public ValidationResponse validatePrivilege(SecurityValidationContext ctx, CPrivilege privilege, boolean update) {
+  public ValidationResponse validatePrivilege(SecurityConfigurationValidationContext ctx, CPrivilege privilege, boolean update) {
     ValidationResponse response = new ValidationResponse();
 
     if (ctx != null) {
@@ -152,14 +152,14 @@ public class SecurityConfigurationValidatorImpl
     return response;
   }
 
-  public ValidationResponse validateRoleContainment(SecurityValidationContext ctx) {
+  public ValidationResponse validateRoleContainment(SecurityConfigurationValidationContext ctx) {
     ValidationResponse response = new ValidationResponse();
 
     if (ctx != null) {
       response.setContext(ctx);
     }
 
-    SecurityValidationContext context = (SecurityValidationContext) response.getContext();
+    SecurityConfigurationValidationContext context = (SecurityConfigurationValidationContext) response.getContext();
 
     if (context.getExistingRoleIds() != null) {
       for (String roleId : context.getExistingRoleIds()) {
@@ -182,7 +182,7 @@ public class SecurityConfigurationValidatorImpl
     return false;
   }
 
-  private String getRoleTextForDisplay(String roleId, SecurityValidationContext ctx) {
+  private String getRoleTextForDisplay(String roleId, SecurityConfigurationValidationContext ctx) {
     String name = ctx.getExistingRoleNameMap().get(roleId);
 
     if (Strings2.isEmpty(name)) {
@@ -192,7 +192,7 @@ public class SecurityConfigurationValidatorImpl
     return name;
   }
 
-  private ValidationResponse isRecursive(String baseRoleId, String roleId, SecurityValidationContext ctx) {
+  private ValidationResponse isRecursive(String baseRoleId, String roleId, SecurityConfigurationValidationContext ctx) {
     ValidationResponse response = new ValidationResponse();
 
     List<String> containedRoles = ctx.getRoleContainmentMap().get(roleId);
@@ -240,14 +240,14 @@ public class SecurityConfigurationValidatorImpl
     return response;
   }
 
-  public ValidationResponse validateRole(SecurityValidationContext ctx, CRole role, boolean update) {
+  public ValidationResponse validateRole(SecurityConfigurationValidationContext ctx, CRole role, boolean update) {
     ValidationResponse response = new ValidationResponse();
 
     if (ctx != null) {
       response.setContext(ctx);
     }
 
-    SecurityValidationContext context = (SecurityValidationContext) response.getContext();
+    SecurityConfigurationValidationContext context = (SecurityConfigurationValidationContext) response.getContext();
 
     List<String> existingIds = context.getExistingRoleIds();
 
@@ -334,14 +334,14 @@ public class SecurityConfigurationValidatorImpl
     return response;
   }
 
-  public ValidationResponse validateUser(SecurityValidationContext ctx, CUser user, Set<String> roles, boolean update) {
+  public ValidationResponse validateUser(SecurityConfigurationValidationContext ctx, CUser user, Set<String> roles, boolean update) {
     ValidationResponse response = new ValidationResponse();
 
     if (ctx != null) {
       response.setContext(ctx);
     }
 
-    SecurityValidationContext context = (SecurityValidationContext) response.getContext();
+    SecurityConfigurationValidationContext context = (SecurityConfigurationValidationContext) response.getContext();
 
     List<String> existingIds = context.getExistingUserIds();
 
@@ -439,7 +439,7 @@ public class SecurityConfigurationValidatorImpl
     return response;
   }
 
-  public ValidationResponse validateUserRoleMapping(SecurityValidationContext context,
+  public ValidationResponse validateUserRoleMapping(SecurityConfigurationValidationContext context,
                                                     CUserRoleMapping userRoleMapping, boolean update)
   {
     ValidationResponse response = new ValidationResponse();

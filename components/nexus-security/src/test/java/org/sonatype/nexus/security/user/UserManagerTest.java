@@ -21,9 +21,9 @@ import org.sonatype.nexus.security.AbstractSecurityTestCase;
 import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.nexus.security.model.CUser;
 import org.sonatype.nexus.security.model.CUserRoleMapping;
-import org.sonatype.nexus.security.model.Configuration;
-import org.sonatype.nexus.security.model.ConfigurationManager;
-import org.sonatype.nexus.security.model.SecurityModelConfiguration;
+import org.sonatype.nexus.security.model.MemorySecurityConfiguration;
+import org.sonatype.nexus.security.model.SecurityConfiguration;
+import org.sonatype.nexus.security.model.SecurityConfigurationManager;
 import org.sonatype.nexus.security.role.RoleIdentifier;
 
 import junit.framework.Assert;
@@ -41,7 +41,7 @@ public class UserManagerTest
   private PasswordService passwordService;
 
   @Override
-  protected Configuration getSecurityModelConfig() {
+  protected MemorySecurityConfiguration getSecurityModelConfig() {
     return UserManagerTestSecurity.securityModel();
   }
 
@@ -51,8 +51,8 @@ public class UserManagerTest
     passwordService = lookup(PasswordService.class, "default");
   }
 
-  public ConfigurationManager getConfigurationManager() throws Exception {
-    return lookup(ConfigurationManager.class);
+  public SecurityConfigurationManager getConfigurationManager() throws Exception {
+    return lookup(SecurityConfigurationManager.class);
   }
 
   public void testGetUser() throws Exception {
@@ -88,7 +88,7 @@ public class UserManagerTest
 
     userManager.addUser(user, "my-password");
 
-    ConfigurationManager config = this.getConfigurationManager();
+    SecurityConfigurationManager config = this.getConfigurationManager();
 
     CUser secUser = config.readUser(user.getUserId());
     Assert.assertEquals(secUser.getId(), user.getUserId());
@@ -131,7 +131,7 @@ public class UserManagerTest
     user.setRoles(roles);
     userManager.updateUser(user);
 
-    ConfigurationManager config = this.getConfigurationManager();
+    SecurityConfigurationManager config = this.getConfigurationManager();
 
     CUser secUser = config.readUser(user.getUserId());
     Assert.assertEquals(secUser.getId(), user.getUserId());
@@ -206,7 +206,7 @@ public class UserManagerTest
     // now delete the user
     userManager.deleteUser(userId);
 
-    SecurityModelConfiguration securityModel = this.getSecurityConfiguration();
+    SecurityConfiguration securityModel = this.getSecurityConfiguration();
 
     for (CUser tmpUser : securityModel.getUsers()) {
       if (userId.equals(tmpUser.getId())) {
@@ -230,7 +230,7 @@ public class UserManagerTest
 
     securitySystem.setUsersRoles("admin", "default", roleIdentifiers);
 
-    SecurityModelConfiguration securityModel = this.getSecurityConfiguration();
+    SecurityConfiguration securityModel = this.getSecurityConfiguration();
 
     boolean found = false;
     for (CUserRoleMapping roleMapping : securityModel.getUserRoleMappings()) {

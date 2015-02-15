@@ -24,7 +24,7 @@ import org.sonatype.nexus.security.authz.AuthorizationManager;
 import org.sonatype.nexus.security.internal.AuthenticatingRealmImpl;
 import org.sonatype.nexus.security.internal.AuthorizingRealmImpl;
 import org.sonatype.nexus.security.model.CPrivilege;
-import org.sonatype.nexus.security.model.ConfigurationManagerImpl;
+import org.sonatype.nexus.security.model.SecurityConfigurationManagerImpl;
 import org.sonatype.nexus.security.privilege.MethodPrivilegeDescriptor;
 import org.sonatype.nexus.security.user.User;
 import org.sonatype.nexus.security.user.UserSearchCriteria;
@@ -160,7 +160,7 @@ public class EmptyRoleTest
     priv.setProperty(MethodPrivilegeDescriptor.P_PERMISSION, "app:config");
     priv.setProperty(MethodPrivilegeDescriptor.P_METHOD, "read");
 
-    this.lookup(ConfigurationManagerImpl.class).createPrivilege(priv);
+    this.lookup(SecurityConfigurationManagerImpl.class).createPrivilege(priv);
 
     return priv.getId();
   }

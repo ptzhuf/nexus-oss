@@ -20,8 +20,8 @@ import java.util.Set;
 import org.sonatype.nexus.security.AbstractSecurityTestCase;
 import org.sonatype.nexus.security.model.CPrivilege;
 import org.sonatype.nexus.security.model.CRole;
-import org.sonatype.nexus.security.model.Configuration;
-import org.sonatype.nexus.security.model.ConfigurationManager;
+import org.sonatype.nexus.security.model.MemorySecurityConfiguration;
+import org.sonatype.nexus.security.model.SecurityConfigurationManager;
 import org.sonatype.nexus.security.privilege.NoSuchPrivilegeException;
 import org.sonatype.nexus.security.privilege.Privilege;
 import org.sonatype.nexus.security.role.NoSuchRoleException;
@@ -36,7 +36,7 @@ public class AuthorizationManagerTest
     extends AbstractSecurityTestCase
 {
   @Override
-  protected Configuration getSecurityModelConfig() {
+  protected MemorySecurityConfiguration getSecurityModelConfig() {
     return AuthorizationManagerTestSecurity.securityModel();
   }
 
@@ -44,8 +44,8 @@ public class AuthorizationManagerTest
     return this.lookup(AuthorizationManager.class);
   }
 
-  public ConfigurationManager getConfigurationManager() throws Exception {
-    return lookup(ConfigurationManager.class);
+  public SecurityConfigurationManager getConfigurationManager() throws Exception {
+    return lookup(SecurityConfigurationManager.class);
   }
 
   // ROLES

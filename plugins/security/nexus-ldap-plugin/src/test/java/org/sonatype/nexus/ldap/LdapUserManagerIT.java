@@ -24,7 +24,7 @@ import org.sonatype.nexus.ldap.internal.persist.entity.LdapConfiguration;
 import org.sonatype.nexus.ldap.internal.persist.entity.Mapping;
 import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.nexus.security.internal.AuthenticatingRealmImpl;
-import org.sonatype.nexus.security.model.Configuration;
+import org.sonatype.nexus.security.model.MemorySecurityConfiguration;
 import org.sonatype.nexus.security.role.Role;
 import org.sonatype.nexus.security.role.RoleIdentifier;
 import org.sonatype.nexus.security.settings.SecuritySettings;
@@ -58,7 +58,7 @@ public class LdapUserManagerIT
   }
 
   @Override
-  protected Configuration getSecurityModelConfig() {
+  protected MemorySecurityConfiguration getSecurityModelConfig() {
     return LdapUserManagerITSecurity.securityModel();
   }
 

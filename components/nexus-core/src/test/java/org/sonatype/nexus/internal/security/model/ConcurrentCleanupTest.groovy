@@ -23,10 +23,10 @@ import org.sonatype.nexus.orient.MinimalDatabaseServer
 import org.sonatype.nexus.security.model.CPrivilege
 import org.sonatype.nexus.security.model.CRole
 import org.sonatype.nexus.security.model.CUserRoleMapping
+import org.sonatype.nexus.security.model.SecurityConfiguration
 import org.sonatype.nexus.security.model.SecurityConfigurationCleaner
 import org.sonatype.nexus.security.model.SecurityConfigurationCleanerImpl
-import org.sonatype.nexus.security.model.SecurityModelConfiguration
-import org.sonatype.nexus.security.model.StaticSecurityModelConfigurationSource
+import org.sonatype.nexus.security.model.StaticSecurityConfigurationSource
 import org.sonatype.sisu.litmus.testsupport.TestSupport
 
 import java.util.concurrent.CountDownLatch
@@ -56,9 +56,9 @@ extends TestSupport
 
   private MemoryDatabaseManager databaseManager
 
-  private OrientSecurityModelConfigurationSource source
+  private OrientSecurityConfigurationSource source
 
-  private SecurityModelConfiguration configuration
+  private SecurityConfiguration configuration
 
   private SecurityConfigurationCleaner cleaner
 
@@ -68,9 +68,9 @@ extends TestSupport
     databaseServer.start()
     databaseManager = new MemoryDatabaseManager()
     databaseManager.start()
-    source = new OrientSecurityModelConfigurationSource(
+    source = new OrientSecurityConfigurationSource(
         Providers.of(databaseManager.instance("security")),
-        new StaticSecurityModelConfigurationSource(),
+        new StaticSecurityConfigurationSource(),
         new CUserEntityAdapter(),
         new CRoleEntityAdapter(),
         new CPrivilegeEntityAdapter(),

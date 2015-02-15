@@ -28,7 +28,7 @@ import org.sonatype.nexus.security.SecurityConfigurationChanged;
 import org.sonatype.nexus.security.authz.AuthorizationConfigurationChanged;
 import org.sonatype.nexus.security.model.CPrivilege;
 import org.sonatype.nexus.security.model.CRole;
-import org.sonatype.nexus.security.model.ConfigurationManager;
+import org.sonatype.nexus.security.model.SecurityConfigurationManager;
 import org.sonatype.nexus.security.privilege.NoSuchPrivilegeException;
 import org.sonatype.nexus.security.privilege.PrivilegeDescriptor;
 import org.sonatype.nexus.security.role.NoSuchRoleException;
@@ -54,7 +54,7 @@ public class RolePermissionResolverImpl
     extends ComponentSupport
     implements RolePermissionResolver
 {
-  private final ConfigurationManager configuration;
+  private final SecurityConfigurationManager configuration;
 
   private final List<PrivilegeDescriptor> privilegeDescriptors;
 
@@ -69,7 +69,7 @@ public class RolePermissionResolverImpl
   private final Map<String, Collection<Permission>> rolePermissionsCache = new MapMaker().weakValues().makeMap();
 
   @Inject
-  public RolePermissionResolverImpl(final ConfigurationManager configuration,
+  public RolePermissionResolverImpl(final SecurityConfigurationManager configuration,
                                     final List<PrivilegeDescriptor> privilegeDescriptors,
                                     final EventBus eventBus)
   {

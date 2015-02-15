@@ -16,10 +16,10 @@ import java.io.File;
 import java.util.Properties;
 
 import org.sonatype.nexus.common.io.DirSupport;
-import org.sonatype.nexus.security.model.Configuration;
-import org.sonatype.nexus.security.model.PreconfiguredSecurityModelConfigurationSource;
-import org.sonatype.nexus.security.model.SecurityModelConfiguration;
-import org.sonatype.nexus.security.model.SecurityModelConfigurationSource;
+import org.sonatype.nexus.security.model.MemorySecurityConfiguration;
+import org.sonatype.nexus.security.model.PreconfiguredSecurityConfigurationSource;
+import org.sonatype.nexus.security.model.SecurityConfiguration;
+import org.sonatype.nexus.security.model.SecurityConfigurationSource;
 import org.sonatype.nexus.security.settings.PreconfiguredSecuritySettingsSource;
 import org.sonatype.nexus.security.settings.SecuritySettings;
 import org.sonatype.nexus.security.settings.SecuritySettingsSource;
@@ -55,16 +55,16 @@ public abstract class AbstractSecurityTestCase
     binder.bind(SecuritySettingsSource.class)
         .annotatedWith(Names.named("default"))
         .toInstance(new PreconfiguredSecuritySettingsSource(getSecurityConfig()));
-    binder.bind(SecurityModelConfigurationSource.class)
+    binder.bind(SecurityConfigurationSource.class)
         .annotatedWith(Names.named("default"))
-        .toInstance(new PreconfiguredSecurityModelConfigurationSource(getSecurityModelConfig()));
+        .toInstance(new PreconfiguredSecurityConfigurationSource(getSecurityModelConfig()));
   }
 
   protected SecuritySettings getSecurityConfig() {
     return AbstractSecurityTestCaseSecurity.security();
   }
 
-  protected Configuration getSecurityModelConfig() {
+  protected MemorySecurityConfiguration getSecurityModelConfig() {
     return AbstractSecurityTestCaseSecurity.securityModel();
   }
 
@@ -100,7 +100,7 @@ public abstract class AbstractSecurityTestCase
     return this.lookup(UserManager.class);
   }
 
-  protected SecurityModelConfiguration getSecurityConfiguration() {
-    return lookup(SecurityModelConfigurationSource.class, "default").getConfiguration();
+  protected SecurityConfiguration getSecurityConfiguration() {
+    return lookup(SecurityConfigurationSource.class, "default").getConfiguration();
   }
 }

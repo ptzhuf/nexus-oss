@@ -26,7 +26,7 @@ import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.nexus.security.model.CRole;
 import org.sonatype.nexus.security.model.CUser;
 import org.sonatype.nexus.security.model.CUserRoleMapping;
-import org.sonatype.nexus.security.model.ConfigurationManager;
+import org.sonatype.nexus.security.model.SecurityConfigurationManager;
 import org.sonatype.nexus.security.role.NoSuchRoleException;
 import org.sonatype.nexus.security.role.RoleIdentifier;
 import org.sonatype.nexus.security.user.AbstractUserManager;
@@ -53,14 +53,14 @@ public class UserManagerImpl
     extends AbstractUserManager
     implements RoleMappingUserManager
 {
-  private final ConfigurationManager configuration;
+  private final SecurityConfigurationManager configuration;
 
   private final SecuritySystem securitySystem;
 
   private final PasswordService passwordService;
 
   @Inject
-  public UserManagerImpl(final ConfigurationManager configuration,
+  public UserManagerImpl(final SecurityConfigurationManager configuration,
                          final SecuritySystem securitySystem,
                          final PasswordService passwordService)
   {

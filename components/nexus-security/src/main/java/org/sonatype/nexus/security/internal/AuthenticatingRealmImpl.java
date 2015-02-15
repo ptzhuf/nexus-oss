@@ -20,7 +20,7 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.sonatype.nexus.security.model.CUser;
-import org.sonatype.nexus.security.model.ConfigurationManager;
+import org.sonatype.nexus.security.model.SecurityConfigurationManager;
 import org.sonatype.nexus.security.user.UserNotFoundException;
 
 import org.apache.shiro.authc.AccountException;
@@ -58,12 +58,12 @@ public class AuthenticatingRealmImpl
 
   private static final int MAX_LEGACY_PASSWORD_LENGTH = 40;
 
-  private final ConfigurationManager configuration;
+  private final SecurityConfigurationManager configuration;
 
   private final PasswordService passwordService;
 
   @Inject
-  public AuthenticatingRealmImpl(final ConfigurationManager configuration,
+  public AuthenticatingRealmImpl(final SecurityConfigurationManager configuration,
                                  final PasswordService passwordService)
   {
     this.configuration = configuration;

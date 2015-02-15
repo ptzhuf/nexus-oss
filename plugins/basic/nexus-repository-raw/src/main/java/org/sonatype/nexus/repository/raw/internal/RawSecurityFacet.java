@@ -30,7 +30,7 @@ public class RawSecurityFacet
 {
   @Inject
   public RawSecurityFacet(final SecurityHelper securityHelper,
-                          final RawFormatSecurityResource securityResource)
+                          final RawFormatSecurityConfigurationResource securityResource)
   {
     super(securityHelper, securityResource);
   }

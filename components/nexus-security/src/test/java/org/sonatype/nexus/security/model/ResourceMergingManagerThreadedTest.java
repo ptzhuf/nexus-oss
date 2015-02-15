@@ -27,18 +27,18 @@ import junit.framework.Assert;
 public class ResourceMergingManagerThreadedTest
     extends AbstractSecurityTestCase
 {
-  private ConfigurationManager manager;
+  private SecurityConfigurationManager manager;
 
   private int expectedPrivilegeCount = 0;
 
   @Inject
-  private List<StaticSecurityResource> injectedStaticResources;
+  private List<StaticSecurityConfigurationResource> injectedStaticResources;
 
   @Inject
-  private List<DynamicSecurityResource> injectedDynamicResources;
+  private List<DynamicSecurityConfigurationResource> injectedDynamicResources;
 
   @Override
-  protected Configuration getSecurityModelConfig() {
+  protected MemorySecurityConfiguration getSecurityModelConfig() {
     return ResourceMergingConfigurationManagerTestSecurity.securityModel();
   }
 
@@ -46,21 +46,21 @@ public class ResourceMergingManagerThreadedTest
   public void configure(Binder binder) {
     super.configure(binder);
 
-    binder.bind(StaticSecurityResource.class).annotatedWith(Names.named("default"))
-        .toInstance(new StaticSecurityResource2());
-    binder.bind(DynamicSecurityResource.class).annotatedWith(Names.named("default"))
-        .toInstance(new UnitTestDynamicSecurityResource());
+    binder.bind(StaticSecurityConfigurationResource.class).annotatedWith(Names.named("default"))
+        .toInstance(new StaticSecurityConfigurationResource2());
+    binder.bind(DynamicSecurityConfigurationResource.class).annotatedWith(Names.named("default"))
+        .toInstance(new UnitTestDynamicSecurityConfigurationResource());
 
     int staticResourceCount = 100;
     for (int ii = 0; ii < staticResourceCount - 1; ii++) {
-      binder.bind(StaticSecurityResource.class).annotatedWith(Names.named("test-" + ii))
-          .toInstance(new StaticSecurityResource3());
+      binder.bind(StaticSecurityConfigurationResource.class).annotatedWith(Names.named("test-" + ii))
+          .toInstance(new StaticSecurityConfigurationResource3());
     }
 
     int dynamicResourceCount = 100;
     for (int ii = 0; ii < dynamicResourceCount - 1; ii++) {
-      binder.bind(DynamicSecurityResource.class).annotatedWith(Names.named("test-" + ii))
-          .toInstance(new UnitTestDynamicSecurityResource());
+      binder.bind(DynamicSecurityConfigurationResource.class).annotatedWith(Names.named("test-" + ii))
+          .toInstance(new UnitTestDynamicSecurityConfigurationResource());
     }
   }
 
@@ -68,7 +68,7 @@ public class ResourceMergingManagerThreadedTest
   protected void setUp() throws Exception {
     super.setUp();
 
-    this.manager = lookup(ConfigurationManager.class);
+    this.manager = lookup(SecurityConfigurationManager.class);
 
     // test the lookup, make sure we have 100
     Assert.assertEquals(100, injectedStaticResources.size());
@@ -79,8 +79,8 @@ public class ResourceMergingManagerThreadedTest
     // 100 static items with 3 privs each + 100 dynamic items + 2 from default config
     Assert.assertEquals((100 * 3) + 100 + 2, expectedPrivilegeCount);
 
-    for (DynamicSecurityResource dynamicSecurityResource : injectedDynamicResources) {
-      Assert.assertFalse(dynamicSecurityResource.isDirty());
+    for (DynamicSecurityConfigurationResource dynamicSecurityConfigurationResource : injectedDynamicResources) {
+      Assert.assertFalse(dynamicSecurityConfigurationResource.isDirty());
     }
   }
 
@@ -93,7 +93,7 @@ public class ResourceMergingManagerThreadedTest
       // }
 
       public void thread1() {
-        ((UnitTestDynamicSecurityResource) injectedDynamicResources.get(1)).setDirty(true);
+        ((UnitTestDynamicSecurityConfigurationResource) injectedDynamicResources.get(1)).setDirty(true);
         Assert.assertEquals(expectedPrivilegeCount, manager.listPrivileges().size());
       }
 
@@ -102,7 +102,7 @@ public class ResourceMergingManagerThreadedTest
       }
 
       public void thread3() {
-        ((UnitTestDynamicSecurityResource) injectedDynamicResources.get(3)).setDirty(true);
+        ((UnitTestDynamicSecurityConfigurationResource) injectedDynamicResources.get(3)).setDirty(true);
         Assert.assertEquals(expectedPrivilegeCount, manager.listPrivileges().size());
       }
 
@@ -111,20 +111,20 @@ public class ResourceMergingManagerThreadedTest
       }
 
       public void thread5() {
-        ((UnitTestDynamicSecurityResource) injectedDynamicResources.get(5)).setDirty(true);
+        ((UnitTestDynamicSecurityConfigurationResource) injectedDynamicResources.get(5)).setDirty(true);
         Assert.assertEquals(expectedPrivilegeCount, manager.listPrivileges().size());
       }
 
     });// , Integer.MAX_VALUE, Integer.MAX_VALUE ); // uncomment this for debugging, if you don't the framework
     // will timeout and close your debug session
 
-    for (DynamicSecurityResource dynamicSecurityResource : injectedDynamicResources) {
+    for (DynamicSecurityConfigurationResource dynamicSecurityConfigurationResource : injectedDynamicResources) {
 
-      Assert.assertFalse(dynamicSecurityResource.isDirty());
+      Assert.assertFalse(dynamicSecurityConfigurationResource.isDirty());
       Assert
           .assertTrue("Get config should be called on each dynamic resource after set dirty is called on any of them: "
-              + ((UnitTestDynamicSecurityResource) dynamicSecurityResource).getId(),
-              ((UnitTestDynamicSecurityResource) dynamicSecurityResource).isConfigCalledAfterSetDirty());
+              + ((UnitTestDynamicSecurityConfigurationResource) dynamicSecurityConfigurationResource).getId(),
+              ((UnitTestDynamicSecurityConfigurationResource) dynamicSecurityConfigurationResource).isConfigCalledAfterSetDirty());
     }
   }
 }

@@ -18,8 +18,8 @@ package org.sonatype.nexus.security.model
 class ResourceMergingConfigurationManagerTestSecurity
 {
 
-  static Configuration securityModel() {
-    return new Configuration(
+  static MemorySecurityConfiguration securityModel() {
+    return new MemorySecurityConfiguration(
         privileges: [
             new CPrivilege(
                 id: '1-test',

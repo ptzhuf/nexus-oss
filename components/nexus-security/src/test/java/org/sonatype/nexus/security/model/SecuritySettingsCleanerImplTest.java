@@ -27,7 +27,7 @@ public class SecuritySettingsCleanerImplTest
 {
   private SecurityConfigurationCleanerImpl underTest;
 
-  private Configuration configuration;
+  private MemorySecurityConfiguration configuration;
 
   @Before
   public void setUp() throws Exception {

@@ -19,16 +19,16 @@ import org.sonatype.configuration.validation.ValidationResponse;
 
 public interface SecurityConfigurationValidator
 {
-  ValidationResponse validateModel(ValidationRequest<Configuration> request);
+  ValidationResponse validateModel(ValidationRequest<MemorySecurityConfiguration> request);
 
-  ValidationResponse validatePrivilege(SecurityValidationContext ctx, CPrivilege privilege, boolean update);
+  ValidationResponse validatePrivilege(SecurityConfigurationValidationContext ctx, CPrivilege privilege, boolean update);
 
-  ValidationResponse validateRoleContainment(SecurityValidationContext ctx);
+  ValidationResponse validateRoleContainment(SecurityConfigurationValidationContext ctx);
 
-  ValidationResponse validateRole(SecurityValidationContext ctx, CRole role, boolean update);
+  ValidationResponse validateRole(SecurityConfigurationValidationContext ctx, CRole role, boolean update);
 
-  ValidationResponse validateUser(SecurityValidationContext ctx, CUser user, Set<String> roles, boolean update);
+  ValidationResponse validateUser(SecurityConfigurationValidationContext ctx, CUser user, Set<String> roles, boolean update);
 
-  ValidationResponse validateUserRoleMapping(SecurityValidationContext ctx, CUserRoleMapping userRoleMapping,
+  ValidationResponse validateUserRoleMapping(SecurityConfigurationValidationContext ctx, CUserRoleMapping userRoleMapping,
                                              boolean update);
 }

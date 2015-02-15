@@ -17,8 +17,8 @@ import java.util.Set;
 import org.sonatype.nexus.security.AbstractSecurityTestCase;
 import org.sonatype.nexus.security.model.CUser;
 import org.sonatype.nexus.security.model.CUserRoleMapping;
-import org.sonatype.nexus.security.model.Configuration;
-import org.sonatype.nexus.security.model.SecurityModelConfiguration;
+import org.sonatype.nexus.security.model.MemorySecurityConfiguration;
+import org.sonatype.nexus.security.model.SecurityConfiguration;
 import org.sonatype.nexus.security.role.RoleIdentifier;
 
 import junit.framework.Assert;
@@ -27,7 +27,7 @@ public class EmptyRoleManagementTest
     extends AbstractSecurityTestCase
 {
   @Override
-  protected Configuration getSecurityModelConfig() {
+  protected MemorySecurityConfiguration getSecurityModelConfig() {
     return EmptyRoleManagementTestSecurity.securityModel();
   }
 
@@ -39,7 +39,7 @@ public class EmptyRoleManagementTest
     UserManager userManager = this.getUserManager();
     userManager.deleteUser(userId);
 
-    SecurityModelConfiguration securityModel = this.getSecurityConfiguration();
+    SecurityConfiguration securityModel = this.getSecurityConfiguration();
 
     for (CUser tmpUser : securityModel.getUsers()) {
       if (userId.equals(tmpUser.getId())) {
@@ -73,7 +73,7 @@ public class EmptyRoleManagementTest
 
     userManager.updateUser(user);
 
-    SecurityModelConfiguration securityModel = this.getSecurityConfiguration();
+    SecurityConfiguration securityModel = this.getSecurityConfiguration();
     for (CUserRoleMapping userRoleMapping : securityModel.getUserRoleMappings()) {
       if (userId.equals(userRoleMapping.getUserId()) && "default".equals(userRoleMapping.getSource())) {
         Set<String> configuredRoles = userRoleMapping.getRoles();
@@ -96,7 +96,7 @@ public class EmptyRoleManagementTest
 
     userManager.updateUser(user);
 
-    SecurityModelConfiguration securityModel = this.getSecurityConfiguration();
+    SecurityConfiguration securityModel = this.getSecurityConfiguration();
 
     boolean found = false;
     for (CUser tmpUser : securityModel.getUsers()) {
@@ -139,7 +139,7 @@ public class EmptyRoleManagementTest
 
     userManager.updateUser(user);
 
-    SecurityModelConfiguration securityModel = this.getSecurityConfiguration();
+    SecurityConfiguration securityModel = this.getSecurityConfiguration();
     for (CUserRoleMapping userRoleMapping : securityModel.getUserRoleMappings()) {
       if (userId.equals(userRoleMapping.getUserId()) && "default".equals(userRoleMapping.getSource())) {
         Set<String> configuredRoles = userRoleMapping.getRoles();

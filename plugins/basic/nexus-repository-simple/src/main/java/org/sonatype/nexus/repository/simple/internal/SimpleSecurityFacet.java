@@ -30,7 +30,7 @@ public class SimpleSecurityFacet
 {
   @Inject
   public SimpleSecurityFacet(final SecurityHelper securityHelper,
-                             final SimpleFormatSecurityResource securityResource)
+                             final SimpleFormatSecurityConfigurationResource securityResource)
   {
     super(securityHelper, securityResource);
   }

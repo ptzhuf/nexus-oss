@@ -19,7 +19,7 @@ import org.sonatype.configuration.validation.ValidationMessage;
 import org.sonatype.configuration.validation.ValidationResponse;
 import org.sonatype.nexus.common.text.Strings2;
 import org.sonatype.nexus.security.model.CPrivilege;
-import org.sonatype.nexus.security.model.SecurityValidationContext;
+import org.sonatype.nexus.security.model.SecurityConfigurationValidationContext;
 
 @Named
 @Singleton
@@ -59,7 +59,7 @@ public class MethodPrivilegeDescriptor
   }
 
   @Override
-  public ValidationResponse validatePrivilege(CPrivilege privilege, SecurityValidationContext ctx, boolean update) {
+  public ValidationResponse validatePrivilege(CPrivilege privilege, SecurityConfigurationValidationContext ctx, boolean update) {
     ValidationResponse response = super.validatePrivilege(privilege, ctx, update);
 
     if (!TYPE.equals(privilege.getType())) {

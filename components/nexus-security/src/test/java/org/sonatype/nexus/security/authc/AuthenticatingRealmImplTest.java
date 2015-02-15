@@ -22,7 +22,7 @@ import org.sonatype.nexus.security.internal.AuthenticatingRealmImpl;
 import org.sonatype.nexus.security.model.CPrivilege;
 import org.sonatype.nexus.security.model.CRole;
 import org.sonatype.nexus.security.model.CUser;
-import org.sonatype.nexus.security.model.ConfigurationManagerImpl;
+import org.sonatype.nexus.security.model.SecurityConfigurationManagerImpl;
 
 import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
@@ -40,7 +40,7 @@ public class AuthenticatingRealmImplTest
 {
   private AuthenticatingRealmImpl realm;
 
-  private ConfigurationManagerImpl configurationManager;
+  private SecurityConfigurationManagerImpl configurationManager;
 
   private PasswordService passwordService;
 
@@ -51,7 +51,7 @@ public class AuthenticatingRealmImplTest
     super.setUp();
 
     realm = (AuthenticatingRealmImpl) lookup(Realm.class, AuthenticatingRealmImpl.NAME);
-    configurationManager = lookup(ConfigurationManagerImpl.class);
+    configurationManager = lookup(SecurityConfigurationManagerImpl.class);
     passwordService = lookup(PasswordService.class, "default");
   }
 

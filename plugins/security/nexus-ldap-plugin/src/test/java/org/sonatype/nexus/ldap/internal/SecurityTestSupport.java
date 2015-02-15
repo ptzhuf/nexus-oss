@@ -14,9 +14,9 @@ package org.sonatype.nexus.ldap.internal;
 
 import java.util.List;
 
-import org.sonatype.nexus.security.model.Configuration;
-import org.sonatype.nexus.security.model.PreconfiguredSecurityModelConfigurationSource;
-import org.sonatype.nexus.security.model.SecurityModelConfigurationSource;
+import org.sonatype.nexus.security.model.MemorySecurityConfiguration;
+import org.sonatype.nexus.security.model.PreconfiguredSecurityConfigurationSource;
+import org.sonatype.nexus.security.model.SecurityConfigurationSource;
 import org.sonatype.nexus.security.settings.PreconfiguredSecuritySettingsSource;
 import org.sonatype.nexus.security.settings.SecuritySettings;
 import org.sonatype.nexus.security.settings.SecuritySettingsSource;
@@ -45,15 +45,15 @@ public abstract class SecurityTestSupport
         }
       });
     }
-    final Configuration securityModelConfig = getSecurityModelConfig();
+    final MemorySecurityConfiguration securityModelConfig = getSecurityModelConfig();
     if (securityModelConfig != null) {
       modules.add(new AbstractModule()
       {
         @Override
         protected void configure() {
-          bind(SecurityModelConfigurationSource.class)
+          bind(SecurityConfigurationSource.class)
               .annotatedWith(Names.named("default"))
-              .toInstance(new PreconfiguredSecurityModelConfigurationSource(securityModelConfig));
+              .toInstance(new PreconfiguredSecurityConfigurationSource(securityModelConfig));
         }
       });
     }
@@ -63,7 +63,7 @@ public abstract class SecurityTestSupport
     return null;
   }
 
-  protected Configuration getSecurityModelConfig() {
+  protected MemorySecurityConfiguration getSecurityModelConfig() {
     return null;
   }
 

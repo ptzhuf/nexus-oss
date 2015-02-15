@@ -16,7 +16,7 @@ import java.util.List;
 
 import org.sonatype.configuration.validation.ValidationResponse;
 import org.sonatype.nexus.security.model.CPrivilege;
-import org.sonatype.nexus.security.model.SecurityValidationContext;
+import org.sonatype.nexus.security.model.SecurityConfigurationValidationContext;
 
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
@@ -56,7 +56,7 @@ public abstract class PrivilegeDescriptorSupport
 
   @Override
   public ValidationResponse validatePrivilege(final CPrivilege privilege,
-                                              final SecurityValidationContext context,
+                                              final SecurityConfigurationValidationContext context,
                                               final boolean update)
   {
     // FIXME: For now ignore validation

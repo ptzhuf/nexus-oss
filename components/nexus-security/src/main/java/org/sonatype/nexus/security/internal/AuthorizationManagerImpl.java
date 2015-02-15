@@ -26,7 +26,7 @@ import org.sonatype.nexus.security.authz.AuthorizationConfigurationChanged;
 import org.sonatype.nexus.security.authz.AuthorizationManager;
 import org.sonatype.nexus.security.model.CPrivilege;
 import org.sonatype.nexus.security.model.CRole;
-import org.sonatype.nexus.security.model.ConfigurationManager;
+import org.sonatype.nexus.security.model.SecurityConfigurationManager;
 import org.sonatype.nexus.security.privilege.MethodPrivilegeDescriptor;
 import org.sonatype.nexus.security.privilege.NoSuchPrivilegeException;
 import org.sonatype.nexus.security.privilege.Privilege;
@@ -51,7 +51,7 @@ public class AuthorizationManagerImpl
 {
   public static final String SOURCE = "default";
 
-  private final ConfigurationManager configuration;
+  private final SecurityConfigurationManager configuration;
 
   private final PrivilegeInheritanceManager privInheritance;
 
@@ -60,7 +60,7 @@ public class AuthorizationManagerImpl
   private final List<PrivilegeDescriptor> privilegeDescriptors;
 
   @Inject
-  public AuthorizationManagerImpl(final ConfigurationManager configuration,
+  public AuthorizationManagerImpl(final SecurityConfigurationManager configuration,
                                   final PrivilegeInheritanceManager privInheritance,
                                   final EventBus eventBus,
                                   final List<PrivilegeDescriptor> privilegeDescriptors)
