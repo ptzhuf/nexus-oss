@@ -42,8 +42,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Default {@link AuthorizationManager}.
  */
-@Singleton
 @Named("default")
+@Singleton
 public class AuthorizationManagerImpl
     implements AuthorizationManager
 {

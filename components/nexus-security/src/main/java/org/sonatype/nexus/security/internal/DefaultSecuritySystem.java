@@ -11,7 +11,7 @@
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
 
-package org.sonatype.nexus.security;
+package org.sonatype.nexus.security.internal;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,6 +28,9 @@ import javax.inject.Singleton;
 
 import org.sonatype.configuration.validation.InvalidConfigurationException;
 import org.sonatype.nexus.common.text.Strings2;
+import org.sonatype.nexus.security.SecurityConfigurationChanged;
+import org.sonatype.nexus.security.SecuritySystem;
+import org.sonatype.nexus.security.UserPrincipalsExpired;
 import org.sonatype.nexus.security.authz.AuthorizationConfigurationChanged;
 import org.sonatype.nexus.security.authz.AuthorizationManager;
 import org.sonatype.nexus.security.authz.NoSuchAuthorizationManagerException;
@@ -69,8 +72,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * This implementation wraps a Shiro SecurityManager, and adds user management.
  */
-@Singleton
 @Named("default")
+@Singleton
 public class DefaultSecuritySystem
     extends ComponentSupport
     implements SecuritySystem

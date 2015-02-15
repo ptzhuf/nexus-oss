@@ -10,12 +10,14 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.security;
+package org.sonatype.nexus.security.internal;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.sonatype.nexus.security.AbstractSecurityTest;
+import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.nexus.security.authz.AuthorizationManager;
 import org.sonatype.nexus.security.authz.MockAuthorizationManagerB;
 import org.sonatype.nexus.security.role.Role;
