@@ -14,8 +14,8 @@ package org.sonatype.nexus.ldap.internal.ui
 
 import groovy.transform.ToString
 import org.hibernate.validator.constraints.NotEmpty
+import org.sonatype.nexus.common.validation.Update
 import org.sonatype.nexus.extdirect.model.Password
-import org.sonatype.nexus.validation.Update
 
 import javax.validation.constraints.Max
 import javax.validation.constraints.Min

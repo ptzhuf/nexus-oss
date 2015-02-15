@@ -26,6 +26,9 @@ import org.sonatype.configuration.validation.InvalidConfigurationException
 import org.sonatype.configuration.validation.ValidationMessage
 import org.sonatype.configuration.validation.ValidationResponse
 import org.sonatype.micromailer.Address
+import org.sonatype.nexus.common.validation.Create
+import org.sonatype.nexus.common.validation.Update
+import org.sonatype.nexus.common.validation.Validate
 import org.sonatype.nexus.extdirect.DirectComponent
 import org.sonatype.nexus.extdirect.DirectComponentSupport
 import org.sonatype.nexus.extdirect.model.Password
@@ -37,9 +40,6 @@ import org.sonatype.nexus.security.user.UserAccountManager
 import org.sonatype.nexus.security.user.UserManager
 import org.sonatype.nexus.security.user.UserSearchCriteria
 import org.sonatype.nexus.util.Tokens
-import org.sonatype.nexus.validation.Create
-import org.sonatype.nexus.validation.Update
-import org.sonatype.nexus.validation.Validate
 import org.sonatype.nexus.wonderland.AuthTicketService
 
 import javax.annotation.Nullable

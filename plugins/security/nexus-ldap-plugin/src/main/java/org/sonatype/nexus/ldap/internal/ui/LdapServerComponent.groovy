@@ -20,6 +20,9 @@ import org.apache.shiro.authz.annotation.RequiresAuthentication
 import org.apache.shiro.authz.annotation.RequiresPermissions
 import org.apache.shiro.realm.ldap.LdapContextFactory
 import org.hibernate.validator.constraints.NotEmpty
+import org.sonatype.nexus.common.validation.Create
+import org.sonatype.nexus.common.validation.Update
+import org.sonatype.nexus.common.validation.Validate
 import org.sonatype.nexus.extdirect.DirectComponent
 import org.sonatype.nexus.extdirect.DirectComponentSupport
 import org.sonatype.nexus.extdirect.model.Password
@@ -41,9 +44,6 @@ import org.sonatype.nexus.ldap.internal.templates.LdapSchemaTemplateManager
 import org.sonatype.nexus.ldap.model.LdapTrustStoreKey
 import org.sonatype.nexus.rapture.TrustStoreKeys
 import org.sonatype.nexus.util.Tokens
-import org.sonatype.nexus.validation.Create
-import org.sonatype.nexus.validation.Update
-import org.sonatype.nexus.validation.Validate
 
 import javax.annotation.Nullable
 import javax.inject.Inject
