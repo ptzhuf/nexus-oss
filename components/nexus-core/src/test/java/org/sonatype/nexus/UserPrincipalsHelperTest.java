@@ -21,8 +21,8 @@ import javax.inject.Singleton;
 
 import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.nexus.security.UserPrincipalsHelper;
-import org.sonatype.nexus.security.model.PreconfiguredSecurityConfigurationSource;
-import org.sonatype.nexus.security.model.SecurityConfigurationSource;
+import org.sonatype.nexus.security.config.PreconfiguredSecurityConfigurationSource;
+import org.sonatype.nexus.security.config.SecurityConfigurationSource;
 import org.sonatype.nexus.security.settings.PreconfiguredSecuritySettingsSource;
 import org.sonatype.nexus.security.settings.SecuritySettingsSource;
 import org.sonatype.nexus.security.user.AbstractReadOnlyUserManager;

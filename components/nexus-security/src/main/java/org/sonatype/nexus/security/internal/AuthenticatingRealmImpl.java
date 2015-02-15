@@ -19,8 +19,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.sonatype.nexus.security.model.CUser;
-import org.sonatype.nexus.security.model.SecurityConfigurationManager;
+import org.sonatype.nexus.security.config.CUser;
+import org.sonatype.nexus.security.config.SecurityConfigurationManager;
 import org.sonatype.nexus.security.user.UserNotFoundException;
 
 import org.apache.shiro.authc.AccountException;

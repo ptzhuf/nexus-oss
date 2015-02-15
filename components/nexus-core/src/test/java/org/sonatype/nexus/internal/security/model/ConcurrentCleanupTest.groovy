@@ -20,13 +20,13 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.sonatype.nexus.orient.MemoryDatabaseManager
 import org.sonatype.nexus.orient.MinimalDatabaseServer
-import org.sonatype.nexus.security.model.CPrivilege
-import org.sonatype.nexus.security.model.CRole
-import org.sonatype.nexus.security.model.CUserRoleMapping
-import org.sonatype.nexus.security.model.SecurityConfiguration
-import org.sonatype.nexus.security.model.SecurityConfigurationCleaner
-import org.sonatype.nexus.security.model.SecurityConfigurationCleanerImpl
-import org.sonatype.nexus.security.model.StaticSecurityConfigurationSource
+import org.sonatype.nexus.security.config.CPrivilege
+import org.sonatype.nexus.security.config.CRole
+import org.sonatype.nexus.security.config.CUserRoleMapping
+import org.sonatype.nexus.security.config.SecurityConfiguration
+import org.sonatype.nexus.security.config.SecurityConfigurationCleaner
+import org.sonatype.nexus.security.config.SecurityConfigurationCleanerImpl
+import org.sonatype.nexus.security.config.StaticSecurityConfigurationSource
 import org.sonatype.sisu.litmus.testsupport.TestSupport
 
 import java.util.concurrent.CountDownLatch

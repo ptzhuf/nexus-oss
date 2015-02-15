@@ -17,11 +17,11 @@ import java.util.Set;
 
 import org.sonatype.configuration.validation.InvalidConfigurationException;
 import org.sonatype.nexus.security.AbstractSecurityTestCase;
+import org.sonatype.nexus.security.config.CPrivilege;
+import org.sonatype.nexus.security.config.CRole;
+import org.sonatype.nexus.security.config.CUser;
+import org.sonatype.nexus.security.config.SecurityConfigurationManagerImpl;
 import org.sonatype.nexus.security.internal.AuthorizingRealmImpl;
-import org.sonatype.nexus.security.model.CPrivilege;
-import org.sonatype.nexus.security.model.CRole;
-import org.sonatype.nexus.security.model.CUser;
-import org.sonatype.nexus.security.model.SecurityConfigurationManagerImpl;
 import org.sonatype.nexus.security.privilege.MethodPrivilegeDescriptor;
 import org.sonatype.nexus.security.user.UserStatus;
 

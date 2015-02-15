@@ -18,8 +18,8 @@ import java.util.List;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.sonatype.nexus.security.model.CPrivilege;
-import org.sonatype.nexus.security.model.CPrivilegeBuilder;
+import org.sonatype.nexus.security.config.CPrivilege;
+import org.sonatype.nexus.security.config.CPrivilegeBuilder;
 import org.sonatype.nexus.security.privilege.PrivilegeDescriptor;
 import org.sonatype.nexus.security.privilege.PrivilegeDescriptorSupport;
 

@@ -15,10 +15,10 @@ package org.sonatype.nexus.security.user;
 import java.util.Set;
 
 import org.sonatype.nexus.security.AbstractSecurityTestCase;
-import org.sonatype.nexus.security.model.CUser;
-import org.sonatype.nexus.security.model.CUserRoleMapping;
-import org.sonatype.nexus.security.model.MemorySecurityConfiguration;
-import org.sonatype.nexus.security.model.SecurityConfiguration;
+import org.sonatype.nexus.security.config.CUser;
+import org.sonatype.nexus.security.config.CUserRoleMapping;
+import org.sonatype.nexus.security.config.MemorySecurityConfiguration;
+import org.sonatype.nexus.security.config.SecurityConfiguration;
 import org.sonatype.nexus.security.role.RoleIdentifier;
 
 import junit.framework.Assert;

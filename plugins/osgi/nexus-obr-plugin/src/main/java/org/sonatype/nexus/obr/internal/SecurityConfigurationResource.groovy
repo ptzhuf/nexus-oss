@@ -12,10 +12,10 @@
  */
 package org.sonatype.nexus.obr.internal
 
-import org.sonatype.nexus.security.model.CPrivilege
-import org.sonatype.nexus.security.model.CRole
-import org.sonatype.nexus.security.model.MemorySecurityConfiguration
-import org.sonatype.nexus.security.model.StaticSecurityConfigurationResource
+import org.sonatype.nexus.security.config.CPrivilege
+import org.sonatype.nexus.security.config.CRole
+import org.sonatype.nexus.security.config.MemorySecurityConfiguration
+import org.sonatype.nexus.security.config.StaticSecurityConfigurationResource
 
 import javax.inject.Named
 import javax.inject.Singleton

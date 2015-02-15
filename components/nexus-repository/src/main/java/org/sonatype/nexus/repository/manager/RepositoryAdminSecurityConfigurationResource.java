@@ -17,8 +17,8 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.sonatype.nexus.repository.Repository;
-import org.sonatype.nexus.security.model.MutableDynamicSecurityConfigurationResource;
-import org.sonatype.nexus.security.model.SecurityConfiguration;
+import org.sonatype.nexus.security.config.MutableDynamicSecurityConfigurationResource;
+import org.sonatype.nexus.security.config.SecurityConfiguration;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.sonatype.nexus.repository.security.BreadActions.ADD;

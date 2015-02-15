@@ -28,12 +28,12 @@ import org.sonatype.nexus.proxy.registry.ContentClass;
 import org.sonatype.nexus.proxy.registry.RepositoryRegistry;
 import org.sonatype.nexus.proxy.registry.RepositoryTypeRegistry;
 import org.sonatype.nexus.proxy.registry.RootContentClass;
-import org.sonatype.nexus.security.model.AbstractDynamicSecurityConfigurationResource;
-import org.sonatype.nexus.security.model.CPrivilege;
-import org.sonatype.nexus.security.model.CRole;
-import org.sonatype.nexus.security.model.DynamicSecurityConfigurationResource;
-import org.sonatype.nexus.security.model.MemorySecurityConfiguration;
-import org.sonatype.nexus.security.model.SecurityConfigurationManager;
+import org.sonatype.nexus.security.config.AbstractDynamicSecurityConfigurationResource;
+import org.sonatype.nexus.security.config.CPrivilege;
+import org.sonatype.nexus.security.config.CRole;
+import org.sonatype.nexus.security.config.DynamicSecurityConfigurationResource;
+import org.sonatype.nexus.security.config.MemorySecurityConfiguration;
+import org.sonatype.nexus.security.config.SecurityConfigurationManager;
 import org.sonatype.sisu.goodies.eventbus.EventBus;
 
 import com.google.common.eventbus.AllowConcurrentEvents;

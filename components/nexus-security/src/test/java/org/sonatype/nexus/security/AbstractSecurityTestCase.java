@@ -16,10 +16,10 @@ import java.io.File;
 import java.util.Properties;
 
 import org.sonatype.nexus.common.io.DirSupport;
-import org.sonatype.nexus.security.model.MemorySecurityConfiguration;
-import org.sonatype.nexus.security.model.PreconfiguredSecurityConfigurationSource;
-import org.sonatype.nexus.security.model.SecurityConfiguration;
-import org.sonatype.nexus.security.model.SecurityConfigurationSource;
+import org.sonatype.nexus.security.config.MemorySecurityConfiguration;
+import org.sonatype.nexus.security.config.PreconfiguredSecurityConfigurationSource;
+import org.sonatype.nexus.security.config.SecurityConfiguration;
+import org.sonatype.nexus.security.config.SecurityConfigurationSource;
 import org.sonatype.nexus.security.settings.PreconfiguredSecuritySettingsSource;
 import org.sonatype.nexus.security.settings.SecuritySettings;
 import org.sonatype.nexus.security.settings.SecuritySettingsSource;

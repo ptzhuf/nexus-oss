@@ -26,9 +26,9 @@ import javax.inject.Singleton;
 
 import org.sonatype.nexus.security.SecurityConfigurationChanged;
 import org.sonatype.nexus.security.authz.AuthorizationConfigurationChanged;
-import org.sonatype.nexus.security.model.CPrivilege;
-import org.sonatype.nexus.security.model.CRole;
-import org.sonatype.nexus.security.model.SecurityConfigurationManager;
+import org.sonatype.nexus.security.config.CPrivilege;
+import org.sonatype.nexus.security.config.CRole;
+import org.sonatype.nexus.security.config.SecurityConfigurationManager;
 import org.sonatype.nexus.security.privilege.NoSuchPrivilegeException;
 import org.sonatype.nexus.security.privilege.PrivilegeDescriptor;
 import org.sonatype.nexus.security.role.NoSuchRoleException;

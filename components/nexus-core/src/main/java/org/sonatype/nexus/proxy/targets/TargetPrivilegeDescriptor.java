@@ -18,8 +18,8 @@ import javax.inject.Singleton;
 
 import org.sonatype.configuration.validation.ValidationMessage;
 import org.sonatype.configuration.validation.ValidationResponse;
-import org.sonatype.nexus.security.model.CPrivilege;
-import org.sonatype.nexus.security.model.SecurityConfigurationValidationContext;
+import org.sonatype.nexus.security.config.CPrivilege;
+import org.sonatype.nexus.security.config.SecurityConfigurationValidationContext;
 import org.sonatype.nexus.security.privilege.AbstractPrivilegeDescriptor;
 import org.sonatype.nexus.security.privilege.MethodPrivilegeDescriptor;
 import org.sonatype.nexus.security.privilege.PrivilegeDescriptor;

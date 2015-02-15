@@ -18,10 +18,10 @@ import java.util.Map;
 import java.util.Set;
 
 import org.sonatype.nexus.security.AbstractSecurityTestCase;
-import org.sonatype.nexus.security.model.CPrivilege;
-import org.sonatype.nexus.security.model.CRole;
-import org.sonatype.nexus.security.model.MemorySecurityConfiguration;
-import org.sonatype.nexus.security.model.SecurityConfigurationManager;
+import org.sonatype.nexus.security.config.CPrivilege;
+import org.sonatype.nexus.security.config.CRole;
+import org.sonatype.nexus.security.config.MemorySecurityConfiguration;
+import org.sonatype.nexus.security.config.SecurityConfigurationManager;
 import org.sonatype.nexus.security.privilege.NoSuchPrivilegeException;
 import org.sonatype.nexus.security.privilege.Privilege;
 import org.sonatype.nexus.security.role.NoSuchRoleException;

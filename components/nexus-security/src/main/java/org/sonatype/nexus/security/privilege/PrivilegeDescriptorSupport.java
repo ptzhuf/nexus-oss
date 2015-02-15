@@ -15,8 +15,8 @@ package org.sonatype.nexus.security.privilege;
 import java.util.List;
 
 import org.sonatype.configuration.validation.ValidationResponse;
-import org.sonatype.nexus.security.model.CPrivilege;
-import org.sonatype.nexus.security.model.SecurityConfigurationValidationContext;
+import org.sonatype.nexus.security.config.CPrivilege;
+import org.sonatype.nexus.security.config.SecurityConfigurationValidationContext;
 
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;

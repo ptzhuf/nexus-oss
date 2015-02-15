@@ -16,11 +16,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.sonatype.nexus.security.AbstractSecurityTestCase;
-import org.sonatype.nexus.security.model.CUser;
-import org.sonatype.nexus.security.model.CUserRoleMapping;
-import org.sonatype.nexus.security.model.MemorySecurityConfiguration;
-import org.sonatype.nexus.security.model.SecurityConfigurationManager;
-import org.sonatype.nexus.security.model.SecurityConfigurationManagerImpl;
+import org.sonatype.nexus.security.config.CUser;
+import org.sonatype.nexus.security.config.CUserRoleMapping;
+import org.sonatype.nexus.security.config.MemorySecurityConfiguration;
+import org.sonatype.nexus.security.config.SecurityConfigurationManager;
+import org.sonatype.nexus.security.config.SecurityConfigurationManagerImpl;
 
 import junit.framework.Assert;
 

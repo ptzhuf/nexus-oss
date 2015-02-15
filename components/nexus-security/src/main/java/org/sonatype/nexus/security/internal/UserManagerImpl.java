@@ -23,10 +23,10 @@ import javax.inject.Singleton;
 
 import org.sonatype.configuration.validation.InvalidConfigurationException;
 import org.sonatype.nexus.security.SecuritySystem;
-import org.sonatype.nexus.security.model.CRole;
-import org.sonatype.nexus.security.model.CUser;
-import org.sonatype.nexus.security.model.CUserRoleMapping;
-import org.sonatype.nexus.security.model.SecurityConfigurationManager;
+import org.sonatype.nexus.security.config.CRole;
+import org.sonatype.nexus.security.config.CUser;
+import org.sonatype.nexus.security.config.CUserRoleMapping;
+import org.sonatype.nexus.security.config.SecurityConfigurationManager;
 import org.sonatype.nexus.security.role.NoSuchRoleException;
 import org.sonatype.nexus.security.role.RoleIdentifier;
 import org.sonatype.nexus.security.user.AbstractUserManager;

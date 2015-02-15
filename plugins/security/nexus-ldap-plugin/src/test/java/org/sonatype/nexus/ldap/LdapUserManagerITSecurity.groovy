@@ -12,9 +12,9 @@
  */
 package org.sonatype.nexus.ldap
 
-import org.sonatype.nexus.security.model.CUser
-import org.sonatype.nexus.security.model.CUserRoleMapping
-import org.sonatype.nexus.security.model.MemorySecurityConfiguration
+import org.sonatype.nexus.security.config.CUser
+import org.sonatype.nexus.security.config.CUserRoleMapping
+import org.sonatype.nexus.security.config.MemorySecurityConfiguration
 
 /**
  * @since 3.0
