@@ -11,7 +11,7 @@
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
 
-package org.sonatype.nexus.security.config
+package org.sonatype.nexus.security.settings
 
 import org.sonatype.nexus.security.internal.AuthenticatingRealmImpl
 import org.sonatype.nexus.security.internal.AuthorizingRealmImpl

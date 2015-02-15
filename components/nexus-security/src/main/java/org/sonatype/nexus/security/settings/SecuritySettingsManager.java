@@ -10,21 +10,37 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.security.config;
+package org.sonatype.nexus.security.settings;
 
 import java.util.List;
 
-import org.sonatype.configuration.validation.ValidationRequest;
-import org.sonatype.configuration.validation.ValidationResponse;
+import org.sonatype.configuration.validation.InvalidConfigurationException;
 
-public interface SecuritySettingsValidator
+public interface SecuritySettingsManager
 {
-  ValidationResponse validateModel(SecuritySettingsValidationContext context,
-                                   ValidationRequest<SecuritySettings> request);
+  void setAnonymousAccessEnabled(boolean anonymousAccessEnabled);
 
-  ValidationResponse validateAnonymousUsername(SecuritySettingsValidationContext context, String anonymousUsername);
+  boolean isAnonymousAccessEnabled();
 
-  ValidationResponse validateAnonymousPassword(SecuritySettingsValidationContext context, String anonymousPassword);
+  void setAnonymousUsername(String anonymousUsername) throws InvalidConfigurationException;
 
-  ValidationResponse validateRealms(SecuritySettingsValidationContext context, List<String> realms);
+  String getAnonymousUsername();
+
+  void setAnonymousPassword(String anonymousPassword) throws InvalidConfigurationException;
+
+  String getAnonymousPassword();
+
+  void setRealms(List<String> realms) throws InvalidConfigurationException;
+
+  List<String> getRealms();
+
+  /**
+   * Clear the cache and reload from file
+   */
+  void clearCache();
+
+  /**
+   * Save to disk what is currently cached in memory
+   */
+  void save();
 }

@@ -14,12 +14,12 @@ package org.sonatype.nexus.ldap.internal;
 
 import java.util.List;
 
-import org.sonatype.nexus.security.config.PreconfiguredSecuritySettingsSource;
-import org.sonatype.nexus.security.config.SecuritySettings;
-import org.sonatype.nexus.security.config.SecuritySettingsSource;
 import org.sonatype.nexus.security.model.Configuration;
 import org.sonatype.nexus.security.model.PreconfiguredSecurityModelConfigurationSource;
 import org.sonatype.nexus.security.model.SecurityModelConfigurationSource;
+import org.sonatype.nexus.security.settings.PreconfiguredSecuritySettingsSource;
+import org.sonatype.nexus.security.settings.SecuritySettings;
+import org.sonatype.nexus.security.settings.SecuritySettingsSource;
 import org.sonatype.nexus.test.NexusTestSupport;
 
 import com.google.inject.AbstractModule;

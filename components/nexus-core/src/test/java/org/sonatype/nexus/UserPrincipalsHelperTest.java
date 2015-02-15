@@ -21,10 +21,10 @@ import javax.inject.Singleton;
 
 import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.nexus.security.UserPrincipalsHelper;
-import org.sonatype.nexus.security.config.PreconfiguredSecuritySettingsSource;
-import org.sonatype.nexus.security.config.SecuritySettingsSource;
 import org.sonatype.nexus.security.model.PreconfiguredSecurityModelConfigurationSource;
 import org.sonatype.nexus.security.model.SecurityModelConfigurationSource;
+import org.sonatype.nexus.security.settings.PreconfiguredSecuritySettingsSource;
+import org.sonatype.nexus.security.settings.SecuritySettingsSource;
 import org.sonatype.nexus.security.user.AbstractReadOnlyUserManager;
 import org.sonatype.nexus.security.user.NoSuchUserManagerException;
 import org.sonatype.nexus.security.user.User;

@@ -12,8 +12,8 @@
  */
 package org.sonatype.nexus.security;
 
-import org.sonatype.nexus.security.config.PreconfiguredSecuritySettingsSource;
-import org.sonatype.nexus.security.config.SecuritySettingsSource;
+import org.sonatype.nexus.security.settings.PreconfiguredSecuritySettingsSource;
+import org.sonatype.nexus.security.settings.SecuritySettingsSource;
 import org.sonatype.sisu.litmus.testsupport.TestUtil;
 
 import com.google.inject.Binder;

@@ -12,10 +12,10 @@
  */
 package org.sonatype.nexus
 
-import org.sonatype.nexus.security.config.SecuritySettings
 import org.sonatype.nexus.security.model.CUser
 import org.sonatype.nexus.security.model.CUserRoleMapping
 import org.sonatype.nexus.security.model.Configuration
+import org.sonatype.nexus.security.settings.SecuritySettings
 
 /**
  * @since 3.0

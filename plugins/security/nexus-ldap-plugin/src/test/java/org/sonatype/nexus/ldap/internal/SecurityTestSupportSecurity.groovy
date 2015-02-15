@@ -12,7 +12,7 @@
  */
 package org.sonatype.nexus.ldap.internal
 
-import org.sonatype.nexus.security.config.SecuritySettings
+import org.sonatype.nexus.security.settings.SecuritySettings
 
 /**
  * @since 3.0

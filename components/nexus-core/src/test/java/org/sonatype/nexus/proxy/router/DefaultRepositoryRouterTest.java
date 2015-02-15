@@ -43,8 +43,8 @@ import org.sonatype.nexus.proxy.security.PlexusConfiguredRealm;
 import org.sonatype.nexus.proxy.targets.Target;
 import org.sonatype.nexus.proxy.targets.TargetRegistry;
 import org.sonatype.nexus.security.SecuritySystem;
-import org.sonatype.nexus.security.config.PreconfiguredSecuritySettingsSource;
-import org.sonatype.nexus.security.config.SecuritySettingsSource;
+import org.sonatype.nexus.security.settings.PreconfiguredSecuritySettingsSource;
+import org.sonatype.nexus.security.settings.SecuritySettingsSource;
 
 import com.google.common.collect.Maps;
 import com.google.inject.Binder;

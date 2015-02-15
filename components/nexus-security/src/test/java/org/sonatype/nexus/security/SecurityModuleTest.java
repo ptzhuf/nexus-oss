@@ -15,8 +15,8 @@ package org.sonatype.nexus.security;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.sonatype.nexus.security.config.PreconfiguredSecuritySettingsSource;
-import org.sonatype.nexus.security.config.SecuritySettingsSource;
+import org.sonatype.nexus.security.settings.PreconfiguredSecuritySettingsSource;
+import org.sonatype.nexus.security.settings.SecuritySettingsSource;
 import org.sonatype.sisu.ehcache.CacheManagerComponent;
 import org.sonatype.sisu.litmus.testsupport.TestSupport;
 
