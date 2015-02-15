@@ -28,7 +28,7 @@ public class SecurityConfiguration
 
   private String anonymousPassword;
 
-  private java.util.List<String> realms;
+  private List<String> realms;
 
   public boolean isAnonymousAccessEnabled() {
     return this.anonymousAccessEnabled;
