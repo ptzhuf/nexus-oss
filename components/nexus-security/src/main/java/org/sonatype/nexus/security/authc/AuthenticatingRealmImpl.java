@@ -58,9 +58,9 @@ public class AuthenticatingRealmImpl
 
   private static final int MAX_LEGACY_PASSWORD_LENGTH = 40;
 
-  private ConfigurationManager configuration;
+  private final ConfigurationManager configuration;
 
-  private PasswordService passwordService;
+  private final PasswordService passwordService;
 
   @Inject
   public AuthenticatingRealmImpl(final ConfigurationManager configuration,
@@ -77,7 +77,7 @@ public class AuthenticatingRealmImpl
   }
 
   @Override
-  protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+  protected AuthenticationInfo doGetAuthenticationInfo(final AuthenticationToken token) throws AuthenticationException {
     UsernamePasswordToken upToken = (UsernamePasswordToken) token;
 
     CUser user;
@@ -99,7 +99,7 @@ public class AuthenticatingRealmImpl
         reHashPassword(user, new String(upToken.getPassword()));
       }
 
-      return this.createAuthenticationInfo(user);
+      return createAuthenticationInfo(user);
     }
     else if (CUser.STATUS_DISABLED.equals(user.getStatus())) {
       throw new DisabledAccountException("User '" + upToken.getUsername() + "' is disabled.");
@@ -146,11 +146,11 @@ public class AuthenticatingRealmImpl
    * @param user object containing the stored credentials
    * @return true if credentials match, false otherwise
    */
-  private boolean isValidCredentials(UsernamePasswordToken token, CUser user) {
+  private boolean isValidCredentials(final UsernamePasswordToken token, final CUser user) {
     boolean credentialsValid = false;
 
-    AuthenticationInfo info = this.createAuthenticationInfo(user);
-    CredentialsMatcher matcher = this.getCredentialsMatcher();
+    AuthenticationInfo info = createAuthenticationInfo(user);
+    CredentialsMatcher matcher = getCredentialsMatcher();
     if (matcher != null) {
       if (matcher.doCredentialsMatch(token, info)) {
         credentialsValid = true;
