@@ -100,8 +100,7 @@ public class UserManagerImpl
     }
     catch (UserNotFoundException e) {
       // We should NEVER get here
-      this.log.warn("Could not find user: '" + cUser.getId() + "' of source: '" + SOURCE
-          + "' while looking up the users roles.", e);
+      log.warn("Could not find user: '{}' of source: '{}' while looking up the users roles.", cUser.getId(), SOURCE, e);
     }
 
     return user;
@@ -201,7 +200,7 @@ public class UserManagerImpl
       }
     }
     catch (NoSuchRoleMappingException e) {
-      log.debug("No user role mapping found for user: " + userId);
+      log.debug("No user role mapping found for user: {}", userId);
     }
 
     return roles;
@@ -224,12 +223,12 @@ public class UserManagerImpl
             users.add(user);
           }
           catch (UserNotFoundException e) {
-            log.debug("User: '" + roleMapping.getUserId() + "' of source: '"
-                + roleMapping.getSource() + "' could not be found.", e);
+            log.debug("User: '{}' of source: '{}' could not be found.",
+                roleMapping.getUserId(), roleMapping.getSource(), e);
           }
           catch (NoSuchUserManagerException e) {
-            log.warn("User: '" + roleMapping.getUserId() + "' of source: '"
-                + roleMapping.getSource() + "' could not be found.", e);
+            log.warn("User: '{}' of source: '{}' could not be found.",
+                roleMapping.getUserId(), roleMapping.getSource(), e);
           }
 
         }
@@ -261,8 +260,8 @@ public class UserManagerImpl
         configuration.deleteUserRoleMapping(userId, userSource);
       }
       catch (NoSuchRoleMappingException e) {
-        log.debug("User role mapping for user: " + userId + " source: " + userSource
-            + " could not be deleted because it does not exist.");
+        log.debug("User role mapping for user: {} source: {} could not be deleted because it does not exist.",
+            userId, userSource);
       }
     }
     else {
@@ -284,8 +283,8 @@ public class UserManagerImpl
       }
       catch (NoSuchRoleMappingException e) {
         // update failed try create
-        log.debug("Update of user role mapping for user: " + userId + " source: " + userSource
-            + " did not exist, creating new one.");
+        log.debug("Update of user role mapping for user: {} source: {} did not exist, creating new one.",
+            userId, userSource);
         configuration.createUserRoleMapping(roleMapping);
       }
     }

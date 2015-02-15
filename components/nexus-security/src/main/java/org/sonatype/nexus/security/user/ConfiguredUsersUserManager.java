@@ -74,14 +74,13 @@ public class ConfiguredUsersUserManager
         }
       }
       catch (UserNotFoundException e) {
-        this.log.warn("User: '" + userRoleMapping.getUserId() + "' of source: '"
-            + userRoleMapping.getSource() + "' could not be found.");
-
-        this.log.debug("Most likely caused by a user role mapping that is invalid.", e);
+        log.warn("User: '{}' of source: '{}' could not be found.",
+            userRoleMapping.getUserId(), userRoleMapping.getSource());
+        log.debug("Most likely caused by a user role mapping that is invalid.", e);
       }
       catch (NoSuchUserManagerException e) {
-        this.log.warn("User: '" + userRoleMapping.getUserId() + "' of source: '"
-            + userRoleMapping.getSource() + "' could not be found.", e);
+        log.warn("User: '{}' of source: '{}' could not be found.",
+            userRoleMapping.getUserId(), userRoleMapping.getSource(), e);
       }
     }
 

@@ -28,24 +28,24 @@ public abstract class AbstractReadOnlyUserManager
   }
 
   public User addUser(User user, String password) throws InvalidConfigurationException {
-    this.throwException();
+    throwException();
     return null;
   }
 
   public void changePassword(String userId, String newPassword) throws UserNotFoundException {
-    this.throwException();
+    throwException();
   }
 
   public void deleteUser(String userId) throws UserNotFoundException {
-    this.throwException();
+    throwException();
   }
 
   public User updateUser(User user) throws UserNotFoundException, InvalidConfigurationException {
-    this.throwException();
+    throwException();
     return null;
   }
 
   private void throwException() {
-    throw new IllegalStateException("UserManager: '" + this.getSource() + "' does not support write operations.");
+    throw new IllegalStateException("UserManager: '" + getSource() + "' does not support write operations.");
   }
 }
