@@ -12,6 +12,8 @@
  */
 package org.sonatype.nexus.security.config;
 
+import java.util.List;
+
 import com.google.common.collect.Lists;
 
 /**
@@ -28,16 +30,28 @@ public class SecurityConfiguration
 
   private java.util.List<String> realms;
 
-  public void addRealm(String string) {
-    getRealms().add(string);
+  public boolean isAnonymousAccessEnabled() {
+    return this.anonymousAccessEnabled;
+  }
+
+  public void setAnonymousAccessEnabled(boolean anonymousAccessEnabled) {
+    this.anonymousAccessEnabled = anonymousAccessEnabled;
+  }
+
+  public String getAnonymousUsername() {
+    return this.anonymousUsername;
+  }
+
+  public void setAnonymousUsername(String anonymousUsername) {
+    this.anonymousUsername = anonymousUsername;
   }
 
   public String getAnonymousPassword() {
     return this.anonymousPassword;
   }
 
-  public String getAnonymousUsername() {
-    return this.anonymousUsername;
+  public void setAnonymousPassword(String anonymousPassword) {
+    this.anonymousPassword = anonymousPassword;
   }
 
   public java.util.List<String> getRealms() {
@@ -48,27 +62,7 @@ public class SecurityConfiguration
     return this.realms;
   }
 
-  public boolean isAnonymousAccessEnabled() {
-    return this.anonymousAccessEnabled;
-  }
-
-  public void removeRealm(String string) {
-    getRealms().remove(string);
-  }
-
-  public void setAnonymousAccessEnabled(boolean anonymousAccessEnabled) {
-    this.anonymousAccessEnabled = anonymousAccessEnabled;
-  }
-
-  public void setAnonymousPassword(String anonymousPassword) {
-    this.anonymousPassword = anonymousPassword;
-  }
-
-  public void setAnonymousUsername(String anonymousUsername) {
-    this.anonymousUsername = anonymousUsername;
-  }
-
-  public void setRealms(java.util.List<String> realms) {
+  public void setRealms(List<String> realms) {
     this.realms = realms;
   }
 }
