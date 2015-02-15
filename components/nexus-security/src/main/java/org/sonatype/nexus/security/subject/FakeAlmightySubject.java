@@ -10,7 +10,7 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.threads;
+package org.sonatype.nexus.security.subject;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -31,6 +31,8 @@ import org.apache.shiro.subject.support.SubjectRunnable;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+
+// FIXME: Rename to TaskSubject or drop task concept and change to SystemSubject?
 
 /**
  * An "almighty" subject, that has all permissions, all roles, has all. Mostly to be used in thread pools and executor

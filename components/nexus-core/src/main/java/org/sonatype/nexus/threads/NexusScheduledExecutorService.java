@@ -15,6 +15,10 @@ package org.sonatype.nexus.threads;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ScheduledExecutorService;
 
+import org.sonatype.nexus.security.subject.CurrentSubjectProvider;
+import org.sonatype.nexus.security.subject.FixedSubjectProvider;
+import org.sonatype.nexus.security.subject.SubjectProvider;
+
 import org.apache.shiro.concurrent.SubjectAwareScheduledExecutorService;
 import org.apache.shiro.subject.Subject;
 

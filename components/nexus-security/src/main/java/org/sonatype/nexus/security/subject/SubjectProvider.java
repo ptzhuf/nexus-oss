@@ -10,29 +10,17 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.threads;
+package org.sonatype.nexus.security.subject;
 
 import org.apache.shiro.subject.Subject;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 /**
- * {@link SubjectProvider} implementation that always returns the "fixed" subject.
+ * Subject provider that provides Subject instance to bind the Runnable or Callable against.
  *
  * @author cstamas
  * @since 2.6
  */
-public class FixedSubjectProvider
-    implements SubjectProvider
+public interface SubjectProvider
 {
-  private final Subject subject;
-
-  public FixedSubjectProvider(final Subject subject) {
-    this.subject = checkNotNull(subject);
-  }
-
-  @Override
-  public Subject getSubject() {
-    return subject;
-  }
+  Subject getSubject();
 }
