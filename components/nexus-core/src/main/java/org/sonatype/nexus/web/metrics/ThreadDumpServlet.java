@@ -18,6 +18,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import static com.google.common.net.HttpHeaders.CONTENT_DISPOSITION;
+
 /**
  * Customized {@link com.codahale.metrics.servlets.ThreadDumpServlet} to support download.
  *
@@ -32,7 +34,7 @@ public class ThreadDumpServlet
   {
     boolean download = Boolean.parseBoolean(req.getParameter("download"));
     if (download) {
-      resp.addHeader("Content-Disposition", "attachment; filename='threads.txt'");
+      resp.addHeader(CONTENT_DISPOSITION, "attachment; filename='threads.txt'");
     }
 
     super.doGet(req, resp);

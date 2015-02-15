@@ -30,6 +30,7 @@ import com.codahale.metrics.jvm.MemoryUsageGaugeSet;
 import com.codahale.metrics.jvm.ThreadStatesGaugeSet;
 
 import static com.codahale.metrics.MetricRegistry.name;
+import static com.google.common.net.HttpHeaders.CONTENT_DISPOSITION;
 
 /**
  * Customized {@link com.codahale.metrics.servlets.MetricsServlet} to support injection and download.
@@ -59,7 +60,7 @@ public class MetricsServlet
   {
     boolean download = Boolean.parseBoolean(req.getParameter("download"));
     if (download) {
-      resp.addHeader("Content-Disposition", "attachment; filename='metrics.json'");
+      resp.addHeader(CONTENT_DISPOSITION, "attachment; filename='metrics.json'");
     }
 
     super.doGet(req, resp);
