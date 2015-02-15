@@ -20,7 +20,7 @@ import org.sonatype.nexus.security.config.CUser;
 import org.sonatype.nexus.security.config.CUserRoleMapping;
 import org.sonatype.nexus.security.config.MemorySecurityConfiguration;
 import org.sonatype.nexus.security.config.SecurityConfigurationManager;
-import org.sonatype.nexus.security.config.SecurityConfigurationManagerImpl;
+import org.sonatype.nexus.security.internal.SecurityConfigurationManagerImpl;
 
 import junit.framework.Assert;
 

@@ -12,6 +12,7 @@
  */
 package org.sonatype.nexus.security.config;
 
+import org.sonatype.nexus.security.internal.SecurityConfigurationCleanerImpl;
 import org.sonatype.sisu.litmus.testsupport.TestSupport;
 
 import org.junit.Before;

@@ -10,13 +10,17 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.security.config;
+package org.sonatype.nexus.security.internal;
 
 import java.util.ConcurrentModificationException;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.sonatype.nexus.security.config.CRole;
+import org.sonatype.nexus.security.config.CUserRoleMapping;
+import org.sonatype.nexus.security.config.SecurityConfiguration;
+import org.sonatype.nexus.security.config.SecurityConfigurationCleaner;
 import org.sonatype.nexus.security.role.NoSuchRoleException;
 import org.sonatype.nexus.security.user.NoSuchRoleMappingException;
 import org.sonatype.sisu.goodies.common.ComponentSupport;

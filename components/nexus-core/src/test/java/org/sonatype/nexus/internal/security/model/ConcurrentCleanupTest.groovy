@@ -25,8 +25,8 @@ import org.sonatype.nexus.security.config.CRole
 import org.sonatype.nexus.security.config.CUserRoleMapping
 import org.sonatype.nexus.security.config.SecurityConfiguration
 import org.sonatype.nexus.security.config.SecurityConfigurationCleaner
-import org.sonatype.nexus.security.config.SecurityConfigurationCleanerImpl
 import org.sonatype.nexus.security.config.StaticSecurityConfigurationSource
+import org.sonatype.nexus.security.internal.SecurityConfigurationCleanerImpl
 import org.sonatype.sisu.litmus.testsupport.TestSupport
 
 import java.util.concurrent.CountDownLatch

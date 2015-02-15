@@ -21,8 +21,8 @@ import org.sonatype.nexus.security.AbstractSecurityTestCase;
 import org.sonatype.nexus.security.config.CPrivilege;
 import org.sonatype.nexus.security.config.CRole;
 import org.sonatype.nexus.security.config.CUser;
-import org.sonatype.nexus.security.config.SecurityConfigurationManagerImpl;
 import org.sonatype.nexus.security.internal.AuthenticatingRealmImpl;
+import org.sonatype.nexus.security.internal.SecurityConfigurationManagerImpl;
 
 import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
