@@ -22,16 +22,16 @@ import org.sonatype.configuration.validation.ValidationResponse;
 
 @Named
 @Singleton
-public class SecurityConfigurationValidatorImpl
-    implements SecurityConfigurationValidator
+public class SecuritySettingsValidatorImpl
+    implements SecuritySettingsValidator
 {
-  public ValidationResponse validateModel(SecurityValidationContext context,
-                                          ValidationRequest<SecurityConfiguration> request)
+  public ValidationResponse validateModel(SecuritySettingsValidationContext context,
+                                          ValidationRequest<SecuritySettings> request)
   {
     ValidationResponse validationResponse = new ValidationResponse();
     validationResponse.setContext(context);
 
-    SecurityConfiguration configuration = request.getConfiguration();
+    SecuritySettings configuration = request.getConfiguration();
 
     validationResponse.append(this.validateAnonymousUsername(context, configuration.getAnonymousUsername()));
     validationResponse.append(this.validateAnonymousPassword(context, configuration.getAnonymousPassword()));
@@ -40,25 +40,25 @@ public class SecurityConfigurationValidatorImpl
     return validationResponse;
   }
 
-  public ValidationResponse validateAnonymousPassword(SecurityValidationContext context, String anonymousPassword) {
+  public ValidationResponse validateAnonymousPassword(SecuritySettingsValidationContext context, String anonymousPassword) {
     // we are not currently doing anything here
     ValidationResponse validationResponse = new ValidationResponse();
     validationResponse.setContext(context);
     return validationResponse;
   }
 
-  public ValidationResponse validateAnonymousUsername(SecurityValidationContext context, String anonymousUsername) {
+  public ValidationResponse validateAnonymousUsername(SecuritySettingsValidationContext context, String anonymousUsername) {
     // we are not currently doing anything here
     ValidationResponse validationResponse = new ValidationResponse();
     validationResponse.setContext(context);
     return validationResponse;
   }
 
-  public ValidationResponse validateRealms(SecurityValidationContext context, List<String> realms) {
+  public ValidationResponse validateRealms(SecuritySettingsValidationContext context, List<String> realms) {
     ValidationResponse validationResponse = new ValidationResponse();
     validationResponse.setContext(context);
 
-    if (context.getSecurityConfiguration() == null) {
+    if (context.getSecuritySettings() == null) {
       if (realms.size() < 1) {
         validationResponse.addValidationError("Security is enabled, You must have at least one realm enabled.");
       }

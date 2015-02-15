@@ -23,7 +23,7 @@ import org.sonatype.nexus.ldap.internal.SecurityTestSupportSecurity;
 import org.sonatype.nexus.ldap.internal.persist.entity.LdapConfiguration;
 import org.sonatype.nexus.ldap.internal.persist.entity.Mapping;
 import org.sonatype.nexus.security.SecuritySystem;
-import org.sonatype.nexus.security.config.SecurityConfiguration;
+import org.sonatype.nexus.security.config.SecuritySettings;
 import org.sonatype.nexus.security.internal.AuthenticatingRealmImpl;
 import org.sonatype.nexus.security.model.Configuration;
 import org.sonatype.nexus.security.role.Role;
@@ -53,7 +53,7 @@ public class LdapUserManagerIT
   }
 
   @Override
-  protected SecurityConfiguration getSecurityConfig() {
+  protected SecuritySettings getSecurityConfig() {
     return SecurityTestSupportSecurity.securityWithLdapRealm();
   }
 

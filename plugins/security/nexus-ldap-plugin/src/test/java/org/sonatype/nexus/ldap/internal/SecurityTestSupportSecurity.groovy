@@ -12,7 +12,7 @@
  */
 package org.sonatype.nexus.ldap.internal
 
-import org.sonatype.nexus.security.config.SecurityConfiguration
+import org.sonatype.nexus.security.config.SecuritySettings
 
 /**
  * @since 3.0
@@ -20,8 +20,8 @@ import org.sonatype.nexus.security.config.SecurityConfiguration
 class SecurityTestSupportSecurity
 {
 
-  static SecurityConfiguration securityWithLdapRealm() {
-    return new SecurityConfiguration(
+  static SecuritySettings securityWithLdapRealm() {
+    return new SecuritySettings(
         anonymousAccessEnabled: false,
         anonymousUsername: 'anonymous',
         realms: [

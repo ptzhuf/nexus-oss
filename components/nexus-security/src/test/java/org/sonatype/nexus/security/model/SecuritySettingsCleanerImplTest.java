@@ -22,7 +22,7 @@ import static org.junit.Assert.assertFalse;
 /**
  * Tests for {@link SecurityConfigurationCleanerImpl}.
  */
-public class SecurityConfigurationCleanerImplTest
+public class SecuritySettingsCleanerImplTest
     extends TestSupport
 {
   private SecurityConfigurationCleanerImpl underTest;

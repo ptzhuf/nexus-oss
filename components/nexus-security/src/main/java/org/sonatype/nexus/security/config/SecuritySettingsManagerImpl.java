@@ -26,24 +26,24 @@ import org.sonatype.sisu.goodies.common.ComponentSupport;
 
 @Named
 @Singleton
-public class SecurityConfigurationManagerImpl
+public class SecuritySettingsManagerImpl
     extends ComponentSupport
-    implements SecurityConfigurationManager
+    implements SecuritySettingsManager
 {
-  private final SecurityConfigurationSource configurationSource;
+  private final SecuritySettingsSource configurationSource;
 
-  private final SecurityConfigurationValidator validator;
+  private final SecuritySettingsValidator validator;
 
   /**
    * This will hold the current configuration in memory, to reload, will need to set this to null
    */
-  private SecurityConfiguration configuration = null;
+  private SecuritySettings configuration = null;
 
   private ReentrantLock lock = new ReentrantLock();
 
   @Inject
-  public SecurityConfigurationManagerImpl(final SecurityConfigurationSource configurationSource,
-                                          final SecurityConfigurationValidator validator)
+  public SecuritySettingsManagerImpl(final SecuritySettingsSource configurationSource,
+                                     final SecuritySettingsValidator validator)
   {
     this.configurationSource = configurationSource;
     this.validator = validator;
@@ -102,7 +102,7 @@ public class SecurityConfigurationManagerImpl
     }
   }
 
-  private SecurityConfiguration getConfiguration() {
+  private SecuritySettings getConfiguration() {
     if (configuration != null) {
       return configuration;
     }
@@ -139,9 +139,9 @@ public class SecurityConfigurationManagerImpl
     }
   }
 
-  private SecurityValidationContext initializeContext() {
-    SecurityValidationContext context = new SecurityValidationContext();
-    context.setSecurityConfiguration(this.getConfiguration());
+  private SecuritySettingsValidationContext initializeContext() {
+    SecuritySettingsValidationContext context = new SecuritySettingsValidationContext();
+    context.setSecuritySettings(this.getConfiguration());
 
     return context;
   }

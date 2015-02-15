@@ -12,18 +12,27 @@
  */
 package org.sonatype.nexus.security.config;
 
-import org.sonatype.configuration.validation.ValidationContext;
-
-public class SecurityValidationContext
-    implements ValidationContext
+/**
+ * Source of {@link SecuritySettings}.
+ */
+public interface SecuritySettingsSource
 {
-  private SecurityConfiguration securityConfiguration;
+  /**
+   * Persists the current configuration.
+   */
+  void storeConfiguration();
 
-  public SecurityConfiguration getSecurityConfiguration() {
-    return securityConfiguration;
-  }
+  /**
+   * Gets the current configuration.
+   *
+   * @return the configuration, null if not loaded
+   */
+  SecuritySettings getConfiguration();
 
-  public void setSecurityConfiguration(SecurityConfiguration securityConfiguration) {
-    this.securityConfiguration = securityConfiguration;
-  }
+  /**
+   * Forces reloading the user configuration.
+   *
+   * @return the configuration
+   */
+  SecuritySettings loadConfiguration();
 }

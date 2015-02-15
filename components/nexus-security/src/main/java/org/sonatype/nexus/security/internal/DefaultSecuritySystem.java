@@ -34,7 +34,7 @@ import org.sonatype.nexus.security.UserPrincipalsExpired;
 import org.sonatype.nexus.security.authz.AuthorizationConfigurationChanged;
 import org.sonatype.nexus.security.authz.AuthorizationManager;
 import org.sonatype.nexus.security.authz.NoSuchAuthorizationManagerException;
-import org.sonatype.nexus.security.config.SecurityConfigurationManager;
+import org.sonatype.nexus.security.config.SecuritySettingsManager;
 import org.sonatype.nexus.security.privilege.Privilege;
 import org.sonatype.nexus.security.role.Role;
 import org.sonatype.nexus.security.role.RoleIdentifier;
@@ -78,7 +78,7 @@ public class DefaultSecuritySystem
     extends ComponentSupport
     implements SecuritySystem
 {
-  private SecurityConfigurationManager securityConfiguration;
+  private SecuritySettingsManager securitySettingsManager;
 
   private RealmSecurityManager securityManager;
 
@@ -100,7 +100,7 @@ public class DefaultSecuritySystem
   public DefaultSecuritySystem(final EventBus eventBus,
                                final Map<String, AuthorizationManager> authorizationManagers,
                                final Map<String, Realm> realmMap,
-                               final SecurityConfigurationManager securityConfiguration,
+                               final SecuritySettingsManager securitySettingsManager,
                                final RealmSecurityManager securityManager,
                                final CacheManager cacheManager,
                                final Map<String, UserManager> userManagers)
@@ -108,7 +108,7 @@ public class DefaultSecuritySystem
     this.eventBus = eventBus;
     this.authorizationManagers = authorizationManagers;
     this.realmMap = realmMap;
-    this.securityConfiguration = securityConfiguration;
+    this.securitySettingsManager = securitySettingsManager;
     this.securityManager = securityManager;
     this.cacheManager = cacheManager;
 
@@ -152,7 +152,7 @@ public class DefaultSecuritySystem
   private Collection<Realm> getRealmsFromConfigSource() {
     List<Realm> realms = new ArrayList<Realm>();
 
-    List<String> realmIds = securityConfiguration.getRealms();
+    List<String> realmIds = securitySettingsManager.getRealms();
 
     for (String realmId : realmIds) {
       if (realmMap.containsKey(realmId)) {
@@ -519,11 +519,11 @@ public class DefaultSecuritySystem
   }
 
   public String getAnonymousUsername() {
-    return securityConfiguration.getAnonymousUsername();
+    return securitySettingsManager.getAnonymousUsername();
   }
 
   public boolean isAnonymousAccessEnabled() {
-    return securityConfiguration.isAnonymousAccessEnabled();
+    return securitySettingsManager.isAnonymousAccessEnabled();
   }
 
   public void changePassword(String userId, String oldPassword, String newPassword)
@@ -565,32 +565,32 @@ public class DefaultSecuritySystem
   }
 
   public List<String> getRealms() {
-    return new ArrayList<String>(securityConfiguration.getRealms());
+    return new ArrayList<String>(securitySettingsManager.getRealms());
   }
 
   public void setRealms(List<String> realms) throws InvalidConfigurationException {
-    securityConfiguration.setRealms(realms);
-    securityConfiguration.save();
+    securitySettingsManager.setRealms(realms);
+    securitySettingsManager.save();
 
     // update the realms in the security manager
     setSecurityManagerRealms();
   }
 
   public void setAnonymousAccessEnabled(boolean enabled) {
-    securityConfiguration.setAnonymousAccessEnabled(enabled);
-    securityConfiguration.save();
+    securitySettingsManager.setAnonymousAccessEnabled(enabled);
+    securitySettingsManager.save();
   }
 
   public void setAnonymousUsername(String anonymousUsername) throws InvalidConfigurationException {
     User user = null;
     try {
-      user = getUser(securityConfiguration.getAnonymousUsername());
+      user = getUser(securitySettingsManager.getAnonymousUsername());
     }
     catch (UserNotFoundException e) {
       // ignore
     }
-    securityConfiguration.setAnonymousUsername(anonymousUsername);
-    securityConfiguration.save();
+    securitySettingsManager.setAnonymousUsername(anonymousUsername);
+    securitySettingsManager.save();
     // flush authc, if anon existed before change
     if (user != null) {
       eventBus.post(new UserPrincipalsExpired(user.getUserId(), user.getSource()));
@@ -598,19 +598,19 @@ public class DefaultSecuritySystem
   }
 
   public String getAnonymousPassword() {
-    return securityConfiguration.getAnonymousPassword();
+    return securitySettingsManager.getAnonymousPassword();
   }
 
   public void setAnonymousPassword(String anonymousPassword) throws InvalidConfigurationException {
     User user = null;
     try {
-      user = getUser(securityConfiguration.getAnonymousUsername());
+      user = getUser(securitySettingsManager.getAnonymousUsername());
     }
     catch (UserNotFoundException e) {
       // ignore
     }
-    securityConfiguration.setAnonymousPassword(anonymousPassword);
-    securityConfiguration.save();
+    securitySettingsManager.setAnonymousPassword(anonymousPassword);
+    securitySettingsManager.save();
     if (user != null) {
       // flush authc, if anon exists
       eventBus.post(new UserPrincipalsExpired(user.getUserId(), user.getSource()));
@@ -623,7 +623,7 @@ public class DefaultSecuritySystem
           + " was already started, same instance is not re-startable!");
     }
     // reload the config
-    securityConfiguration.clearCache();
+    securitySettingsManager.clearCache();
 
     // setup the CacheManager ( this could be injected if we where less coupled with ehcache)
     // The plexus wrapper can interpolate the config
@@ -737,7 +737,7 @@ public class DefaultSecuritySystem
   public void onEvent(final SecurityConfigurationChanged event) {
     clearAuthcRealmCaches();
     clearAuthzRealmCaches();
-    securityConfiguration.clearCache();
+    securitySettingsManager.clearCache();
     setSecurityManagerRealms();
   }
 

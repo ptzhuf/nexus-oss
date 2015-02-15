@@ -20,7 +20,7 @@ import javax.inject.Singleton;
 
 import org.sonatype.nexus.orient.OClassNameBuilder;
 import org.sonatype.nexus.security.config.PasswordHelper;
-import org.sonatype.nexus.security.config.SecurityConfiguration;
+import org.sonatype.nexus.security.config.SecuritySettings;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
 
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
@@ -32,7 +32,7 @@ import com.orientechnologies.orient.core.record.impl.ODocument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * {@link SecurityConfiguration} entity adapter.
+ * {@link SecuritySettings} entity adapter.
  *
  * @since 3.0
  */
@@ -82,7 +82,7 @@ public class SecurityConfigurationEntityAdapter
   /**
    * Create a new document and write entity.
    */
-  public ODocument create(final ODatabaseDocumentTx db, final SecurityConfiguration entity) {
+  public ODocument create(final ODatabaseDocumentTx db, final SecuritySettings entity) {
     checkNotNull(db);
     checkNotNull(entity);
 
@@ -93,7 +93,7 @@ public class SecurityConfigurationEntityAdapter
   /**
    * Write entity to document.
    */
-  public ODocument write(final ODocument document, final SecurityConfiguration entity) {
+  public ODocument write(final ODocument document, final SecuritySettings entity) {
     checkNotNull(document);
     checkNotNull(entity);
 
@@ -114,7 +114,7 @@ public class SecurityConfigurationEntityAdapter
   /**
    * Read entity from document.
    */
-  public SecurityConfiguration read(final ODocument document) {
+  public SecuritySettings read(final ODocument document) {
     checkNotNull(document);
 
     boolean anonymousEnabled = document.field(P_ANONYMOUS_ACCESS_ENABLED, OType.BOOLEAN);
@@ -122,7 +122,7 @@ public class SecurityConfigurationEntityAdapter
     String anonymousPassword = document.field(P_ANONYMOUS_PASSWORD, OType.STRING);
     List<String> realms = document.field(P_REALMS, OType.EMBEDDEDLIST);
 
-    SecurityConfiguration entity = new SecurityConfiguration();
+    SecuritySettings entity = new SecuritySettings();
     entity.setAnonymousAccessEnabled(anonymousEnabled);
     entity.setAnonymousUsername(anonymousUsername);
     try {

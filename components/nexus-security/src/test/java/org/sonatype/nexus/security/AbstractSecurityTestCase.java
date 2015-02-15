@@ -16,9 +16,9 @@ import java.io.File;
 import java.util.Properties;
 
 import org.sonatype.nexus.common.io.DirSupport;
-import org.sonatype.nexus.security.config.PreconfiguredSecurityConfigurationSource;
-import org.sonatype.nexus.security.config.SecurityConfiguration;
-import org.sonatype.nexus.security.config.SecurityConfigurationSource;
+import org.sonatype.nexus.security.config.PreconfiguredSecuritySettingsSource;
+import org.sonatype.nexus.security.config.SecuritySettings;
+import org.sonatype.nexus.security.config.SecuritySettingsSource;
 import org.sonatype.nexus.security.model.Configuration;
 import org.sonatype.nexus.security.model.PreconfiguredSecurityModelConfigurationSource;
 import org.sonatype.nexus.security.model.SecurityModelConfiguration;
@@ -52,15 +52,15 @@ public abstract class AbstractSecurityTestCase
   @Override
   public void configure(final Binder binder) {
     binder.install(new SecurityModule());
-    binder.bind(SecurityConfigurationSource.class)
+    binder.bind(SecuritySettingsSource.class)
         .annotatedWith(Names.named("default"))
-        .toInstance(new PreconfiguredSecurityConfigurationSource(getSecurityConfig()));
+        .toInstance(new PreconfiguredSecuritySettingsSource(getSecurityConfig()));
     binder.bind(SecurityModelConfigurationSource.class)
         .annotatedWith(Names.named("default"))
         .toInstance(new PreconfiguredSecurityModelConfigurationSource(getSecurityModelConfig()));
   }
 
-  protected SecurityConfiguration getSecurityConfig() {
+  protected SecuritySettings getSecurityConfig() {
     return AbstractSecurityTestCaseSecurity.security();
   }
 

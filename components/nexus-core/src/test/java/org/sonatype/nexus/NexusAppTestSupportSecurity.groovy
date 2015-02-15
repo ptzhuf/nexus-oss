@@ -12,7 +12,7 @@
  */
 package org.sonatype.nexus
 
-import org.sonatype.nexus.security.config.SecurityConfiguration
+import org.sonatype.nexus.security.config.SecuritySettings
 import org.sonatype.nexus.security.model.CUser
 import org.sonatype.nexus.security.model.CUserRoleMapping
 import org.sonatype.nexus.security.model.Configuration
@@ -23,8 +23,8 @@ import org.sonatype.nexus.security.model.Configuration
 class NexusAppTestSupportSecurity
 {
 
-  static SecurityConfiguration security() {
-    return new SecurityConfiguration(
+  static SecuritySettings security() {
+    return new SecuritySettings(
         anonymousAccessEnabled: false,
         anonymousUsername: 'anonymous',
         realms: [

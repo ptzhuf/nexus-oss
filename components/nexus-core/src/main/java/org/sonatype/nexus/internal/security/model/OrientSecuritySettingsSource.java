@@ -21,8 +21,8 @@ import org.sonatype.nexus.events.EventSubscriber;
 import org.sonatype.nexus.orient.DatabaseInstance;
 import org.sonatype.nexus.proxy.events.NexusInitializedEvent;
 import org.sonatype.nexus.proxy.events.NexusStoppingEvent;
-import org.sonatype.nexus.security.config.SecurityConfiguration;
-import org.sonatype.nexus.security.config.SecurityConfigurationSource;
+import org.sonatype.nexus.security.config.SecuritySettings;
+import org.sonatype.nexus.security.config.SecuritySettingsSource;
 import org.sonatype.sisu.goodies.lifecycle.LifecycleSupport;
 
 import com.google.common.eventbus.Subscribe;
@@ -32,7 +32,7 @@ import com.orientechnologies.orient.core.record.impl.ODocument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Default {@link SecurityConfigurationSource} implementation using Orient db as store.
+ * Default {@link SecuritySettingsSource} implementation using Orient db as store.
  *
  * TODO remove EventSubscriber and replace with component lifecycle (NEXUS-7303)
  *
@@ -40,9 +40,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 @Named
 @Singleton
-public class OrientSecurityConfigurationSource
+public class OrientSecuritySettingsSource
     extends LifecycleSupport
-    implements SecurityConfigurationSource, EventSubscriber
+    implements SecuritySettingsSource, EventSubscriber
 {
 
   /**
@@ -53,22 +53,22 @@ public class OrientSecurityConfigurationSource
   /**
    * The defaults configuration source.
    */
-  private final SecurityConfigurationSource securityDefaults;
+  private final SecuritySettingsSource securityDefaults;
 
   /**
-   * {@link SecurityConfiguration} entity adapter.
+   * {@link SecuritySettings} entity adapter.
    */
   private final SecurityConfigurationEntityAdapter entityAdapter;
 
   /**
    * The configuration.
    */
-  private SecurityConfiguration configuration;
+  private SecuritySettings configuration;
 
   @Inject
-  public OrientSecurityConfigurationSource(final @Named("security") Provider<DatabaseInstance> databaseInstance,
-                                           final @Named("static") SecurityConfigurationSource securityDefaults,
-                                           final SecurityConfigurationEntityAdapter entityAdapter)
+  public OrientSecuritySettingsSource(final @Named("security") Provider<DatabaseInstance> databaseInstance,
+                                      final @Named("static") SecuritySettingsSource securityDefaults,
+                                      final SecurityConfigurationEntityAdapter entityAdapter)
   {
     this.databaseInstance = checkNotNull(databaseInstance);
     this.securityDefaults = checkNotNull(securityDefaults);
@@ -84,12 +84,12 @@ public class OrientSecurityConfigurationSource
   }
 
   @Override
-  public SecurityConfiguration getConfiguration() {
+  public SecuritySettings getConfiguration() {
     return configuration;
   }
 
   @Override
-  public SecurityConfiguration loadConfiguration() {
+  public SecuritySettings loadConfiguration() {
     try (ODatabaseDocumentTx db = openDb()) {
       ODocument doc = get(db);
       if (doc == null) {
@@ -106,7 +106,7 @@ public class OrientSecurityConfigurationSource
     saveConfiguration(getConfiguration());
   }
 
-  private void saveConfiguration(final SecurityConfiguration configuration) {
+  private void saveConfiguration(final SecuritySettings configuration) {
     checkNotNull(configuration, "Missing security configuration");
     try (ODatabaseDocumentTx db = openDb()) {
       ODocument doc = get(db);

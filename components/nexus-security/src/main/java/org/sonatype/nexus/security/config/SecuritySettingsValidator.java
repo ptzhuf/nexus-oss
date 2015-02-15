@@ -12,27 +12,19 @@
  */
 package org.sonatype.nexus.security.config;
 
-/**
- * Source of {@link SecurityConfiguration}.
- */
-public interface SecurityConfigurationSource
+import java.util.List;
+
+import org.sonatype.configuration.validation.ValidationRequest;
+import org.sonatype.configuration.validation.ValidationResponse;
+
+public interface SecuritySettingsValidator
 {
-  /**
-   * Persists the current configuration.
-   */
-  void storeConfiguration();
+  ValidationResponse validateModel(SecuritySettingsValidationContext context,
+                                   ValidationRequest<SecuritySettings> request);
 
-  /**
-   * Gets the current configuration.
-   *
-   * @return the configuration, null if not loaded
-   */
-  SecurityConfiguration getConfiguration();
+  ValidationResponse validateAnonymousUsername(SecuritySettingsValidationContext context, String anonymousUsername);
 
-  /**
-   * Forces reloading the user configuration.
-   *
-   * @return the configuration
-   */
-  SecurityConfiguration loadConfiguration();
+  ValidationResponse validateAnonymousPassword(SecuritySettingsValidationContext context, String anonymousPassword);
+
+  ValidationResponse validateRealms(SecuritySettingsValidationContext context, List<String> realms);
 }

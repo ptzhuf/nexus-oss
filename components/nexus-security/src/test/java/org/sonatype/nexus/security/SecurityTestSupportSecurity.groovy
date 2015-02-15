@@ -12,7 +12,7 @@
  */
 package org.sonatype.nexus.security
 
-import org.sonatype.nexus.security.config.SecurityConfiguration
+import org.sonatype.nexus.security.config.SecuritySettings
 
 /**
  * @since 3.0
@@ -20,8 +20,8 @@ import org.sonatype.nexus.security.config.SecurityConfiguration
 class SecurityTestSupportSecurity
 {
 
-  static SecurityConfiguration security() {
-    return new SecurityConfiguration(
+  static SecuritySettings security() {
+    return new SecuritySettings(
         anonymousAccessEnabled: false,
         anonymousUsername: 'anonymous-user',
         anonymousPassword: 'anonymous-pass',

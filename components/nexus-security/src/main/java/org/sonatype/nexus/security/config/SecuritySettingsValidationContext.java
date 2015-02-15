@@ -12,19 +12,18 @@
  */
 package org.sonatype.nexus.security.config;
 
-import java.util.List;
+import org.sonatype.configuration.validation.ValidationContext;
 
-import org.sonatype.configuration.validation.ValidationRequest;
-import org.sonatype.configuration.validation.ValidationResponse;
-
-public interface SecurityConfigurationValidator
+public class SecuritySettingsValidationContext
+    implements ValidationContext
 {
-  ValidationResponse validateModel(SecurityValidationContext context,
-                                   ValidationRequest<SecurityConfiguration> request);
+  private SecuritySettings securitySettings;
 
-  ValidationResponse validateAnonymousUsername(SecurityValidationContext context, String anonymousUsername);
+  public SecuritySettings getSecuritySettings() {
+    return securitySettings;
+  }
 
-  ValidationResponse validateAnonymousPassword(SecurityValidationContext context, String anonymousPassword);
-
-  ValidationResponse validateRealms(SecurityValidationContext context, List<String> realms);
+  public void setSecuritySettings(SecuritySettings securitySettings) {
+    this.securitySettings = securitySettings;
+  }
 }

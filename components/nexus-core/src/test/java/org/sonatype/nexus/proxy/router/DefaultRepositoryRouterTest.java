@@ -43,8 +43,8 @@ import org.sonatype.nexus.proxy.security.PlexusConfiguredRealm;
 import org.sonatype.nexus.proxy.targets.Target;
 import org.sonatype.nexus.proxy.targets.TargetRegistry;
 import org.sonatype.nexus.security.SecuritySystem;
-import org.sonatype.nexus.security.config.PreconfiguredSecurityConfigurationSource;
-import org.sonatype.nexus.security.config.SecurityConfigurationSource;
+import org.sonatype.nexus.security.config.PreconfiguredSecuritySettingsSource;
+import org.sonatype.nexus.security.config.SecuritySettingsSource;
 
 import com.google.common.collect.Maps;
 import com.google.inject.Binder;
@@ -93,9 +93,9 @@ public class DefaultRepositoryRouterTest
         final PlexusConfiguredRealm realm = new PlexusConfiguredRealm(privileges);
         binder.bind(Key.get(Realm.class, Names.named("default"))).toInstance(realm);
 
-        binder.bind(SecurityConfigurationSource.class)
+        binder.bind(SecuritySettingsSource.class)
             .annotatedWith(Names.named("default"))
-            .toInstance(new PreconfiguredSecurityConfigurationSource(NexusAppTestSupportSecurity.security()));
+            .toInstance(new PreconfiguredSecuritySettingsSource(NexusAppTestSupportSecurity.security()));
       }
     });
   }

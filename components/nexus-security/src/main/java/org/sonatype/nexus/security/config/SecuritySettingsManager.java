@@ -16,7 +16,7 @@ import java.util.List;
 
 import org.sonatype.configuration.validation.InvalidConfigurationException;
 
-public interface SecurityConfigurationManager
+public interface SecuritySettingsManager
 {
   void setAnonymousAccessEnabled(boolean anonymousAccessEnabled);
 

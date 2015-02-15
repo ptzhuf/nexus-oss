@@ -12,8 +12,8 @@
  */
 package org.sonatype.nexus.security;
 
-import org.sonatype.nexus.security.config.PreconfiguredSecurityConfigurationSource;
-import org.sonatype.nexus.security.config.SecurityConfigurationSource;
+import org.sonatype.nexus.security.config.PreconfiguredSecuritySettingsSource;
+import org.sonatype.nexus.security.config.SecuritySettingsSource;
 import org.sonatype.sisu.litmus.testsupport.TestUtil;
 
 import com.google.inject.Binder;
@@ -30,9 +30,9 @@ public abstract class SecurityTestSupport
   @Override
   public void configure(final Binder binder) {
     binder.install(new SecurityModule());
-    binder.bind(SecurityConfigurationSource.class)
+    binder.bind(SecuritySettingsSource.class)
         .annotatedWith(Names.named("default"))
-        .toInstance(new PreconfiguredSecurityConfigurationSource(SecurityTestSupportSecurity.security()));
+        .toInstance(new PreconfiguredSecuritySettingsSource(SecurityTestSupportSecurity.security()));
   }
 
 }

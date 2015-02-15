@@ -20,7 +20,7 @@ import javax.naming.Context;
 import org.sonatype.ldaptestsuite.LdapServer;
 import org.sonatype.nexus.ldap.internal.persist.entity.LdapConfiguration;
 import org.sonatype.nexus.ldap.internal.persist.entity.Mapping;
-import org.sonatype.nexus.security.config.SecurityConfiguration;
+import org.sonatype.nexus.security.config.SecuritySettings;
 
 /**
  * Support for LDAP ITs (slow UTs) with real OrientDB backed configuration source.
@@ -29,7 +29,7 @@ public abstract class LdapITSupport
     extends LdapTestSupport
 {
   @Override
-  protected SecurityConfiguration getSecurityConfig() {
+  protected SecuritySettings getSecurityConfig() {
     return SecurityTestSupportSecurity.securityWithLdapRealm();
   }
 

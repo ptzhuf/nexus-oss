@@ -20,18 +20,18 @@ import javax.inject.Named
 import javax.inject.Singleton
 
 /**
- * Security configuration defaults.
+ * Default (aka 'static') security settings source.
  *
  * @since 3.0
  */
 @Named('static')
 @Singleton
-class StaticSecurityConfigurationSource
-    extends PreconfiguredSecurityConfigurationSource
-    implements SecurityConfigurationSource
+class StaticSecuritySettingsSource
+    extends PreconfiguredSecuritySettingsSource
+    implements SecuritySettingsSource
 {
-  StaticSecurityConfigurationSource() {
-    super(new SecurityConfiguration(
+  StaticSecuritySettingsSource() {
+    super(new SecuritySettings(
         anonymousAccessEnabled: true,
         anonymousUsername: 'anonymous',
         anonymousPassword: 'anonymous',

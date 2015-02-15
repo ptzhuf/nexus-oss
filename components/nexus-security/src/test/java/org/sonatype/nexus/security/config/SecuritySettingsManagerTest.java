@@ -23,14 +23,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
 /**
- * Tests for {@link SecurityConfigurationManager}.
+ * Tests for {@link SecuritySettingsManager}.
  */
-public class SecurityConfigurationManagerTest
+public class SecuritySettingsManagerTest
     extends AbstractSecurityTest
 {
   //@Test
   public void testLoadEmptyDefaults() throws Exception {
-    SecurityConfigurationManager config = this.lookup(SecurityConfigurationManager.class);
+    SecuritySettingsManager config = this.lookup(SecuritySettingsManager.class);
 
     Assert.assertNotNull(config);
 
@@ -46,7 +46,7 @@ public class SecurityConfigurationManagerTest
 
   //@Test
   public void testWrite() throws Exception {
-    SecurityConfigurationManager config = this.lookup(SecurityConfigurationManager.class);
+    SecuritySettingsManager config = this.lookup(SecuritySettingsManager.class);
 
     config.setAnonymousAccessEnabled(true);
     config.setAnonymousPassword("new-pass");
