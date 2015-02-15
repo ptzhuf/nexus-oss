@@ -62,20 +62,17 @@ public class LdapUserManagerIT
     return LdapUserManagerITSecurity.securityModel();
   }
 
-  private SecuritySystem getSecuritySystem()
-      throws Exception
-  {
+  private SecuritySystem getSecuritySystem() throws Exception {
     return this.lookup(SecuritySystem.class);
   }
 
-  private UserManager getUserManager()
-      throws Exception
-  {
+  private UserManager getUserManager() throws Exception {
     return this.lookup(UserManager.class, LdapPlugin.USER_SOURCE);
   }
 
   @Override
-  protected LdapConfiguration createLdapClientConfigurationForServer(final String name, final int order,
+  protected LdapConfiguration createLdapClientConfigurationForServer(final String name,
+                                                                     final int order,
                                                                      final LdapServer ldapServer)
   {
     final LdapConfiguration ldapConfiguration = super.createLdapClientConfigurationForServer(name, order, ldapServer);
@@ -100,9 +97,7 @@ public class LdapUserManagerIT
   }
 
   @Test
-  public void testGetUserFromUserManager()
-      throws Exception
-  {
+  public void testGetUserFromUserManager() throws Exception {
 
     SecuritySystem securitySystem = this.getSecuritySystem();
     securitySystem.start();
@@ -117,9 +112,7 @@ public class LdapUserManagerIT
   }
 
   @Test
-  public void testGetUserFromLocator()
-      throws Exception
-  {
+  public void testGetUserFromLocator() throws Exception {
     UserManager userLocator = this.getUserManager();
     User user = userLocator.getUser("cstamas");
     assertNotNull(user);
@@ -129,9 +122,7 @@ public class LdapUserManagerIT
   }
 
   @Test
-  public void testGetUserIds()
-      throws Exception
-  {
+  public void testGetUserIds() throws Exception {
     UserManager userLocator = this.getUserManager();
     Set<String> userIds = userLocator.listUserIds();
     assertTrue(userIds.contains("cstamas"));
@@ -142,9 +133,7 @@ public class LdapUserManagerIT
   }
 
   @Test
-  public void testSearch()
-      throws Exception
-  {
+  public void testSearch() throws Exception {
     UserManager userLocator = this.getUserManager();
     Set<User> users = userLocator.searchUsers(new UserSearchCriteria("j"));
 
@@ -154,9 +143,7 @@ public class LdapUserManagerIT
   }
 
   @Test
-  public void testEffectiveSearch()
-      throws Exception
-  {
+  public void testEffectiveSearch() throws Exception {
     UserManager userLocator = this.getUserManager();
 
     Set<String> allRoleIds = new HashSet<String>();
@@ -173,9 +160,7 @@ public class LdapUserManagerIT
   }
 
   @Test
-  public void testGetUsers()
-      throws Exception
-  {
+  public void testGetUsers() throws Exception {
     UserManager userLocator = this.getUserManager();
     Set<User> users = userLocator.listUsers();
 
@@ -221,9 +206,7 @@ public class LdapUserManagerIT
   }
 
   @Test
-  public void testOrderOfUserSearch()
-      throws Exception
-  {
+  public void testOrderOfUserSearch() throws Exception {
     SecuritySystem securitySystem = this.getSecuritySystem();
     securitySystem.start();
 
@@ -246,6 +229,5 @@ public class LdapUserManagerIT
 
     user = securitySystem.getUser("brianf");
     Assert.assertEquals("LDAP", user.getSource());
-
   }
 }

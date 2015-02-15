@@ -11,7 +11,7 @@
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
 
-package org.sonatype.nexus.security.role;
+package org.sonatype.nexus.security.internal;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -31,6 +31,7 @@ import org.sonatype.nexus.security.model.CRole;
 import org.sonatype.nexus.security.model.ConfigurationManager;
 import org.sonatype.nexus.security.privilege.NoSuchPrivilegeException;
 import org.sonatype.nexus.security.privilege.PrivilegeDescriptor;
+import org.sonatype.nexus.security.role.NoSuchRoleException;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
 import org.sonatype.sisu.goodies.eventbus.EventBus;
 
