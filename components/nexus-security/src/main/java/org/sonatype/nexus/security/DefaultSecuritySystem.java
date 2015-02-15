@@ -111,12 +111,12 @@ public class DefaultSecuritySystem
 
     this.eventBus.register(this);
     this.userManagers = userManagers;
-    SecurityUtils.setSecurityManager(this.getSecurityManager());
+    SecurityUtils.setSecurityManager(getSecurityManager());
     started = false;
   }
 
   public Subject login(AuthenticationToken token) throws AuthenticationException {
-    Subject subject = this.getSubject();
+    Subject subject = getSubject();
     subject.login(token);
     return subject;
   }
@@ -135,30 +135,25 @@ public class DefaultSecuritySystem
   }
 
   public boolean isPermitted(PrincipalCollection principal, String permission) {
-    return this.getSecurityManager().isPermitted(principal, permission);
+    return getSecurityManager().isPermitted(principal, permission);
   }
 
   public boolean[] isPermitted(PrincipalCollection principal, List<String> permissions) {
-    return this.getSecurityManager().isPermitted(principal, permissions.toArray(new String[permissions.size()]));
+    return getSecurityManager().isPermitted(principal, permissions.toArray(new String[permissions.size()]));
   }
 
   public void checkPermission(PrincipalCollection principal, String permission) throws AuthorizationException {
-    try {
-      this.getSecurityManager().checkPermission(principal, permission);
-    }
-    catch (org.apache.shiro.authz.AuthorizationException e) {
-      throw new AuthorizationException(e.getMessage(), e);
-    }
+    getSecurityManager().checkPermission(principal, permission);
   }
 
   private Collection<Realm> getRealmsFromConfigSource() {
     List<Realm> realms = new ArrayList<Realm>();
 
-    List<String> realmIds = this.securityConfiguration.getRealms();
+    List<String> realmIds = securityConfiguration.getRealms();
 
     for (String realmId : realmIds) {
-      if (this.realmMap.containsKey(realmId)) {
-        realms.add(this.realmMap.get(realmId));
+      if (realmMap.containsKey(realmId)) {
+        realms.add(realmMap.get(realmId));
       }
       else {
         log.debug("Failed to look up realm as a component, trying reflection");
@@ -177,7 +172,7 @@ public class DefaultSecuritySystem
 
   public Set<Role> listRoles() {
     Set<Role> roles = new HashSet<Role>();
-    for (AuthorizationManager authzManager : this.authorizationManagers.values()) {
+    for (AuthorizationManager authzManager : authorizationManagers.values()) {
       Set<Role> tmpRoles = authzManager.listRoles();
       if (tmpRoles != null) {
         roles.addAll(tmpRoles);
@@ -189,17 +184,17 @@ public class DefaultSecuritySystem
 
   public Set<Role> listRoles(String sourceId) throws NoSuchAuthorizationManagerException {
     if (ALL_ROLES_KEY.equalsIgnoreCase(sourceId)) {
-      return this.listRoles();
+      return listRoles();
     }
     else {
-      AuthorizationManager authzManager = this.getAuthorizationManager(sourceId);
+      AuthorizationManager authzManager = getAuthorizationManager(sourceId);
       return authzManager.listRoles();
     }
   }
 
   public Set<Privilege> listPrivileges() {
     Set<Privilege> privileges = new HashSet<Privilege>();
-    for (AuthorizationManager authzManager : this.authorizationManagers.values()) {
+    for (AuthorizationManager authzManager : authorizationManagers.values()) {
       Set<Privilege> tmpPrivileges = authzManager.listPrivileges();
       if (tmpPrivileges != null) {
         privileges.addAll(tmpPrivileges);
@@ -292,9 +287,9 @@ public class DefaultSecuritySystem
   }
 
   public void deleteUser(String userId) throws UserNotFoundException {
-    User user = this.getUser(userId);
+    User user = getUser(userId);
     try {
-      this.deleteUser(userId, user.getSource());
+      deleteUser(userId, user.getSource());
     }
     catch (NoSuchUserManagerException e) {
       log.error("User manager returned user, but could not be found: " + e.getMessage(), e);
@@ -371,7 +366,7 @@ public class DefaultSecuritySystem
     log.trace("Found user: {}", user);
 
     // add roles from other user managers
-    this.addOtherRolesToUser(user);
+    addOtherRolesToUser(user);
 
     return user;
   }
@@ -409,7 +404,7 @@ public class DefaultSecuritySystem
     // now add all the roles to the users
     for (User user : users) {
       // add roles from other user managers
-      this.addOtherRolesToUser(user);
+      addOtherRolesToUser(user);
     }
 
     return users;
@@ -440,7 +435,7 @@ public class DefaultSecuritySystem
     // now add all the roles to the users
     for (User user : users) {
       // add roles from other user managers
-      this.addOtherRolesToUser(user);
+      addOtherRolesToUser(user);
     }
 
     return users;
@@ -470,7 +465,7 @@ public class DefaultSecuritySystem
     }
 
     // get the sorted order of realms from the realm locator
-    Collection<Realm> realms = this.getSecurityManager().getRealms();
+    Collection<Realm> realms = getSecurityManager().getRealms();
 
     for (Realm realm : realms) {
       // now user the realm.name to find the UserManager
@@ -511,23 +506,21 @@ public class DefaultSecuritySystem
     }
   }
 
-  public AuthorizationManager getAuthorizationManager(String source)
-      throws NoSuchAuthorizationManagerException
-  {
-    if (!this.authorizationManagers.containsKey(source)) {
+  public AuthorizationManager getAuthorizationManager(String source) throws NoSuchAuthorizationManagerException {
+    if (!authorizationManagers.containsKey(source)) {
       throw new NoSuchAuthorizationManagerException("AuthorizationManager with source: '" + source
           + "' could not be found.");
     }
 
-    return this.authorizationManagers.get(source);
+    return authorizationManagers.get(source);
   }
 
   public String getAnonymousUsername() {
-    return this.securityConfiguration.getAnonymousUsername();
+    return securityConfiguration.getAnonymousUsername();
   }
 
   public boolean isAnonymousAccessEnabled() {
-    return this.securityConfiguration.isAnonymousAccessEnabled();
+    return securityConfiguration.isAnonymousAccessEnabled();
   }
 
   public void changePassword(String userId, String oldPassword, String newPassword)
@@ -536,7 +529,7 @@ public class DefaultSecuritySystem
     // first authenticate the user
     try {
       UsernamePasswordToken authenticationToken = new UsernamePasswordToken(userId, oldPassword);
-      if (this.getSecurityManager().authenticate(authenticationToken) == null) {
+      if (getSecurityManager().authenticate(authenticationToken) == null) {
         throw new InvalidCredentialsException();
       }
     }
@@ -546,13 +539,13 @@ public class DefaultSecuritySystem
     }
 
     // if that was good just change the password
-    this.changePassword(userId, newPassword);
+    changePassword(userId, newPassword);
   }
 
   public void changePassword(String userId, String newPassword)
       throws UserNotFoundException, InvalidConfigurationException
   {
-    User user = this.getUser(userId);
+    User user = getUser(userId);
 
     try {
       UserManager userManager = getUserManager(user.getSource());
@@ -569,20 +562,20 @@ public class DefaultSecuritySystem
   }
 
   public List<String> getRealms() {
-    return new ArrayList<String>(this.securityConfiguration.getRealms());
+    return new ArrayList<String>(securityConfiguration.getRealms());
   }
 
   public void setRealms(List<String> realms) throws InvalidConfigurationException {
-    this.securityConfiguration.setRealms(realms);
-    this.securityConfiguration.save();
+    securityConfiguration.setRealms(realms);
+    securityConfiguration.save();
 
     // update the realms in the security manager
-    this.setSecurityManagerRealms();
+    setSecurityManagerRealms();
   }
 
   public void setAnonymousAccessEnabled(boolean enabled) {
-    this.securityConfiguration.setAnonymousAccessEnabled(enabled);
-    this.securityConfiguration.save();
+    securityConfiguration.setAnonymousAccessEnabled(enabled);
+    securityConfiguration.save();
   }
 
   public void setAnonymousUsername(String anonymousUsername) throws InvalidConfigurationException {
@@ -593,8 +586,8 @@ public class DefaultSecuritySystem
     catch (UserNotFoundException e) {
       // ignore
     }
-    this.securityConfiguration.setAnonymousUsername(anonymousUsername);
-    this.securityConfiguration.save();
+    securityConfiguration.setAnonymousUsername(anonymousUsername);
+    securityConfiguration.save();
     // flush authc, if anon existed before change
     if (user != null) {
       eventBus.post(new UserPrincipalsExpired(user.getUserId(), user.getSource()));
@@ -602,7 +595,7 @@ public class DefaultSecuritySystem
   }
 
   public String getAnonymousPassword() {
-    return this.securityConfiguration.getAnonymousPassword();
+    return securityConfiguration.getAnonymousPassword();
   }
 
   public void setAnonymousPassword(String anonymousPassword) throws InvalidConfigurationException {
@@ -613,8 +606,8 @@ public class DefaultSecuritySystem
     catch (UserNotFoundException e) {
       // ignore
     }
-    this.securityConfiguration.setAnonymousPassword(anonymousPassword);
-    this.securityConfiguration.save();
+    securityConfiguration.setAnonymousPassword(anonymousPassword);
+    securityConfiguration.save();
     if (user != null) {
       // flush authc, if anon exists
       eventBus.post(new UserPrincipalsExpired(user.getUserId(), user.getSource()));
@@ -627,18 +620,18 @@ public class DefaultSecuritySystem
           + " was already started, same instance is not re-startable!");
     }
     // reload the config
-    this.securityConfiguration.clearCache();
+    securityConfiguration.clearCache();
 
     // setup the CacheManager ( this could be injected if we where less coupled with ehcache)
     // The plexus wrapper can interpolate the config
     EhCacheManager ehCacheManager = new EhCacheManager();
     ehCacheManager.setCacheManager(cacheManager);
-    this.getSecurityManager().setCacheManager(ehCacheManager);
+    getSecurityManager().setCacheManager(ehCacheManager);
 
-    if (org.apache.shiro.util.Initializable.class.isInstance(this.getSecurityManager())) {
-      ((org.apache.shiro.util.Initializable) this.getSecurityManager()).init();
+    if (org.apache.shiro.util.Initializable.class.isInstance(getSecurityManager())) {
+      ((org.apache.shiro.util.Initializable) getSecurityManager()).init();
     }
-    this.setSecurityManagerRealms();
+    setSecurityManagerRealms();
     started = true;
   }
 
@@ -726,19 +719,19 @@ public class DefaultSecuritySystem
   // ==
 
   @Subscribe
-  public void onEvent(final UserPrincipalsExpired evt) {
+  public void onEvent(final UserPrincipalsExpired event) {
     // TODO: we could do this better, not flushing whole cache for single user being deleted
     clearAuthcRealmCaches();
   }
 
   @Subscribe
-  public void onEvent(final AuthorizationConfigurationChanged evt) {
+  public void onEvent(final AuthorizationConfigurationChanged event) {
     // TODO: we could do this better, not flushing whole cache for single user roles being updated
     clearAuthzRealmCaches();
   }
 
   @Subscribe
-  public void onEvent(final SecurityConfigurationChanged evt) {
+  public void onEvent(final SecurityConfigurationChanged event) {
     clearAuthcRealmCaches();
     clearAuthzRealmCaches();
     securityConfiguration.clearCache();
