@@ -17,7 +17,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.sonatype.nexus.security.authc.AuthenticationException;
-import org.sonatype.nexus.security.authz.AuthorizationException;
 import org.sonatype.nexus.security.authz.AuthorizationManager;
 import org.sonatype.nexus.security.authz.MockAuthorizationManagerB;
 import org.sonatype.nexus.security.role.Role;
@@ -30,6 +29,7 @@ import com.google.inject.Singleton;
 import com.google.inject.name.Names;
 import junit.framework.Assert;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.Subject;

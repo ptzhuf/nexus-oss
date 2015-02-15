@@ -17,7 +17,6 @@ import java.util.Set;
 
 import org.sonatype.configuration.validation.InvalidConfigurationException;
 import org.sonatype.nexus.security.authc.AuthenticationException;
-import org.sonatype.nexus.security.authz.AuthorizationException;
 import org.sonatype.nexus.security.authz.AuthorizationManager;
 import org.sonatype.nexus.security.authz.NoSuchAuthorizationManagerException;
 import org.sonatype.nexus.security.privilege.Privilege;
@@ -31,6 +30,7 @@ import org.sonatype.nexus.security.user.UserSearchCriteria;
 
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.mgt.RealmSecurityManager;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;

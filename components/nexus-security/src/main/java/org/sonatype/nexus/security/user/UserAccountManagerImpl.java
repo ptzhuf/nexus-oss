@@ -18,8 +18,9 @@ import javax.inject.Singleton;
 
 import org.sonatype.configuration.validation.InvalidConfigurationException;
 import org.sonatype.nexus.security.SecuritySystem;
-import org.sonatype.nexus.security.authz.AuthorizationException;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
+
+import org.apache.shiro.authz.AuthorizationException;
 
 /**
  * Provides functionality to read and update basic user data.

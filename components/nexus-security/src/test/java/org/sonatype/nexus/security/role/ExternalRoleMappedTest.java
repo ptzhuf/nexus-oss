@@ -20,7 +20,6 @@ import java.util.Map;
 
 import org.sonatype.nexus.security.AbstractSecurityTestCase;
 import org.sonatype.nexus.security.SecuritySystem;
-import org.sonatype.nexus.security.authz.AuthorizationException;
 import org.sonatype.nexus.security.authz.AuthorizingRealmImpl;
 import org.sonatype.nexus.security.privilege.MethodPrivilegeDescriptor;
 import org.sonatype.nexus.security.privilege.Privilege;
@@ -32,6 +31,7 @@ import com.google.inject.Binder;
 import com.google.inject.Singleton;
 import com.google.inject.name.Names;
 import junit.framework.Assert;
+import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
