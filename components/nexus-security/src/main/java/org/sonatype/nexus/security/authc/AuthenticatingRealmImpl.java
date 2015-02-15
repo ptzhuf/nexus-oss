@@ -128,7 +128,7 @@ public class AuthenticatingRealmImpl
           updated = true;
         }
         catch (ConcurrentModificationException e) {
-          logger.debug("Could not re-hash user {} password as user was concurrently being updated. Retrying...");
+          logger.debug("Could not re-hash user '{}' password as user was concurrently being updated. Retrying...", user.getId());
         }
       }
       while (!updated);
@@ -161,24 +161,15 @@ public class AuthenticatingRealmImpl
   }
 
   /**
-   * Checks to see if the specified user is a legacy user
-   * A legacy user has an unsalted password
-   *
-   * @param user to check
-   * @return true if legacy user, false otherwise
+   * Checks to see if the specified user is a legacy user.
+   * A legacy user has an unsalted password.
    */
-  private boolean hasLegacyPassword(CUser user) {
+  private boolean hasLegacyPassword(final CUser user) {
     //Legacy users have a shorter, unsalted, SHA1 or MD5 based hash
-    return user.getPassword().length() <= this.MAX_LEGACY_PASSWORD_LENGTH;
+    return user.getPassword().length() <= MAX_LEGACY_PASSWORD_LENGTH;
   }
 
-  /**
-   * Creates an authentication info object
-   * using the credentials of the provided user
-   *
-   * @return authentication info object based on user credentials
-   */
-  private AuthenticationInfo createAuthenticationInfo(CUser user) {
+  private AuthenticationInfo createAuthenticationInfo(final CUser user) {
     return new SimpleAuthenticationInfo(user.getId(), user.getPassword().toCharArray(), getName());
   }
 }
