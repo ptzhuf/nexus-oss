@@ -12,22 +12,38 @@
  */
 package org.sonatype.nexus.internal.metrics;
 
+import java.util.Map;
+import java.util.Map.Entry;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import com.codahale.metrics.health.HealthCheck;
 import com.codahale.metrics.health.HealthCheckRegistry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Customized {@link com.codahale.metrics.servlets.HealthCheckServlet} to support injection.
  *
  * @since 3.0
+ *
+ * @see HealthCheckMediator
  */
 @Singleton
 public class HealthCheckServlet
   extends com.codahale.metrics.servlets.HealthCheckServlet
 {
+  private static final Logger log = LoggerFactory.getLogger(HealthCheckServlet.class);
+
   @Inject
-  public HealthCheckServlet(final HealthCheckRegistry registry) {
+  public HealthCheckServlet(final HealthCheckRegistry registry, final Map<String,HealthCheck> healthChecks) {
     super(registry);
+
+    // prime registry with existing health-check components
+    for (Entry<String,HealthCheck> entry : healthChecks.entrySet()) {
+      log.debug("Registering: {}", entry);
+      registry.register(entry.getKey(), entry.getValue());
+    }
   }
 }
