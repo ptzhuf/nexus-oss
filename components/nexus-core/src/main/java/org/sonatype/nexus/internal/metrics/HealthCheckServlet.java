@@ -10,33 +10,24 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.web.metrics;
+package org.sonatype.nexus.internal.metrics;
 
-import java.io.IOException;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import static com.google.common.net.HttpHeaders.CONTENT_DISPOSITION;
+import com.codahale.metrics.health.HealthCheckRegistry;
 
 /**
- * Customized {@link com.codahale.metrics.servlets.ThreadDumpServlet} to support download.
+ * Customized {@link com.codahale.metrics.servlets.HealthCheckServlet} to support injection.
  *
  * @since 3.0
  */
-public class ThreadDumpServlet
-  extends com.codahale.metrics.servlets.ThreadDumpServlet
+@Singleton
+public class HealthCheckServlet
+  extends com.codahale.metrics.servlets.HealthCheckServlet
 {
-  @Override
-  protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)
-      throws ServletException, IOException
-  {
-    boolean download = Boolean.parseBoolean(req.getParameter("download"));
-    if (download) {
-      resp.addHeader(CONTENT_DISPOSITION, "attachment; filename='threads.txt'");
-    }
-
-    super.doGet(req, resp);
+  @Inject
+  public HealthCheckServlet(final HealthCheckRegistry registry) {
+    super(registry);
   }
 }

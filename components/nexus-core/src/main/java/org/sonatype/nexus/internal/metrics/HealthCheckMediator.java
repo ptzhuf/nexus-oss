@@ -10,26 +10,35 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.web.metrics;
+package org.sonatype.nexus.internal.metrics;
 
 import javax.inject.Named;
-import javax.inject.Provider;
-import javax.inject.Singleton;
+
+import org.sonatype.sisu.goodies.common.ComponentSupport;
 
 import com.codahale.metrics.health.HealthCheck;
-import com.codahale.metrics.health.jvm.ThreadDeadlockHealthCheck;
+import com.codahale.metrics.health.HealthCheckRegistry;
+import org.eclipse.sisu.BeanEntry;
+import org.eclipse.sisu.Mediator;
 
 /**
- * {@link ThreadDeadlockHealthCheck} provider.
+ * Manages {@link HealthCheck} registrations via Sisu component mediation.
  *
  * @since 2.8
  */
-@Named("deadlocks")
-@Singleton
-public class DeadlockHealthCheckProvider
-  implements Provider<HealthCheck>
+@Named
+public class HealthCheckMediator
+    extends ComponentSupport
+    implements Mediator<Named, HealthCheck, HealthCheckRegistry>
 {
-  public HealthCheck get() {
-    return new ThreadDeadlockHealthCheck();
+  public void add(final BeanEntry<Named, HealthCheck> entry, final HealthCheckRegistry registry) throws Exception {
+    log.debug("Registering: {}", entry);
+    registry.register(entry.getKey().value(), entry.getValue());
+  }
+
+  public void remove(final BeanEntry<Named, HealthCheck> entry, final HealthCheckRegistry registry) throws Exception {
+    log.debug("Un-registering: {}", entry);
+    registry.unregister(entry.getKey().value());
   }
 }
+
