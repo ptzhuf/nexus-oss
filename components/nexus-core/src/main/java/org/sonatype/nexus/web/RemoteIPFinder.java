@@ -21,6 +21,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 
+import static com.google.common.net.HttpHeaders.X_FORWARDED_FOR;
+
 /**
  * Helper class to detect "real" IP address of remote client.
  * 
@@ -28,13 +30,11 @@ import org.apache.commons.lang.StringUtils;
  */
 public class RemoteIPFinder
 {
-  public static final String FORWARD_HEADER = "X-Forwarded-For";
-
   /**
    * Returns the "real" IP address (as string) of the passed in {@link HttpServletRequest}.
    */
   public static String findIP(final HttpServletRequest request) {
-    String forwardedIP = getFirstForwardedIp(request.getHeader(FORWARD_HEADER));
+    String forwardedIP = getFirstForwardedIp(request.getHeader(X_FORWARDED_FOR));
 
     if (forwardedIP != null) {
       return forwardedIP;
