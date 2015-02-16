@@ -10,6 +10,7 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
+
 package org.sonatype.nexus.common.guice;
 
 import java.net.URL;
@@ -52,9 +53,9 @@ public class NexusUberClassloader
 
   @Override
   protected Class<?> loadClass(final String name, final boolean resolve) throws ClassNotFoundException {
-    for (ClassSpace s : spaces) {
+    for (ClassSpace space : spaces) {
       try {
-        return s.loadClass(name);
+        return space.loadClass(name);
       }
       catch (TypeNotPresentException e) {
         // ignore it
@@ -78,7 +79,7 @@ public class NexusUberClassloader
   public Enumeration<URL> getResources(final String name) {
     List<URL> result = Lists.newArrayList();
     for (ClassSpace space : spaces) {
-      for (Enumeration<URL> resources = space.getResources(name); resources.hasMoreElements();) {
+      for (Enumeration<URL> resources = space.getResources(name); resources.hasMoreElements(); ) {
         result.add(resources.nextElement());
       }
     }
