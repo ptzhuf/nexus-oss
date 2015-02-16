@@ -20,6 +20,8 @@ import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.subject.WebSubject;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Shiro Web subject of {@link AnonymousSubject}.
  */
@@ -39,8 +41,8 @@ public class AnonymousWebSubject
                              final ServletResponse servletResponse)
   {
     super(anonymousConfigurationSource, securityManager, permissionResolver, subject);
-    this.servletRequest = servletRequest;
-    this.servletResponse = servletResponse;
+    this.servletRequest = checkNotNull(servletRequest);
+    this.servletResponse = checkNotNull(servletResponse);
   }
 
   @Override
