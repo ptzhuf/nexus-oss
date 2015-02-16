@@ -33,16 +33,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class NexusExecutorService
     extends SubjectAwareExecutorService
 {
-  public static NexusExecutorService forFixedSubject(final ExecutorService target, final Subject subject) {
-    return new NexusExecutorService(target, new FixedSubjectProvider(subject));
-  }
-
-  public static NexusExecutorService forCurrentSubject(final ExecutorService target) {
-    return new NexusExecutorService(target, new CurrentSubjectProvider());
-  }
-
-  // ==
-
   private final SubjectProvider subjectProvider;
 
   public NexusExecutorService(final ExecutorService target, final SubjectProvider subjectProvider) {
@@ -68,5 +58,17 @@ public class NexusExecutorService
   protected <T> Callable<T> associateWithSubject(Callable<T> task) {
     Subject subject = getSubject();
     return subject.associateWith(new MDCAwareCallable(task));
+  }
+
+  //
+  // Factory access
+  //
+
+  public static NexusExecutorService forFixedSubject(final ExecutorService target, final Subject subject) {
+    return new NexusExecutorService(target, new FixedSubjectProvider(subject));
+  }
+
+  public static NexusExecutorService forCurrentSubject(final ExecutorService target) {
+    return new NexusExecutorService(target, new CurrentSubjectProvider());
   }
 }

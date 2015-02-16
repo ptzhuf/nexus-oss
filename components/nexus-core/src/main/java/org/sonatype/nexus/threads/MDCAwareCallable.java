@@ -36,9 +36,7 @@ public class MDCAwareCallable<T>
   }
 
   @Override
-  public T call()
-      throws Exception
-  {
+  public T call() throws Exception {
     MDCUtils.setContextMap(mdcContext);
     return delegate.call();
   }
