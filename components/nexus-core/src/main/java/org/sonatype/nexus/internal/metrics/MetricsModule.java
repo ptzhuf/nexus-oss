@@ -46,6 +46,8 @@ public class MetricsModule
 {
   private static final Logger log = LoggerFactory.getLogger(MetricsModule.class);
 
+  // TODO: Change MP to /service/* ?
+
   private static final String MOUNT_POINT = "/internal";
 
   @Override
@@ -85,6 +87,7 @@ public class MetricsModule
     {
       @Override
       protected void configure() {
+        // TODO: Expose resource permissions for ping/threads/metrics/healthcheck?
         addFilterChain(MOUNT_POINT + "/**", "noSessionCreation,authcBasic,perms[nexus:metrics-endpoints]");
       }
     });
