@@ -10,6 +10,7 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
+
 package org.sonatype.nexus.internal.metrics;
 
 import javax.inject.Inject;
@@ -20,11 +21,12 @@ import com.codahale.metrics.health.HealthCheckRegistry;
 /**
  * Customized {@link com.codahale.metrics.servlets.HealthCheckServlet} to support injection.
  *
+ * @see HealthCheckMediator
  * @since 3.0
  */
 @Singleton
 public class HealthCheckServlet
-  extends com.codahale.metrics.servlets.HealthCheckServlet
+    extends com.codahale.metrics.servlets.HealthCheckServlet
 {
   @Inject
   public HealthCheckServlet(final HealthCheckRegistry registry) {
