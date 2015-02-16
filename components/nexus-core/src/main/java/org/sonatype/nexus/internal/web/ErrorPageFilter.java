@@ -10,7 +10,7 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.web.internal;
+package org.sonatype.nexus.internal.web;
 
 import java.io.IOException;
 
@@ -28,7 +28,6 @@ import org.sonatype.nexus.web.ErrorStatusException;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
 
 import static javax.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
-import static org.sonatype.nexus.web.internal.ErrorPageServlet.attachCause;
 
 /**
  * Servlet filter to add error page rendering.
@@ -66,11 +65,11 @@ public class ErrorPageFilter
       chain.doFilter(request, response);
     }
     catch (ErrorStatusException e) {
-      attachCause(request, e);
+      ErrorPageServlet.attachCause(request, e);
       response.sendError(e.getResponseCode(), e.getReasonPhrase());
     }
     catch (Exception e) {
-      attachCause(request, e);
+      ErrorPageServlet.attachCause(request, e);
       response.sendError(SC_INTERNAL_SERVER_ERROR);
     }
   }

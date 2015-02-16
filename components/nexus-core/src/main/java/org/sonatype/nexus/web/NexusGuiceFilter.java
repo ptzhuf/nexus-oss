@@ -12,7 +12,7 @@
  */
 package org.sonatype.nexus.web;
 
-import org.sonatype.nexus.web.internal.DynamicFilterPipeline;
+import org.sonatype.nexus.internal.web.DynamicFilterPipeline;
 
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceFilter;

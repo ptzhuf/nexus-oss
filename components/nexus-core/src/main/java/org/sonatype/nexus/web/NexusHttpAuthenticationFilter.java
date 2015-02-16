@@ -23,9 +23,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.sonatype.nexus.SystemStatus;
+import org.sonatype.nexus.internal.web.BrowserDetector;
 import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.nexus.web.TemplateRenderer.TemplateLocator;
-import org.sonatype.nexus.web.internal.BrowserDetector;
 import org.sonatype.sisu.goodies.common.Loggers;
 import org.sonatype.sisu.goodies.eventbus.EventBus;
 
@@ -188,7 +188,7 @@ public class NexusHttpAuthenticationFilter
           "nexusRoot", (Object) BaseUrlHolder.get()
       );
       TemplateLocator template = templateRenderer.template(
-          "/org/sonatype/nexus/web/internal/accessDeniedHtml.vm",
+          "/org/sonatype/nexus/internal/web/accessDeniedHtml.vm",
           NexusHttpAuthenticationFilter.class.getClassLoader()
       );
 

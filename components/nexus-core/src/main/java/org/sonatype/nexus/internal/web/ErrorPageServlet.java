@@ -10,7 +10,7 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.web.internal;
+package org.sonatype.nexus.internal.web;
 
 import java.io.IOException;
 import java.util.Map;
@@ -95,7 +95,7 @@ public class ErrorPageServlet
     this.webUtils = checkNotNull(webUtils);
 
     this.templateLocator = templateRenderer.template(
-        "/org/sonatype/nexus/web/internal/errorPageContentHtml.vm",
+        "/org/sonatype/nexus/internal/web/errorPageContentHtml.vm",
         getClass().getClassLoader());
   }
 

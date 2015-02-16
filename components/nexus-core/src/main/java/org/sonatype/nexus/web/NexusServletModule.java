@@ -17,11 +17,11 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 
 import org.sonatype.nexus.internal.orient.OrientModule;
+import org.sonatype.nexus.internal.web.BaseUrlHolderFilter;
+import org.sonatype.nexus.internal.web.ErrorPageFilter;
+import org.sonatype.nexus.internal.web.ErrorPageServlet;
+import org.sonatype.nexus.internal.web.StandardHttpResponseHeadersFilter;
 import org.sonatype.nexus.security.WebSecurityModule;
-import org.sonatype.nexus.web.internal.BaseUrlHolderFilter;
-import org.sonatype.nexus.web.internal.ErrorPageFilter;
-import org.sonatype.nexus.web.internal.ErrorPageServlet;
-import org.sonatype.nexus.web.internal.StandardHttpResponseHeadersFilter;
 import org.sonatype.nexus.web.metrics.MetricsModule;
 
 import com.google.inject.AbstractModule;
