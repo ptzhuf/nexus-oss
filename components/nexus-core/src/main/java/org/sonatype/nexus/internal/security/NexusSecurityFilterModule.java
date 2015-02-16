@@ -17,6 +17,7 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.sonatype.nexus.security.FilterProviderSupport;
+import org.sonatype.nexus.security.authz.AnonymousFilter;
 import org.sonatype.nexus.web.FailureLoggingHttpMethodPermissionFilter;
 
 import com.google.inject.AbstractModule;
@@ -32,6 +33,8 @@ public class NexusSecurityFilterModule
 {
   @Override
   protected void configure() {
+    bind(filterKey(AnonymousFilter.NAME)).to(AnonymousFilter.class).in(Singleton.class);
+
     bind(filterKey("authcBasic")).toProvider(AuthcBasicFilterProvider.class);
     bind(filterKey("perms")).to(FailureLoggingHttpMethodPermissionFilter.class).in(Singleton.class);
     bind(filterKey("authcApiKey")).toProvider(AuthcApiKeyFilterProvider.class);
