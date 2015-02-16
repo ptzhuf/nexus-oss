@@ -10,10 +10,9 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.util;
+package org.sonatype.nexus.common.guice;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
@@ -22,9 +21,12 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import com.google.common.collect.Lists;
 import org.eclipse.sisu.space.ClassSpace;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+
+// FIXME: Rename to GlobalClassLoader, and "global" for named key
 
 /**
  * ClassLoader which exposes all {@link ClassSpace}s in the application.
@@ -39,21 +41,17 @@ public class NexusUberClassloader
   private final List<ClassSpace> spaces;
 
   @Inject
-  public NexusUberClassloader(List<ClassSpace> spaces) {
+  public NexusUberClassloader(final List<ClassSpace> spaces) {
     this.spaces = checkNotNull(spaces);
   }
 
   @Override
-  public Class<?> loadClass(String name)
-      throws ClassNotFoundException
-  {
+  public Class<?> loadClass(String name) throws ClassNotFoundException {
     return loadClass(name, false);
   }
 
   @Override
-  protected Class<?> loadClass(String name, boolean resolve)
-      throws ClassNotFoundException
-  {
+  protected Class<?> loadClass(final String name, final boolean resolve) throws ClassNotFoundException {
     for (ClassSpace s : spaces) {
       try {
         return s.loadClass(name);
@@ -66,9 +64,9 @@ public class NexusUberClassloader
   }
 
   @Override
-  public URL getResource(String name) {
-    for (ClassSpace s : spaces) {
-      URL result = s.getResource(name);
+  public URL getResource(final String name) {
+    for (ClassSpace space : spaces) {
+      URL result = space.getResource(name);
       if (result != null) {
         return result;
       }
@@ -77,11 +75,10 @@ public class NexusUberClassloader
   }
 
   @Override
-  public Enumeration<URL> getResources(String name)
-  {
-    List<URL> result = new ArrayList<URL>();
-    for (ClassSpace s : spaces) {
-      for (Enumeration<URL> resources = s.getResources(name); resources.hasMoreElements();) {
+  public Enumeration<URL> getResources(final String name) {
+    List<URL> result = Lists.newArrayList();
+    for (ClassSpace space : spaces) {
+      for (Enumeration<URL> resources = space.getResources(name); resources.hasMoreElements();) {
         result.add(resources.nextElement());
       }
     }
