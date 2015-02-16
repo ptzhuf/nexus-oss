@@ -27,7 +27,7 @@ public class HealthCheckServlet
   extends com.codahale.metrics.servlets.HealthCheckServlet
 {
   @Inject
-  public HealthCheckServlet(HealthCheckRegistry registry) {
+  public HealthCheckServlet(final HealthCheckRegistry registry) {
     super(registry);
   }
 }
