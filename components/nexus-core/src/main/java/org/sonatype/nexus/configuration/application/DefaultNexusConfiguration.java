@@ -143,11 +143,6 @@ public class DefaultNexusConfiguration
   private File configurationDirectory;
 
   /**
-   * Names of the conf files
-   */
-  private Map<String, String> configurationFiles;
-
-  /**
    * The default maxInstance count
    */
   private int defaultRepositoryMaxInstanceCountLimit = Integer.MAX_VALUE;
@@ -192,9 +187,7 @@ public class DefaultNexusConfiguration
   }
 
   @Override
-  public void loadConfiguration()
-      throws ConfigurationException, IOException
-  {
+  public void loadConfiguration() throws ConfigurationException, IOException {
     loadConfiguration(false);
   }
 
