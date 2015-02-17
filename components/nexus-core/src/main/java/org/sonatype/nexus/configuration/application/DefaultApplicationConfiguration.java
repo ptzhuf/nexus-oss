@@ -85,16 +85,15 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * The class DefaultNexusConfiguration is responsible for config management. It actually keeps in sync Nexus internal
  * state with persisted user configuration. All changes incoming through its iface is reflect/maintained in Nexus
- * current
- * state and Nexus user config.
+ * current state and Nexus user config.
  *
  * @author cstamas
  */
 @Singleton
 @Named
-public class DefaultNexusConfiguration
+public class DefaultApplicationConfiguration
     extends ComponentSupport
-    implements NexusConfiguration
+    implements ApplicationConfiguration
 {
   /**
    * Only to have UTs work
@@ -155,19 +154,19 @@ public class DefaultNexusConfiguration
   // ==
 
   @Inject
-  public DefaultNexusConfiguration(final CacheManager cacheManager,
-                                   final EventBus eventBus,
-                                   final @Named("file") ApplicationConfigurationSource configurationSource,
-                                   final Provider<GlobalRemoteConnectionSettings> globalRemoteConnectionSettingsProvider,
-                                   final Provider<GlobalRemoteProxySettings> globalRemoteProxySettingsProvider,
-                                   final ApplicationConfigurationValidator configurationValidator,
-                                   final ApplicationRuntimeConfigurationBuilder runtimeConfigurationBuilder,
-                                   final RepositoryTypeRegistry repositoryTypeRegistry,
-                                   final RepositoryRegistry repositoryRegistry,
-                                   final SecuritySystem securitySystem,
-                                   final List<ConfigurationModifier> configurationModifiers,
-                                   final @Named("nexus-uber") ClassLoader uberClassLoader,
-                                   final ApplicationDirectories applicationDirectories)
+  public DefaultApplicationConfiguration(final CacheManager cacheManager,
+                                         final EventBus eventBus,
+                                         final @Named("file") ApplicationConfigurationSource configurationSource,
+                                         final Provider<GlobalRemoteConnectionSettings> globalRemoteConnectionSettingsProvider,
+                                         final Provider<GlobalRemoteProxySettings> globalRemoteProxySettingsProvider,
+                                         final ApplicationConfigurationValidator configurationValidator,
+                                         final ApplicationRuntimeConfigurationBuilder runtimeConfigurationBuilder,
+                                         final RepositoryTypeRegistry repositoryTypeRegistry,
+                                         final RepositoryRegistry repositoryRegistry,
+                                         final SecuritySystem securitySystem,
+                                         final List<ConfigurationModifier> configurationModifiers,
+                                         final @Named("nexus-uber") ClassLoader uberClassLoader,
+                                         final ApplicationDirectories applicationDirectories)
   {
     this.cacheManager = checkNotNull(cacheManager);
     this.eventBus = checkNotNull(eventBus);

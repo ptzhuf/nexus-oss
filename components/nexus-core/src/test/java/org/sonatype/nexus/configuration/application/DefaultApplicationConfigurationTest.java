@@ -28,10 +28,10 @@ import org.junit.Test;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-public class DefaultNexusConfigurationTest
+public class DefaultApplicationConfigurationTest
     extends NexusAppTestSupport
 {
-  protected DefaultNexusConfiguration nexusConfiguration;
+  protected DefaultApplicationConfiguration nexusConfiguration;
 
   protected NexusEmailer nexusEmailer;
 
@@ -42,7 +42,7 @@ public class DefaultNexusConfigurationTest
   {
     super.setUp();
 
-    nexusConfiguration = (DefaultNexusConfiguration) this.lookup(ApplicationConfiguration.class);
+    nexusConfiguration = (DefaultApplicationConfiguration) this.lookup(ApplicationConfiguration.class);
 
     nexusConfiguration.loadConfiguration();
 
