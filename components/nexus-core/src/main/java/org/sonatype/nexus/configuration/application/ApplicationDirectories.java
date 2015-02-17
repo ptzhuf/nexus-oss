@@ -38,6 +38,8 @@ public interface ApplicationDirectories
    */
   File getTemporaryDirectory();
 
+  // TODO: Add getTemporaryDirectory(String path) helper, seems to be common use so add helper
+
   /**
    * Application directory.
    * 

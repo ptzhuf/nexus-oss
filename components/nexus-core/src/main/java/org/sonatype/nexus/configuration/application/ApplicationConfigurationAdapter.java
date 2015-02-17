@@ -15,7 +15,6 @@ package org.sonatype.nexus.configuration.application;
 import java.io.File;
 import java.io.IOException;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -49,12 +48,6 @@ public class ApplicationConfigurationAdapter
     return nexusConfiguration.getConfigurationModel();
   }
 
-  @Nullable
-  @Override
-  public File getInstallDirectory() {
-    return nexusConfiguration.getInstallDirectory();
-  }
-
   @Override
   public File getWorkingDirectory() {
     return nexusConfiguration.getWorkingDirectory();
@@ -63,16 +56,6 @@ public class ApplicationConfigurationAdapter
   @Override 
   public File getWorkingDirectory(final String key) {
     return nexusConfiguration.getWorkingDirectory(key);
-  }
-
-  @Override 
-  public File getWorkingDirectory(final String key, final boolean createIfNeeded) {
-    return nexusConfiguration.getWorkingDirectory(key, createIfNeeded);
-  }
-
-  @Override 
-  public File getTemporaryDirectory() {
-    return nexusConfiguration.getTemporaryDirectory();
   }
 
   @Override 

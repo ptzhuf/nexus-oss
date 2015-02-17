@@ -24,6 +24,7 @@ import javax.inject.Singleton;
 
 import org.sonatype.configuration.ConfigurationException;
 import org.sonatype.nexus.configuration.ConfigurationChangeEvent;
+import org.sonatype.nexus.configuration.application.ApplicationDirectories;
 import org.sonatype.nexus.configuration.application.NexusConfiguration;
 import org.sonatype.nexus.events.EventSubscriberHost;
 import org.sonatype.nexus.internal.orient.OrientBootstrap;
@@ -60,6 +61,8 @@ public class NxApplication
 
   private final ApplicationStatusSource applicationStatusSource;
 
+  private final ApplicationDirectories applicationDirectories;
+
   private final NexusConfiguration nexusConfiguration;
 
   private final SecuritySystem securitySystem;
@@ -76,6 +79,7 @@ public class NxApplication
 
   @Inject
   public NxApplication(final EventBus eventBus,
+                       final ApplicationDirectories applicationDirectories,
                        final NexusConfiguration nexusConfiguration,
                        final ApplicationStatusSource applicationStatusSource,
                        final SecuritySystem securitySystem,
@@ -87,6 +91,7 @@ public class NxApplication
   {
     this.eventBus = checkNotNull(eventBus);
     this.applicationStatusSource = checkNotNull(applicationStatusSource);
+    this.applicationDirectories = checkNotNull(applicationDirectories);
     this.nexusConfiguration = checkNotNull(nexusConfiguration);
     this.securitySystem = checkNotNull(securitySystem);
     this.taskScheduler = checkNotNull(taskScheduler);
@@ -162,7 +167,7 @@ public class NxApplication
       synchronizeShadowsAtStartup();
 
       if (log.isInfoEnabled()) {
-        final File workDir = nexusConfiguration.getWorkingDirectory();
+        final File workDir = applicationDirectories.getWorkDirectory();
         String workDirPath = null;
         if (workDir != null) {
           try {
