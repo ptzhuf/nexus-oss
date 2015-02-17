@@ -10,26 +10,26 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
+package org.sonatype.nexus.extender.modules;
 
-package org.sonatype.nexus.internal.metrics;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.SharedMetricRegistries;
 import com.codahale.metrics.health.HealthCheckRegistry;
+import com.google.inject.AbstractModule;
 
 /**
- * Customized {@link com.codahale.metrics.servlets.HealthCheckServlet} to support injection.
- *
- * @see HealthCheckMediator
+ * Provides access to the shared metrics and healthcheck registries.
+ * 
  * @since 3.0
  */
-@Singleton
-public class HealthCheckServlet
-    extends com.codahale.metrics.servlets.HealthCheckServlet
+public class MetricsRegistryModule
+    extends AbstractModule
 {
-  @Inject
-  public HealthCheckServlet(final HealthCheckRegistry registry) {
-    super(registry);
+  static final HealthCheckRegistry HEALTH_CHECK_REGISTRY = new HealthCheckRegistry();
+
+  @Override
+  protected void configure() {
+    bind(MetricRegistry.class).toInstance(SharedMetricRegistries.getOrCreate("nexus"));
+    bind(HealthCheckRegistry.class).toInstance(HEALTH_CHECK_REGISTRY);
   }
 }

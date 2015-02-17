@@ -13,6 +13,7 @@
 
 package org.sonatype.nexus.security;
 
+import com.google.common.base.Joiner;
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 
@@ -28,5 +29,9 @@ public abstract class FilterChainModule
     bind(FilterChain.class)
         .annotatedWith(Names.named(pathPattern))
         .toInstance(new FilterChain(pathPattern, filterExpression));
+  }
+
+  protected void addFilterChain(final String pathPattern, final String... filterExpression) {
+    addFilterChain(pathPattern, Joiner.on(",").join(filterExpression));
   }
 }
