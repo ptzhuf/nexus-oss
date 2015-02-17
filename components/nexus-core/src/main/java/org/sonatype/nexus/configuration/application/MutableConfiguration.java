@@ -51,8 +51,7 @@ public interface MutableConfiguration
 
   List<String> getRealms();
 
-  void setRealms(List<String> realms)
-      throws InvalidConfigurationException;
+  void setRealms(List<String> realms) throws InvalidConfigurationException;
 
   // ----------------------------------------------------------------------------------------------------------
   // Repositories
@@ -86,8 +85,7 @@ public interface MutableConfiguration
    *
    * @return the repository instance.
    */
-  Repository createRepository(CRepository settings)
-      throws ConfigurationException, IOException;
+  Repository createRepository(CRepository settings) throws ConfigurationException, IOException;
 
   /**
    * Drops a user managed repository.
@@ -104,10 +102,4 @@ public interface MutableConfiguration
    */
   public void deleteRepository(String id, boolean force)
       throws NoSuchRepositoryException, IOException, ConfigurationException, AccessDeniedException;
-
-  // FIXME: This will be removed: NEXUS-2363 vvvvv
-  // CRemoteNexusInstance
-
-  // FIXME: This will be removed: NEXUS-2363 ^^^^^
-
 }

@@ -173,14 +173,6 @@ public class DefaultNexusConfigurationTest
   }
 
   @Test
-  public void testGetDefaultConfigurationAsStream()
-      throws Exception
-  {
-    contentEquals(getClass().getResourceAsStream("/META-INF/nexus/nexus.xml"), nexusConfiguration
-        .getConfigurationSource().getDefaultsSource().getConfigurationAsStream());
-  }
-
-  @Test
   public void testNEXUS2212SaveInvalidConfig()
       throws Exception
   {

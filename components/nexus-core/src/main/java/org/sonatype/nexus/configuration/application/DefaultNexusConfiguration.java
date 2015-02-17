@@ -420,11 +420,6 @@ public class DefaultNexusConfiguration
   }
 
   @Override
-  public ApplicationConfigurationSource getConfigurationSource() {
-    return configurationSource;
-  }
-
-  @Override
   public boolean isInstanceUpgraded() {
     return configurationSource.isInstanceUpgraded();
   }

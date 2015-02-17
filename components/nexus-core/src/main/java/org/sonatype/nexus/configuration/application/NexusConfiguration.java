@@ -15,36 +15,28 @@ package org.sonatype.nexus.configuration.application;
 import java.io.IOException;
 
 import org.sonatype.configuration.ConfigurationException;
-import org.sonatype.nexus.configuration.source.ApplicationConfigurationSource;
 
 /**
  * A component responsible for configuration management.
- *
- * @author cstamas
  */
 public interface NexusConfiguration
     extends ApplicationConfiguration, MutableConfiguration
 {
-  /**
-   * Explicit loading of configuration. Does not force reload.
-   */
+  // FIXME: Only used by tests
   void loadConfiguration() throws ConfigurationException, IOException;
+
+  // FIXME: These only only used to prime details in SystemStatus, which are not really useful
+  boolean isInstanceUpgraded();
+  boolean isConfigurationUpgraded();
+  boolean isConfigurationDefaulted();
+
+
+  // TODO: These are still in use by NxApplication core/lifecycle, figure out how to unroll
 
   /**
    * Explicit loading of configuration. Enables to force reloading of config.
    */
   void loadConfiguration(boolean forceReload) throws ConfigurationException, IOException;
-
-  ApplicationConfigurationSource getConfigurationSource();
-
-  boolean isInstanceUpgraded();
-
-  boolean isConfigurationUpgraded();
-
-  boolean isConfigurationDefaulted();
-
-  // ------------------------------------------------------------------
-  // Booting
 
   /**
    * Creates internals like reposes configured in nexus.xml. Called on startup.
