@@ -13,10 +13,8 @@
 package org.sonatype.nexus.configuration.application;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +38,6 @@ import org.sonatype.nexus.configuration.ConfigurationPrepareForLoadEvent;
 import org.sonatype.nexus.configuration.ConfigurationPrepareForSaveEvent;
 import org.sonatype.nexus.configuration.ConfigurationRollbackEvent;
 import org.sonatype.nexus.configuration.ConfigurationSaveEvent;
-import org.sonatype.nexus.configuration.NexusStreamResponse;
 import org.sonatype.nexus.configuration.application.runtime.ApplicationRuntimeConfigurationBuilder;
 import org.sonatype.nexus.configuration.model.CPathMappingItem;
 import org.sonatype.nexus.configuration.model.CRepository;
@@ -936,69 +933,6 @@ public class DefaultNexusConfiguration
   }
 
   // ===
-
-  @Override
-  public Map<String, String> getConfigurationFiles() {
-    if (configurationFiles == null) {
-      configurationFiles = new HashMap<String, String>();
-
-      File configDirectory = getConfigurationDirectory();
-
-      int key = 1;
-
-      // Tamas:
-      // configDirectory.listFiles() may be returning null... in this case, it is 99.9% not true (otherwise nexus
-      // would not start at all), but in general, be more explicit about checks.
-
-      if (configDirectory.isDirectory() && configDirectory.listFiles() != null) {
-        for (File file : configDirectory.listFiles()) {
-          if (file.exists() && file.isFile()) {
-            configurationFiles.put(Integer.toString(key), file.getName());
-
-            key++;
-          }
-        }
-      }
-    }
-    return configurationFiles;
-  }
-
-  @Override
-  public NexusStreamResponse getConfigurationAsStreamByKey(String key)
-      throws IOException
-  {
-    String fileName = getConfigurationFiles().get(key);
-
-    if (fileName != null) {
-      File configFile = new File(getConfigurationDirectory(), fileName);
-
-      if (configFile.canRead() && configFile.isFile()) {
-        NexusStreamResponse response = new NexusStreamResponse();
-
-        response.setName(fileName);
-
-        if (fileName.endsWith(".xml")) {
-          response.setMimeType("text/xml");
-        }
-        else {
-          response.setMimeType("text/plain");
-        }
-
-        response.setSize(configFile.length());
-        response.setFromByte(0);
-        response.setBytesCount(configFile.length());
-        response.setInputStream(new FileInputStream(configFile));
-
-        return response;
-      }
-      else {
-        return null;
-      }
-    }
-    else {
-      return null;
-    }
-  }
 
   protected SecuritySystem getSecuritySystem() {
     return this.securitySystem;

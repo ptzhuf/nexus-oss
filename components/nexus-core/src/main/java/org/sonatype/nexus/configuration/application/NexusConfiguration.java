@@ -13,10 +13,8 @@
 package org.sonatype.nexus.configuration.application;
 
 import java.io.IOException;
-import java.util.Map;
 
 import org.sonatype.configuration.ConfigurationException;
-import org.sonatype.nexus.configuration.NexusStreamResponse;
 import org.sonatype.nexus.configuration.source.ApplicationConfigurationSource;
 
 /**
@@ -30,14 +28,12 @@ public interface NexusConfiguration
   /**
    * Explicit loading of configuration. Does not force reload.
    */
-  void loadConfiguration()
-      throws ConfigurationException, IOException;
+  void loadConfiguration() throws ConfigurationException, IOException;
 
   /**
    * Explicit loading of configuration. Enables to force reloading of config.
    */
-  void loadConfiguration(boolean forceReload)
-      throws ConfigurationException, IOException;
+  void loadConfiguration(boolean forceReload) throws ConfigurationException, IOException;
 
   ApplicationConfigurationSource getConfigurationSource();
 
@@ -53,24 +49,10 @@ public interface NexusConfiguration
   /**
    * Creates internals like reposes configured in nexus.xml. Called on startup.
    */
-  void createInternals()
-      throws ConfigurationException;
+  void createInternals() throws ConfigurationException;
 
   /**
    * Cleanups the internals, like on shutdown.
    */
   void dropInternals();
-
-  /**
-   * List the names of files under Configuration Directory
-   *
-   * @return A map with the value be file name
-   */
-  Map<String, String> getConfigurationFiles();
-
-  /**
-   * Loads the config file.
-   */
-  NexusStreamResponse getConfigurationAsStreamByKey(String key)
-      throws IOException;
 }

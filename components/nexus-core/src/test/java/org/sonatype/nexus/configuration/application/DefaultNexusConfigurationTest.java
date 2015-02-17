@@ -12,10 +12,7 @@
  */
 package org.sonatype.nexus.configuration.application;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.util.Map;
 
 import org.sonatype.nexus.NexusAppTestSupport;
 import org.sonatype.nexus.configuration.model.CRepository;
@@ -181,36 +178,6 @@ public class DefaultNexusConfigurationTest
   {
     contentEquals(getClass().getResourceAsStream("/META-INF/nexus/nexus.xml"), nexusConfiguration
         .getConfigurationSource().getDefaultsSource().getConfigurationAsStream());
-  }
-
-  @Test
-  public void testGetAndReadConfigurationFiles()
-      throws Exception
-  {
-    File testConfFile = new File(getConfHomeDir(), "test.xml");
-
-    FileUtils.write(testConfFile, "test");
-
-    Map<String, String> confFileNames = nexusConfiguration.getConfigurationFiles();
-
-    assertTrue(confFileNames.size() > 1);
-
-    assertTrue(confFileNames.containsValue("nexus.xml"));
-
-    assertTrue(confFileNames.containsValue("test.xml"));
-
-    for (Map.Entry<String, String> entry : confFileNames.entrySet()) {
-      if (entry.getValue().equals("test.xml")) {
-        contentEquals(new ByteArrayInputStream("test".getBytes()), nexusConfiguration
-            .getConfigurationAsStreamByKey(entry.getKey()).getInputStream());
-      }
-      else if (entry.getValue().equals("nexus.xml")) {
-        contentEquals(new FileInputStream(new File(getNexusConfiguration())), nexusConfiguration
-            .getConfigurationAsStreamByKey(entry.getKey()).getInputStream());
-      }
-    }
-    FileUtils.forceDelete(testConfFile);
-
   }
 
   @Test
