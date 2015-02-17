@@ -13,7 +13,6 @@
 package org.sonatype.nexus.configuration.application;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.sonatype.configuration.ConfigurationException;
 import org.sonatype.configuration.validation.InvalidConfigurationException;
@@ -29,8 +28,6 @@ public interface MutableConfiguration
   // Security (TODO: this should be removed, security has to be completely "paralell" and not interleaved!)
   // ----------------------------------------------------------------------------------------------------------
 
-  boolean isAnonymousAccessEnabled();
-
   /**
    * Configures anonymous access in atomic way.
    *
@@ -42,16 +39,7 @@ public interface MutableConfiguration
    * @throws InvalidConfigurationException if {@code enabled} parameter is {@code true}, but passed in username or
    *                                       password parameters are empty ({@code null} or empty string).
    */
-  void setAnonymousAccess(boolean enabled, String username, String password)
-      throws InvalidConfigurationException;
-
-  String getAnonymousUsername();
-
-  String getAnonymousPassword();
-
-  List<String> getRealms();
-
-  void setRealms(List<String> realms) throws InvalidConfigurationException;
+  void setAnonymousAccess(boolean enabled, String username, String password) throws InvalidConfigurationException;
 
   // ----------------------------------------------------------------------------------------------------------
   // Repositories

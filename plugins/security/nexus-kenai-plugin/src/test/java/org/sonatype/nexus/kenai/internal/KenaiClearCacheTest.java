@@ -43,7 +43,7 @@ public class KenaiClearCacheTest
 
     // to start the hobelevanc and make it use Kenai realm
     startNx();
-    lookup(NexusConfiguration.class).setRealms(Collections.singletonList("kenai"));
+    lookup(SecuritySystem.class).setRealms(Collections.singletonList("kenai"));
     lookup(NexusConfiguration.class).saveConfiguration();
 
     securitySystem = lookup(SecuritySystem.class);

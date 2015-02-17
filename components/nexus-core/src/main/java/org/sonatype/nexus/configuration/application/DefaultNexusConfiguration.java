@@ -300,7 +300,7 @@ public class DefaultNexusConfiguration
     }
   }
 
-  protected String changesToString(final Collection<Configurable> changes) {
+  private String changesToString(final Collection<Configurable> changes) {
     final StringBuilder sb = new StringBuilder();
 
     if (changes != null) {
@@ -316,7 +316,7 @@ public class DefaultNexusConfiguration
     return sb.toString();
   }
 
-  protected void logApplyConfiguration(final Collection<Configurable> changes) {
+  private void logApplyConfiguration(final Collection<Configurable> changes) {
     final String userId = getCurrentUserId();
 
     if (changes != null && changes.size() > 0) {
@@ -350,7 +350,7 @@ public class DefaultNexusConfiguration
    * this method) does not have bound Subject. If more information needed about current user, Shiro and/or Security
    * API of Nexus should be used, this method is not a definitive source of users in Nexus Security.
    */
-  protected String getCurrentUserId() {
+  private String getCurrentUserId() {
     try {
       final Subject subject = SecurityUtils.getSubject();
       if (subject != null && subject.getPrincipal() != null) {
@@ -465,18 +465,6 @@ public class DefaultNexusConfiguration
   // Security
 
   @Override
-  public void setRealms(List<String> realms)
-      throws org.sonatype.configuration.validation.InvalidConfigurationException
-  {
-    getSecuritySystem().setRealms(realms);
-  }
-
-  @Override
-  public boolean isAnonymousAccessEnabled() {
-    return getSecuritySystem() != null && getSecuritySystem().isAnonymousAccessEnabled();
-  }
-
-  @Override
   public void setAnonymousAccess(final boolean enabled, final String username, final String password)
       throws InvalidConfigurationException
   {
@@ -551,7 +539,7 @@ public class DefaultNexusConfiguration
 
   }
 
-  protected boolean setAnonymousUserEnabled(final String anonymousUsername, final boolean enabled)
+  private boolean setAnonymousUserEnabled(final String anonymousUsername, final boolean enabled)
       throws InvalidConfigurationException
   {
     try {
@@ -590,28 +578,11 @@ public class DefaultNexusConfiguration
     }
   }
 
-  @Override
-  public String getAnonymousUsername() {
-    return getSecuritySystem().getAnonymousUsername();
-  }
-
-  @Override
-  public String getAnonymousPassword() {
-    return getSecuritySystem().getAnonymousPassword();
-  }
-
-  @Override
-  public List<String> getRealms() {
-    return getSecuritySystem().getRealms();
-  }
-
   // ------------------------------------------------------------------
   // Booting
 
   @Override
-  public void createInternals()
-      throws ConfigurationException
-  {
+  public void createInternals() throws ConfigurationException {
     createRepositories();
   }
 
@@ -620,9 +591,7 @@ public class DefaultNexusConfiguration
     dropRepositories();
   }
 
-  protected void createRepositories()
-      throws ConfigurationException
-  {
+  private void createRepositories() throws ConfigurationException {
     List<CRepository> reposes = getConfigurationModel().getRepositories();
 
     for (CRepository repo : reposes) {
@@ -639,7 +608,7 @@ public class DefaultNexusConfiguration
     }
   }
 
-  protected void dropRepositories() {
+  private void dropRepositories() {
     for (Repository repository : repositoryRegistry.getRepositories()) {
       try {
         repositoryRegistry.removeRepositorySilently(repository.getId());
@@ -650,7 +619,7 @@ public class DefaultNexusConfiguration
     }
   }
 
-  protected Repository instantiateRepository(final Configuration configuration, final CRepository repositoryModel)
+  private Repository instantiateRepository(final Configuration configuration, final CRepository repositoryModel)
       throws ConfigurationException
   {
     try {
@@ -665,7 +634,7 @@ public class DefaultNexusConfiguration
     }
   }
 
-  protected Repository instantiateRepository(final Configuration configuration, final Class<? extends Repository> klazz,
+  private Repository instantiateRepository(final Configuration configuration, final Class<? extends Repository> klazz,
                                              final String name, final CRepository repositoryModel)
       throws ConfigurationException
   {
@@ -684,7 +653,7 @@ public class DefaultNexusConfiguration
     return repository;
   }
 
-  protected void releaseRepository(final Repository repository, final Configuration configuration,
+  private void releaseRepository(final Repository repository, final Configuration configuration,
                                    final CRepository repositoryModel)
       throws ConfigurationException
   {
@@ -722,7 +691,7 @@ public class DefaultNexusConfiguration
   // Repositories
   // ----------------------------------------------------------------------------------------------------------
 
-  protected Map<RepositoryTypeDescriptor, Integer> getRepositoryMaxInstanceCountLimits() {
+  private Map<RepositoryTypeDescriptor, Integer> getRepositoryMaxInstanceCountLimits() {
     if (repositoryMaxInstanceCountLimits == null) {
       repositoryMaxInstanceCountLimits = new ConcurrentHashMap<RepositoryTypeDescriptor, Integer>();
     }
@@ -770,7 +739,7 @@ public class DefaultNexusConfiguration
     }
   }
 
-  protected void checkRepositoryMaxInstanceCountForCreation(Class<? extends Repository> klazz, String name,
+  private void checkRepositoryMaxInstanceCountForCreation(Class<? extends Repository> klazz, String name,
                                                             CRepository repositoryModel)
       throws ConfigurationException
   {
@@ -813,7 +782,7 @@ public class DefaultNexusConfiguration
 
   // CRepository: CRUD
 
-  protected void validateRepository(CRepository settings, boolean create)
+  private void validateRepository(CRepository settings, boolean create)
       throws ConfigurationException
   {
     ApplicationValidationContext ctx = getRepositoryValidationContext();
@@ -929,7 +898,7 @@ public class DefaultNexusConfiguration
 
   // ===
 
-  protected SecuritySystem getSecuritySystem() {
+  private SecuritySystem getSecuritySystem() {
     return this.securitySystem;
   }
 }

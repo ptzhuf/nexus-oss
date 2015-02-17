@@ -21,6 +21,7 @@ import org.sonatype.nexus.extdirect.DirectComponent
 import org.sonatype.nexus.extdirect.DirectComponentSupport
 import org.sonatype.nexus.extdirect.model.Password
 import org.sonatype.nexus.security.SecuritySystem
+import org.sonatype.nexus.security.settings.SecuritySettingsManager
 
 import javax.inject.Inject
 import javax.inject.Named
@@ -39,9 +40,12 @@ import javax.validation.constraints.NotNull
 class AnonymousSettingsComponent
 extends DirectComponentSupport
 {
-
+  // FIXME: Remove once we sort out configuration updates
   @Inject
   NexusConfiguration nexusConfiguration
+
+  @Inject
+  SecuritySettingsManager securitySettingsManager
 
   @Inject
   SecuritySystem securitySystem
@@ -53,11 +57,11 @@ extends DirectComponentSupport
   @DirectMethod
   @RequiresPermissions('nexus:settings:read')
   AnonymousSettingsXO read() {
-    boolean customUser = nexusConfiguration.anonymousUsername != 'anonymous'
+    boolean customUser = securitySettingsManager.anonymousUsername != 'anonymous'
     return new AnonymousSettingsXO(
-        enabled: nexusConfiguration.anonymousAccessEnabled,
+        enabled: securitySettingsManager.anonymousAccessEnabled,
         useCustomUser: customUser,
-        username: customUser ? nexusConfiguration.anonymousUsername : null,
+        username: customUser ? securitySettingsManager.anonymousUsername : null,
         password: customUser ? Password.fakePassword() : null
     )
   }
@@ -74,7 +78,7 @@ extends DirectComponentSupport
     if (anonymousXO.enabled) {
       if (anonymousXO.useCustomUser) {
         username = anonymousXO.username
-        password = anonymousXO.password?.valueIfValid ?: nexusConfiguration.anonymousPassword
+        password = anonymousXO.password?.valueIfValid ?: securitySettingsManager.anonymousPassword
       }
       else {
         username = 'anonymous'
@@ -85,6 +89,8 @@ extends DirectComponentSupport
       username = null
       password = null
     }
+
+    // FIXME: This should be isolated into securitySettingsManager
     nexusConfiguration.setAnonymousAccess(anonymousXO.enabled, username, password)
     nexusConfiguration.saveConfiguration()
     return read()
