@@ -27,6 +27,7 @@ import org.sonatype.nexus.security.anonymous.ConfigurationFactory;
 import org.sonatype.nexus.security.anonymous.SubjectFactory;
 import org.sonatype.nexus.security.authc.FirstSuccessfulModularRealmAuthenticator;
 import org.sonatype.nexus.security.authz.ExceptionCatchingModularRealmAuthorizer;
+import org.sonatype.nexus.security.authz.NXPermissionResolver;
 import org.sonatype.nexus.security.internal.RolePermissionResolverImpl;
 
 import com.google.common.base.Throwables;
@@ -92,7 +93,7 @@ public class WebSecurityModule
   @Override
   protected void bindWebSecurityManager(final AnnotatedBindingBuilder<? super WebSecurityManager> bind) {
     bind(ConfigurationFactory.class).in(Singleton.class);
-    bind(PermissionResolver.class).to(WildcardPermissionResolver.class).in(Singleton.class);
+    bind(PermissionResolver.class).to(NXPermissionResolver.class).in(Singleton.class);
     bind(SubjectFactory.class).in(Singleton.class);
     bind(NexusWebSecurityManager.class).asEagerSingleton();
 

@@ -19,12 +19,12 @@ import javax.inject.Inject;
 import org.sonatype.configuration.validation.ValidationMessage;
 import org.sonatype.configuration.validation.ValidationResponse;
 import org.sonatype.nexus.common.text.Strings2;
-import org.sonatype.nexus.security.authz.WildcardPermission2;
 import org.sonatype.nexus.security.config.CPrivilege;
 import org.sonatype.nexus.security.config.ConfigurationIdGenerator;
 import org.sonatype.nexus.security.config.SecurityConfigurationValidationContext;
 
 import org.apache.shiro.authz.Permission;
+import org.apache.shiro.authz.permission.PermissionResolver;
 
 /**
  * Abstract {@link PrivilegeDescriptor}.
@@ -37,9 +37,12 @@ public abstract class AbstractPrivilegeDescriptor
 {
   private ConfigurationIdGenerator idGenerator;
 
+  private PermissionResolver permissionResolver;
+
   @Inject
-  public void installDependencies(final ConfigurationIdGenerator idGenerator) {
+  public void installDependencies(final ConfigurationIdGenerator idGenerator, final PermissionResolver permissionResolver) {
     this.idGenerator = idGenerator;
+    this.permissionResolver = permissionResolver;
   }
 
   protected abstract String buildPermission(CPrivilege privilege);
@@ -48,7 +51,7 @@ public abstract class AbstractPrivilegeDescriptor
   public Permission createPermission(final CPrivilege privilege) {
     assert privilege != null;
     assert getType().equals(privilege.getType());
-    return new WildcardPermission2(buildPermission(privilege));
+    return permissionResolver.resolvePermission(buildPermission(privilege));
   }
 
   public ValidationResponse validatePrivilege(CPrivilege privilege, SecurityConfigurationValidationContext ctx, boolean update) {
