@@ -29,7 +29,7 @@ public class DefaultGlobalRemoteConnectionSettingsTest
   public void testEvents()
       throws Exception
   {
-    NexusConfiguration cfg = lookup(NexusConfiguration.class);
+    ApplicationConfiguration cfg = lookup(ApplicationConfiguration.class);
     cfg.loadConfiguration();
 
     final GlobalRemoteConnectionSettingsChangedEvent[] event = new GlobalRemoteConnectionSettingsChangedEvent[1];

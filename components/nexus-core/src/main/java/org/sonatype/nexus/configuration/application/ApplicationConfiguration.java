@@ -15,7 +15,14 @@ package org.sonatype.nexus.configuration.application;
 import java.io.File;
 import java.io.IOException;
 
+import org.sonatype.configuration.ConfigurationException;
+import org.sonatype.configuration.validation.InvalidConfigurationException;
+import org.sonatype.nexus.configuration.model.CRepository;
 import org.sonatype.nexus.configuration.model.Configuration;
+import org.sonatype.nexus.proxy.AccessDeniedException;
+import org.sonatype.nexus.proxy.NoSuchRepositoryException;
+import org.sonatype.nexus.proxy.registry.RepositoryTypeDescriptor;
+import org.sonatype.nexus.proxy.repository.Repository;
 import org.sonatype.nexus.proxy.storage.local.LocalStorageContext;
 import org.sonatype.nexus.proxy.storage.remote.RemoteStorageContext;
 
@@ -71,4 +78,86 @@ public interface ApplicationConfiguration
    */
   @Deprecated
   Configuration getConfigurationModel();
+
+  // FIXME: Only used by tests
+  void loadConfiguration() throws ConfigurationException, IOException;
+
+  // FIXME: These only only used to prime details in SystemStatus, which are not really useful
+  boolean isInstanceUpgraded();
+
+  boolean isConfigurationUpgraded();
+
+  boolean isConfigurationDefaulted();
+
+  /**
+   * Explicit loading of configuration. Enables to force reloading of config.
+   */
+  void loadConfiguration(boolean forceReload) throws ConfigurationException, IOException;
+
+  /**
+   * Creates internals like reposes configured in nexus.xml. Called on startup.
+   */
+  void createInternals() throws ConfigurationException;
+
+  /**
+   * Cleanups the internals, like on shutdown.
+   */
+  void dropInternals();
+
+  /**
+   * Configures anonymous access in atomic way.
+   *
+   * @param enabled  {@code true} to enable and {@code false} to disable it.
+   * @param username the username of the user to be used as "anonymous" user. If {@code enabled} parameter is
+   *                 {@code true}, this value must be non-null.
+   * @param password the password of the user to be used as "anonymous" user. If {@code enabled} parameter is
+   *                 {@code true}, this value must be non-null.
+   * @throws InvalidConfigurationException if {@code enabled} parameter is {@code true}, but passed in username or
+   *                                       password parameters are empty ({@code null} or empty string).
+   */
+  void setAnonymousAccess(boolean enabled, String username, String password) throws InvalidConfigurationException;
+
+  /**
+   * Sets the default (applied to all that has no exceptions set with {
+   * {@link #setRepositoryMaxInstanceCount(RepositoryTypeDescriptor, int)} method) maxInstanceCount. Any positive
+   * integer limits the max count of live instances, any less then 0 integer removes the limitation. Note: setting
+   * limitations on already booted instance will not "enforce" the limitation!
+   */
+  void setDefaultRepositoryMaxInstanceCount(int count);
+
+  /**
+   * Limits the maxInstanceCount for the passed in repository type. Any positive integer limits the max count of live
+   * instances, any less then 0 integer removes the limitation. Note: setting limitations on already booted instance
+   * will not "enforce" the limitation!
+   */
+  void setRepositoryMaxInstanceCount(RepositoryTypeDescriptor rtd, int count);
+
+  /**
+   * Returns the count limit for the passed in repository type.
+   */
+  int getRepositoryMaxInstanceCount(RepositoryTypeDescriptor rtd);
+
+  /**
+   * Creates a repository live instance out of the passed in model. It validates, registers it with repository
+   * registry and puts it into configuration. And finally saves configuration.
+   *
+   * @return the repository instance.
+   */
+  Repository createRepository(CRepository settings) throws ConfigurationException, IOException;
+
+  /**
+   * Drops a user managed repository.
+   *
+   * @see #deleteRepository(String, boolean)
+   */
+  void deleteRepository(String id)
+      throws NoSuchRepositoryException, IOException, ConfigurationException, AccessDeniedException;
+
+  /**
+   * Drops a repository, can only delete user managed repository unless force parameter is {@code true}.
+   *
+   * @throws AccessDeniedException when try to delete a non-user-managed repository and without force enabled
+   */
+  void deleteRepository(String id, boolean force)
+      throws NoSuchRepositoryException, IOException, ConfigurationException, AccessDeniedException;
 }

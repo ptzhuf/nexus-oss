@@ -13,7 +13,7 @@
 package org.sonatype.nexus.repositories.nexus4807;
 
 import org.sonatype.nexus.NexusAppTestSupport;
-import org.sonatype.nexus.configuration.application.NexusConfiguration;
+import org.sonatype.nexus.configuration.application.ApplicationConfiguration;
 import org.sonatype.nexus.proxy.NoSuchRepositoryException;
 import org.sonatype.nexus.proxy.registry.RepositoryRegistry;
 import org.sonatype.nexus.proxy.registry.RepositoryTypeDescriptor;
@@ -44,7 +44,7 @@ public class Nexus4807Test
   {
     final RepositoryTypeRegistry repositoryTypeRegistry = lookup(RepositoryTypeRegistry.class);
     final RepositoryRegistry repositoryRegistry = lookup(RepositoryRegistry.class);
-    final NexusConfiguration nexusConfiguration = lookup(NexusConfiguration.class);
+    final ApplicationConfiguration nexusConfiguration = lookup(ApplicationConfiguration.class);
     final TemplateManager templateManager = lookup(TemplateManager.class);
 
     // register this

@@ -33,7 +33,7 @@ public class DefaultGlobalRemoteProxySettingsTest
   public void testEvents()
       throws Exception
   {
-    NexusConfiguration cfg = lookup(NexusConfiguration.class);
+    ApplicationConfiguration cfg = lookup(ApplicationConfiguration.class);
     cfg.loadConfiguration();
 
     final GlobalRemoteProxySettingsChangedEvent[] event = new GlobalRemoteProxySettingsChangedEvent[1];

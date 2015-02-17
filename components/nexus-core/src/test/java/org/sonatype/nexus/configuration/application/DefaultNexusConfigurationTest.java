@@ -42,7 +42,7 @@ public class DefaultNexusConfigurationTest
   {
     super.setUp();
 
-    nexusConfiguration = (DefaultNexusConfiguration) this.lookup(NexusConfiguration.class);
+    nexusConfiguration = (DefaultNexusConfiguration) this.lookup(ApplicationConfiguration.class);
 
     nexusConfiguration.loadConfiguration();
 

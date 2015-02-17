@@ -24,8 +24,8 @@ import javax.inject.Singleton;
 
 import org.sonatype.configuration.ConfigurationException;
 import org.sonatype.nexus.configuration.ConfigurationChangeEvent;
+import org.sonatype.nexus.configuration.application.ApplicationConfiguration;
 import org.sonatype.nexus.configuration.application.ApplicationDirectories;
-import org.sonatype.nexus.configuration.application.NexusConfiguration;
 import org.sonatype.nexus.events.EventSubscriberHost;
 import org.sonatype.nexus.internal.orient.OrientBootstrap;
 import org.sonatype.nexus.proxy.events.NexusInitializedEvent;
@@ -63,7 +63,7 @@ public class NxApplication
 
   private final ApplicationDirectories applicationDirectories;
 
-  private final NexusConfiguration nexusConfiguration;
+  private final ApplicationConfiguration applicationConfiguration;
 
   private final SecuritySystem securitySystem;
 
@@ -80,7 +80,7 @@ public class NxApplication
   @Inject
   public NxApplication(final EventBus eventBus,
                        final ApplicationDirectories applicationDirectories,
-                       final NexusConfiguration nexusConfiguration,
+                       final ApplicationConfiguration applicationConfiguration,
                        final ApplicationStatusSource applicationStatusSource,
                        final SecuritySystem securitySystem,
                        final TaskScheduler taskScheduler,
@@ -92,7 +92,7 @@ public class NxApplication
     this.eventBus = checkNotNull(eventBus);
     this.applicationStatusSource = checkNotNull(applicationStatusSource);
     this.applicationDirectories = checkNotNull(applicationDirectories);
-    this.nexusConfiguration = checkNotNull(nexusConfiguration);
+    this.applicationConfiguration = checkNotNull(applicationConfiguration);
     this.securitySystem = checkNotNull(securitySystem);
     this.taskScheduler = checkNotNull(taskScheduler);
     this.repositoryRegistry = checkNotNull(repositoryRegistry);
@@ -141,19 +141,19 @@ public class NxApplication
     try {
       // force configuration load, validation and probable upgrade if needed
       // applies configuration and notifies listeners
-      nexusConfiguration.loadConfiguration(true);
+      applicationConfiguration.loadConfiguration(true);
       // essential services
       securitySystem.start();
       securitySystem.getAnonymousUsername();
-      nexusConfiguration.createInternals();
+      applicationConfiguration.createInternals();
 
       // notify about start other components participating in configuration framework
-      eventBus.post(new ConfigurationChangeEvent(nexusConfiguration, null, null));
+      eventBus.post(new ConfigurationChangeEvent(applicationConfiguration, null, null));
 
       applicationStatusSource.getSystemStatus().setLastConfigChange(new Date());
-      applicationStatusSource.getSystemStatus().setFirstStart(nexusConfiguration.isConfigurationDefaulted());
-      applicationStatusSource.getSystemStatus().setInstanceUpgraded(nexusConfiguration.isInstanceUpgraded());
-      applicationStatusSource.getSystemStatus().setConfigurationUpgraded(nexusConfiguration.isConfigurationUpgraded());
+      applicationStatusSource.getSystemStatus().setFirstStart(applicationConfiguration.isConfigurationDefaulted());
+      applicationStatusSource.getSystemStatus().setInstanceUpgraded(applicationConfiguration.isInstanceUpgraded());
+      applicationStatusSource.getSystemStatus().setConfigurationUpgraded(applicationConfiguration.isConfigurationUpgraded());
       if (applicationStatusSource.getSystemStatus().isFirstStart()) {
         log.info("This is 1st start of new Nexus instance.");
       }
@@ -207,7 +207,7 @@ public class NxApplication
     eventBus.post(new NexusStoppedEvent(this));
     eventSubscriberHost.stop();
 
-    nexusConfiguration.dropInternals();
+    applicationConfiguration.dropInternals();
     securitySystem.stop();
 
     // HACK: Must stop database services manually

@@ -17,7 +17,7 @@ import java.io.IOException;
 import javax.inject.Inject;
 
 import org.sonatype.configuration.ConfigurationException;
-import org.sonatype.nexus.configuration.application.NexusConfiguration;
+import org.sonatype.nexus.configuration.application.ApplicationConfiguration;
 import org.sonatype.nexus.configuration.model.CRepository;
 import org.sonatype.nexus.configuration.model.CRepositoryCoreConfiguration;
 import org.sonatype.nexus.proxy.registry.ContentClass;
@@ -41,13 +41,13 @@ public abstract class AbstractRepositoryTemplateProvider
 
   private RepositoryTypeRegistry repositoryTypeRegistry;
 
-  private NexusConfiguration nexusConfiguration;
+  private ApplicationConfiguration applicationConfiguration;
 
   private RemoteProviderHintFactory remoteProviderHintFactory;
 
   @Inject
-  public void setNexusConfiguration(final NexusConfiguration nexusConfiguration) {
-    this.nexusConfiguration = checkNotNull(nexusConfiguration);
+  public void setApplicationConfiguration(final ApplicationConfiguration applicationConfiguration) {
+    this.applicationConfiguration = checkNotNull(applicationConfiguration);
   }
 
   @Inject
@@ -63,7 +63,7 @@ public abstract class AbstractRepositoryTemplateProvider
   protected Repository createRepository(CRepository repository)
       throws ConfigurationException, IOException
   {
-    return nexusConfiguration.createRepository(repository);
+    return applicationConfiguration.createRepository(repository);
   }
 
   public RemoteProviderHintFactory getRemoteProviderHintFactory() {

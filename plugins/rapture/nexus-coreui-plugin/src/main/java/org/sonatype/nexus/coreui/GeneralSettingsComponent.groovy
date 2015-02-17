@@ -21,8 +21,8 @@ import org.apache.shiro.authz.annotation.RequiresPermissions
 import org.sonatype.configuration.validation.InvalidConfigurationException
 import org.sonatype.configuration.validation.ValidationMessage
 import org.sonatype.configuration.validation.ValidationResponse
+import org.sonatype.nexus.configuration.application.ApplicationConfiguration
 import org.sonatype.nexus.configuration.application.GlobalRestApiSettings
-import org.sonatype.nexus.configuration.application.NexusConfiguration
 import org.sonatype.nexus.extdirect.DirectComponent
 import org.sonatype.nexus.extdirect.DirectComponentSupport
 
@@ -48,7 +48,7 @@ extends DirectComponentSupport
   GlobalRestApiSettings globalRestApiSettings
 
   @Inject
-  NexusConfiguration nexusConfiguration
+  ApplicationConfiguration nexusConfiguration
 
   /**
    * Retrieves general system settings.

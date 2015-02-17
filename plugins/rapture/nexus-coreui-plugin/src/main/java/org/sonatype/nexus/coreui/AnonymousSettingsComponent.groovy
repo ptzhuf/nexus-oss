@@ -16,7 +16,7 @@ import com.softwarementors.extjs.djn.config.annotations.DirectAction
 import com.softwarementors.extjs.djn.config.annotations.DirectMethod
 import org.apache.shiro.authz.annotation.RequiresAuthentication
 import org.apache.shiro.authz.annotation.RequiresPermissions
-import org.sonatype.nexus.configuration.application.NexusConfiguration
+import org.sonatype.nexus.configuration.application.ApplicationConfiguration
 import org.sonatype.nexus.extdirect.DirectComponent
 import org.sonatype.nexus.extdirect.DirectComponentSupport
 import org.sonatype.nexus.extdirect.model.Password
@@ -42,7 +42,7 @@ extends DirectComponentSupport
 {
   // FIXME: Remove once we sort out configuration updates
   @Inject
-  NexusConfiguration nexusConfiguration
+  ApplicationConfiguration nexusConfiguration
 
   @Inject
   SecuritySettingsManager securitySettingsManager

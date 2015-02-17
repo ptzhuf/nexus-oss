@@ -17,7 +17,7 @@ import java.net.ServerSocket;
 import java.util.List;
 
 import org.sonatype.configuration.ConfigurationException;
-import org.sonatype.nexus.configuration.application.NexusConfiguration;
+import org.sonatype.nexus.configuration.application.ApplicationConfiguration;
 import org.sonatype.nexus.events.EventSubscriberHost;
 import org.sonatype.nexus.proxy.events.NexusStoppedEvent;
 import org.sonatype.nexus.proxy.maven.routing.Config;
@@ -50,7 +50,7 @@ public abstract class NexusAppTestSupport
 
   private EventBus eventBus;
 
-  private NexusConfiguration nexusConfiguration;
+  private ApplicationConfiguration nexusConfiguration;
 
   private TemplateManager templateManager;
 
@@ -156,7 +156,7 @@ public abstract class NexusAppTestSupport
     eventBus = lookup(EventBus.class);
     nexusScheduler = lookup(TaskScheduler.class);
     eventSubscriberHost = lookup(EventSubscriberHost.class);
-    nexusConfiguration = lookup(NexusConfiguration.class);
+    nexusConfiguration = lookup(ApplicationConfiguration.class);
     templateManager = lookup(TemplateManager.class);
 
     if (shouldLoadConfigurationOnStartup()) {
@@ -184,7 +184,7 @@ public abstract class NexusAppTestSupport
     return eventBus;
   }
 
-  protected NexusConfiguration nexusConfiguration() {
+  protected ApplicationConfiguration nexusConfiguration() {
     return nexusConfiguration;
   }
 
