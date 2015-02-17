@@ -12,11 +12,14 @@
  */
 package org.sonatype.nexus.security.anonymous;
 
+import java.util.Collections;
 import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
+
+import org.sonatype.nexus.security.internal.AuthenticatingRealmImpl;
 
 import com.google.common.collect.Sets;
 import org.apache.shiro.authz.Permission;
@@ -44,8 +47,17 @@ public class ConfigurationFactory
   private Set<String> roles;
 
   @Inject
-  public ConfigurationFactory(final RolePermissionResolver rolePermissionResolver) {
-    this.rolePermissionResolver = checkNotNull(rolePermissionResolver);
+  public ConfigurationFactory() { //final RolePermissionResolver rolePermissionResolver) {
+    // TODO: role permResolver is NOT needed now (as anon user is mapped), but would be needed to generic operation
+    // TODO: Still, due some guicey/Sisuey wiring problem I cannot get a role perm resolver here
+    //this.rolePermissionResolver = checkNotNull(rolePermissionResolver);
+    this.rolePermissionResolver = null;
+    // TODO: these are just example configuratiuon, emulating what NX2 had, except no "anonymous" user needed in XML realm
+    this.enabled = true;
+    this.sessionCreationEnabled = false;
+    this.principal = "anonymous"; // map it to anonymous user
+    this.originatingRealm = AuthenticatingRealmImpl.NAME; // map it to "XML" realm
+    this.roles = Collections.emptySet();
   }
 
   public boolean isEnabled() {

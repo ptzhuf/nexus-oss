@@ -28,6 +28,8 @@ import org.apache.shiro.subject.ExecutionException;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.subject.support.DisabledSessionException;
+import org.apache.shiro.subject.support.SubjectCallable;
+import org.apache.shiro.subject.support.SubjectRunnable;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -372,22 +374,35 @@ public class AnonymousSubject
 
   @Override
   public <V> V execute(final Callable<V> callable) throws ExecutionException {
-    return subject.execute(callable);
+    final Callable<V> associated = associateWith(callable);
+    try {
+      return associated.call();
+    } catch (Throwable t) {
+      throw new ExecutionException(t);
+    }
   }
 
   @Override
   public void execute(final Runnable runnable) {
-    subject.execute(runnable);
+    final Runnable associated = associateWith(runnable);
+    associated.run();
   }
 
   @Override
   public <V> Callable<V> associateWith(final Callable<V> callable) {
-    return subject.associateWith(callable);
+    return new SubjectCallable<V>(this, callable);
   }
 
   @Override
   public Runnable associateWith(final Runnable runnable) {
-    return subject.associateWith(runnable);
+    if (runnable instanceof Thread) {
+      String msg = "This implementation does not support Thread arguments because of JDK ThreadLocal " +
+          "inheritance mechanisms required by Shiro.  Instead, the method argument should be a non-Thread " +
+          "Runnable and the return value from this method can then be given to an ExecutorService or " +
+          "another Thread.";
+      throw new UnsupportedOperationException(msg);
+    }
+    return new SubjectRunnable(this, runnable);
   }
 
   @Override

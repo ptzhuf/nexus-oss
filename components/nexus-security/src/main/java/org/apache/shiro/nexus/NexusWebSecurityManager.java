@@ -17,6 +17,7 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 
 import org.sonatype.nexus.security.UserIdMdcHelper;
+import org.sonatype.nexus.security.anonymous.SubjectFactory;
 import org.sonatype.nexus.security.authc.AuthenticationEvent;
 import org.sonatype.sisu.goodies.common.Time;
 import org.sonatype.sisu.goodies.eventbus.EventBus;
@@ -46,7 +47,7 @@ public class NexusWebSecurityManager
   private final Provider<EventBus> eventBus;
 
   @Inject
-  public NexusWebSecurityManager(final Provider<EventBus> eventBus) {
+  public NexusWebSecurityManager(final Provider<EventBus> eventBus, final SubjectFactory subjectFactory) {
     this.eventBus = checkNotNull(eventBus);
 
     // TODO: Inject singleton?
@@ -57,6 +58,7 @@ public class NexusWebSecurityManager
     cookie.setName(DEFAULT_REMEMBER_ME_COOKIE_NAME);
     cookie.setMaxAge(DEFAULT_REMEMBER_ME_COOKIE_MAX_AGE.toSecondsI());
     setRememberMeManager(rememberMeManager);
+    setSubjectFactory(subjectFactory);
   }
 
   /**

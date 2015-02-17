@@ -23,8 +23,11 @@ import javax.servlet.Filter;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletContext;
 
+import org.sonatype.nexus.security.anonymous.ConfigurationFactory;
+import org.sonatype.nexus.security.anonymous.SubjectFactory;
 import org.sonatype.nexus.security.authc.FirstSuccessfulModularRealmAuthenticator;
 import org.sonatype.nexus.security.authz.ExceptionCatchingModularRealmAuthorizer;
+import org.sonatype.nexus.security.internal.RolePermissionResolverImpl;
 
 import com.google.common.base.Throwables;
 import com.google.inject.Key;
@@ -33,6 +36,9 @@ import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.Authenticator;
 import org.apache.shiro.authz.Authorizer;
+import org.apache.shiro.authz.permission.PermissionResolver;
+import org.apache.shiro.authz.permission.RolePermissionResolver;
+import org.apache.shiro.authz.permission.WildcardPermissionResolver;
 import org.apache.shiro.config.ConfigurationException;
 import org.apache.shiro.guice.web.ShiroWebModule;
 import org.apache.shiro.mgt.RealmSecurityManager;
@@ -85,6 +91,9 @@ public class WebSecurityModule
 
   @Override
   protected void bindWebSecurityManager(final AnnotatedBindingBuilder<? super WebSecurityManager> bind) {
+    bind(ConfigurationFactory.class).in(Singleton.class);
+    bind(PermissionResolver.class).to(WildcardPermissionResolver.class).in(Singleton.class);
+    bind(SubjectFactory.class).in(Singleton.class);
     bind(NexusWebSecurityManager.class).asEagerSingleton();
 
     // bind RealmSecurityManager and WebSecurityManager to _same_ component

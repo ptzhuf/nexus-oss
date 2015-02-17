@@ -27,6 +27,7 @@ import org.sonatype.nexus.common.validation.Validate;
 import org.sonatype.nexus.extdirect.DirectComponentSupport;
 import org.sonatype.nexus.rapture.StateContributor;
 import org.sonatype.nexus.security.SecuritySystem;
+import org.sonatype.nexus.security.anonymous.AnonymousSubject;
 import org.sonatype.nexus.security.privilege.Privilege;
 import org.sonatype.nexus.util.Tokens;
 import org.sonatype.nexus.wonderland.AuthTicketService;
@@ -156,14 +157,6 @@ public class SecurityComponent
       if (subject.hasRole("nx-admin")) {
         userXO.setAdministrator(true);
       }
-
-      Object principal = subject.getPrincipal();
-      if (principal != null) {
-        userXO.setId(principal.toString());
-        if (securitySystem.isAnonymousAccessEnabled() && userXO.getId().equals(securitySystem.getAnonymousUsername())) {
-          userXO = null;
-        }
-      }
     }
     return userXO;
   }
@@ -179,7 +172,7 @@ public class SecurityComponent
   public List<PermissionXO> calculatePermissions() {
     List<PermissionXO> permissions = null;
     Subject subject = securitySystem.getSubject();
-    if (isLoggedIn(subject)) {
+    if (isLoggedInOrIsAnonymous(subject)) {
       permissions = asPermissions(calculatePrivileges(subject));
     }
     return permissions;
@@ -205,6 +198,16 @@ public class SecurityComponent
     }
 
     return commands;
+  }
+
+  private boolean isLoggedInOrIsAnonymous(final Subject subject) {
+    if (subject instanceof AnonymousSubject) {
+      final AnonymousSubject anon = (AnonymousSubject) subject;
+      if (anon.isAnonymous()) {
+        return true;
+      }
+    }
+    return isLoggedIn(subject);
   }
 
   private boolean isLoggedIn(final Subject subject) {

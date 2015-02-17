@@ -29,6 +29,8 @@ import org.apache.shiro.web.servlet.AdviceFilter;
 public class AnonymousFilter
     extends AdviceFilter
 {
+  public static final String NAME = "nx-anonymous";
+
   @Override
   protected boolean preHandle(final ServletRequest request, final ServletResponse response) throws Exception {
     final Subject subject = SecurityUtils.getSubject();
