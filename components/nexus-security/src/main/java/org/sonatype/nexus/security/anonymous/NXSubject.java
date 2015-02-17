@@ -38,14 +38,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * implementation, you need two things:
  * <ul>
  * <li>Register and use {@link SubjectFactory} as global subject factory</li>
- * <li>Add a filter to entry points (like servlet filter for webapps) where you call {@link #setAnonymous()} method on
- * entry, and {@link #unsetAnonymous()} on exit. This is the one and only place where casting of Subject is needed,
- * everything else works as usual.</li>
+ * <li>Add {@link AnonymousFilter} to entry points where anonymous users are allowed</li>
  * </ul>
  * This implementation does not change behaviour of any existing Shiro filter, but it makes possible to assign roles
  * and permissions to non-authenticated subjects.
  */
-public class AnonymousSubject
+public class NXSubject
     implements Subject
 {
   private final ConfigurationFactory anonymousConfigurationSource;
@@ -58,10 +56,10 @@ public class AnonymousSubject
 
   private Configuration anonymousConfiguration;
 
-  public AnonymousSubject(final ConfigurationFactory anonymousConfigurationSource,
-                          final SecurityManager securityManager,
-                          final PermissionResolver permissionResolver,
-                          final Subject subject)
+  public NXSubject(final ConfigurationFactory anonymousConfigurationSource,
+                   final SecurityManager securityManager,
+                   final PermissionResolver permissionResolver,
+                   final Subject subject)
   {
     this.anonymousConfigurationSource = checkNotNull(anonymousConfigurationSource);
     this.securityManager = checkNotNull(securityManager);

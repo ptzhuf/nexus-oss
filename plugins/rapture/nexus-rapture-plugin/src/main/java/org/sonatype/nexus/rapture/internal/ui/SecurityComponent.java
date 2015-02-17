@@ -27,7 +27,7 @@ import org.sonatype.nexus.common.validation.Validate;
 import org.sonatype.nexus.extdirect.DirectComponentSupport;
 import org.sonatype.nexus.rapture.StateContributor;
 import org.sonatype.nexus.security.SecuritySystem;
-import org.sonatype.nexus.security.anonymous.AnonymousSubject;
+import org.sonatype.nexus.security.anonymous.NXSubject;
 import org.sonatype.nexus.security.privilege.Privilege;
 import org.sonatype.nexus.util.Tokens;
 import org.sonatype.nexus.wonderland.AuthTicketService;
@@ -201,8 +201,8 @@ public class SecurityComponent
   }
 
   private boolean isLoggedInOrIsAnonymous(final Subject subject) {
-    if (subject instanceof AnonymousSubject) {
-      final AnonymousSubject anon = (AnonymousSubject) subject;
+    if (subject instanceof NXSubject) {
+      final NXSubject anon = (NXSubject) subject;
       if (anon.isAnonymous()) {
         return true;
       }

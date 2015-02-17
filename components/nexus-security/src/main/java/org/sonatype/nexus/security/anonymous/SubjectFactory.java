@@ -25,7 +25,7 @@ import org.apache.shiro.web.subject.WebSubject;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Subject factory of anonymous enabled subjects.
+ * Shiro subject factory implementation that creates {@link NXSubject} and {@link NXWebSubject} instances.
  */
 @Singleton
 @Named
@@ -49,12 +49,10 @@ public class SubjectFactory
     final Subject subject = super.createSubject(context);
     if (subject instanceof WebSubject) {
       final WebSubject webSubject = (WebSubject) subject;
-      return new AnonymousWebSubject(configurationFactory, context.resolveSecurityManager(), permissionResolver,
-          subject, webSubject.getServletRequest(), webSubject.getServletResponse());
-
+      return new NXWebSubject(configurationFactory, context.resolveSecurityManager(), permissionResolver, webSubject);
     }
     else {
-      return new AnonymousSubject(configurationFactory, context.resolveSecurityManager(), permissionResolver, subject);
+      return new NXSubject(configurationFactory, context.resolveSecurityManager(), permissionResolver, subject);
     }
   }
 }

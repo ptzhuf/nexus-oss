@@ -17,32 +17,29 @@ import javax.servlet.ServletResponse;
 
 import org.apache.shiro.authz.permission.PermissionResolver;
 import org.apache.shiro.mgt.SecurityManager;
-import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.subject.WebSubject;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Shiro Web subject of {@link AnonymousSubject}.
+ * Shiro {@link WebSubject} extension of {@link NXSubject}.
  */
-public class AnonymousWebSubject
-    extends AnonymousSubject
+public class NXWebSubject
+    extends NXSubject
     implements WebSubject
 {
   private final ServletRequest servletRequest;
 
   private final ServletResponse servletResponse;
 
-  public AnonymousWebSubject(final ConfigurationFactory anonymousConfigurationSource,
-                             final SecurityManager securityManager,
-                             final PermissionResolver permissionResolver,
-                             final Subject subject,
-                             final ServletRequest servletRequest,
-                             final ServletResponse servletResponse)
+  public NXWebSubject(final ConfigurationFactory anonymousConfigurationSource,
+                      final SecurityManager securityManager,
+                      final PermissionResolver permissionResolver,
+                      final WebSubject subject)
   {
     super(anonymousConfigurationSource, securityManager, permissionResolver, subject);
-    this.servletRequest = checkNotNull(servletRequest);
-    this.servletResponse = checkNotNull(servletResponse);
+    this.servletRequest = checkNotNull(subject.getServletRequest());
+    this.servletResponse = checkNotNull(subject.getServletResponse());
   }
 
   @Override

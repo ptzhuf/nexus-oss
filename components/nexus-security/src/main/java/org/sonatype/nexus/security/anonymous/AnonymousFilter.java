@@ -34,26 +34,27 @@ public class AnonymousFilter
   @Override
   protected boolean preHandle(final ServletRequest request, final ServletResponse response) throws Exception {
     final Subject subject = SecurityUtils.getSubject();
-    if (subject instanceof AnonymousSubject) {
-      ((AnonymousSubject) subject).setAnonymous();
+    if (subject instanceof NXSubject) {
+      ((NXSubject) subject).setAnonymous();
       return true;
     }
     else {
-      // TODO: factory not set?
+      // TODO: factory not set? This is here only for testing purposes, to be removed
       throw new IllegalStateException(
           "SubjectFactory not set? Subject class not supported " + subject.getClass().getSimpleName());
     }
   }
 
+  @Override
   public void afterCompletion(final ServletRequest request, final ServletResponse response, final Exception exception)
       throws Exception
   {
     final Subject subject = SecurityUtils.getSubject();
-    if (subject instanceof AnonymousSubject) {
-      ((AnonymousSubject) subject).unsetAnonymous();
+    if (subject instanceof NXSubject) {
+      ((NXSubject) subject).unsetAnonymous();
     }
     else {
-      // TODO: something rebound/override subject?
+      // TODO: something rebound/override subject? This is here only for testing purposes, to be removed
       throw new IllegalStateException(
           "SubjectFactory not set? Subject class not supported " + subject.getClass().getSimpleName());
     }
