@@ -91,7 +91,8 @@ extends DirectComponentSupport
     }
 
     // FIXME: This should be isolated into securitySettingsManager
-    nexusConfiguration.setAnonymousAccess(anonymousXO.enabled, username, password)
+    securitySystem.setAnonymousAccess(anonymousXO.enabled, username, password)
+    // FIXME: This should be handled by ^^^
     nexusConfiguration.saveConfiguration()
     return read()
   }

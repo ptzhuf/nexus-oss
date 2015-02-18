@@ -16,7 +16,6 @@ import java.io.File;
 import java.io.IOException;
 
 import org.sonatype.configuration.ConfigurationException;
-import org.sonatype.configuration.validation.InvalidConfigurationException;
 import org.sonatype.nexus.configuration.model.CRepository;
 import org.sonatype.nexus.configuration.model.Configuration;
 import org.sonatype.nexus.proxy.AccessDeniedException;
@@ -96,19 +95,6 @@ public interface ApplicationConfiguration
    * Cleanups the internals, like on shutdown.
    */
   void dropInternals();
-
-  /**
-   * Configures anonymous access in atomic way.
-   *
-   * @param enabled  {@code true} to enable and {@code false} to disable it.
-   * @param username the username of the user to be used as "anonymous" user. If {@code enabled} parameter is
-   *                 {@code true}, this value must be non-null.
-   * @param password the password of the user to be used as "anonymous" user. If {@code enabled} parameter is
-   *                 {@code true}, this value must be non-null.
-   * @throws InvalidConfigurationException if {@code enabled} parameter is {@code true}, but passed in username or
-   *                                       password parameters are empty ({@code null} or empty string).
-   */
-  void setAnonymousAccess(boolean enabled, String username, String password) throws InvalidConfigurationException;
 
   /**
    * Sets the default (applied to all that has no exceptions set with {

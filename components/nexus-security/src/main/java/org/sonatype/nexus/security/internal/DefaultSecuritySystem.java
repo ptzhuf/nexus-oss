@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.annotation.Nullable;
@@ -49,6 +50,7 @@ import org.sonatype.nexus.security.user.UserStatus;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
 import org.sonatype.sisu.goodies.eventbus.EventBus;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.eventbus.Subscribe;
 import net.sf.ehcache.CacheManager;
@@ -118,6 +120,53 @@ public class DefaultSecuritySystem
     started = false;
   }
 
+  public RealmSecurityManager getSecurityManager() {
+    return securityManager;
+  }
+
+  public Subject getSubject() {
+    // this gets the currently bound Subject to the thread
+    return SecurityUtils.getSubject();
+  }
+
+  public synchronized void start() {
+    if (started) {
+      throw new IllegalStateException(getClass().getName()
+          + " was already started, same instance is not re-startable!");
+    }
+    // reload the config
+    securitySettingsManager.clearCache();
+
+    // setup the CacheManager ( this could be injected if we where less coupled with ehcache)
+    // The plexus wrapper can interpolate the config
+    EhCacheManager ehCacheManager = new EhCacheManager();
+    ehCacheManager.setCacheManager(cacheManager);
+    getSecurityManager().setCacheManager(ehCacheManager);
+
+    if (org.apache.shiro.util.Initializable.class.isInstance(getSecurityManager())) {
+      ((org.apache.shiro.util.Initializable) getSecurityManager()).init();
+    }
+    setSecurityManagerRealms();
+    started = true;
+  }
+
+  public synchronized void stop() {
+    if (getSecurityManager().getRealms() != null) {
+      for (Realm realm : getSecurityManager().getRealms()) {
+        if (AuthenticatingRealm.class.isInstance(realm)) {
+          ((AuthenticatingRealm) realm).setAuthenticationCache(null);
+        }
+        if (AuthorizingRealm.class.isInstance(realm)) {
+          ((AuthorizingRealm) realm).setAuthorizationCache(null);
+        }
+      }
+    }
+
+    // we need to kill caches on stop
+    getSecurityManager().destroy();
+    // cacheManagerComponent.shutdown();
+  }
+
   public Subject login(AuthenticationToken token) throws AuthenticationException {
     Subject subject = getSubject();
     subject.login(token);
@@ -126,11 +175,6 @@ public class DefaultSecuritySystem
 
   public AuthenticationInfo authenticate(AuthenticationToken token) throws AuthenticationException {
     return getSecurityManager().authenticate(token);
-  }
-
-  public Subject getSubject() {
-    // this gets the currently bound Subject to the thread
-    return SecurityUtils.getSubject();
   }
 
   public void logout(Subject subject) {
@@ -147,30 +191,6 @@ public class DefaultSecuritySystem
 
   public void checkPermission(PrincipalCollection principal, String permission) throws AuthorizationException {
     getSecurityManager().checkPermission(principal, permission);
-  }
-
-  private Collection<Realm> getRealmsFromConfigSource() {
-    List<Realm> realms = new ArrayList<Realm>();
-
-    List<String> realmIds = securitySettingsManager.getRealms();
-
-    for (String realmId : realmIds) {
-      if (realmMap.containsKey(realmId)) {
-        realms.add(realmMap.get(realmId));
-      }
-      else {
-        log.debug("Failed to look up realm as a component, trying reflection");
-        // If that fails, will simply use reflection to load
-        try {
-          realms.add((Realm) getClass().getClassLoader().loadClass(realmId).newInstance());
-        }
-        catch (Exception e) {
-          log.error("Unable to lookup security realms", e);
-        }
-      }
-    }
-
-    return realms;
   }
 
   public Set<Role> listRoles() {
@@ -518,14 +538,6 @@ public class DefaultSecuritySystem
     return authorizationManagers.get(source);
   }
 
-  public String getAnonymousUsername() {
-    return securitySettingsManager.getAnonymousUsername();
-  }
-
-  public boolean isAnonymousAccessEnabled() {
-    return securitySettingsManager.isAnonymousAccessEnabled();
-  }
-
   public void changePassword(String userId, String oldPassword, String newPassword)
       throws UserNotFoundException, InvalidCredentialsException, InvalidConfigurationException
   {
@@ -564,6 +576,109 @@ public class DefaultSecuritySystem
     eventBus.post(new UserPrincipalsExpired(userId, user.getSource()));
   }
 
+  private Collection<UserManager> getUserManagers() {
+    return userManagers.values();
+  }
+
+  private UserManager getUserManager(final String source) throws NoSuchUserManagerException {
+    if (!userManagers.containsKey(source)) {
+      throw new NoSuchUserManagerException("UserManager with source: '" + source + "' could not be found.");
+    }
+    return userManagers.get(source);
+  }
+
+  // ==
+
+  @Subscribe
+  public void onEvent(final UserPrincipalsExpired event) {
+    // TODO: we could do this better, not flushing whole cache for single user being deleted
+    clearAuthcRealmCaches();
+  }
+
+  @Subscribe
+  public void onEvent(final AuthorizationConfigurationChanged event) {
+    // TODO: we could do this better, not flushing whole cache for single user roles being updated
+    clearAuthzRealmCaches();
+  }
+
+  @Subscribe
+  public void onEvent(final SecurityConfigurationChanged event) {
+    clearAuthcRealmCaches();
+    clearAuthzRealmCaches();
+    securitySettingsManager.clearCache();
+    setSecurityManagerRealms();
+  }
+
+  //
+  // Realms
+  //
+
+  private void clearIfNonNull(@Nullable final Cache cache) {
+    if (cache != null) {
+      cache.clear();
+    }
+  }
+
+  /**
+   * Looks up registered {@link AuthenticatingRealm}s, and clears their authc caches if they have it set.
+   */
+  private void clearAuthcRealmCaches() {
+    // NOTE: we don't need to iterate all the Sec Managers, they use the same Realms, so one is fine.
+    final Collection<Realm> realms = getSecurityManager().getRealms();
+    if (realms != null) {
+      for (Realm realm : realms) {
+        if (realm instanceof AuthenticatingRealm) {
+          clearIfNonNull(((AuthenticatingRealm) realm).getAuthenticationCache());
+        }
+      }
+    }
+  }
+
+  /**
+   * Looks up registered {@link AuthorizingRealm}s, and clears their authz caches if they have it set.
+   */
+  private void clearAuthzRealmCaches() {
+    // NOTE: we don't need to iterate all the Sec Managers, they use the same Realms, so one is fine.
+    final Collection<Realm> realms = getSecurityManager().getRealms();
+    if (realms != null) {
+      for (Realm realm : realms) {
+        if (realm instanceof AuthorizingRealm) {
+          clearIfNonNull(((AuthorizingRealm) realm).getAuthorizationCache());
+        }
+      }
+    }
+  }
+
+  private void setSecurityManagerRealms() {
+    Collection<Realm> realms = getRealmsFromConfigSource();
+    log.debug("Security manager realms: {}", realms);
+    getSecurityManager().setRealms(Lists.newArrayList(realms));
+  }
+
+  private Collection<Realm> getRealmsFromConfigSource() {
+    List<Realm> realms = new ArrayList<Realm>();
+
+    List<String> realmIds = securitySettingsManager.getRealms();
+
+    for (String realmId : realmIds) {
+      if (realmMap.containsKey(realmId)) {
+        realms.add(realmMap.get(realmId));
+      }
+      else {
+        log.debug("Failed to look up realm as a component, trying reflection");
+        // If that fails, will simply use reflection to load
+        try {
+          realms.add((Realm) getClass().getClassLoader().loadClass(realmId).newInstance());
+        }
+        catch (Exception e) {
+          log.error("Unable to lookup security realms", e);
+        }
+      }
+    }
+
+    return realms;
+  }
+
   public List<String> getRealms() {
     return new ArrayList<String>(securitySettingsManager.getRealms());
   }
@@ -575,6 +690,10 @@ public class DefaultSecuritySystem
     // update the realms in the security manager
     setSecurityManagerRealms();
   }
+
+  //
+  // Anonymous
+  //
 
   public void setAnonymousAccessEnabled(boolean enabled) {
     securitySettingsManager.setAnonymousAccessEnabled(enabled);
@@ -617,131 +736,117 @@ public class DefaultSecuritySystem
     }
   }
 
-  public synchronized void start() {
-    if (started) {
-      throw new IllegalStateException(getClass().getName()
-          + " was already started, same instance is not re-startable!");
-    }
-    // reload the config
-    securitySettingsManager.clearCache();
-
-    // setup the CacheManager ( this could be injected if we where less coupled with ehcache)
-    // The plexus wrapper can interpolate the config
-    EhCacheManager ehCacheManager = new EhCacheManager();
-    ehCacheManager.setCacheManager(cacheManager);
-    getSecurityManager().setCacheManager(ehCacheManager);
-
-    if (org.apache.shiro.util.Initializable.class.isInstance(getSecurityManager())) {
-      ((org.apache.shiro.util.Initializable) getSecurityManager()).init();
-    }
-    setSecurityManagerRealms();
-    started = true;
+  public String getAnonymousUsername() {
+    return securitySettingsManager.getAnonymousUsername();
   }
 
-  public synchronized void stop() {
-    if (getSecurityManager().getRealms() != null) {
-      for (Realm realm : getSecurityManager().getRealms()) {
-        if (AuthenticatingRealm.class.isInstance(realm)) {
-          ((AuthenticatingRealm) realm).setAuthenticationCache(null);
-        }
-        if (AuthorizingRealm.class.isInstance(realm)) {
-          ((AuthorizingRealm) realm).setAuthorizationCache(null);
-        }
+  public boolean isAnonymousAccessEnabled() {
+    return securitySettingsManager.isAnonymousAccessEnabled();
+  }
+
+  @Override
+  public void setAnonymousAccess(final boolean enabled, final String username, final String password)
+      throws InvalidConfigurationException
+  {
+    if (enabled) {
+      if (Strings.isNullOrEmpty(username) || Strings.isNullOrEmpty(password)) {
+        throw new InvalidConfigurationException(
+            "Anonymous access is getting enabled without valid username and/or password!");
       }
-    }
 
-    // we need to kill caches on stop
-    getSecurityManager().destroy();
-    // cacheManagerComponent.shutdown();
-  }
+      final String oldUsername = getAnonymousUsername();
+      final String oldPassword = getAnonymousPassword();
 
-  private void setSecurityManagerRealms() {
-    Collection<Realm> realms = getRealmsFromConfigSource();
-    log.debug("Security manager realms: {}", realms);
-    getSecurityManager().setRealms(Lists.newArrayList(realms));
-  }
+      // try to enable the "anonymous" user defined in XML realm, but ignore any problem (users might delete or
+      // already disabled it, or completely removed XML realm) this is needed as below we will try a login
+      final boolean statusChanged = setAnonymousUserEnabled(username, true);
 
-  /**
-   * Looks up registered {@link AuthenticatingRealm}s, and clears their authc caches if they
-   * have it set.
-   *
-   * @since 2.8
-   */
-  private void clearAuthcRealmCaches() {
-    // NOTE: we don't need to iterate all the Sec Managers, they use the same Realms, so one is fine.
-    final Collection<Realm> realms = getSecurityManager().getRealms();
-    if (realms != null) {
-      for (Realm realm : realms) {
-        if (realm instanceof AuthenticatingRealm) {
-          clearIfNonNull(((AuthenticatingRealm) realm).getAuthenticationCache());
+      // detect change
+      if (!Objects.equals(oldUsername, username) || !Objects.equals(oldPassword, password)) {
+        try {
+          // test authc with changed credentials
+          try {
+            // try to "log in" with supplied credentials
+            // the anon user a) should exists
+            getUser(username);
+            // b) the pwd must work
+            authenticate(new UsernamePasswordToken(username, password));
+          }
+          catch (UserNotFoundException e) {
+            final String msg = "User \"" + username + "'\" does not exist.";
+            log.warn("Nexus refused to apply configuration, the supplied anonymous information is wrong: " + msg, e);
+            throw new InvalidConfigurationException(msg, e);
+          }
+          catch (AuthenticationException e) {
+            final String msg = "The password of user \"" + username + "\" is incorrect.";
+            log.warn("Nexus refused to apply configuration, the supplied anonymous information is wrong: " + msg, e);
+            throw new InvalidConfigurationException(msg, e);
+          }
         }
-      }
-    }
-  }
-
-  /**
-   * Looks up registered {@link AuthorizingRealm}s, and clears their authz caches if they
-   * have it set.
-   *
-   * @since 2.8
-   */
-  private void clearAuthzRealmCaches() {
-    // NOTE: we don't need to iterate all the Sec Managers, they use the same Realms, so one is fine.
-    final Collection<Realm> realms = getSecurityManager().getRealms();
-    if (realms != null) {
-      for (Realm realm : realms) {
-        if (realm instanceof AuthorizingRealm) {
-          clearIfNonNull(((AuthorizingRealm) realm).getAuthorizationCache());
+        catch (InvalidConfigurationException e) {
+          if (statusChanged) {
+            setAnonymousUserEnabled(username, false);
+          }
+          throw e;
         }
+
+        // set the changed username/pw
+        setAnonymousUsername(username);
+        setAnonymousPassword(password);
       }
+
+      setAnonymousAccessEnabled(true);
     }
-  }
+    else {
+      // get existing username from XML realm, if we can (if security config about to be disabled still holds this
+      // info)
+      final String existingUsername = getAnonymousUsername();
 
-  /**
-   * Clears Shiro cache if passed instance is not {@code null}.
-   *
-   * @since 2.8
-   */
-  private void clearIfNonNull(@Nullable final Cache cache) {
-    if (cache != null) {
-      cache.clear();
+      if (!Strings.isNullOrEmpty(existingUsername)) {
+        // try to disable the "anonymous" user defined in XML realm, but ignore any problem (users might delete
+        // or already disabled it, or completely removed XML realm)
+        setAnonymousUserEnabled(existingUsername, false);
+      }
+
+      setAnonymousAccessEnabled(false);
     }
+
+    // TODO: Save?
   }
 
-  private Collection<UserManager> getUserManagers() {
-    return userManagers.values();
-  }
-
-  private UserManager getUserManager(final String source) throws NoSuchUserManagerException {
-    if (!userManagers.containsKey(source)) {
-      throw new NoSuchUserManagerException("UserManager with source: '" + source + "' could not be found.");
+  private boolean setAnonymousUserEnabled(final String anonymousUsername, final boolean enabled)
+      throws InvalidConfigurationException
+  {
+    try {
+      final User anonymousUser = getUser(anonymousUsername, UserManager.DEFAULT_SOURCE);
+      final UserStatus oldStatus = anonymousUser.getStatus();
+      if (enabled) {
+        anonymousUser.setStatus(UserStatus.active);
+      }
+      else {
+        anonymousUser.setStatus(UserStatus.disabled);
+      }
+      updateUser(anonymousUser);
+      return !oldStatus.equals(anonymousUser.getStatus());
     }
-    return userManagers.get(source);
-  }
-
-  // ==
-
-  @Subscribe
-  public void onEvent(final UserPrincipalsExpired event) {
-    // TODO: we could do this better, not flushing whole cache for single user being deleted
-    clearAuthcRealmCaches();
-  }
-
-  @Subscribe
-  public void onEvent(final AuthorizationConfigurationChanged event) {
-    // TODO: we could do this better, not flushing whole cache for single user roles being updated
-    clearAuthzRealmCaches();
-  }
-
-  @Subscribe
-  public void onEvent(final SecurityConfigurationChanged event) {
-    clearAuthcRealmCaches();
-    clearAuthzRealmCaches();
-    securitySettingsManager.clearCache();
-    setSecurityManagerRealms();
-  }
-
-  public RealmSecurityManager getSecurityManager() {
-    return securityManager;
+    catch (UserNotFoundException e) {
+      // ignore, anon user maybe manually deleted from XML realm by Nexus admin, is okay (kinda expected)
+      log.debug("Anonymous user not found while trying to disable it (as part of disabling anonymous access)!", e);
+      return false;
+    }
+    catch (NoSuchUserManagerException e) {
+      // ignore, XML realm removed from configuration by Nexus admin, is okay (kinda expected)
+      log.debug("XML Realm not found while trying to disable Anonymous user; as part of disabling anonymous access", e);
+      return false;
+    }
+    catch (InvalidConfigurationException e) {
+      // do not ignore, and report, as this jeopardizes whole security functionality
+      // we did not perform any _change_ against security sofar (we just did reading from it),
+      // so it is okay to bail out at this point
+      log.warn(
+          "XML Realm reported invalid configuration while trying to disable Anonymous user (as part of disabling anonymous access)!",
+          e);
+      throw e;
+    }
   }
 }

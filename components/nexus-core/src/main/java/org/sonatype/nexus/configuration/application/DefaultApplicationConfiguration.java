@@ -18,7 +18,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.inject.Inject;
@@ -61,11 +60,6 @@ import org.sonatype.nexus.proxy.storage.local.LocalStorageContext;
 import org.sonatype.nexus.proxy.storage.remote.DefaultRemoteStorageContext;
 import org.sonatype.nexus.proxy.storage.remote.RemoteStorageContext;
 import org.sonatype.nexus.security.SecuritySystem;
-import org.sonatype.nexus.security.user.NoSuchUserManagerException;
-import org.sonatype.nexus.security.user.User;
-import org.sonatype.nexus.security.user.UserManager;
-import org.sonatype.nexus.security.user.UserNotFoundException;
-import org.sonatype.nexus.security.user.UserStatus;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
 import org.sonatype.sisu.goodies.eventbus.EventBus;
 
@@ -76,8 +70,6 @@ import com.google.common.collect.Collections2;
 import com.google.inject.Key;
 import com.google.inject.name.Names;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.codehaus.plexus.util.ExceptionUtils;
 import org.eclipse.sisu.inject.BeanLocator;
@@ -443,119 +435,7 @@ public class DefaultApplicationConfiguration
   // ------------------------------------------------------------------
   // Security
 
-  @Override
-  public void setAnonymousAccess(final boolean enabled, final String username, final String password)
-      throws InvalidConfigurationException
-  {
-    if (enabled) {
-      if (Strings.isNullOrEmpty(username) || Strings.isNullOrEmpty(password)) {
-        throw new InvalidConfigurationException(
-            "Anonymous access is getting enabled without valid username and/or password!");
-      }
 
-      final String oldUsername = getSecuritySystem().getAnonymousUsername();
-      final String oldPassword = getSecuritySystem().getAnonymousPassword();
-
-      // try to enable the "anonymous" user defined in XML realm, but ignore any problem (users might
-      // delete
-      // or already disabled it, or completely removed XML realm)
-      // this is needed as below we will try a login
-      final boolean statusChanged = setAnonymousUserEnabled(username, true);
-
-      // detect change
-      if (!Objects.equals(oldUsername, username) || !Objects.equals(oldPassword, password)) {
-        try {
-          // test authc with changed credentials
-          try {
-            // try to "log in" with supplied credentials
-            // the anon user a) should exists
-            securitySystem.getUser(username);
-            // b) the pwd must work
-            securitySystem.authenticate(new UsernamePasswordToken(username, password));
-          }
-          catch (UserNotFoundException e) {
-            final String msg = "User \"" + username + "'\" does not exist.";
-            log.warn(
-                "Nexus refused to apply configuration, the supplied anonymous information is wrong: " + msg,
-                e);
-            throw new InvalidConfigurationException(msg, e);
-          }
-          catch (AuthenticationException e) {
-            final String msg = "The password of user \"" + username + "\" is incorrect.";
-            log.warn(
-                "Nexus refused to apply configuration, the supplied anonymous information is wrong: " + msg,
-                e);
-            throw new InvalidConfigurationException(msg, e);
-          }
-        }
-        catch (InvalidConfigurationException e) {
-          if (statusChanged) {
-            setAnonymousUserEnabled(username, false);
-          }
-          throw e;
-        }
-
-        // set the changed username/pw
-        getSecuritySystem().setAnonymousUsername(username);
-        getSecuritySystem().setAnonymousPassword(password);
-      }
-
-      getSecuritySystem().setAnonymousAccessEnabled(true);
-    }
-    else {
-      // get existing username from XML realm, if we can (if security config about to be disabled still holds this
-      // info)
-      final String existingUsername = getSecuritySystem().getAnonymousUsername();
-
-      if (!Strings.isNullOrEmpty(existingUsername)) {
-        // try to disable the "anonymous" user defined in XML realm, but ignore any problem (users might delete
-        // or already disabled it, or completely removed XML realm)
-        setAnonymousUserEnabled(existingUsername, false);
-      }
-
-      getSecuritySystem().setAnonymousAccessEnabled(false);
-    }
-
-  }
-
-  private boolean setAnonymousUserEnabled(final String anonymousUsername, final boolean enabled)
-      throws InvalidConfigurationException
-  {
-    try {
-      final User anonymousUser = getSecuritySystem().getUser(anonymousUsername, UserManager.DEFAULT_SOURCE);
-      final UserStatus oldStatus = anonymousUser.getStatus();
-      if (enabled) {
-        anonymousUser.setStatus(UserStatus.active);
-      }
-      else {
-        anonymousUser.setStatus(UserStatus.disabled);
-      }
-      getSecuritySystem().updateUser(anonymousUser);
-      return !oldStatus.equals(anonymousUser.getStatus());
-    }
-    catch (UserNotFoundException e) {
-      // ignore, anon user maybe manually deleted from XML realm by Nexus admin, is okay (kinda expected)
-      log.debug(
-          "Anonymous user not found while trying to disable it (as part of disabling anonymous access)!", e);
-      return false;
-    }
-    catch (NoSuchUserManagerException e) {
-      // ignore, XML realm removed from configuration by Nexus admin, is okay (kinda expected)
-      log.debug(
-          "XML Realm not found while trying to disable Anonymous user (as part of disabling anonymous access)!",
-          e);
-      return false;
-    }
-    catch (InvalidConfigurationException e) {
-      // do not ignore, and report, as this jeopardizes whole security functionality
-      // we did not perform any _change_ against security sofar (we just did reading from it),
-      // so it is okay to bail out at this point
-      log.warn(
-          "XML Realm reported invalid configuration while trying to disable Anonymous user (as part of disabling anonymous access)!",
-          e);
-      throw e;
-    }
-  }
 
   // ------------------------------------------------------------------
   // Booting
@@ -883,11 +763,5 @@ public class DefaultApplicationConfiguration
     }
 
     throw new NoSuchRepositoryException(id);
-  }
-
-  // ===
-
-  private SecuritySystem getSecuritySystem() {
-    return this.securitySystem;
   }
 }

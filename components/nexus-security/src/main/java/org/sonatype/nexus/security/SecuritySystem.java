@@ -257,6 +257,28 @@ public interface SecuritySystem
   void setRealms(List<String> realms) throws InvalidConfigurationException;
 
   /**
+   * Returns the configured shiro SecurityManager
+   */
+  RealmSecurityManager getSecurityManager();
+
+  //
+  // Anonymous
+  //
+
+  /**
+   * Configures anonymous access in atomic way.
+   *
+   * @param enabled  {@code true} to enable and {@code false} to disable it.
+   * @param username the username of the user to be used as "anonymous" user. If {@code enabled} parameter is
+   *                 {@code true}, this value must be non-null.
+   * @param password the password of the user to be used as "anonymous" user. If {@code enabled} parameter is
+   *                 {@code true}, this value must be non-null.
+   * @throws InvalidConfigurationException if {@code enabled} parameter is {@code true}, but passed in username or
+   *                                       password parameters are empty ({@code null} or empty string).
+   */
+  void setAnonymousAccess(boolean enabled, String username, String password) throws InvalidConfigurationException;
+
+  /**
    * Return true if anonymous access is enabled.
    *
    * @return true if anonymous access is enabled.
@@ -289,9 +311,4 @@ public interface SecuritySystem
    * Sets the anonymous user password.
    */
   void setAnonymousPassword(String anonymousPassword) throws InvalidConfigurationException;
-
-  /**
-   * Returns the configured shiro SecurityManager
-   */
-  RealmSecurityManager getSecurityManager();
 }
