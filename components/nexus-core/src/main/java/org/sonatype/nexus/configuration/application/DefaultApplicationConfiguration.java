@@ -412,21 +412,6 @@ public class DefaultApplicationConfiguration
   }
 
   @Override
-  public boolean isInstanceUpgraded() {
-    return configurationSource.isInstanceUpgraded();
-  }
-
-  @Override
-  public boolean isConfigurationUpgraded() {
-    return configurationSource.isConfigurationUpgraded();
-  }
-
-  @Override
-  public boolean isConfigurationDefaulted() {
-    return configurationSource.isConfigurationDefaulted();
-  }
-
-  @Override
   public LocalStorageContext getGlobalLocalStorageContext() {
     return globalLocalStorageContext;
   }

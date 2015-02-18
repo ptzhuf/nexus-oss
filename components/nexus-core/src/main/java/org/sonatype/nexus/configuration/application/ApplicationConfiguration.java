@@ -82,13 +82,6 @@ public interface ApplicationConfiguration
   // FIXME: Only used by tests
   void loadConfiguration() throws ConfigurationException, IOException;
 
-  // FIXME: These only only used to prime details in SystemStatus, which are not really useful
-  boolean isInstanceUpgraded();
-
-  boolean isConfigurationUpgraded();
-
-  boolean isConfigurationDefaulted();
-
   /**
    * Explicit loading of configuration. Enables to force reloading of config.
    */
