@@ -143,20 +143,9 @@ class SystemInformationGeneratorImpl
     def reportNexusStatus = {
       def data = [
           'version': systemStatus.version,
-          'apiVersion': systemStatus.apiVersion,
           'edition': systemStatus.editionShort,
-          'state': systemStatus.state,
-          'initializedAt': systemStatus.initializedAt,
-          'startedAt': systemStatus.startedAt,
-          'lastConfigChange': systemStatus.lastConfigChange,
-          'firstStart': systemStatus.firstStart,
-          'instanceUpgrade': systemStatus.instanceUpgraded,
-          'configurationUpgraded': systemStatus.configurationUpgraded
+          'state': systemStatus.state
       ]
-
-      if (systemStatus.errorCause) {
-        data['errorCause'] = systemStatus.errorCause.toString()
-      }
 
       return data
     }

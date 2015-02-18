@@ -15,7 +15,6 @@ package org.sonatype.nexus;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Date;
 
 import javax.crypto.Cipher;
 import javax.inject.Inject;
@@ -115,7 +114,7 @@ public class NxApplication
   @VisibleForTesting
   protected final String getNexusNameForLogs() {
     final StringBuilder msg = new StringBuilder();
-    msg.append(applicationStatusSource.getSystemStatus().getAppName());
+    msg.append("Sonatype Nexus ").append(applicationStatusSource.getSystemStatus().getEditionShort());
     msg.append(" ").append(applicationStatusSource.getSystemStatus().getVersion());
     return msg.toString();
   }
@@ -130,7 +129,6 @@ public class NxApplication
     eventSubscriberHost.start();
 
     applicationStatusSource.setState(SystemState.STOPPED);
-    applicationStatusSource.getSystemStatus().setInitializedAt(new Date());
 
     // HACK: Must start database services manually
     orientBootstrap.start();
@@ -150,19 +148,7 @@ public class NxApplication
       // notify about start other components participating in configuration framework
       eventBus.post(new ConfigurationChangeEvent(applicationConfiguration, null, null));
 
-      applicationStatusSource.getSystemStatus().setLastConfigChange(new Date());
-      applicationStatusSource.getSystemStatus().setFirstStart(applicationConfiguration.isConfigurationDefaulted());
-      applicationStatusSource.getSystemStatus().setInstanceUpgraded(applicationConfiguration.isInstanceUpgraded());
-      applicationStatusSource.getSystemStatus().setConfigurationUpgraded(applicationConfiguration.isConfigurationUpgraded());
-      if (applicationStatusSource.getSystemStatus().isFirstStart()) {
-        log.info("This is 1st start of new Nexus instance.");
-      }
-      if (applicationStatusSource.getSystemStatus().isInstanceUpgraded()) {
-        log.info("This is an upgraded instance of Nexus.");
-      }
-
       applicationStatusSource.getSystemStatus().setState(SystemState.STARTED);
-      applicationStatusSource.getSystemStatus().setStartedAt(new Date());
 
       synchronizeShadowsAtStartup();
 
@@ -184,13 +170,11 @@ public class NxApplication
     }
     catch (IOException e) {
       applicationStatusSource.getSystemStatus().setState(SystemState.BROKEN_IO);
-      applicationStatusSource.getSystemStatus().setErrorCause(e);
       log.error("Could not start Nexus, bad IO exception!", e);
       throw Throwables.propagate(e);
     }
     catch (ConfigurationException e) {
       applicationStatusSource.getSystemStatus().setState(SystemState.BROKEN_CONFIGURATION);
-      applicationStatusSource.getSystemStatus().setErrorCause(e);
       log.error("Could not start Nexus, user configuration exception!", e);
       throw Throwables.propagate(e);
     }
