@@ -10,13 +10,13 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
+
 package org.sonatype.nexus.coreui
 
 import com.softwarementors.extjs.djn.config.annotations.DirectAction
 import com.softwarementors.extjs.djn.config.annotations.DirectMethod
 import org.apache.shiro.authz.annotation.RequiresAuthentication
 import org.apache.shiro.authz.annotation.RequiresPermissions
-import org.sonatype.nexus.configuration.application.ApplicationConfiguration
 import org.sonatype.nexus.extdirect.DirectComponent
 import org.sonatype.nexus.extdirect.DirectComponentSupport
 import org.sonatype.nexus.extdirect.model.Password
@@ -38,12 +38,8 @@ import javax.validation.constraints.NotNull
 @Singleton
 @DirectAction(action = 'coreui_AnonymousSettings')
 class AnonymousSettingsComponent
-extends DirectComponentSupport
+    extends DirectComponentSupport
 {
-  // FIXME: Remove once we sort out configuration updates
-  @Inject
-  ApplicationConfiguration nexusConfiguration
-
   @Inject
   SecuritySettingsManager securitySettingsManager
 
@@ -73,7 +69,9 @@ extends DirectComponentSupport
   @DirectMethod
   @RequiresAuthentication
   @RequiresPermissions('nexus:settings:update')
-  AnonymousSettingsXO update(final @NotNull(message = '[anonymousXO] may not be null') @Valid AnonymousSettingsXO anonymousXO) {
+  AnonymousSettingsXO update(
+      final @NotNull(message = '[anonymousXO] may not be null') @Valid AnonymousSettingsXO anonymousXO)
+  {
     def username, password
     if (anonymousXO.enabled) {
       if (anonymousXO.useCustomUser) {
@@ -92,9 +90,6 @@ extends DirectComponentSupport
 
     // FIXME: This should be isolated into securitySettingsManager
     securitySystem.setAnonymousAccess(anonymousXO.enabled, username, password)
-    // FIXME: This should be handled by ^^^
-    nexusConfiguration.saveConfiguration()
     return read()
   }
-
 }
