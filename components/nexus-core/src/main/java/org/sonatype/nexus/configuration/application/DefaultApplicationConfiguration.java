@@ -38,7 +38,6 @@ import org.sonatype.nexus.configuration.ConfigurationPrepareForLoadEvent;
 import org.sonatype.nexus.configuration.ConfigurationPrepareForSaveEvent;
 import org.sonatype.nexus.configuration.ConfigurationRollbackEvent;
 import org.sonatype.nexus.configuration.ConfigurationSaveEvent;
-import org.sonatype.nexus.configuration.application.runtime.ApplicationRuntimeConfigurationBuilder;
 import org.sonatype.nexus.configuration.model.CPathMappingItem;
 import org.sonatype.nexus.configuration.model.CRepository;
 import org.sonatype.nexus.configuration.model.Configuration;
@@ -74,11 +73,14 @@ import com.google.common.base.Function;
 import com.google.common.base.Strings;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Collections2;
+import com.google.inject.Key;
+import com.google.inject.name.Names;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.codehaus.plexus.util.ExceptionUtils;
+import org.eclipse.sisu.inject.BeanLocator;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -100,6 +102,8 @@ public class DefaultApplicationConfiguration
    */
   private final CacheManager cacheManager;
 
+  private final BeanLocator beanLocator;
+
   private final EventBus eventBus;
 
   private final ApplicationConfigurationSource configurationSource;
@@ -109,8 +113,6 @@ public class DefaultApplicationConfiguration
   private final Provider<GlobalRemoteProxySettings> globalRemoteProxySettingsProvider;
 
   private final ApplicationConfigurationValidator configurationValidator;
-
-  private final ApplicationRuntimeConfigurationBuilder runtimeConfigurationBuilder;
 
   private final RepositoryTypeRegistry repositoryTypeRegistry;
 
@@ -155,12 +157,12 @@ public class DefaultApplicationConfiguration
 
   @Inject
   public DefaultApplicationConfiguration(final CacheManager cacheManager,
+                                         final BeanLocator beanLocator,
                                          final EventBus eventBus,
                                          final @Named("file") ApplicationConfigurationSource configurationSource,
                                          final Provider<GlobalRemoteConnectionSettings> globalRemoteConnectionSettingsProvider,
                                          final Provider<GlobalRemoteProxySettings> globalRemoteProxySettingsProvider,
                                          final ApplicationConfigurationValidator configurationValidator,
-                                         final ApplicationRuntimeConfigurationBuilder runtimeConfigurationBuilder,
                                          final RepositoryTypeRegistry repositoryTypeRegistry,
                                          final RepositoryRegistry repositoryRegistry,
                                          final SecuritySystem securitySystem,
@@ -169,12 +171,12 @@ public class DefaultApplicationConfiguration
                                          final ApplicationDirectories applicationDirectories)
   {
     this.cacheManager = checkNotNull(cacheManager);
+    this.beanLocator = checkNotNull(beanLocator);
     this.eventBus = checkNotNull(eventBus);
     this.configurationSource = checkNotNull(configurationSource);
     this.globalRemoteConnectionSettingsProvider = checkNotNull(globalRemoteConnectionSettingsProvider);
     this.globalRemoteProxySettingsProvider = checkNotNull(globalRemoteProxySettingsProvider);
     this.configurationValidator = checkNotNull(configurationValidator);
-    this.runtimeConfigurationBuilder = checkNotNull(runtimeConfigurationBuilder);
     this.repositoryTypeRegistry = checkNotNull(repositoryTypeRegistry);
     this.repositoryRegistry = checkNotNull(repositoryRegistry);
     this.securitySystem = checkNotNull(securitySystem);
@@ -611,6 +613,17 @@ public class DefaultApplicationConfiguration
     }
   }
 
+  private Repository createRepository(Class<? extends Repository> type, String name) throws ConfigurationException {
+    try {
+      final Provider<? extends Repository> rp =
+          beanLocator.locate(Key.get(type, Names.named(name))).iterator().next().getProvider();
+      return rp.get();
+    }
+    catch (Exception e) {
+      throw new InvalidConfigurationException("Could not lookup a new instance of Repository!", e);
+    }
+  }
+
   private Repository instantiateRepository(final Configuration configuration, final Class<? extends Repository> klazz,
                                              final String name, final CRepository repositoryModel)
       throws ConfigurationException
@@ -618,7 +631,7 @@ public class DefaultApplicationConfiguration
     checkRepositoryMaxInstanceCountForCreation(klazz, name, repositoryModel);
 
     // create it, will do runtime validation
-    Repository repository = runtimeConfigurationBuilder.createRepository(klazz, name);
+    Repository repository = createRepository(klazz, name);
     if (repository instanceof Configurable) {
       ((Configurable) repository).configure(repositoryModel);
     }
@@ -634,8 +647,7 @@ public class DefaultApplicationConfiguration
                                    final CRepository repositoryModel)
       throws ConfigurationException
   {
-    // release it
-    runtimeConfigurationBuilder.releaseRepository(repository);
+    repository.dispose();
   }
 
   // ------------------------------------------------------------------
