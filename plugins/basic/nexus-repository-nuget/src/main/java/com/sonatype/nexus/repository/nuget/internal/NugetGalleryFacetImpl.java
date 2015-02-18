@@ -26,6 +26,9 @@ import java.util.SortedSet;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.sonatype.nexus.repository.nuget.NugetContentCreatedEvent;
+import com.sonatype.nexus.repository.nuget.NugetContentDeletedEvent;
+import com.sonatype.nexus.repository.nuget.NugetContentUpdatedEvent;
 import com.sonatype.nexus.repository.nuget.internal.odata.ComponentQuery;
 import com.sonatype.nexus.repository.nuget.internal.odata.ComponentQuery.Builder;
 import com.sonatype.nexus.repository.nuget.internal.odata.NugetPackageUtils;
@@ -244,14 +247,23 @@ public class NugetGalleryFacetImpl
       recordMetadata.put(CREATED, creationTime);
       recordMetadata.put(LAST_UPDATED, creationTime);
       recordMetadata.put(PUBLISHED, creationTime);
-
+      OrientVertex component = null;
       try (InputStream in = tempStream.get()) {
-        createOrUpdatePackage(storageTx, recordMetadata, in);
+        component = createOrUpdatePackage(storageTx, recordMetadata, in);
       }
 
-      maintainAggregateInfo(storageTx, recordMetadata.get(ID));
+      String id = recordMetadata.get(ID);
+      String version = recordMetadata.get(VERSION);
+      maintainAggregateInfo(storageTx, id);
 
       storageTx.commit();
+
+      if (component.getIdentity().isNew()) {
+        getEventBus().post(new NugetContentCreatedEvent(id, version, component));
+      }
+      else {
+        getEventBus().post(new NugetContentUpdatedEvent(id, version, component));
+      }
     }
   }
 
@@ -296,7 +308,7 @@ public class NugetGalleryFacetImpl
       tx.commit();
 
       deleteFromIndex(component);
-
+      getEventBus().post(new NugetContentDeletedEvent(id, version, component));
       return true;
     }
   }
@@ -335,7 +347,7 @@ public class NugetGalleryFacetImpl
   }
 
   @VisibleForTesting
-  void createOrUpdatePackage(final StorageTx storageTx, final Map<String, String> recordMetadata,
+  OrientVertex createOrUpdatePackage(final StorageTx storageTx, final Map<String, String> recordMetadata,
                              final InputStream packageStream)
   {
     final OrientVertex bucket = storageTx.getBucket();
@@ -343,6 +355,7 @@ public class NugetGalleryFacetImpl
 
     createOrUpdateAsset(storageTx, bucket, component, packageStream);
     putInIndex(component);
+    return component;
   }
 
   private String blobName(OrientVertex component) {

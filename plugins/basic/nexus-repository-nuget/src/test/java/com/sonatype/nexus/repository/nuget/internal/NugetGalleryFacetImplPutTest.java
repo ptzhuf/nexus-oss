@@ -19,15 +19,22 @@ import java.util.Date;
 import java.util.Map;
 import java.util.SortedSet;
 
+import com.sonatype.nexus.repository.nuget.NugetContentCreatedEvent;
+import com.sonatype.nexus.repository.nuget.NugetContentDeletedEvent;
+import com.sonatype.nexus.repository.nuget.NugetContentEvent;
+import com.sonatype.nexus.repository.nuget.NugetContentUpdatedEvent;
+
 import org.sonatype.nexus.common.time.Clock;
 import org.sonatype.nexus.repository.search.ComponentMetadataFactory;
 import org.sonatype.nexus.repository.storage.StorageTx;
 import org.sonatype.nexus.repository.util.NestedAttributesMap;
+import org.sonatype.sisu.goodies.eventbus.EventBus;
 import org.sonatype.sisu.litmus.testsupport.TestSupport;
 
 import com.google.common.base.Throwables;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.orientechnologies.orient.core.id.ORID;
 import com.tinkerpop.blueprints.impls.orient.OrientVertex;
 import org.eclipse.aether.util.version.GenericVersionScheme;
 import org.eclipse.aether.version.InvalidVersionSpecificationException;
@@ -35,6 +42,7 @@ import org.eclipse.aether.version.Version;
 import org.eclipse.aether.version.VersionScheme;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import static com.sonatype.nexus.repository.nuget.internal.NugetFormat.NAME;
@@ -47,6 +55,7 @@ import static com.sonatype.nexus.repository.nuget.internal.NugetProperties.P_LAS
 import static com.sonatype.nexus.repository.nuget.internal.NugetProperties.P_PUBLISHED;
 import static com.sonatype.nexus.repository.nuget.internal.NugetProperties.P_VERSION;
 import static com.sonatype.nexus.repository.nuget.internal.NugetProperties.P_VERSION_DOWNLOAD_COUNT;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
@@ -56,6 +65,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -64,9 +74,26 @@ public class NugetGalleryFacetImplPutTest
 {
   @Test
   public void putCreatesPackageMetadataAndBlob() throws Exception {
+    putPackageMetadataAndBlob(true, NugetContentCreatedEvent.class);
+  }
+
+  @Test
+  public void putUpdatesPackageMetadataAndBlob() throws Exception {
+    putPackageMetadataAndBlob(false, NugetContentUpdatedEvent.class);
+  }
+
+  private void putPackageMetadataAndBlob(final boolean isNew,
+                                         final Class eventClass) throws Exception {
+    final EventBus eventBus = mock(EventBus.class);
     final NugetGalleryFacetImpl galleryFacet = Mockito.spy(new NugetGalleryFacetImpl(
         mock(ComponentMetadataFactory.class)
-    ));
+    )
+    {
+      @Override
+      protected EventBus getEventBus() {
+        return eventBus;
+      }
+    });
 
     final StorageTx tx = mock(StorageTx.class);
 
@@ -74,16 +101,26 @@ public class NugetGalleryFacetImplPutTest
 
     final InputStream packageStream = getClass().getResourceAsStream("/SONATYPE.TEST.1.0.nupkg");
 
-    doNothing().when(galleryFacet)
+    OrientVertex orientVertex = mock(OrientVertex.class);
+    ORID orid = mock(ORID.class);
+    doReturn(orientVertex).when(galleryFacet)
         .createOrUpdatePackage(any(StorageTx.class), any(Map.class), any(InputStream.class));
+    when(orientVertex.getIdentity()).thenReturn(orid);
+    when(orid.isNew()).thenReturn(isNew);
 
     doNothing().when(galleryFacet).maintainAggregateInfo(any(StorageTx.class), eq("SONATYPE.TEST"));
 
     galleryFacet.put(packageStream);
 
     verify(galleryFacet).maintainAggregateInfo(tx, "SONATYPE.TEST");
+    ArgumentCaptor<NugetContentEvent> o = ArgumentCaptor.forClass(NugetContentEvent.class);
+    verify(eventBus, times(1)).post(o.capture());
+    NugetContentEvent actual = o.getValue();
+    assertThat(actual, instanceOf(eventClass));
+    assertThat(actual.getId(), is("SONATYPE.TEST"));
+    assertThat(actual.getVersion(), is("1.0"));
   }
-
+  
   @Test
   public void derivedAttributesSetForNewComponents() {
     final NugetGalleryFacetImpl galleryFacet = Mockito.spy(new NugetGalleryFacetImpl(
