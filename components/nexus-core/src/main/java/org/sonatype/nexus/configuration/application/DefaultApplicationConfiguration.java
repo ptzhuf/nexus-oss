@@ -258,13 +258,15 @@ public class DefaultApplicationConfiguration
       // this one has no parent
       globalRemoteStorageContext = new DefaultRemoteStorageContext(null);
 
-      final GlobalRemoteConnectionSettings globalRemoteConnectionSettings = globalRemoteConnectionSettingsProvider
-          .get();
+      final GlobalRemoteConnectionSettings globalRemoteConnectionSettings =
+          globalRemoteConnectionSettingsProvider.get();
+
       // TODO: hack
       ((DefaultGlobalRemoteConnectionSettings) globalRemoteConnectionSettings).configure(this);
       globalRemoteStorageContext.setRemoteConnectionSettings(globalRemoteConnectionSettings);
 
       final GlobalRemoteProxySettings globalRemoteProxySettings = globalRemoteProxySettingsProvider.get();
+
       // TODO: hack
       ((DefaultGlobalRemoteProxySettings) globalRemoteProxySettings).configure(this);
       globalRemoteStorageContext.setRemoteProxySettings(globalRemoteProxySettings);
@@ -432,10 +434,6 @@ public class DefaultApplicationConfiguration
     return configurationDirectory;
   }
 
-  // ------------------------------------------------------------------
-  // Security
-
-
 
   // ------------------------------------------------------------------
   // Booting
@@ -523,13 +521,6 @@ public class DefaultApplicationConfiguration
     return repository;
   }
 
-  private void releaseRepository(final Repository repository, final Configuration configuration,
-                                   final CRepository repositoryModel)
-      throws ConfigurationException
-  {
-    repository.dispose();
-  }
-
   // ------------------------------------------------------------------
   // CRUD-like ops on config sections
   // Globals are mandatory: RU
@@ -585,12 +576,12 @@ public class DefaultApplicationConfiguration
   @Override
   public void setRepositoryMaxInstanceCount(RepositoryTypeDescriptor rtd, int count) {
     if (count < 0) {
-      log.info("Repository type " + rtd.toString() + " maximal instance limit set to UNLIMITED.");
+      log.info("Repository type {} maximal instance limit set to UNLIMITED.", rtd);
 
       getRepositoryMaxInstanceCountLimits().remove(rtd);
     }
     else {
-      log.info("Repository type " + rtd.toString() + " maximal instance limit set to " + count + ".");
+      log.info("Repository type {} maximal instance limit set to {}", rtd, count);
 
       getRepositoryMaxInstanceCountLimits().put(rtd, count);
     }
@@ -756,7 +747,7 @@ public class DefaultApplicationConfiguration
 
         saveConfiguration();
 
-        releaseRepository(repository, getConfigurationModel(), repo);
+        repository.dispose();
 
         return;
       }

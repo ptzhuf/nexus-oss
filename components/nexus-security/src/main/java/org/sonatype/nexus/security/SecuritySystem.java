@@ -286,29 +286,13 @@ public interface SecuritySystem
   boolean isAnonymousAccessEnabled();
 
   /**
-   * Set Anonymous access enabled.
-   */
-  void setAnonymousAccessEnabled(boolean enabled);
-
-  /**
    * Returns the name of the anonymous users. Could be something other then 'anonymous', for example Active Directory
    * uses 'Guest' TODO: consider removing this method.
    */
   String getAnonymousUsername();
 
   /**
-   * Sets the name of the anonymous users. Could be something other then 'anonymous', for example Active Directory
-   * uses 'Guest' TODO: consider removing this method.
-   */
-  void setAnonymousUsername(String anonymousUsername) throws InvalidConfigurationException;
-
-  /**
    * Gets the anonymous user password.
    */
   String getAnonymousPassword();
-
-  /**
-   * Sets the anonymous user password.
-   */
-  void setAnonymousPassword(String anonymousPassword) throws InvalidConfigurationException;
 }

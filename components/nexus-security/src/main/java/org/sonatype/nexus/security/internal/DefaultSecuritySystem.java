@@ -695,12 +695,22 @@ public class DefaultSecuritySystem
   // Anonymous
   //
 
-  public void setAnonymousAccessEnabled(boolean enabled) {
+  @Override
+  public boolean isAnonymousAccessEnabled() {
+    return securitySettingsManager.isAnonymousAccessEnabled();
+  }
+
+  private void setAnonymousAccessEnabled(boolean enabled) {
     securitySettingsManager.setAnonymousAccessEnabled(enabled);
     securitySettingsManager.save();
   }
 
-  public void setAnonymousUsername(String anonymousUsername) throws InvalidConfigurationException {
+  @Override
+  public String getAnonymousUsername() {
+    return securitySettingsManager.getAnonymousUsername();
+  }
+
+  private void setAnonymousUsername(String anonymousUsername) throws InvalidConfigurationException {
     User user = null;
     try {
       user = getUser(securitySettingsManager.getAnonymousUsername());
@@ -716,11 +726,12 @@ public class DefaultSecuritySystem
     }
   }
 
+  @Override
   public String getAnonymousPassword() {
     return securitySettingsManager.getAnonymousPassword();
   }
 
-  public void setAnonymousPassword(String anonymousPassword) throws InvalidConfigurationException {
+  private void setAnonymousPassword(String anonymousPassword) throws InvalidConfigurationException {
     User user = null;
     try {
       user = getUser(securitySettingsManager.getAnonymousUsername());
@@ -734,14 +745,6 @@ public class DefaultSecuritySystem
       // flush authc, if anon exists
       eventBus.post(new UserPrincipalsExpired(user.getUserId(), user.getSource()));
     }
-  }
-
-  public String getAnonymousUsername() {
-    return securitySettingsManager.getAnonymousUsername();
-  }
-
-  public boolean isAnonymousAccessEnabled() {
-    return securitySettingsManager.isAnonymousAccessEnabled();
   }
 
   @Override
@@ -811,7 +814,7 @@ public class DefaultSecuritySystem
       setAnonymousAccessEnabled(false);
     }
 
-    // TODO: Save?
+    // TODO: Save?  ATM relies on setAnonymousAccessEnabled() to save, pita
   }
 
   private boolean setAnonymousUserEnabled(final String anonymousUsername, final boolean enabled)
