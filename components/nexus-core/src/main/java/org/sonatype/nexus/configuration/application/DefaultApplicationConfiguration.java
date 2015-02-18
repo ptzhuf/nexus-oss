@@ -59,7 +59,6 @@ import org.sonatype.nexus.proxy.storage.local.DefaultLocalStorageContext;
 import org.sonatype.nexus.proxy.storage.local.LocalStorageContext;
 import org.sonatype.nexus.proxy.storage.remote.DefaultRemoteStorageContext;
 import org.sonatype.nexus.proxy.storage.remote.RemoteStorageContext;
-import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
 import org.sonatype.sisu.goodies.eventbus.EventBus;
 
@@ -110,8 +109,6 @@ public class DefaultApplicationConfiguration
 
   private final RepositoryRegistry repositoryRegistry;
 
-  private final SecuritySystem securitySystem;
-
   private final List<ConfigurationModifier> configurationModifiers;
 
   private final ClassLoader uberClassLoader;
@@ -157,7 +154,6 @@ public class DefaultApplicationConfiguration
                                          final ApplicationConfigurationValidator configurationValidator,
                                          final RepositoryTypeRegistry repositoryTypeRegistry,
                                          final RepositoryRegistry repositoryRegistry,
-                                         final SecuritySystem securitySystem,
                                          final List<ConfigurationModifier> configurationModifiers,
                                          final @Named("nexus-uber") ClassLoader uberClassLoader,
                                          final ApplicationDirectories applicationDirectories)
@@ -171,7 +167,6 @@ public class DefaultApplicationConfiguration
     this.configurationValidator = checkNotNull(configurationValidator);
     this.repositoryTypeRegistry = checkNotNull(repositoryTypeRegistry);
     this.repositoryRegistry = checkNotNull(repositoryRegistry);
-    this.securitySystem = checkNotNull(securitySystem);
     this.configurationModifiers = checkNotNull(configurationModifiers);
     this.uberClassLoader = checkNotNull(uberClassLoader);
     this.applicationDirectories = checkNotNull(applicationDirectories);
