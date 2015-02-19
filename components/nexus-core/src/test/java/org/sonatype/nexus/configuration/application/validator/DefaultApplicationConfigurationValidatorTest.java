@@ -19,7 +19,6 @@ import java.io.Reader;
 import org.sonatype.configuration.validation.ValidationMessage;
 import org.sonatype.configuration.validation.ValidationRequest;
 import org.sonatype.configuration.validation.ValidationResponse;
-import org.sonatype.nexus.configuration.ExternalConfigUtil;
 import org.sonatype.nexus.configuration.model.CRepository;
 import org.sonatype.nexus.configuration.model.Configuration;
 import org.sonatype.nexus.configuration.model.DefaultCRepository;
