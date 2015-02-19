@@ -256,9 +256,10 @@ public class NugetGalleryFacetImpl
       String version = recordMetadata.get(VERSION);
       maintainAggregateInfo(storageTx, id);
 
+      boolean isNew = component.getIdentity().isNew();  // must check before commit
       storageTx.commit();
 
-      if (component.getIdentity().isNew()) {
+      if (isNew) {
         getEventBus().post(new NugetContentCreatedEvent(id, version, component));
       }
       else {
