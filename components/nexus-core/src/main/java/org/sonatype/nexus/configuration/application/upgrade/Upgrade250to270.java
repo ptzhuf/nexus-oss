@@ -21,9 +21,6 @@ import java.util.Map;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.sonatype.configuration.upgrade.ConfigurationIsCorruptedException;
-import org.sonatype.configuration.upgrade.SingleVersionUpgrader;
-import org.sonatype.configuration.upgrade.UpgradeMessage;
 import org.sonatype.nexus.configuration.model.v2_7_0.CProps;
 import org.sonatype.nexus.configuration.model.v2_7_0.CScheduledTask;
 import org.sonatype.nexus.configuration.model.v2_7_0.CSmtpConfiguration;

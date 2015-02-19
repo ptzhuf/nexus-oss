@@ -10,7 +10,7 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.configuration.upgrade;
+package org.sonatype.nexus.configuration.application.upgrade;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,9 +23,7 @@ import java.io.IOException;
  */
 public interface SingleVersionUpgrader
 {
-  Object loadConfiguration(File file)
-      throws IOException, ConfigurationIsCorruptedException;
+  Object loadConfiguration(File file) throws IOException, ConfigurationIsCorruptedException;
 
-  void upgrade(UpgradeMessage message)
-      throws ConfigurationIsCorruptedException;
+  void upgrade(UpgradeMessage message) throws ConfigurationIsCorruptedException;
 }

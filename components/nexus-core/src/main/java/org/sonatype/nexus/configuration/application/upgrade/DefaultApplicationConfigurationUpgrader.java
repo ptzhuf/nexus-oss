@@ -22,10 +22,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.sonatype.configuration.upgrade.ConfigurationIsCorruptedException;
-import org.sonatype.configuration.upgrade.SingleVersionUpgrader;
-import org.sonatype.configuration.upgrade.UnsupportedConfigurationVersionException;
-import org.sonatype.configuration.upgrade.UpgradeMessage;
 import org.sonatype.nexus.configuration.model.Configuration;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
 

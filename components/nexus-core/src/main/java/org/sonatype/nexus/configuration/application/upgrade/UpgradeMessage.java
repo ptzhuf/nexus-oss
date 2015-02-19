@@ -10,24 +10,34 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.configuration.upgrade;
-
-import java.io.File;
-import java.io.IOException;
-
-import org.sonatype.configuration.Configuration;
+package org.sonatype.nexus.configuration.application.upgrade;
 
 /**
- * A component involved only if old security configuration is found. It will fetch the old configuration, transform it
- * to current Configuration model and return it. Nothing else.
+ * An upgrade message used to hold the current version and the configuration itself. Since modello generated classes
+ * differs from model version to model version, it is held as Object, and the needed converter will cast it to what it
+ * needs.
  *
  * @author cstamas
  */
-public interface ConfigurationUpgrader<E extends Configuration>
+public class UpgradeMessage
 {
-  /**
-   * Tries to load an old configuration from file and will try to upgrade it to current model.
-   */
-  public E loadOldConfiguration(File file)
-      throws IOException, ConfigurationIsCorruptedException, UnsupportedConfigurationVersionException;
+  private String modelVersion;
+
+  private Object configuration;
+
+  public String getModelVersion() {
+    return modelVersion;
+  }
+
+  public void setModelVersion(String modelVersion) {
+    this.modelVersion = modelVersion;
+  }
+
+  public Object getConfiguration() {
+    return configuration;
+  }
+
+  public void setConfiguration(Object configuration) {
+    this.configuration = configuration;
+  }
 }

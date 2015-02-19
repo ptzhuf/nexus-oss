@@ -10,24 +10,33 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.configuration.upgrade;
+package org.sonatype.nexus.configuration.application.upgrade;
 
 import java.io.File;
 
 import org.sonatype.configuration.ConfigurationException;
 
 /**
- * Thrown when the configuration has model version but it is unknown to the security layer.
+ * Thrown when the configuration file is corrupt and cannot be loaded neither upgraded. It has wrong syntax or is
+ * unreadable.
  *
  * @author cstamas
  */
-public class UnsupportedConfigurationVersionException
+public class ConfigurationIsCorruptedException
     extends ConfigurationException
 {
-  private static final long serialVersionUID = 1965812260368747123L;
+  private static final long serialVersionUID = 5592204171297423008L;
 
-  public UnsupportedConfigurationVersionException(String version, File file) {
-    super("Unsupported configuration file in " + file.getAbsolutePath() + " with version: " + version
-        + ". Cannot upgrade.");
+  public ConfigurationIsCorruptedException(File file) {
+    this(file.getAbsolutePath());
   }
+
+  public ConfigurationIsCorruptedException(String filePath) {
+    this(filePath, null);
+  }
+
+  public ConfigurationIsCorruptedException(String filePath, Throwable t) {
+    super("Could not read or parse security configuration file on path " + filePath + "! It may be corrupted.", t);
+  }
+
 }

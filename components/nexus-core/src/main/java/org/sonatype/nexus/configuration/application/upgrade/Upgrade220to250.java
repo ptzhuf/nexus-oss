@@ -19,9 +19,6 @@ import java.io.IOException;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.sonatype.configuration.upgrade.ConfigurationIsCorruptedException;
-import org.sonatype.configuration.upgrade.SingleVersionUpgrader;
-import org.sonatype.configuration.upgrade.UpgradeMessage;
 import org.sonatype.nexus.configuration.model.v2_5_0.CRemoteHttpProxySettings;
 import org.sonatype.nexus.configuration.model.v2_5_0.CRemoteProxySettings;
 import org.sonatype.nexus.configuration.model.v2_5_0.Configuration;
