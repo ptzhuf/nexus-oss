@@ -37,12 +37,10 @@ public interface ApplicationConfigurationSource
   /**
    * Backup the current configuration.
    */
-  void backupConfiguration()
-      throws IOException;
+  void backupConfiguration() throws IOException;
 
   /**
    * Is nexus instance upgraded
    */
   boolean isInstanceUpgraded();
-
 }

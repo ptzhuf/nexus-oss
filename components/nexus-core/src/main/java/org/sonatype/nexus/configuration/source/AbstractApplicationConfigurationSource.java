@@ -18,9 +18,11 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 
 import org.sonatype.configuration.ConfigurationException;
+import org.sonatype.configuration.validation.ValidationResponse;
 import org.sonatype.nexus.configuration.ApplicationInterpolatorProvider;
 import org.sonatype.nexus.configuration.model.Configuration;
 import org.sonatype.nexus.configuration.model.io.xpp3.NexusConfigurationXpp3Reader;
+import org.sonatype.sisu.goodies.common.ComponentSupport;
 
 import org.codehaus.plexus.interpolation.InterpolatorFilterReader;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
@@ -33,7 +35,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author cstamas
  */
 public abstract class AbstractApplicationConfigurationSource
-    extends AbstractConfigurationSource
+    extends ComponentSupport
     implements ApplicationConfigurationSource
 {
   /**
@@ -50,6 +52,16 @@ public abstract class AbstractApplicationConfigurationSource
    * Flag to mark instance upgrade.
    */
   private boolean instanceUpgraded;
+
+  /**
+   * Flag to mark update.
+   */
+  private boolean configurationUpgraded;
+
+  /**
+   * The validation response
+   */
+  private ValidationResponse validationResponse;
 
   public AbstractApplicationConfigurationSource(final ApplicationInterpolatorProvider interpolatorProvider) {
     this.interpolatorProvider = checkNotNull(interpolatorProvider);
@@ -76,16 +88,7 @@ public abstract class AbstractApplicationConfigurationSource
     }
   }
 
-  /**
-   * Load configuration.
-   *
-   * @param file the file
-   * @return the configuration
-   * @throws IOException Signals that an I/O exception has occurred.
-   */
-  protected void loadConfiguration(InputStream is)
-      throws IOException, ConfigurationException
-  {
+  protected void loadConfiguration(InputStream is) throws IOException, ConfigurationException {
     Reader fr = null;
 
     try {
@@ -147,4 +150,27 @@ public abstract class AbstractApplicationConfigurationSource
     this.instanceUpgraded = instanceUpgraded;
   }
 
+  @Override
+  public ValidationResponse getValidationResponse() {
+    return validationResponse;
+  }
+
+  protected void setValidationResponse(ValidationResponse validationResponse) {
+    this.validationResponse = validationResponse;
+  }
+
+  /**
+   * Is configuration updated?
+   */
+  @Override
+  public boolean isConfigurationUpgraded() {
+    return configurationUpgraded;
+  }
+
+  /**
+   * Setter for configuration pugraded.
+   */
+  public void setConfigurationUpgraded(boolean configurationUpgraded) {
+    this.configurationUpgraded = configurationUpgraded;
+  }
 }

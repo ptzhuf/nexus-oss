@@ -36,8 +36,7 @@ public interface ConfigurationSource<E extends Configuration>
   /**
    * Persists the current configuration.
    */
-  void storeConfiguration()
-      throws IOException;
+  void storeConfiguration() throws IOException;
 
   /**
    * Gets the current configuration.
@@ -53,14 +52,12 @@ public interface ConfigurationSource<E extends Configuration>
    *
    * @return the configuration
    */
-  E loadConfiguration()
-      throws ConfigurationException, IOException;
+  E loadConfiguration() throws ConfigurationException, IOException;
 
   /**
    * Returns the actual content of configuration as stream.
    */
-  InputStream getConfigurationAsStream()
-      throws IOException;
+  InputStream getConfigurationAsStream() throws IOException;
 
   /**
    * Returns whether the configuration was upgraded.
