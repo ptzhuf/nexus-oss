@@ -40,7 +40,6 @@ import org.sonatype.nexus.configuration.validator.ApplicationConfigurationValida
 import org.sonatype.nexus.configuration.validator.ConfigurationValidator;
 import org.sonatype.sisu.goodies.common.io.FileReplacer;
 import org.sonatype.sisu.goodies.common.io.FileReplacer.ContentWriter;
-import org.sonatype.sisu.goodies.eventbus.EventBus;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -55,8 +54,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class FileConfigurationSource
     extends AbstractApplicationConfigurationSource
 {
-  private final EventBus eventBus;
-
   private final Provider<SystemStatus> systemStatusProvider;
 
   /**
@@ -83,7 +80,6 @@ public class FileConfigurationSource
 
   @Inject
   public FileConfigurationSource(final ApplicationInterpolatorProvider interpolatorProvider,
-                                 final EventBus eventBus,
                                  final Provider<SystemStatus> systemStatusProvider,
                                  final @Named("${nexus-work}/etc/nexus.xml") File configurationFile,
                                  final ApplicationConfigurationValidator configurationValidator,
@@ -91,7 +87,6 @@ public class FileConfigurationSource
                                  final ConfigurationHelper configHelper)
   {
     super(interpolatorProvider);
-    this.eventBus = checkNotNull(eventBus);
     this.systemStatusProvider = checkNotNull(systemStatusProvider);
     this.configurationFile = checkNotNull(configurationFile);
     this.configurationValidator = checkNotNull(configurationValidator);
