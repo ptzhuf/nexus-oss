@@ -15,15 +15,16 @@ package org.sonatype.nexus.configuration.model;
 import org.sonatype.configuration.ConfigurationException;
 import org.sonatype.configuration.validation.ValidationMessage;
 import org.sonatype.configuration.validation.ValidationResponse;
+import org.sonatype.nexus.configuration.ApplicationConfiguration;
 import org.sonatype.nexus.configuration.ExternalConfiguration;
-import org.sonatype.nexus.configuration.application.ApplicationConfiguration;
 import org.sonatype.nexus.configuration.validator.ApplicationValidationResponse;
 import org.sonatype.nexus.proxy.item.RepositoryItemUid;
 import org.sonatype.nexus.proxy.repository.LocalStatus;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class CRepositoryCoreConfiguration
     extends AbstractCoreConfiguration<CRepository>

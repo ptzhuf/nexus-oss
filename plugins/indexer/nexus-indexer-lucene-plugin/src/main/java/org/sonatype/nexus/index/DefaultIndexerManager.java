@@ -41,7 +41,7 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.sonatype.nexus.common.io.DirSupport;
-import org.sonatype.nexus.configuration.application.ApplicationDirectories;
+import org.sonatype.nexus.configuration.ApplicationDirectories;
 import org.sonatype.nexus.maven.tasks.SnapshotRemover;
 import org.sonatype.nexus.mime.MimeSupport;
 import org.sonatype.nexus.proxy.ItemNotFoundException;

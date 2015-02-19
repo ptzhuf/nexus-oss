@@ -27,8 +27,8 @@ import javax.inject.Inject;
 
 import org.sonatype.configuration.ConfigurationException;
 import org.sonatype.nexus.NexusAppTestSupport;
-import org.sonatype.nexus.configuration.application.ApplicationConfiguration;
-import org.sonatype.nexus.configuration.application.DefaultGlobalRestApiSettings;
+import org.sonatype.nexus.configuration.ApplicationConfiguration;
+import org.sonatype.nexus.configuration.DefaultGlobalRestApiSettings;
 import org.sonatype.nexus.proxy.RequestContext;
 import org.sonatype.nexus.proxy.item.RepositoryItemUid;
 import org.sonatype.nexus.proxy.item.RepositoryItemUidLock;

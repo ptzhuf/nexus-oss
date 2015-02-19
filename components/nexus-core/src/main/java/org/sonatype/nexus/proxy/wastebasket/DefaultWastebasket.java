@@ -25,7 +25,7 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.sonatype.nexus.common.property.SystemPropertiesHelper;
-import org.sonatype.nexus.configuration.application.ApplicationDirectories;
+import org.sonatype.nexus.configuration.ApplicationDirectories;
 import org.sonatype.nexus.proxy.ItemNotFoundException;
 import org.sonatype.nexus.proxy.LocalStorageException;
 import org.sonatype.nexus.proxy.ResourceStoreRequest;

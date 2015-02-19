@@ -25,8 +25,8 @@ import javax.inject.Singleton;
 
 import org.sonatype.configuration.ConfigurationException;
 import org.sonatype.nexus.configuration.AbstractLastingConfigurable;
+import org.sonatype.nexus.configuration.ApplicationConfiguration;
 import org.sonatype.nexus.configuration.CoreConfiguration;
-import org.sonatype.nexus.configuration.application.ApplicationConfiguration;
 import org.sonatype.nexus.configuration.model.CRouting;
 import org.sonatype.nexus.configuration.model.CRoutingCoreConfiguration;
 import org.sonatype.nexus.proxy.AccessDeniedException;

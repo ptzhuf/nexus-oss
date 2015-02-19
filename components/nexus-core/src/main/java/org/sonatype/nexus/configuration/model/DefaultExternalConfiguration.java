@@ -13,9 +13,9 @@
 package org.sonatype.nexus.configuration.model;
 
 import org.sonatype.configuration.ConfigurationException;
+import org.sonatype.nexus.configuration.ApplicationConfiguration;
 import org.sonatype.nexus.configuration.CoreConfiguration;
 import org.sonatype.nexus.configuration.ExternalConfiguration;
-import org.sonatype.nexus.configuration.application.ApplicationConfiguration;
 
 /**
  * A superclass class that holds an Xpp3Dom and maintains it.

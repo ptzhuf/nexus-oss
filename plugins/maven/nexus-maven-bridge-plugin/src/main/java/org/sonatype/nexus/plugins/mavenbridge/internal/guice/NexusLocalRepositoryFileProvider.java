@@ -19,7 +19,7 @@ import javax.inject.Named;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 
-import org.sonatype.nexus.configuration.application.ApplicationDirectories;
+import org.sonatype.nexus.configuration.ApplicationDirectories;
 import org.sonatype.nexus.plugins.mavenbridge.internal.DefaultNexusAether;
 import org.sonatype.sisu.maven.bridge.Names;
 

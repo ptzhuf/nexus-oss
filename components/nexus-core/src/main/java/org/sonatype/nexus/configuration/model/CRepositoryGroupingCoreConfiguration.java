@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import org.sonatype.configuration.validation.ValidationResponse;
-import org.sonatype.nexus.configuration.application.ApplicationConfiguration;
+import org.sonatype.nexus.configuration.ApplicationConfiguration;
 import org.sonatype.nexus.configuration.validator.ApplicationValidationContext;
 import org.sonatype.nexus.configuration.validator.ApplicationValidationResponse;
 

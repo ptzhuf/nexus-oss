@@ -22,8 +22,8 @@ import org.sonatype.nexus.SystemState;
 import org.sonatype.nexus.SystemStatus;
 import org.sonatype.nexus.capability.support.CapabilitySupport;
 import org.sonatype.nexus.capability.support.WithoutConfiguration;
-import org.sonatype.nexus.configuration.application.ApplicationConfiguration;
-import org.sonatype.nexus.configuration.application.GlobalRestApiSettings;
+import org.sonatype.nexus.configuration.ApplicationConfiguration;
+import org.sonatype.nexus.configuration.GlobalRestApiSettings;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.sonatype.nexus.capability.support.WithoutConfiguration.WITHOUT_CONFIGURATION;

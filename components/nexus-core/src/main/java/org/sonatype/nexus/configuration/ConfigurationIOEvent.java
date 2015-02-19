@@ -12,8 +12,6 @@
  */
 package org.sonatype.nexus.configuration;
 
-import org.sonatype.nexus.configuration.application.ApplicationConfiguration;
-
 /**
  * An event fired on configuration IO (load, save).
  *

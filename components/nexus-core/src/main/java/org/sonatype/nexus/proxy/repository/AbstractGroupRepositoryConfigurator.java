@@ -13,7 +13,7 @@
 package org.sonatype.nexus.proxy.repository;
 
 import org.sonatype.configuration.ConfigurationException;
-import org.sonatype.nexus.configuration.application.ApplicationConfiguration;
+import org.sonatype.nexus.configuration.ApplicationConfiguration;
 import org.sonatype.nexus.configuration.model.CRepositoryCoreConfiguration;
 
 public abstract class AbstractGroupRepositoryConfigurator

@@ -20,7 +20,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions
 import org.hibernate.validator.constraints.Email
 import org.sonatype.micromailer.Address
 import org.sonatype.nexus.common.validation.Validate
-import org.sonatype.nexus.configuration.application.ApplicationConfiguration
+import org.sonatype.nexus.configuration.ApplicationConfiguration
 import org.sonatype.nexus.email.EmailerException
 import org.sonatype.nexus.email.NexusEmailer
 import org.sonatype.nexus.email.SmtpConfiguration

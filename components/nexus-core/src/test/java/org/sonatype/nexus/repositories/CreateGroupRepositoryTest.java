@@ -14,7 +14,7 @@ package org.sonatype.nexus.repositories;
 
 import org.sonatype.configuration.ConfigurationException;
 import org.sonatype.nexus.NexusAppTestSupport;
-import org.sonatype.nexus.configuration.application.ApplicationConfiguration;
+import org.sonatype.nexus.configuration.ApplicationConfiguration;
 import org.sonatype.nexus.configuration.model.CRepository;
 import org.sonatype.nexus.proxy.repository.LocalStatus;
 import org.sonatype.nexus.templates.repository.maven.Maven2GroupRepositoryTemplate;

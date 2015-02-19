@@ -14,7 +14,7 @@ package org.sonatype.nexus.kenai.internal;
 
 import java.util.Collections;
 
-import org.sonatype.nexus.configuration.application.ApplicationConfiguration;
+import org.sonatype.nexus.configuration.ApplicationConfiguration;
 import org.sonatype.nexus.kenai.AbstractKenaiRealmTest;
 import org.sonatype.nexus.security.SecuritySystem;
 

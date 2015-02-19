@@ -19,7 +19,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.sonatype.nexus.configuration.application.ApplicationDirectories;
+import org.sonatype.nexus.configuration.ApplicationDirectories;
 import org.sonatype.nexus.mime.MimeSupport;
 import org.sonatype.nexus.obr.ObrPluginConfiguration;
 import org.sonatype.nexus.obr.util.ObrUtils;

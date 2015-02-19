@@ -29,7 +29,7 @@ import org.sonatype.configuration.validation.ValidationResponse
 import org.sonatype.nexus.common.validation.Create
 import org.sonatype.nexus.common.validation.Update
 import org.sonatype.nexus.common.validation.Validate
-import org.sonatype.nexus.configuration.application.ApplicationConfiguration
+import org.sonatype.nexus.configuration.ApplicationConfiguration
 import org.sonatype.nexus.configuration.model.CLocalStorage
 import org.sonatype.nexus.configuration.model.CRemoteAuthentication
 import org.sonatype.nexus.configuration.model.CRemoteConnectionSettings

@@ -18,7 +18,7 @@ import java.io.IOException;
 import javax.inject.Inject;
 
 import org.sonatype.nexus.common.io.DirSupport;
-import org.sonatype.nexus.configuration.application.ApplicationDirectories;
+import org.sonatype.nexus.configuration.ApplicationDirectories;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
 
 public abstract class AbstractRepositoryFolderCleaner
