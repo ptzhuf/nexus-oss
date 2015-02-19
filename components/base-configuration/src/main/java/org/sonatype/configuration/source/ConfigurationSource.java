@@ -58,16 +58,4 @@ public interface ConfigurationSource<E extends Configuration>
    * Returns the actual content of configuration as stream.
    */
   InputStream getConfigurationAsStream() throws IOException;
-
-  /**
-   * Returns whether the configuration was upgraded.
-   *
-   * @return true if the user configuration was upgraded, false otherwise
-   */
-  boolean isConfigurationUpgraded();
-
-  /**
-   * Returns true if the configuration was got from defaults.
-   */
-  boolean isConfigurationDefaulted();
 }

@@ -49,16 +49,6 @@ public abstract class AbstractApplicationConfigurationSource
   private Configuration configuration;
 
   /**
-   * Flag to mark instance upgrade.
-   */
-  private boolean instanceUpgraded;
-
-  /**
-   * Flag to mark update.
-   */
-  private boolean configurationUpgraded;
-
-  /**
    * The validation response
    */
   private ValidationResponse validationResponse;
@@ -77,10 +67,7 @@ public abstract class AbstractApplicationConfigurationSource
     this.configuration = configuration;
   }
 
-  /**
-   * Called by subclasses when loaded configuration is rejected for some reason.
-   */
-  protected void rejectConfiguration(String message, Throwable e) {
+  private void rejectConfiguration(String message, Throwable e) {
     this.configuration = null;
 
     if (message != null) {
@@ -135,21 +122,6 @@ public abstract class AbstractApplicationConfigurationSource
     return null;
   }
 
-  /**
-   * Is nexus instance upgraded
-   */
-  @Override
-  public boolean isInstanceUpgraded() {
-    return instanceUpgraded;
-  }
-
-  /**
-   * Setter for nexus instance upgraded
-   */
-  public void setInstanceUpgraded(boolean instanceUpgraded) {
-    this.instanceUpgraded = instanceUpgraded;
-  }
-
   @Override
   public ValidationResponse getValidationResponse() {
     return validationResponse;
@@ -157,20 +129,5 @@ public abstract class AbstractApplicationConfigurationSource
 
   protected void setValidationResponse(ValidationResponse validationResponse) {
     this.validationResponse = validationResponse;
-  }
-
-  /**
-   * Is configuration updated?
-   */
-  @Override
-  public boolean isConfigurationUpgraded() {
-    return configurationUpgraded;
-  }
-
-  /**
-   * Setter for configuration pugraded.
-   */
-  public void setConfigurationUpgraded(boolean configurationUpgraded) {
-    this.configurationUpgraded = configurationUpgraded;
   }
 }

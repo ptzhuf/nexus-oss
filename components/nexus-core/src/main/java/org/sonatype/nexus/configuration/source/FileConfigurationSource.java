@@ -57,7 +57,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class FileConfigurationSource
     extends AbstractApplicationConfigurationSource
 {
-
   private final EventBus eventBus;
 
   private final Provider<SystemStatus> systemStatusProvider;
@@ -128,9 +127,7 @@ public class FileConfigurationSource
   }
 
   @Override
-  public Configuration loadConfiguration()
-      throws ConfigurationException, IOException
-  {
+  public Configuration loadConfiguration() throws ConfigurationException, IOException {
     // propagate call and fill in defaults too
     nexusDefaults.loadConfiguration();
 
@@ -155,17 +152,11 @@ public class FileConfigurationSource
 
     try {
       loadConfiguration(getConfigurationFile());
-
-      // was able to load configuration w/o upgrading it
-      setConfigurationUpgraded(false);
     }
     catch (ConfigurationException e) {
       log.info("Configuration file is outdated, begin upgrade");
 
       upgradeConfiguration(getConfigurationFile());
-
-      // had to upgrade configuration before I was able to load it
-      setConfigurationUpgraded(true);
 
       loadConfiguration(getConfigurationFile());
 
@@ -233,33 +224,22 @@ public class FileConfigurationSource
     }
   }
 
-  protected void upgradeNexusVersion()
-      throws IOException
-  {
+  protected void upgradeNexusVersion() throws IOException {
     final String currentVersion = checkNotNull(systemStatusProvider.get().getVersion());
     final String previousVersion = getConfiguration().getNexusVersion();
-    if (currentVersion.equals(previousVersion)) {
-      setInstanceUpgraded(false);
-    }
-    else {
-      setInstanceUpgraded(true);
+    if (!currentVersion.equals(previousVersion)) {
       getConfiguration().setNexusVersion(currentVersion);
       storeConfiguration();
     }
-
   }
 
   @Override
-  public void storeConfiguration()
-      throws IOException
-  {
+  public void storeConfiguration() throws IOException {
     saveConfiguration(getConfigurationFile());
   }
 
   @Override
-  public InputStream getConfigurationAsStream()
-      throws IOException
-  {
+  public InputStream getConfigurationAsStream() throws IOException {
     return new FileInputStream(getConfigurationFile());
   }
 
@@ -268,9 +248,7 @@ public class FileConfigurationSource
     return nexusDefaults;
   }
 
-  protected void upgradeConfiguration(File file)
-      throws IOException, ConfigurationException
-  {
+  protected void upgradeConfiguration(File file) throws IOException, ConfigurationException {
     log.info("Trying to upgrade the configuration file " + file.getAbsolutePath());
 
     setConfiguration(configurationUpgrader.loadOldConfiguration(file));
@@ -295,9 +273,7 @@ public class FileConfigurationSource
    * @return the configuration
    * @throws IOException Signals that an I/O exception has occurred.
    */
-  private void loadConfiguration(File file)
-      throws IOException, ConfigurationException
-  {
+  private void loadConfiguration(File file) throws IOException, ConfigurationException {
     log.debug("Loading Nexus configuration from " + file.getAbsolutePath());
 
     FileInputStream fis = null;
@@ -325,9 +301,7 @@ public class FileConfigurationSource
    * @param file the file
    * @throws IOException Signals that an I/O exception has occurred.
    */
-  private void saveConfiguration(final File file)
-      throws IOException
-  {
+  private void saveConfiguration(final File file) throws IOException {
     // Create the dir if doesn't exist, throw runtime exception on failure
     // bad bad bad
     try {
@@ -361,18 +335,8 @@ public class FileConfigurationSource
     });
   }
 
-  /**
-   * Was the active configuration fetched from config file or from default source? True if it from default source.
-   */
   @Override
-  public boolean isConfigurationDefaulted() {
-    return configurationDefaulted;
-  }
-
-  @Override
-  public void backupConfiguration()
-      throws IOException
-  {
+  public void backupConfiguration() throws IOException {
     File file = getConfigurationFile();
 
     // backup the file
