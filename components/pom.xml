@@ -37,7 +37,6 @@
     <module>nexus-client</module>
     <!--<module>nexus-client-core</module>-->
     <module>nexus-commands</module>
-    <module>nexus-configuration-model</module>
     <module>nexus-core</module>
     <module>nexus-ehcache</module>
     <module>nexus-elasticsearch</module>
