@@ -387,46 +387,12 @@
             <configuration>
               <useJava5>true</useJava5>
               <version>2.8.0</version>
-              <packagedVersions>
-                <packagedVersion>2.0.0</packagedVersion>
-                <packagedVersion>2.2.0</packagedVersion>
-                <packagedVersion>2.5.0</packagedVersion>
-                <packagedVersion>2.7.0</packagedVersion>
-              </packagedVersions>
               <models>
                 <model>src/main/mdo/nexus.xml</model>
               </models>
             </configuration>
           </execution>
 
-        </executions>
-        <configuration>
-          <packageWithVersion>false</packageWithVersion>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.sonatype.plugins</groupId>
-        <artifactId>modello-plugin-upgrade</artifactId>
-        <executions>
-          <execution>
-            <goals>
-              <goal>upgrade</goal>
-            </goals>
-            <phase>generate-sources</phase>
-            <configuration>
-              <version>2.8.0</version>
-              <packagedVersions>
-                <packagedVersion>2.0.0</packagedVersion>
-                <packagedVersion>2.2.0</packagedVersion>
-                <packagedVersion>2.5.0</packagedVersion>
-                <packagedVersion>2.7.0</packagedVersion>
-              </packagedVersions>
-              <models>
-                <model>src/main/mdo/nexus.xml</model>
-              </models>
-            </configuration>
-          </execution>
         </executions>
         <configuration>
           <packageWithVersion>false</packageWithVersion>
