@@ -30,21 +30,17 @@ public interface RevertableConfiguration<C>
   /**
    * Validates the changes, if any.
    */
-  void validateChanges()
-      throws ConfigurationException;
+  void validateChanges() throws ConfigurationException;
 
   /**
    * Commits the changes. Resets the state of config "back to normal" (saved). Will call validateChanges() if needed.
    */
-  void commitChanges()
-      throws ConfigurationException;
+  void commitChanges() throws ConfigurationException;
 
   /**
    * Rollback the changes. Resets the state of config "back to normal" (saved).
    */
   void rollbackChanges();
-
-  // ==
 
   C getConfiguration(boolean forWrite);
 }
