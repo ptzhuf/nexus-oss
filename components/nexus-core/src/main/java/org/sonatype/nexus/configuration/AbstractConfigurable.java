@@ -23,8 +23,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * This class is a special in configuration framework, extended by other framework classes. You do not want to extend
- * this class (most probably), but rather go for {@link AbstractLastingConfigurable} or
- * {@link AbstractRemovableConfigurable} class.
+ * this class (most probably), but rather go for {@link AbstractLastingConfigurable}.
  *
  * @author cstamas
  */
@@ -47,11 +46,7 @@ public abstract class AbstractConfigurable<C>
    */
   private boolean registeredWithEventBus;
 
-  /**
-   * Constructor used by {@link AbstractRemovableConfigurable}.
-   */
-  public AbstractConfigurable() {
-  }
+  protected AbstractConfigurable() {}
 
   /**
    * Constructor used by {@link AbstractLastingConfigurable}.

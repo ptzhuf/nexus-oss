@@ -12,8 +12,10 @@
  */
 package org.sonatype.nexus.proxy.repository;
 
+import javax.inject.Inject;
+
 import org.sonatype.configuration.ConfigurationException;
-import org.sonatype.nexus.configuration.AbstractRemovableConfigurable;
+import org.sonatype.nexus.configuration.AbstractConfigurable;
 import org.sonatype.nexus.configuration.application.ApplicationConfiguration;
 import org.sonatype.nexus.configuration.model.CRepository;
 import org.sonatype.nexus.configuration.model.CRepositoryCoreConfiguration;
@@ -22,11 +24,12 @@ import org.sonatype.nexus.proxy.LocalStorageException;
 import org.sonatype.nexus.proxy.item.RepositoryItemUid;
 import org.sonatype.nexus.proxy.mirror.DefaultPublishedMirrors;
 import org.sonatype.nexus.proxy.mirror.PublishedMirrors;
+import org.sonatype.sisu.goodies.eventbus.EventBus;
 
 import org.codehaus.plexus.util.StringUtils;
 
 public class ConfigurableRepository
-    extends AbstractRemovableConfigurable<CRepository>
+    extends AbstractConfigurable<CRepository>
 {
   private PublishedMirrors pMirrors;
   
@@ -38,6 +41,23 @@ public class ConfigurableRepository
     // TODO: sort out templates, as this is sub-optimal
     // constructor for Templates
     setApplicationConfiguration(applicationConfiguration);
+  }
+
+  @Override
+  @Inject
+  public void setEventBus(final EventBus eventBus) {
+    super.setEventBus(eventBus);
+    registerWithEventBus();
+  }
+
+  @Override
+  @Inject
+  public void setApplicationConfiguration(final ApplicationConfiguration applicationConfiguration) {
+    super.setApplicationConfiguration(applicationConfiguration);
+  }
+
+  public void dispose() {
+    unregisterFromEventBus();
   }
 
   @Override
