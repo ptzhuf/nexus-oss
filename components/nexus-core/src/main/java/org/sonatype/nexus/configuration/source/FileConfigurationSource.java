@@ -36,10 +36,8 @@ import org.sonatype.nexus.configuration.ApplicationInterpolatorProvider;
 import org.sonatype.nexus.configuration.model.Configuration;
 import org.sonatype.nexus.configuration.model.ConfigurationHelper;
 import org.sonatype.nexus.configuration.model.io.xpp3.NexusConfigurationXpp3Writer;
-import org.sonatype.nexus.configuration.upgrade.ApplicationConfigurationUpgrader;
 import org.sonatype.nexus.configuration.validator.ApplicationConfigurationValidator;
 import org.sonatype.nexus.configuration.validator.ConfigurationValidator;
-import org.sonatype.nexus.security.SecurityConfigurationChanged;
 import org.sonatype.sisu.goodies.common.io.FileReplacer;
 import org.sonatype.sisu.goodies.common.io.FileReplacer.ContentWriter;
 import org.sonatype.sisu.goodies.eventbus.EventBus;
@@ -72,11 +70,6 @@ public class FileConfigurationSource
   private final ApplicationConfigurationValidator configurationValidator;
 
   /**
-   * The configuration upgrader.
-   */
-  private final ApplicationConfigurationUpgrader configurationUpgrader;
-
-  /**
    * The nexus defaults configuration source.
    */
   private final ApplicationConfigurationSource nexusDefaults;
@@ -94,7 +87,6 @@ public class FileConfigurationSource
                                  final Provider<SystemStatus> systemStatusProvider,
                                  final @Named("${nexus-work}/etc/nexus.xml") File configurationFile,
                                  final ApplicationConfigurationValidator configurationValidator,
-                                 final ApplicationConfigurationUpgrader configurationUpgrader,
                                  final @Named("static") ApplicationConfigurationSource nexusDefaults,
                                  final ConfigurationHelper configHelper)
   {
@@ -103,26 +95,15 @@ public class FileConfigurationSource
     this.systemStatusProvider = checkNotNull(systemStatusProvider);
     this.configurationFile = checkNotNull(configurationFile);
     this.configurationValidator = checkNotNull(configurationValidator);
-    this.configurationUpgrader = checkNotNull(configurationUpgrader);
     this.nexusDefaults = checkNotNull(nexusDefaults);
     this.configHelper = checkNotNull(configHelper);
   }
 
-  /**
-   * Gets the configuration validator.
-   *
-   * @return the configuration validator
-   */
-  public ConfigurationValidator getConfigurationValidator() {
+  private ConfigurationValidator getConfigurationValidator() {
     return configurationValidator;
   }
 
-  /**
-   * Gets the configuration file.
-   *
-   * @return the configuration file
-   */
-  public File getConfigurationFile() {
+  private File getConfigurationFile() {
     return configurationFile;
   }
 
@@ -150,24 +131,7 @@ public class FileConfigurationSource
       configurationDefaulted = false;
     }
 
-    try {
-      loadConfiguration(getConfigurationFile());
-    }
-    catch (ConfigurationException e) {
-      log.info("Configuration file is outdated, begin upgrade");
-
-      upgradeConfiguration(getConfigurationFile());
-
-      loadConfiguration(getConfigurationFile());
-
-      // if the configuration is upgraded we need to reload the security.
-      // it would be great if this was put somewhere else, but I am out of ideas.
-      // the problem is the default security was already loaded with the security-system component was loaded
-      // so it has the defaults, the upgrade from 1.0.8 -> 1.4 moves security out of the nexus.xml
-      // and we cannot use the 'correct' way of updating the info, because that would cause an infinit loop
-      // loading the nexus.xml
-      this.eventBus.post(new SecurityConfigurationChanged());
-    }
+    loadConfiguration(getConfigurationFile());
 
     upgradeNexusVersion();
 
@@ -192,8 +156,7 @@ public class FileConfigurationSource
     }
   }
 
-  protected void dumpValidationErrors(final ValidationResponse response) {
-    // summary
+  private void dumpValidationErrors(final ValidationResponse response) {
     if (response.getValidationErrors().size() > 0 || response.getValidationWarnings().size() > 0) {
       log.error("* * * * * * * * * * * * * * * * * * * * * * * * * *");
 
@@ -224,7 +187,7 @@ public class FileConfigurationSource
     }
   }
 
-  protected void upgradeNexusVersion() throws IOException {
+  private void upgradeNexusVersion() throws IOException {
     final String currentVersion = checkNotNull(systemStatusProvider.get().getVersion());
     final String previousVersion = getConfiguration().getNexusVersion();
     if (!currentVersion.equals(previousVersion)) {
@@ -248,31 +211,6 @@ public class FileConfigurationSource
     return nexusDefaults;
   }
 
-  protected void upgradeConfiguration(File file) throws IOException, ConfigurationException {
-    log.info("Trying to upgrade the configuration file " + file.getAbsolutePath());
-
-    setConfiguration(configurationUpgrader.loadOldConfiguration(file));
-
-    // after all we should have a configuration
-    if (getConfiguration() == null) {
-      throw new ConfigurationException("Could not upgrade Nexus configuration! Please replace the "
-          + file.getAbsolutePath() + " file with a valid Nexus configuration file.");
-    }
-
-    log.info("Creating backup from the old file and saving the upgraded configuration.");
-
-    backupConfiguration();
-
-    saveConfiguration(file);
-  }
-
-  /**
-   * Load configuration.
-   *
-   * @param file the file
-   * @return the configuration
-   * @throws IOException Signals that an I/O exception has occurred.
-   */
   private void loadConfiguration(File file) throws IOException, ConfigurationException {
     log.debug("Loading Nexus configuration from " + file.getAbsolutePath());
 
@@ -295,12 +233,6 @@ public class FileConfigurationSource
     }
   }
 
-  /**
-   * Save configuration.
-   *
-   * @param file the file
-   * @throws IOException Signals that an I/O exception has occurred.
-   */
   private void saveConfiguration(final File file) throws IOException {
     // Create the dir if doesn't exist, throw runtime exception on failure
     // bad bad bad
