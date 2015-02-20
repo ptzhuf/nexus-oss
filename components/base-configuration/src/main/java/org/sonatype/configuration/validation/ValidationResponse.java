@@ -87,12 +87,6 @@ public class ValidationResponse
     return null;
   }
 
-  public void setValidationErrors(List<ValidationMessage> validationErrors) {
-    this.validationErrors = validationErrors;
-
-    valid = validationErrors == null || validationErrors.size() == 0;
-  }
-
   public void addValidationError(ValidationMessage message) {
     getValidationErrors().add(message);
 
@@ -128,10 +122,6 @@ public class ValidationResponse
       validationWarnings = new ArrayList<ValidationMessage>();
     }
     return validationWarnings;
-  }
-
-  public void setValidationWarnings(List<ValidationMessage> validationWarnings) {
-    this.validationWarnings = validationWarnings;
   }
 
   public void addValidationWarning(ValidationMessage message) {
