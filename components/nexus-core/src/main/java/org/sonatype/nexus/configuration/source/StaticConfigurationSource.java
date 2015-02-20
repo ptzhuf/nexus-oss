@@ -51,12 +51,4 @@ public class StaticConfigurationSource
   public void storeConfiguration() throws IOException {
     throw new UnsupportedOperationException();
   }
-
-  /**
-   * The 'static' source is immutable.
-   */
-  @Override
-  public void backupConfiguration() throws IOException {
-    throw new UnsupportedOperationException();
-  }
 }

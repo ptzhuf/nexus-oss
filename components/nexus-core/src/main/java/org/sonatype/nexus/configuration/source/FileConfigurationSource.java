@@ -15,8 +15,6 @@ package org.sonatype.nexus.configuration.source;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -182,14 +180,5 @@ public class FileConfigurationSource
         new NexusConfigurationXpp3Writer().write(output, configuration);
       }
     });
-  }
-
-  @Override
-  public void backupConfiguration() throws IOException {
-    File file = configurationFile;
-
-    // backup the file
-    File backup = new File(file.getParentFile(), file.getName() + ".bak");
-    Files.copy(file.toPath(), backup.toPath(), StandardCopyOption.REPLACE_EXISTING);
   }
 }

@@ -33,6 +33,4 @@ public interface ApplicationConfigurationSource
   void setConfiguration(Configuration configuration);
 
   Configuration loadConfiguration() throws ConfigurationException, IOException;
-
-  void backupConfiguration() throws IOException;
 }
