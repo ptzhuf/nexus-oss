@@ -14,15 +14,13 @@ package org.sonatype.nexus.configuration;
 
 /**
  * Event fired when global remote Proxy settings are changed (within configuration change). The settings carried in
- * this event will reflect the NEW values, but if you have the {@link GlobalRemoteProxySettings}
- * component, you can
- * query it too <em>after</em> you received this event .
+ * this event will reflect the NEW values, but if you have the {@link GlobalRemoteProxySettings} component, you can
+ * query it too <em>after</em> you received this event.
  *
  * @since 2.6
  */
 public class GlobalRemoteProxySettingsChangedEvent
 {
-
   private GlobalRemoteProxySettings settings;
 
   public GlobalRemoteProxySettingsChangedEvent(final GlobalRemoteProxySettings settings)

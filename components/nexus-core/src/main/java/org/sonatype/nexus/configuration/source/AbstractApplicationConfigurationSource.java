@@ -16,19 +16,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.Map;
 
 import javax.inject.Inject;
 
 import org.sonatype.configuration.ConfigurationException;
-import org.sonatype.nexus.configuration.ApplicationInterpolatorProvider;
 import org.sonatype.nexus.configuration.model.Configuration;
 import org.sonatype.nexus.configuration.model.io.xpp3.NexusConfigurationXpp3Reader;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
 
+import org.codehaus.plexus.interpolation.Interpolator;
 import org.codehaus.plexus.interpolation.InterpolatorFilterReader;
+import org.codehaus.plexus.interpolation.MapBasedValueSource;
+import org.codehaus.plexus.interpolation.RegexBasedInterpolator;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import org.eclipse.sisu.Parameters;
 
 /**
  * Support for {@link ApplicationConfigurationSource} implementations.
@@ -37,13 +39,16 @@ public abstract class AbstractApplicationConfigurationSource
     extends ComponentSupport
     implements ApplicationConfigurationSource
 {
-  private ApplicationInterpolatorProvider interpolatorProvider;
+  private Interpolator interpolator;
 
   private Configuration configuration;
 
   @Inject
-  public void installDependencies(final ApplicationInterpolatorProvider interpolator) {
-    this.interpolatorProvider = checkNotNull(interpolator);
+  public void installDependencies(final @Parameters Map<String, String> parameters) {
+    interpolator = new RegexBasedInterpolator();
+    interpolator.addValueSource(new MapBasedValueSource(parameters));
+    interpolator.addValueSource(new MapBasedValueSource(System.getenv()));
+    interpolator.addValueSource(new MapBasedValueSource(System.getProperties()));
   }
 
   @Override
@@ -61,9 +66,8 @@ public abstract class AbstractApplicationConfigurationSource
 
     try (InputStream is = url.openStream()) {
       NexusConfigurationXpp3Reader reader = new NexusConfigurationXpp3Reader();
-      InterpolatorFilterReader interpolator = new InterpolatorFilterReader(
-          new InputStreamReader(is), interpolatorProvider.getInterpolator());
-      configuration = reader.read(interpolator);
+      InterpolatorFilterReader filter = new InterpolatorFilterReader(new InputStreamReader(is), interpolator);
+      configuration = reader.read(filter);
     }
     catch (XmlPullParserException e) {
       configuration = null;

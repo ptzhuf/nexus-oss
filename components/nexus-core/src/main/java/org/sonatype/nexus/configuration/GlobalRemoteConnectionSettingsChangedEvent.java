@@ -13,11 +13,10 @@
 package org.sonatype.nexus.configuration;
 
 /**
- * Event fired when global remote connection settings are changed (within configuration change). The settings carried
- * in
- * this event will reflect the NEW values, but if you have the {@link GlobalRemoteConnectionSettings} component, you
- * can
- * query it too <em>after</em> you received this event .
+ * Event fired when global remote connection settings are changed (within configuration change).
+ *
+ * The settings carried in this event will reflect the NEW values, but if you have the
+ * {@link GlobalRemoteConnectionSettings} component, you can query it too <em>after</em> you received this event.
  */
 public class GlobalRemoteConnectionSettingsChangedEvent
 {
@@ -30,5 +29,4 @@ public class GlobalRemoteConnectionSettingsChangedEvent
   public GlobalRemoteConnectionSettings getSettings() {
     return settings;
   }
-
 }
