@@ -100,8 +100,6 @@ public class DefaultApplicationConfiguration
 
   private final RepositoryRegistry repositoryRegistry;
 
-  private final List<ConfigurationModifier> configurationModifiers;
-
   private final ClassLoader uberClassLoader;
 
   private final ApplicationDirectories applicationDirectories;
@@ -145,7 +143,6 @@ public class DefaultApplicationConfiguration
                                          final ApplicationConfigurationValidator configurationValidator,
                                          final RepositoryTypeRegistry repositoryTypeRegistry,
                                          final RepositoryRegistry repositoryRegistry,
-                                         final List<ConfigurationModifier> configurationModifiers,
                                          final @Named("nexus-uber") ClassLoader uberClassLoader,
                                          final ApplicationDirectories applicationDirectories)
   {
@@ -158,7 +155,6 @@ public class DefaultApplicationConfiguration
     this.configurationValidator = checkNotNull(configurationValidator);
     this.repositoryTypeRegistry = checkNotNull(repositoryTypeRegistry);
     this.repositoryRegistry = checkNotNull(repositoryRegistry);
-    this.configurationModifiers = checkNotNull(configurationModifiers);
     this.uberClassLoader = checkNotNull(uberClassLoader);
     this.applicationDirectories = checkNotNull(applicationDirectories);
 
@@ -227,16 +223,6 @@ public class DefaultApplicationConfiguration
       log.info("Loading Nexus Configuration...");
 
       configurationSource.loadConfiguration();
-
-      boolean modified = false;
-      for (ConfigurationModifier modifier : configurationModifiers) {
-        modified |= modifier.apply(configurationSource.getConfiguration());
-      }
-
-      if (modified) {
-        configurationSource.backupConfiguration();
-        configurationSource.storeConfiguration();
-      }
 
       globalLocalStorageContext = new DefaultLocalStorageContext(null);
 
