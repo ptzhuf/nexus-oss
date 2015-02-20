@@ -10,14 +10,29 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package com.sonatype.nexus.repository.nuget;
+package org.sonatype.nexus.repository.content;
+
+import org.sonatype.nexus.repository.Repository;
 
 import com.tinkerpop.blueprints.impls.orient.OrientVertex;
 
-public class NugetContentDeletedEvent
-    extends NugetContentEvent
+public abstract class RepositoryContentEvent
 {
-  public NugetContentDeletedEvent(final String id, final String version, OrientVertex component) {
-    super(id, version, component);
+
+  private final Repository repository;
+
+  private final OrientVertex component;
+
+  public RepositoryContentEvent(final Repository repository, final OrientVertex component) {
+    this.repository = repository;
+    this.component = component;
+  }
+
+  public OrientVertex getComponent() {
+    return component;
+  }
+
+  public Repository getRepository() {
+    return repository;
   }
 }

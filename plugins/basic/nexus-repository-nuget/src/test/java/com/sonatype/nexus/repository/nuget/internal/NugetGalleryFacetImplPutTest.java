@@ -19,10 +19,10 @@ import java.util.Date;
 import java.util.Map;
 import java.util.SortedSet;
 
-import com.sonatype.nexus.repository.nuget.NugetContentCreatedEvent;
-import com.sonatype.nexus.repository.nuget.NugetContentDeletedEvent;
-import com.sonatype.nexus.repository.nuget.NugetContentEvent;
-import com.sonatype.nexus.repository.nuget.NugetContentUpdatedEvent;
+import org.sonatype.nexus.repository.Repository;
+import org.sonatype.nexus.repository.content.RepositoryContentCreatedEvent;
+import org.sonatype.nexus.repository.content.RepositoryContentEvent;
+import org.sonatype.nexus.repository.content.RepositoryContentUpdatedEvent;
 
 import org.sonatype.nexus.common.time.Clock;
 import org.sonatype.nexus.repository.search.ComponentMetadataFactory;
@@ -40,6 +40,7 @@ import org.eclipse.aether.util.version.GenericVersionScheme;
 import org.eclipse.aether.version.InvalidVersionSpecificationException;
 import org.eclipse.aether.version.Version;
 import org.eclipse.aether.version.VersionScheme;
+import org.hamcrest.CoreMatchers;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -55,6 +56,7 @@ import static com.sonatype.nexus.repository.nuget.internal.NugetProperties.P_LAS
 import static com.sonatype.nexus.repository.nuget.internal.NugetProperties.P_PUBLISHED;
 import static com.sonatype.nexus.repository.nuget.internal.NugetProperties.P_VERSION;
 import static com.sonatype.nexus.repository.nuget.internal.NugetProperties.P_VERSION_DOWNLOAD_COUNT;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -74,17 +76,18 @@ public class NugetGalleryFacetImplPutTest
 {
   @Test
   public void putCreatesPackageMetadataAndBlob() throws Exception {
-    putPackageMetadataAndBlob(true, NugetContentCreatedEvent.class);
+    putPackageMetadataAndBlob(true, RepositoryContentCreatedEvent.class);
   }
 
   @Test
   public void putUpdatesPackageMetadataAndBlob() throws Exception {
-    putPackageMetadataAndBlob(false, NugetContentUpdatedEvent.class);
+    putPackageMetadataAndBlob(false, RepositoryContentUpdatedEvent.class);
   }
 
   private void putPackageMetadataAndBlob(final boolean isNew,
                                          final Class eventClass) throws Exception {
     final EventBus eventBus = mock(EventBus.class);
+    final Repository repository = mock(Repository.class);
     final NugetGalleryFacetImpl galleryFacet = Mockito.spy(new NugetGalleryFacetImpl(
         mock(ComponentMetadataFactory.class)
     )
@@ -93,19 +96,25 @@ public class NugetGalleryFacetImplPutTest
       protected EventBus getEventBus() {
         return eventBus;
       }
+
+      @Override
+      protected Repository getRepository() {
+        return repository;
+      }
     });
 
     final StorageTx tx = mock(StorageTx.class);
+    
 
     doReturn(tx).when(galleryFacet).openStorageTx();
 
     final InputStream packageStream = getClass().getResourceAsStream("/SONATYPE.TEST.1.0.nupkg");
 
-    OrientVertex orientVertex = mock(OrientVertex.class);
+    OrientVertex component = mock(OrientVertex.class);
     ORID orid = mock(ORID.class);
-    doReturn(orientVertex).when(galleryFacet)
+    doReturn(component).when(galleryFacet)
         .createOrUpdatePackage(any(StorageTx.class), any(Map.class), any(InputStream.class));
-    when(orientVertex.getIdentity()).thenReturn(orid);
+    when(component.getIdentity()).thenReturn(orid);
     when(orid.isNew()).thenReturn(isNew);
 
     doNothing().when(galleryFacet).maintainAggregateInfo(any(StorageTx.class), eq("SONATYPE.TEST"));
@@ -113,12 +122,12 @@ public class NugetGalleryFacetImplPutTest
     galleryFacet.put(packageStream);
 
     verify(galleryFacet).maintainAggregateInfo(tx, "SONATYPE.TEST");
-    ArgumentCaptor<NugetContentEvent> o = ArgumentCaptor.forClass(NugetContentEvent.class);
+    ArgumentCaptor<RepositoryContentEvent> o = ArgumentCaptor.forClass(RepositoryContentEvent.class);
     verify(eventBus, times(1)).post(o.capture());
-    NugetContentEvent actual = o.getValue();
+    RepositoryContentEvent actual = o.getValue();
     assertThat(actual, instanceOf(eventClass));
-    assertThat(actual.getId(), is("SONATYPE.TEST"));
-    assertThat(actual.getVersion(), is("1.0"));
+    assertThat(actual.getComponent(), is(component));
+    assertThat(actual.getRepository(), is(repository));
   }
   
   @Test

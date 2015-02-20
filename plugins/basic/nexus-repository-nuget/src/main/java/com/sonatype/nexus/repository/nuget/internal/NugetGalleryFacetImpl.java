@@ -26,9 +26,9 @@ import java.util.SortedSet;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.sonatype.nexus.repository.nuget.NugetContentCreatedEvent;
-import com.sonatype.nexus.repository.nuget.NugetContentDeletedEvent;
-import com.sonatype.nexus.repository.nuget.NugetContentUpdatedEvent;
+import org.sonatype.nexus.repository.content.RepositoryContentCreatedEvent;
+import org.sonatype.nexus.repository.content.RepositoryContentDeletedEvent;
+import org.sonatype.nexus.repository.content.RepositoryContentUpdatedEvent;
 import com.sonatype.nexus.repository.nuget.internal.odata.ComponentQuery;
 import com.sonatype.nexus.repository.nuget.internal.odata.ComponentQuery.Builder;
 import com.sonatype.nexus.repository.nuget.internal.odata.NugetPackageUtils;
@@ -260,10 +260,10 @@ public class NugetGalleryFacetImpl
       storageTx.commit();
 
       if (isNew) {
-        getEventBus().post(new NugetContentCreatedEvent(id, version, component));
+        getEventBus().post(new RepositoryContentCreatedEvent(getRepository(), component));
       }
       else {
-        getEventBus().post(new NugetContentUpdatedEvent(id, version, component));
+        getEventBus().post(new RepositoryContentUpdatedEvent(getRepository(), component));
       }
     }
   }
@@ -309,7 +309,7 @@ public class NugetGalleryFacetImpl
       tx.commit();
 
       deleteFromIndex(component);
-      getEventBus().post(new NugetContentDeletedEvent(id, version, component));
+      getEventBus().post(new RepositoryContentDeletedEvent(getRepository(), component));
       return true;
     }
   }

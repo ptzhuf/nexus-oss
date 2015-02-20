@@ -12,8 +12,9 @@
  */
 package com.sonatype.nexus.repository.nuget.internal;
 
-import com.sonatype.nexus.repository.nuget.NugetContentDeletedEvent;
-import com.sonatype.nexus.repository.nuget.NugetContentEvent;
+import org.sonatype.nexus.repository.Repository;
+import org.sonatype.nexus.repository.content.RepositoryContentDeletedEvent;
+import org.sonatype.nexus.repository.content.RepositoryContentEvent;
 
 import org.sonatype.nexus.blobstore.api.BlobRef;
 import org.sonatype.nexus.repository.search.ComponentMetadataFactory;
@@ -28,8 +29,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import static java.util.Arrays.asList;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
@@ -53,6 +54,8 @@ public class NugetGalleryFacetImplDeleteTest
     final String version = "0.1.1";
 
     final EventBus eventBus = mock(EventBus.class);
+    final Repository repository = mock(Repository.class);
+
     final NugetGalleryFacetImpl galleryFacet = Mockito.spy(new NugetGalleryFacetImpl(
         mock(ComponentMetadataFactory.class)
     )
@@ -60,6 +63,11 @@ public class NugetGalleryFacetImplDeleteTest
       @Override
       protected EventBus getEventBus() {
         return eventBus;
+      }
+
+      @Override
+      protected Repository getRepository() {
+        return repository;
       }
     });
     final StorageTx tx = mock(StorageTx.class);
@@ -81,11 +89,11 @@ public class NugetGalleryFacetImplDeleteTest
     verify(tx).deleteVertex(component);
     verify(tx).deleteVertex(asset);
     verify(tx).deleteBlob(eq(blobRef));
-    ArgumentCaptor<NugetContentEvent> o = ArgumentCaptor.forClass(NugetContentEvent.class);
+    ArgumentCaptor<RepositoryContentEvent> o = ArgumentCaptor.forClass(RepositoryContentEvent.class);
     verify(eventBus, times(1)).post(o.capture());
-    NugetContentEvent actual = o.getValue();
-    assertThat(actual, instanceOf(NugetContentDeletedEvent.class));
-    assertThat(actual.getId(), is(packageId));
-    assertThat(actual.getVersion(), is(version));
+    RepositoryContentEvent actual = o.getValue();
+    assertThat(actual, instanceOf(RepositoryContentDeletedEvent.class));
+    assertThat(actual.getComponent(), is(component));
+    assertThat(actual.getRepository(), is(repository));
   }
 }
