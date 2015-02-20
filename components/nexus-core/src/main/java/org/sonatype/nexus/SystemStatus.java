@@ -13,41 +13,20 @@
 package org.sonatype.nexus;
 
 /**
- * Nexus system state object. It gives small amount of important infos about Nexus Application.
- *
- * @author cstamas
- * @author damian
+ * System status.
  */
 public class SystemStatus
 {
-  /**
-   * The Nexus Application version.
-   */
   private String version = "unknown";
 
-  /**
-   * The Nexus Application edition for user agent
-   */
   private String editionShort = "OSS";
 
-  /**
-   * The Nexus Application state.
-   */
   private SystemState state;
 
-  /**
-   * True if a license is installed, false otherwise. For OSS always return false.
-   */
   private boolean licenseInstalled = false;
 
-  /**
-   * True if license is expired, false otherwise. For OSS always return false.
-   */
   private boolean licenseExpired = false;
 
-  /**
-   * True if installed license is a trial license, false otherwise. For OSS always return false.
-   */
   private boolean trialLicense = false;
 
   public String getVersion() {
@@ -101,5 +80,4 @@ public class SystemStatus
   public void setTrialLicense(final boolean trialLicense) {
     this.trialLicense = trialLicense;
   }
-
 }

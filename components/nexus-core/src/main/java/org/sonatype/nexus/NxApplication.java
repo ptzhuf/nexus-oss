@@ -21,7 +21,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.sonatype.configuration.ConfigurationException;
 import org.sonatype.nexus.configuration.ApplicationConfiguration;
 import org.sonatype.nexus.configuration.ApplicationDirectories;
 import org.sonatype.nexus.configuration.ConfigurationChangeEvent;
@@ -168,14 +167,9 @@ public class NxApplication
       }
       eventBus.post(new NexusStartedEvent(this));
     }
-    catch (IOException e) {
-      applicationStatusSource.getSystemStatus().setState(SystemState.BROKEN_IO);
-      log.error("Could not start Nexus, bad IO exception!", e);
-      throw Throwables.propagate(e);
-    }
-    catch (ConfigurationException e) {
-      applicationStatusSource.getSystemStatus().setState(SystemState.BROKEN_CONFIGURATION);
-      log.error("Could not start Nexus, user configuration exception!", e);
+    catch (Exception e) {
+      applicationStatusSource.getSystemStatus().setState(SystemState.BROKEN);
+      log.error("Failed start application", e);
       throw Throwables.propagate(e);
     }
   }
