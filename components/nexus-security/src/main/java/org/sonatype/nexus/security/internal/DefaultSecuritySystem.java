@@ -27,7 +27,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.sonatype.configuration.validation.InvalidConfigurationException;
+import org.sonatype.configuration.ConfigurationException;
 import org.sonatype.nexus.common.text.Strings2;
 import org.sonatype.nexus.security.SecurityConfigurationChanged;
 import org.sonatype.nexus.security.SecuritySystem;
@@ -120,15 +120,18 @@ public class DefaultSecuritySystem
     started = false;
   }
 
+  @Override
   public RealmSecurityManager getSecurityManager() {
     return securityManager;
   }
 
+  @Override
   public Subject getSubject() {
     // this gets the currently bound Subject to the thread
     return SecurityUtils.getSubject();
   }
 
+  @Override
   public synchronized void start() {
     if (started) {
       throw new IllegalStateException(getClass().getName()
@@ -150,6 +153,7 @@ public class DefaultSecuritySystem
     started = true;
   }
 
+  @Override
   public synchronized void stop() {
     if (getSecurityManager().getRealms() != null) {
       for (Realm realm : getSecurityManager().getRealms()) {
@@ -167,32 +171,39 @@ public class DefaultSecuritySystem
     // cacheManagerComponent.shutdown();
   }
 
+  @Override
   public Subject login(AuthenticationToken token) throws AuthenticationException {
     Subject subject = getSubject();
     subject.login(token);
     return subject;
   }
 
+  @Override
   public AuthenticationInfo authenticate(AuthenticationToken token) throws AuthenticationException {
     return getSecurityManager().authenticate(token);
   }
 
+  @Override
   public void logout(Subject subject) {
     subject.logout();
   }
 
+  @Override
   public boolean isPermitted(PrincipalCollection principal, String permission) {
     return getSecurityManager().isPermitted(principal, permission);
   }
 
+  @Override
   public boolean[] isPermitted(PrincipalCollection principal, List<String> permissions) {
     return getSecurityManager().isPermitted(principal, permissions.toArray(new String[permissions.size()]));
   }
 
+  @Override
   public void checkPermission(PrincipalCollection principal, String permission) throws AuthorizationException {
     getSecurityManager().checkPermission(principal, permission);
   }
 
+  @Override
   public Set<Role> listRoles() {
     Set<Role> roles = new HashSet<Role>();
     for (AuthorizationManager authzManager : authorizationManagers.values()) {
@@ -205,6 +216,7 @@ public class DefaultSecuritySystem
     return roles;
   }
 
+  @Override
   public Set<Role> listRoles(String sourceId) throws NoSuchAuthorizationManagerException {
     if (ALL_ROLES_KEY.equalsIgnoreCase(sourceId)) {
       return listRoles();
@@ -215,6 +227,7 @@ public class DefaultSecuritySystem
     }
   }
 
+  @Override
   public Set<Privilege> listPrivileges() {
     Set<Privilege> privileges = new HashSet<Privilege>();
     for (AuthorizationManager authzManager : authorizationManagers.values()) {
@@ -231,14 +244,14 @@ public class DefaultSecuritySystem
   // * user management
   // *********************
 
-  public User addUser(User user, String password) throws NoSuchUserManagerException, InvalidConfigurationException {
+  @Override
+  public User addUser(User user, String password) throws NoSuchUserManagerException, ConfigurationException {
     // first save the user
     // this is the UserManager that owns the user
     UserManager userManager = getUserManager(user.getSource());
 
     if (!userManager.supportsWrite()) {
-      throw new InvalidConfigurationException("UserManager: " + userManager.getSource()
-          + " does not support writing.");
+      throw new ConfigurationException("UserManager: " + userManager.getSource() + " does not support writing.");
     }
 
     userManager.addUser(user, password);
@@ -265,16 +278,14 @@ public class DefaultSecuritySystem
     return user;
   }
 
-  public User updateUser(User user)
-      throws UserNotFoundException, NoSuchUserManagerException, InvalidConfigurationException
-  {
+  @Override
+  public User updateUser(User user) throws UserNotFoundException, NoSuchUserManagerException, ConfigurationException {
     // first update the user
     // this is the UserManager that owns the user
     UserManager userManager = getUserManager(user.getSource());
 
     if (!userManager.supportsWrite()) {
-      throw new InvalidConfigurationException("UserManager: " + userManager.getSource()
-          + " does not support writing.");
+      throw new ConfigurationException("UserManager: " + userManager.getSource() + " does not support writing.");
     }
 
     final User oldUser = userManager.getUser(user.getUserId());
@@ -309,6 +320,7 @@ public class DefaultSecuritySystem
     return user;
   }
 
+  @Override
   public void deleteUser(String userId) throws UserNotFoundException {
     User user = getUser(userId);
     try {
@@ -320,6 +332,7 @@ public class DefaultSecuritySystem
     }
   }
 
+  @Override
   public void deleteUser(String userId, String source) throws UserNotFoundException, NoSuchUserManagerException {
     checkNotNull(userId, "User ID may not be null");
 
@@ -347,8 +360,9 @@ public class DefaultSecuritySystem
     eventBus.post(new UserPrincipalsExpired(userId, source));
   }
 
+  @Override
   public void setUsersRoles(String userId, String source, Set<RoleIdentifier> roleIdentifiers)
-      throws InvalidConfigurationException, UserNotFoundException
+      throws ConfigurationException, UserNotFoundException
   {
     // TODO: this is a bit sticky, what we really want to do is just expose the RoleMappingUserManagers this way (i
     // think), maybe this is too generic
@@ -394,6 +408,7 @@ public class DefaultSecuritySystem
     return user;
   }
 
+  @Override
   public User getUser(String userId) throws UserNotFoundException {
     log.trace("Finding user: {}", userId);
 
@@ -410,6 +425,7 @@ public class DefaultSecuritySystem
     throw new UserNotFoundException(userId);
   }
 
+  @Override
   public User getUser(String userId, String source) throws UserNotFoundException, NoSuchUserManagerException {
     log.trace("Finding user: {} in source: {}", userId, source);
 
@@ -417,6 +433,7 @@ public class DefaultSecuritySystem
     return findUser(userId, userManager);
   }
 
+  @Override
   public Set<User> listUsers() {
     Set<User> users = new HashSet<User>();
 
@@ -433,6 +450,7 @@ public class DefaultSecuritySystem
     return users;
   }
 
+  @Override
   public Set<User> searchUsers(UserSearchCriteria criteria) {
     Set<User> users = new HashSet<User>();
 
@@ -529,6 +547,7 @@ public class DefaultSecuritySystem
     }
   }
 
+  @Override
   public AuthorizationManager getAuthorizationManager(String source) throws NoSuchAuthorizationManagerException {
     if (!authorizationManagers.containsKey(source)) {
       throw new NoSuchAuthorizationManagerException("AuthorizationManager with source: '" + source
@@ -538,8 +557,9 @@ public class DefaultSecuritySystem
     return authorizationManagers.get(source);
   }
 
+  @Override
   public void changePassword(String userId, String oldPassword, String newPassword)
-      throws UserNotFoundException, InvalidCredentialsException, InvalidConfigurationException
+      throws UserNotFoundException, InvalidCredentialsException, ConfigurationException
   {
     // first authenticate the user
     try {
@@ -557,8 +577,9 @@ public class DefaultSecuritySystem
     changePassword(userId, newPassword);
   }
 
+  @Override
   public void changePassword(String userId, String newPassword)
-      throws UserNotFoundException, InvalidConfigurationException
+      throws UserNotFoundException, ConfigurationException
   {
     User user = getUser(userId);
 
@@ -679,11 +700,13 @@ public class DefaultSecuritySystem
     return realms;
   }
 
+  @Override
   public List<String> getRealms() {
     return new ArrayList<String>(securitySettingsManager.getRealms());
   }
 
-  public void setRealms(List<String> realms) throws InvalidConfigurationException {
+  @Override
+  public void setRealms(List<String> realms) throws ConfigurationException {
     securitySettingsManager.setRealms(realms);
     securitySettingsManager.save();
 
@@ -710,7 +733,7 @@ public class DefaultSecuritySystem
     return securitySettingsManager.getAnonymousUsername();
   }
 
-  private void setAnonymousUsername(String anonymousUsername) throws InvalidConfigurationException {
+  private void setAnonymousUsername(String anonymousUsername) throws ConfigurationException {
     User user = null;
     try {
       user = getUser(securitySettingsManager.getAnonymousUsername());
@@ -731,7 +754,7 @@ public class DefaultSecuritySystem
     return securitySettingsManager.getAnonymousPassword();
   }
 
-  private void setAnonymousPassword(String anonymousPassword) throws InvalidConfigurationException {
+  private void setAnonymousPassword(String anonymousPassword) throws ConfigurationException {
     User user = null;
     try {
       user = getUser(securitySettingsManager.getAnonymousUsername());
@@ -749,11 +772,11 @@ public class DefaultSecuritySystem
 
   @Override
   public void setAnonymousAccess(final boolean enabled, final String username, final String password)
-      throws InvalidConfigurationException
+      throws ConfigurationException
   {
     if (enabled) {
       if (Strings.isNullOrEmpty(username) || Strings.isNullOrEmpty(password)) {
-        throw new InvalidConfigurationException(
+        throw new ConfigurationException(
             "Anonymous access is getting enabled without valid username and/or password!");
       }
 
@@ -778,15 +801,15 @@ public class DefaultSecuritySystem
           catch (UserNotFoundException e) {
             final String msg = "User \"" + username + "'\" does not exist.";
             log.warn("Nexus refused to apply configuration, the supplied anonymous information is wrong: " + msg, e);
-            throw new InvalidConfigurationException(msg, e);
+            throw new ConfigurationException(msg, e);
           }
           catch (AuthenticationException e) {
             final String msg = "The password of user \"" + username + "\" is incorrect.";
             log.warn("Nexus refused to apply configuration, the supplied anonymous information is wrong: " + msg, e);
-            throw new InvalidConfigurationException(msg, e);
+            throw new ConfigurationException(msg, e);
           }
         }
-        catch (InvalidConfigurationException e) {
+        catch (ConfigurationException e) {
           if (statusChanged) {
             setAnonymousUserEnabled(username, false);
           }
@@ -818,7 +841,7 @@ public class DefaultSecuritySystem
   }
 
   private boolean setAnonymousUserEnabled(final String anonymousUsername, final boolean enabled)
-      throws InvalidConfigurationException
+      throws ConfigurationException
   {
     try {
       final User anonymousUser = getUser(anonymousUsername, UserManager.DEFAULT_SOURCE);
@@ -842,7 +865,7 @@ public class DefaultSecuritySystem
       log.debug("XML Realm not found while trying to disable Anonymous user; as part of disabling anonymous access", e);
       return false;
     }
-    catch (InvalidConfigurationException e) {
+    catch (ConfigurationException e) {
       // do not ignore, and report, as this jeopardizes whole security functionality
       // we did not perform any _change_ against security sofar (we just did reading from it),
       // so it is okay to bail out at this point

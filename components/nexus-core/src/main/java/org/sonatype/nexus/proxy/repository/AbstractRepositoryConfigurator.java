@@ -86,7 +86,7 @@ public abstract class AbstractRepositoryConfigurator
     }
     catch (MalformedURLException e) {
       // will not happen, not user settable
-      throw new InvalidConfigurationException("Malformed URL for LocalRepositoryStorage!", e);
+      throw new ConfigurationException("Malformed URL for LocalRepositoryStorage!", e);
     }
 
     String localUrl;
@@ -152,15 +152,11 @@ public abstract class AbstractRepositoryConfigurator
     return repositoryRegistry;
   }
 
-  protected LocalRepositoryStorage getLocalRepositoryStorage(String repoId, String provider)
-      throws InvalidConfigurationException
-  {
+  private LocalRepositoryStorage getLocalRepositoryStorage(String repoId, String provider) throws ConfigurationException {
     final LocalRepositoryStorage result = localRepositoryStorages.get(provider);
     if (result != null) {
       return result;
     }
-    throw new InvalidConfigurationException("Repository " + repoId
-        + " have local storage with unsupported provider: " + provider);
+    throw new ConfigurationException("Repository " + repoId + " have local storage with unsupported provider: " + provider);
   }
-
 }

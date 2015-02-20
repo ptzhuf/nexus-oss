@@ -470,7 +470,7 @@ public class DefaultApplicationConfiguration
       return rp.get();
     }
     catch (Exception e) {
-      throw new InvalidConfigurationException("Could not lookup a new instance of Repository!", e);
+      throw new ConfigurationException("Could not lookup a new instance of Repository!", e);
     }
   }
 

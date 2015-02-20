@@ -25,14 +25,6 @@ public class InvalidConfigurationException
 
   private ValidationResponse validationResponse;
 
-  public InvalidConfigurationException(String msg) {
-    super(msg);
-  }
-
-  public InvalidConfigurationException(String msg, Throwable t) {
-    super(msg, t);
-  }
-
   public InvalidConfigurationException(ValidationResponse validationResponse) {
     super("Invalid configuration");
     this.validationResponse = validationResponse;

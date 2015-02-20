@@ -12,7 +12,7 @@
  */
 package org.sonatype.nexus.security.user;
 
-import org.sonatype.configuration.validation.InvalidConfigurationException;
+import org.sonatype.configuration.ConfigurationException;
 
 import org.apache.shiro.authz.AuthorizationException;
 
@@ -32,5 +32,5 @@ public interface UserAccountManager
    * Update the account info, but do not change password
    */
   User updateAccount(User user)
-      throws InvalidConfigurationException, UserNotFoundException, NoSuchUserManagerException, AuthorizationException;
+      throws ConfigurationException, UserNotFoundException, NoSuchUserManagerException, AuthorizationException;
 }

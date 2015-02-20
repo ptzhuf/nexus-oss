@@ -166,10 +166,10 @@ public abstract class AbstractProxyRepositoryConfigurator
     }
   }
 
-  protected RemoteRepositoryStorage getRemoteRepositoryStorage(final String repoId, 
-                                                               final String remoteUrl,
-                                                               final String provider)
-      throws InvalidConfigurationException
+  private RemoteRepositoryStorage getRemoteRepositoryStorage(final String repoId,
+                                                             final String remoteUrl,
+                                                             final String provider)
+      throws ConfigurationException
   {
     try {
       final String mungledHint = remoteProviderHintFactory.getRoleHint(remoteUrl, provider);
@@ -177,11 +177,11 @@ public abstract class AbstractProxyRepositoryConfigurator
       if (result != null) {
         return result;
       }
-      throw new InvalidConfigurationException("Repository " + repoId
+      throw new ConfigurationException("Repository " + repoId
           + " have remote storage with unsupported provider: " + provider);
     }
     catch (IllegalArgumentException e) {
-      throw new InvalidConfigurationException("Repository " + repoId
+      throw new ConfigurationException("Repository " + repoId
           + " have remote storage with unsupported provider: " + provider, e);
     }
   }

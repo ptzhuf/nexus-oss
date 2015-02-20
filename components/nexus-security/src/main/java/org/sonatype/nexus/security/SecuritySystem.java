@@ -15,7 +15,7 @@ package org.sonatype.nexus.security;
 import java.util.List;
 import java.util.Set;
 
-import org.sonatype.configuration.validation.InvalidConfigurationException;
+import org.sonatype.configuration.ConfigurationException;
 import org.sonatype.nexus.security.authz.AuthorizationManager;
 import org.sonatype.nexus.security.authz.NoSuchAuthorizationManagerException;
 import org.sonatype.nexus.security.privilege.Privilege;
@@ -139,7 +139,7 @@ public interface SecuritySystem
    * @param password The users initial password.
    * @return The User that was just created.
    */
-  User addUser(User user, String password) throws NoSuchUserManagerException, InvalidConfigurationException;
+  User addUser(User user, String password) throws NoSuchUserManagerException, ConfigurationException;
 
   /**
    * Get a User by id and source.
@@ -166,7 +166,7 @@ public interface SecuritySystem
    * @param user User to be updated.
    * @return The User that was just updated.
    */
-  User updateUser(User user) throws UserNotFoundException, NoSuchUserManagerException, InvalidConfigurationException;
+  User updateUser(User user) throws UserNotFoundException, NoSuchUserManagerException, ConfigurationException;
 
   /**
    * Remove a user based on the Id.
@@ -193,7 +193,7 @@ public interface SecuritySystem
    * @param roleIdentifiers The list of roles to give the user.
    */
   void setUsersRoles(String userId, String sourceId, Set<RoleIdentifier> roleIdentifiers)
-      throws InvalidConfigurationException, UserNotFoundException;
+      throws UserNotFoundException, ConfigurationException;
 
   /**
    * Retrieve all Users . NOTE: This could be slow if there lots of users coming from external realms (a database).
@@ -216,7 +216,7 @@ public interface SecuritySystem
    * @param newPassword The user's new password.
    */
   void changePassword(String userId, String oldPassword, String newPassword)
-      throws UserNotFoundException, InvalidCredentialsException, InvalidConfigurationException;
+      throws UserNotFoundException, InvalidCredentialsException, ConfigurationException;
 
   /**
    * Updates a users password. NOTE: This method does not require the old password to be known, it is meant for
@@ -225,7 +225,7 @@ public interface SecuritySystem
    * @param userId      The id of the user.
    * @param newPassword The user's new password.
    */
-  void changePassword(String userId, String newPassword) throws UserNotFoundException, InvalidConfigurationException;
+  void changePassword(String userId, String newPassword) throws UserNotFoundException, ConfigurationException;
 
   // *********************
   // * Authorization Management
@@ -254,7 +254,7 @@ public interface SecuritySystem
   /**
    * Set the currently configured realms.
    */
-  void setRealms(List<String> realms) throws InvalidConfigurationException;
+  void setRealms(List<String> realms) throws ConfigurationException;
 
   /**
    * Returns the configured shiro SecurityManager
@@ -265,34 +265,11 @@ public interface SecuritySystem
   // Anonymous
   //
 
-  /**
-   * Configures anonymous access in atomic way.
-   *
-   * @param enabled  {@code true} to enable and {@code false} to disable it.
-   * @param username the username of the user to be used as "anonymous" user. If {@code enabled} parameter is
-   *                 {@code true}, this value must be non-null.
-   * @param password the password of the user to be used as "anonymous" user. If {@code enabled} parameter is
-   *                 {@code true}, this value must be non-null.
-   * @throws InvalidConfigurationException if {@code enabled} parameter is {@code true}, but passed in username or
-   *                                       password parameters are empty ({@code null} or empty string).
-   */
-  void setAnonymousAccess(boolean enabled, String username, String password) throws InvalidConfigurationException;
+  void setAnonymousAccess(boolean enabled, String username, String password) throws ConfigurationException;
 
-  /**
-   * Return true if anonymous access is enabled.
-   *
-   * @return true if anonymous access is enabled.
-   */
   boolean isAnonymousAccessEnabled();
 
-  /**
-   * Returns the name of the anonymous users. Could be something other then 'anonymous', for example Active Directory
-   * uses 'Guest' TODO: consider removing this method.
-   */
   String getAnonymousUsername();
 
-  /**
-   * Gets the anonymous user password.
-   */
   String getAnonymousPassword();
 }

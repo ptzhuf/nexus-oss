@@ -12,7 +12,7 @@
  */
 package org.sonatype.nexus.security.user;
 
-import org.sonatype.configuration.validation.InvalidConfigurationException;
+import org.sonatype.configuration.ConfigurationException;
 
 /**
  * An abstract UserManager, that just throws exceptions for all the write methods.
@@ -23,24 +23,29 @@ import org.sonatype.configuration.validation.InvalidConfigurationException;
 public abstract class AbstractReadOnlyUserManager
     extends AbstractUserManager
 {
+  @Override
   public boolean supportsWrite() {
     return false;
   }
 
-  public User addUser(User user, String password) throws InvalidConfigurationException {
+  @Override
+  public User addUser(User user, String password) throws ConfigurationException {
     throwException();
     return null;
   }
 
+  @Override
   public void changePassword(String userId, String newPassword) throws UserNotFoundException {
     throwException();
   }
 
+  @Override
   public void deleteUser(String userId) throws UserNotFoundException {
     throwException();
   }
 
-  public User updateUser(User user) throws UserNotFoundException, InvalidConfigurationException {
+  @Override
+  public User updateUser(User user) throws UserNotFoundException, ConfigurationException {
     throwException();
     return null;
   }
