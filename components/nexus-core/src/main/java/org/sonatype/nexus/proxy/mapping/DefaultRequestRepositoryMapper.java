@@ -100,9 +100,7 @@ public class DefaultRequestRepositoryMapper
   // ==
 
   @Override
-  protected void initializeConfiguration()
-      throws ConfigurationException
-  {
+  protected void initializeConfiguration() throws ConfigurationException {
     if (getApplicationConfiguration().getConfigurationModel() != null) {
       configure(getApplicationConfiguration());
     }
@@ -123,9 +121,7 @@ public class DefaultRequestRepositoryMapper
   }
 
   @Override
-  public boolean commitChanges()
-      throws ConfigurationException
-  {
+  public boolean commitChanges() throws ConfigurationException {
     boolean wasDirty = super.commitChanges();
     if (wasDirty) {
       compiled = false;
@@ -136,8 +132,9 @@ public class DefaultRequestRepositoryMapper
   // ==
 
   @Override
-  public List<Repository> getMappedRepositories(Repository repository, ResourceStoreRequest request,
-                                                List<Repository> resolvedRepositories)
+  public List<Repository> getMappedRepositories(final Repository repository,
+                                                final ResourceStoreRequest request,
+                                                final List<Repository> resolvedRepositories)
       throws NoSuchRepositoryException
   {
     if (!compiled) {
@@ -303,9 +300,7 @@ public class DefaultRequestRepositoryMapper
 
   // ==
 
-  protected synchronized void compile()
-      throws NoSuchRepositoryException
-  {
+  private synchronized void compile() throws NoSuchRepositoryException {
     if (compiled) {
       return;
     }
@@ -346,9 +341,7 @@ public class DefaultRequestRepositoryMapper
     compiled = true;
   }
 
-  protected RepositoryPathMapping convert(CPathMappingItem item)
-      throws IllegalArgumentException
-  {
+  protected RepositoryPathMapping convert(CPathMappingItem item) {
     MappingType type = null;
 
     if (CPathMappingItem.BLOCKING_RULE_TYPE.equals(item.getRouteType())) {
@@ -399,28 +392,18 @@ public class DefaultRequestRepositoryMapper
   // ==
 
   @Override
-  public boolean addMapping(RepositoryPathMapping mapping)
-      throws ConfigurationException
-  {
+  public boolean addMapping(RepositoryPathMapping mapping) throws ConfigurationException {
     removeMapping(mapping.getId());
 
     CPathMappingItem pathItem = convert(mapping);
-
-    // validate
-    this.validate(pathItem);
-
-    getCurrentConfiguration(true).addPathMapping(convert(mapping));
-
-    return true;
-  }
-
-  protected void validate(CPathMappingItem pathItem)
-      throws InvalidConfigurationException
-  {
     ValidationResponse response = this.validator.validateGroupsSettingPathMappingItem(null, pathItem);
     if (!response.isValid()) {
       throw new InvalidConfigurationException(response);
     }
+
+    getCurrentConfiguration(true).addPathMapping(convert(mapping));
+
+    return true;
   }
 
   @Override
@@ -474,5 +457,4 @@ public class DefaultRequestRepositoryMapper
       }
     }
   }
-
 }
