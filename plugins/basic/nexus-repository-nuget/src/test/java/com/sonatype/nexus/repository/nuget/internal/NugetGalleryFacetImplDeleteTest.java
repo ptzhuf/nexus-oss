@@ -13,11 +13,11 @@
 package com.sonatype.nexus.repository.nuget.internal;
 
 import org.sonatype.nexus.repository.Repository;
-import org.sonatype.nexus.repository.content.RepositoryContentDeletedEvent;
-import org.sonatype.nexus.repository.content.RepositoryContentEvent;
 
 import org.sonatype.nexus.blobstore.api.BlobRef;
 import org.sonatype.nexus.repository.search.ComponentMetadataFactory;
+import org.sonatype.nexus.repository.storage.ComponentDeletedEvent;
+import org.sonatype.nexus.repository.storage.ComponentEvent;
 import org.sonatype.nexus.repository.storage.StorageFacet;
 import org.sonatype.nexus.repository.storage.StorageTx;
 import org.sonatype.sisu.goodies.eventbus.EventBus;
@@ -89,11 +89,11 @@ public class NugetGalleryFacetImplDeleteTest
     verify(tx).deleteVertex(component);
     verify(tx).deleteVertex(asset);
     verify(tx).deleteBlob(eq(blobRef));
-    ArgumentCaptor<RepositoryContentEvent> o = ArgumentCaptor.forClass(RepositoryContentEvent.class);
+    ArgumentCaptor<ComponentEvent> o = ArgumentCaptor.forClass(ComponentEvent.class);
     verify(eventBus, times(1)).post(o.capture());
-    RepositoryContentEvent actual = o.getValue();
-    assertThat(actual, instanceOf(RepositoryContentDeletedEvent.class));
-    assertThat(actual.getComponent(), is(component));
+    ComponentEvent actual = o.getValue();
+    assertThat(actual, instanceOf(ComponentDeletedEvent.class));
+    assertThat(actual.getVertex(), is(component));
     assertThat(actual.getRepository(), is(repository));
   }
 }
