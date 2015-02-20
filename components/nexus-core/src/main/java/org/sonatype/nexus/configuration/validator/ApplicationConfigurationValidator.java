@@ -30,15 +30,13 @@ import org.sonatype.nexus.configuration.model.CRouting;
 import org.sonatype.nexus.configuration.model.CScheduleConfig;
 import org.sonatype.nexus.configuration.model.CScheduledTask;
 import org.sonatype.nexus.configuration.model.CSmtpConfiguration;
+import org.sonatype.nexus.configuration.model.Configuration;
 
 /**
  * The validator used to validate current configuration in boot-up sequence.
- *
- * @author cstamas
- * @deprecated see Configurable
  */
 public interface ApplicationConfigurationValidator
-    extends ConfigurationValidator
+    extends ConfigurationValidator<Configuration>
 {
   /**
    * Validates a repository configuration.

@@ -30,12 +30,12 @@ import org.sonatype.configuration.validation.ValidationRequest;
 import org.sonatype.configuration.validation.ValidationResponse;
 import org.sonatype.nexus.SystemStatus;
 import org.sonatype.nexus.common.io.DirSupport;
+import org.sonatype.nexus.configuration.ApplicationDirectories;
 import org.sonatype.nexus.configuration.ApplicationInterpolatorProvider;
 import org.sonatype.nexus.configuration.model.Configuration;
 import org.sonatype.nexus.configuration.model.ConfigurationHelper;
 import org.sonatype.nexus.configuration.model.io.xpp3.NexusConfigurationXpp3Writer;
 import org.sonatype.nexus.configuration.validator.ApplicationConfigurationValidator;
-import org.sonatype.nexus.configuration.validator.ConfigurationValidator;
 import org.sonatype.sisu.goodies.common.io.FileReplacer;
 import org.sonatype.sisu.goodies.common.io.FileReplacer.ContentWriter;
 
@@ -54,36 +54,30 @@ public class FileConfigurationSource
 {
   private final Provider<SystemStatus> systemStatusProvider;
 
-  private final File configurationFile;
-
   private final ApplicationConfigurationValidator configurationValidator;
 
   private final ApplicationConfigurationSource nexusDefaults;
 
   private final ConfigurationHelper configHelper;
 
+  private final File configurationFile;
+
   @Inject
-  public FileConfigurationSource(final ApplicationInterpolatorProvider interpolatorProvider,
+  public FileConfigurationSource(final ApplicationDirectories applicationDirectories,
+                                 final ApplicationInterpolatorProvider interpolatorProvider,
                                  final Provider<SystemStatus> systemStatusProvider,
-                                 final @Named("${nexus-work}/etc/nexus.xml") File configurationFile,
                                  final ApplicationConfigurationValidator configurationValidator,
                                  final @Named("static") ApplicationConfigurationSource nexusDefaults,
                                  final ConfigurationHelper configHelper)
   {
     super(interpolatorProvider);
     this.systemStatusProvider = checkNotNull(systemStatusProvider);
-    this.configurationFile = checkNotNull(configurationFile);
     this.configurationValidator = checkNotNull(configurationValidator);
     this.nexusDefaults = checkNotNull(nexusDefaults);
     this.configHelper = checkNotNull(configHelper);
-  }
 
-  private ConfigurationValidator getConfigurationValidator() {
-    return configurationValidator;
-  }
-
-  private File getConfigurationFile() {
-    return configurationFile;
+    configurationFile = new File(applicationDirectories.getWorkDirectory("etc"), "nexus.xml");
+    log.debug("Configuration file: {}", configurationFile);
   }
 
   @Override
@@ -91,24 +85,23 @@ public class FileConfigurationSource
     // propagate call and fill in defaults too
     nexusDefaults.loadConfiguration();
 
-    if (getConfigurationFile() == null || getConfigurationFile().getAbsolutePath().contains("${")) {
-      throw new ConfigurationException("The configuration file is not set or resolved properly: "
-          + getConfigurationFile().getAbsolutePath());
-    }
-
-    if (!getConfigurationFile().exists()) {
-      log.warn("No configuration file in place, copying the default one and continuing with it.");
-
-      // get the defaults and stick it to place
+    if (!configurationFile.exists()) {
+      log.info("Installing default configuration");
       setConfiguration(nexusDefaults.getConfiguration());
-      saveConfiguration(getConfigurationFile());
+      saveConfiguration(configurationFile);
     }
 
-    loadConfiguration(getConfigurationFile());
+    loadConfiguration(configurationFile.toURI().toURL());
+
+    // seems a bit dirty, but the config might need to be upgraded.
+    if (getConfiguration() != null) {
+      // decrypt the passwords
+      setConfiguration(configHelper.encryptDecryptPasswords(getConfiguration(), false));
+    }
 
     upgradeNexusVersion();
 
-    ValidationResponse vResponse = getConfigurationValidator().validateModel(new ValidationRequest(getConfiguration()));
+    ValidationResponse vResponse = configurationValidator.validateModel(new ValidationRequest(getConfiguration()));
     dumpValidationErrors(vResponse);
     if (vResponse.isValid()) {
       if (vResponse.isModified()) {
@@ -160,17 +153,7 @@ public class FileConfigurationSource
 
   @Override
   public void storeConfiguration() throws IOException {
-    saveConfiguration(getConfigurationFile());
-  }
-
-  private void loadConfiguration(File file) throws IOException, ConfigurationException {
-    loadConfiguration(file.toURI().toURL());
-
-    // seems a bit dirty, but the config might need to be upgraded.
-    if (this.getConfiguration() != null) {
-      // decrypt the passwords
-      setConfiguration(configHelper.encryptDecryptPasswords(getConfiguration(), false));
-    }
+    saveConfiguration(configurationFile);
   }
 
   private void saveConfiguration(final File file) throws IOException {
@@ -209,7 +192,7 @@ public class FileConfigurationSource
 
   @Override
   public void backupConfiguration() throws IOException {
-    File file = getConfigurationFile();
+    File file = configurationFile;
 
     // backup the file
     File backup = new File(file.getParentFile(), file.getName() + ".bak");
