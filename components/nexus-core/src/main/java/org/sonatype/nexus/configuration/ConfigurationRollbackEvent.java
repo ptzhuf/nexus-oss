@@ -18,7 +18,7 @@ package org.sonatype.nexus.configuration;
  * @author cstamas
  */
 public class ConfigurationRollbackEvent
-    extends ConfigurationIOEvent
+    extends ConfigurationEvent
 {
   public ConfigurationRollbackEvent(ApplicationConfiguration configuration) {
     super(configuration);

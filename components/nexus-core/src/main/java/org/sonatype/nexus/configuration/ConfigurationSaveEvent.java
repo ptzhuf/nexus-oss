@@ -18,7 +18,7 @@ package org.sonatype.nexus.configuration;
  * @author cstamas
  */
 public class ConfigurationSaveEvent
-    extends ConfigurationIOEvent
+    extends ConfigurationEvent
 {
   public ConfigurationSaveEvent(ApplicationConfiguration configuration) {
     super(configuration);
