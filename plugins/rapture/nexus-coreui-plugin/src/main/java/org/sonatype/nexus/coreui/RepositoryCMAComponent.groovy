@@ -18,9 +18,9 @@ import com.softwarementors.extjs.djn.config.annotations.DirectAction
 import com.softwarementors.extjs.djn.config.annotations.DirectMethod
 import org.apache.shiro.authz.annotation.RequiresAuthentication
 import org.hibernate.validator.constraints.NotEmpty
-import org.sonatype.configuration.validation.InvalidConfigurationException
 import org.sonatype.configuration.validation.ValidationMessage
 import org.sonatype.configuration.validation.ValidationResponse
+import org.sonatype.configuration.validation.ValidationResponseException
 import org.sonatype.nexus.common.validation.Create
 import org.sonatype.nexus.common.validation.Update
 import org.sonatype.nexus.common.validation.Validate
@@ -118,7 +118,7 @@ extends DirectComponentSupport
     catch (Exception e) {
       def validations = new ValidationResponse()
       validations.addValidationError(new ValidationMessage('attributes', e.message))
-      throw new InvalidConfigurationException(validations)
+      throw new ValidationResponseException(validations)
     }
   }
 

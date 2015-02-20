@@ -22,9 +22,9 @@ import org.apache.shiro.authz.annotation.RequiresUser
 import org.apache.shiro.subject.Subject
 import org.eclipse.sisu.inject.BeanLocator
 import org.hibernate.validator.constraints.NotEmpty
-import org.sonatype.configuration.validation.InvalidConfigurationException
 import org.sonatype.configuration.validation.ValidationMessage
 import org.sonatype.configuration.validation.ValidationResponse
+import org.sonatype.configuration.validation.ValidationResponseException
 import org.sonatype.micromailer.Address
 import org.sonatype.nexus.common.validation.Create
 import org.sonatype.nexus.common.validation.Update
@@ -342,7 +342,7 @@ extends DirectComponentSupport
           message += ': ' + e.cause.message
         }
         validations.addValidationError(new ValidationMessage('email', message))
-        throw new InvalidConfigurationException(validations)
+        throw new ValidationResponseException(validations)
       }
     }
     return email

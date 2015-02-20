@@ -12,8 +12,7 @@
  */
 package org.sonatype.configuration.validation;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import com.google.common.base.Throwables;
 
 /**
  * Validation message.
@@ -24,6 +23,7 @@ public class ValidationMessage
 
   private String message;
 
+  // FIXME: Remove unused shortMessage and related
   private String shortMessage;
 
   private Throwable cause;
@@ -32,6 +32,7 @@ public class ValidationMessage
     this(key, message, (Throwable) null);
   }
 
+  @Deprecated
   public ValidationMessage(String key, String message, String shortMessage) {
     this(key, message, shortMessage, null);
   }
@@ -40,6 +41,7 @@ public class ValidationMessage
     this(key, message, message, cause);
   }
 
+  @Deprecated
   public ValidationMessage(String key, String message, String shortMessage, Throwable cause) {
     this.key = key;
     this.message = message;
@@ -80,18 +82,15 @@ public class ValidationMessage
   }
 
   public String toString() {
-    StringWriter sw = new StringWriter();
+    StringBuilder buff = new StringBuilder();
 
-    sw.append(" o ").append(getKey()).append(" - ").append(getMessage());
+    buff.append(" o ").append(key).append(" - ").append(message);
 
-    if (getCause() != null) {
-      sw.append("\n");
-
-      sw.append("   Cause:\n");
-
-      getCause().printStackTrace(new PrintWriter(sw));
+    if (cause != null) {
+      buff.append("\nCause:\n");
+      buff.append(Throwables.getStackTraceAsString(cause));
     }
 
-    return sw.toString();
+    return buff.toString();
   }
 }

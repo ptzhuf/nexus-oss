@@ -18,9 +18,9 @@ import groovy.transform.PackageScope
 import org.apache.commons.lang.StringUtils
 import org.apache.shiro.authz.annotation.RequiresAuthentication
 import org.apache.shiro.authz.annotation.RequiresPermissions
-import org.sonatype.configuration.validation.InvalidConfigurationException
 import org.sonatype.configuration.validation.ValidationMessage
 import org.sonatype.configuration.validation.ValidationResponse
+import org.sonatype.configuration.validation.ValidationResponseException
 import org.sonatype.nexus.configuration.ApplicationConfiguration
 import org.sonatype.nexus.configuration.GlobalRestApiSettings
 import org.sonatype.nexus.extdirect.DirectComponent
@@ -88,7 +88,7 @@ extends DirectComponentSupport
       }
     }
     if (!validations.valid) {
-      throw new InvalidConfigurationException(validations)
+      throw new ValidationResponseException(validations)
     }
   }
 

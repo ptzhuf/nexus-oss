@@ -16,11 +16,8 @@ import java.io.StringWriter;
 
 import org.sonatype.configuration.ConfigurationException;
 
-/**
- * Thrown when some semantical error is detected in validated configuration.
- *
- * @author cstamas
- */
+// FIXME: Remove, replace usage with ValidationResponseException or ConfigurationException for simple string no-response usage
+
 public class InvalidConfigurationException
     extends ConfigurationException
 {

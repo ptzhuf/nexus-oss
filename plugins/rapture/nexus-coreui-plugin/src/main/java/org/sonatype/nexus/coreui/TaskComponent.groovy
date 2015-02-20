@@ -18,9 +18,9 @@ import groovy.transform.PackageScope
 import org.apache.shiro.authz.annotation.RequiresAuthentication
 import org.apache.shiro.authz.annotation.RequiresPermissions
 import org.hibernate.validator.constraints.NotEmpty
-import org.sonatype.configuration.validation.InvalidConfigurationException
 import org.sonatype.configuration.validation.ValidationMessage
 import org.sonatype.configuration.validation.ValidationResponse
+import org.sonatype.configuration.validation.ValidationResponseException
 import org.sonatype.nexus.common.validation.Create
 import org.sonatype.nexus.common.validation.Update
 import org.sonatype.nexus.common.validation.Validate
@@ -348,14 +348,14 @@ class TaskComponent
       catch (Exception e) {
         def response = new ValidationResponse()
         response.addValidationError(new ValidationMessage('cronExpression', e.getMessage()))
-        throw new InvalidConfigurationException(response)
+        throw new ValidationResponseException(response)
       }
     }
     if (taskXO.schedule != 'manual') {
       if (!taskXO.startDate) {
         def response = new ValidationResponse()
         response.addValidationError(new ValidationMessage('startDate', 'May not be null'))
-        throw new InvalidConfigurationException(response)
+        throw new ValidationResponseException(response)
       }
       def date = Calendar.instance
       date.setTimeInMillis(taskXO.startDate.time)
@@ -374,7 +374,7 @@ class TaskComponent
             else {
               response.addValidationError(new ValidationMessage('startDate', 'Date is in the past'))
             }
-            throw new InvalidConfigurationException(response)
+            throw new ValidationResponseException(response)
           }
           return new Once(date.time)
         case 'hourly':

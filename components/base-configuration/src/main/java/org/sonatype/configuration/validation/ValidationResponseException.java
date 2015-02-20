@@ -12,7 +12,9 @@
  */
 package org.sonatype.configuration.validation;
 
-import java.io.StringWriter;
+import java.util.List;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Validation response exception.
@@ -24,39 +26,52 @@ public class ValidationResponseException
 {
   private ValidationResponse response;
 
+  public ValidationResponseException(final String message, final ValidationResponse response) {
+    super(message);
+    this.response = checkNotNull(response);
+  }
+
   public ValidationResponseException(final ValidationResponse response) {
-    this.response = response;
+    this(null, response);
   }
 
   public ValidationResponse getResponse() {
     return response;
   }
 
+  public List<ValidationMessage> getErrors() {
+    return response.getValidationErrors();
+  }
+
+  public List<ValidationMessage> getWarnings() {
+    return response.getValidationWarnings();
+  }
+
   public String getMessage() {
-    StringWriter buff = new StringWriter();
+    StringBuilder buff = new StringBuilder();
 
-    // FIXME: Clean this mess up... :-(
+    if (super.getMessage() != null) {
+      buff.append(super.getMessage()).append("\n");
+    }
 
-    buff.append(super.getMessage());
+    // FIXME: Refine this output and ValidationMessage.toString() for sanity
 
-    if (getResponse() != null) {
-      if (getResponse().getValidationErrors().size() > 0) {
-        buff.append("\nValidation errors follows:\n");
+    if (!response.getValidationErrors().isEmpty()) {
+      buff.append("Validation errors:\n");
 
-        for (ValidationMessage error : getResponse().getValidationErrors()) {
-          buff.append(error.toString());
-        }
-        buff.append("\n");
+      for (ValidationMessage message : response.getValidationErrors()) {
+        buff.append(message);
       }
+      buff.append("\n");
+    }
 
-      if (getResponse().getValidationWarnings().size() > 0) {
-        buff.append("\nValidation warnings follows:\n");
+    if (!response.getValidationWarnings().isEmpty()) {
+      buff.append("Validation warnings:\n");
 
-        for (ValidationMessage warning : getResponse().getValidationWarnings()) {
-          buff.append(warning.toString());
-        }
-        buff.append("\n");
+      for (ValidationMessage message : response.getValidationWarnings()) {
+        buff.append(message);
       }
+      buff.append("\n");
     }
 
     return buff.toString();

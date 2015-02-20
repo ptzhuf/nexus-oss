@@ -37,8 +37,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 
-import org.sonatype.configuration.validation.InvalidConfigurationException;
-import org.sonatype.configuration.validation.ValidationResponse;
+import org.sonatype.configuration.validation.ValidationResponseException;
 import org.sonatype.nexus.analytics.EventDataBuilder;
 import org.sonatype.nexus.analytics.EventRecorder;
 import org.sonatype.nexus.configuration.ApplicationDirectories;
@@ -227,14 +226,13 @@ public class ExtDirectServlet
       }
 
       private Response handleException(final RegisteredMethod method, final Throwable e) {
-        if (e instanceof InvalidConfigurationException) {
+        if (e instanceof ValidationResponseException) {
           log.debug(
               "Failed to invoke action method: {}, java-method: {}",
               method.getFullName(), method.getFullJavaMethodName(), e
           );
-          InvalidConfigurationException cause = (InvalidConfigurationException) e;
-          ValidationResponse vr = cause.getValidationResponse();
-          if (vr == null || vr.getValidationErrors() == null || vr.getValidationErrors().size() == 0) {
+          ValidationResponseException cause = (ValidationResponseException) e;
+          if (cause.getErrors().isEmpty()) {
             return asResponse(error(e));
           }
           return asResponse(invalid(cause));

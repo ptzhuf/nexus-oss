@@ -18,9 +18,9 @@ import groovy.transform.PackageScope
 import org.apache.shiro.authz.annotation.RequiresAuthentication
 import org.apache.shiro.authz.annotation.RequiresPermissions
 import org.hibernate.validator.constraints.NotEmpty
-import org.sonatype.configuration.validation.InvalidConfigurationException
 import org.sonatype.configuration.validation.ValidationMessage
 import org.sonatype.configuration.validation.ValidationResponse
+import org.sonatype.configuration.validation.ValidationResponseException
 import org.sonatype.nexus.common.validation.Create
 import org.sonatype.nexus.common.validation.Update
 import org.sonatype.nexus.common.validation.Validate
@@ -166,7 +166,7 @@ extends DirectComponentSupport
     }
 
     if (!validations.valid) {
-      throw new InvalidConfigurationException(validations)
+      throw new ValidationResponseException(validations)
     }
   }
 

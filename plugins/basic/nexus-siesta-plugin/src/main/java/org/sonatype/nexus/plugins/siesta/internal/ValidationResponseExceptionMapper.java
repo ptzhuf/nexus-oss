@@ -18,45 +18,42 @@ import javax.annotation.Nullable;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.sonatype.configuration.validation.InvalidConfigurationException;
 import org.sonatype.configuration.validation.ValidationMessage;
 import org.sonatype.configuration.validation.ValidationResponse;
+import org.sonatype.configuration.validation.ValidationResponseException;
 import org.sonatype.siesta.ValidationErrorXO;
 import org.sonatype.siesta.server.validation.ValidationExceptionMapperSupport;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
-// FIXME: Remove, replaced by ValidationResponseExceptionMapper
-
 /**
- * Maps {@link InvalidConfigurationException} to 400 with a list of {@link ValidationErrorXO} as body.
+ * Maps {@link ValidationResponseException} to 400 with a list of {@link ValidationErrorXO} as body.
  *
- * @since 2.4
+ * @since 3.0
  */
 @Named
 @Singleton
-public class InvalidConfigurationExceptionMapper
-    extends ValidationExceptionMapperSupport<InvalidConfigurationException>
+public class ValidationResponseExceptionMapper
+    extends ValidationExceptionMapperSupport<ValidationResponseException>
 {
   @Override
-  protected List<ValidationErrorXO> getValidationErrors(final InvalidConfigurationException exception) {
-    ValidationResponse response = exception.getValidationResponse();
-    if (response != null) {
-      List<ValidationMessage> errors = response.getValidationErrors();
-      if (errors != null && !errors.isEmpty()) {
-        return Lists.transform(errors, new Function<ValidationMessage, ValidationErrorXO>()
-        {
-          @Nullable
-          @Override
-          public ValidationErrorXO apply(@Nullable final ValidationMessage message) {
-            if (message != null) {
-              return new ValidationErrorXO(message.getKey(), message.getMessage());
-            }
-            return null;
+  protected List<ValidationErrorXO> getValidationErrors(final ValidationResponseException exception) {
+    ValidationResponse response = exception.getResponse();
+    List<ValidationMessage> errors = response.getValidationErrors();
+    if (!errors.isEmpty()) {
+      return Lists.transform(errors, new Function<ValidationMessage, ValidationErrorXO>()
+      {
+        // FIXME: While guava api allows for nulls, the data here should never be null so can simplify
+        @Nullable
+        @Override
+        public ValidationErrorXO apply(@Nullable final ValidationMessage message) {
+          if (message != null) {
+            return new ValidationErrorXO(message.getKey(), message.getMessage());
           }
-        });
-      }
+          return null;
+        }
+      });
     }
 
     return Lists.newArrayList(new ValidationErrorXO(exception.getMessage()));

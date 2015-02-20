@@ -23,9 +23,9 @@ import org.apache.maven.model.io.xpp3.MavenXpp3Reader
 import org.apache.shiro.SecurityUtils
 import org.apache.shiro.authz.annotation.RequiresAuthentication
 import org.apache.shiro.authz.annotation.RequiresPermissions
-import org.sonatype.configuration.validation.InvalidConfigurationException
 import org.sonatype.configuration.validation.ValidationMessage
 import org.sonatype.configuration.validation.ValidationResponse
+import org.sonatype.configuration.validation.ValidationResponseException
 import org.sonatype.nexus.common.validation.Validate
 import org.sonatype.nexus.extdirect.DirectComponent
 import org.sonatype.nexus.extdirect.DirectComponentSupport
@@ -78,7 +78,7 @@ extends DirectComponentSupport
     if (files.size() == 0) {
       def validations = new ValidationResponse()
       validations.addValidationError(new ValidationMessage('*', 'At least one file should be uploaded'))
-      throw new InvalidConfigurationException(validations)
+      throw new ValidationResponseException(validations)
     }
 
     UploadContext uploadContext = createUploadContext(params, files)
@@ -157,7 +157,7 @@ extends DirectComponentSupport
     if (poms.size() > 1) {
       def validations = new ValidationResponse()
       validations.addValidationError(new ValidationMessage('*', 'Only one POM file can be uploaded'))
-      throw new InvalidConfigurationException(validations)
+      throw new ValidationResponseException(validations)
     }
     FileItem pom = poms[0]
     if (pom) {
@@ -186,7 +186,7 @@ extends DirectComponentSupport
       validations.addValidationError(new ValidationMessage('repositoryId', 'May not be null'))
     }
     if (!validations.valid) {
-      throw new InvalidConfigurationException(validations)
+      throw new ValidationResponseException(validations)
     }
     return context
   }
@@ -235,7 +235,7 @@ extends DirectComponentSupport
       }
     }
     if (!validations.valid) {
-      throw new InvalidConfigurationException(validations)
+      throw new ValidationResponseException(validations)
     }
   }
 

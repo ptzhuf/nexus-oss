@@ -23,9 +23,9 @@ import org.apache.shiro.authz.annotation.RequiresPermissions
 import org.codehaus.plexus.util.StringUtils
 import org.codehaus.plexus.util.xml.Xpp3Dom
 import org.hibernate.validator.constraints.NotEmpty
-import org.sonatype.configuration.validation.InvalidConfigurationException
 import org.sonatype.configuration.validation.ValidationMessage
 import org.sonatype.configuration.validation.ValidationResponse
+import org.sonatype.configuration.validation.ValidationResponseException
 import org.sonatype.nexus.common.validation.Create
 import org.sonatype.nexus.common.validation.Update
 import org.sonatype.nexus.common.validation.Validate
@@ -579,7 +579,7 @@ extends DirectComponentSupport
     catch (RemoteStorageException e) {
       def validations = new ValidationResponse()
       validations.addValidationError(new ValidationMessage("remoteStorageUrl", e.getMessage()))
-      throw new InvalidConfigurationException(validations);
+      throw new ValidationResponseException(validations);
     }
     repo.autoBlockActive = repositoryXO.autoBlockActive
     repo.fileTypeValidation = repositoryXO.fileTypeValidation
