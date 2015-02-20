@@ -14,6 +14,7 @@ package org.sonatype.nexus.configuration.validator;
 
 import java.util.List;
 
+import org.sonatype.configuration.validation.ValidationRequest;
 import org.sonatype.configuration.validation.ValidationResponse;
 import org.sonatype.nexus.configuration.model.CHttpProxySettings;
 import org.sonatype.nexus.configuration.model.CMirror;
@@ -34,8 +35,9 @@ import org.sonatype.nexus.configuration.model.Configuration;
  * The validator used to validate current configuration in boot-up sequence.
  */
 public interface ApplicationConfigurationValidator
-    extends ConfigurationValidator<Configuration>
 {
+  ValidationResponse validateModel(ValidationRequest<Configuration> request);
+
   /**
    * Validates a repository configuration.
    */

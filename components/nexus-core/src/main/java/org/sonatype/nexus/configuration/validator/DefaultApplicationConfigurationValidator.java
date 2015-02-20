@@ -43,10 +43,7 @@ import org.sonatype.nexus.proxy.repository.LocalStatus;
 import org.codehaus.plexus.util.StringUtils;
 
 /**
- * The default configuration validator provider. It checks the model for semantical validity.
- *
- * @author cstamas
- * @deprecated see Configurable
+ * Default {@link ApplicationConfigurationValidator}.
  */
 @Singleton
 @Named

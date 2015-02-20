@@ -18,8 +18,6 @@ public class ApplicationValidationResponse
     extends ValidationResponse
 {
   public ApplicationValidationResponse() {
-    super();
-
     setContext(new ApplicationValidationContext());
   }
 }
