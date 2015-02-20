@@ -14,19 +14,17 @@ package org.sonatype.configuration.validation;
 
 import java.io.StringWriter;
 
-import org.sonatype.configuration.ConfigurationException;
-
 /**
- * Validation exception.
+ * Validation response exception.
  *
  * @since 3.0
  */
-public class ValidationException
-    extends ConfigurationException
+public class ValidationResponseException
+    extends RuntimeException // javax.validation.ValidationException?
 {
   private ValidationResponse response;
 
-  public ValidationException(ValidationResponse response) {
+  public ValidationResponseException(final ValidationResponse response) {
     this.response = response;
   }
 
@@ -35,30 +33,32 @@ public class ValidationException
   }
 
   public String getMessage() {
-    StringWriter sw = new StringWriter();
+    StringWriter buff = new StringWriter();
 
-    sw.append(super.getMessage());
+    // FIXME: Clean this mess up... :-(
+
+    buff.append(super.getMessage());
 
     if (getResponse() != null) {
       if (getResponse().getValidationErrors().size() > 0) {
-        sw.append("\nValidation errors follows:\n");
+        buff.append("\nValidation errors follows:\n");
 
         for (ValidationMessage error : getResponse().getValidationErrors()) {
-          sw.append(error.toString());
+          buff.append(error.toString());
         }
-        sw.append("\n");
+        buff.append("\n");
       }
 
       if (getResponse().getValidationWarnings().size() > 0) {
-        sw.append("\nValidation warnings follows:\n");
+        buff.append("\nValidation warnings follows:\n");
 
         for (ValidationMessage warning : getResponse().getValidationWarnings()) {
-          sw.append(warning.toString());
+          buff.append(warning.toString());
         }
-        sw.append("\n");
+        buff.append("\n");
       }
     }
 
-    return sw.toString();
+    return buff.toString();
   }
 }
