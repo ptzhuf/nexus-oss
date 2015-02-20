@@ -36,8 +36,6 @@ import org.sonatype.nexus.configuration.model.CRepositoryGrouping;
 import org.sonatype.nexus.configuration.model.CRepositoryTarget;
 import org.sonatype.nexus.configuration.model.CRestApiSettings;
 import org.sonatype.nexus.configuration.model.CRouting;
-import org.sonatype.nexus.configuration.model.CScheduleConfig;
-import org.sonatype.nexus.configuration.model.CScheduledTask;
 import org.sonatype.nexus.configuration.model.CSmtpConfiguration;
 import org.sonatype.nexus.configuration.model.Configuration;
 import org.sonatype.nexus.proxy.repository.LocalStatus;
@@ -157,15 +155,6 @@ public class DefaultApplicationConfigurationValidator
 
       for (CRepositoryTarget target : targets) {
         response.append(validateRepositoryTarget(context, target));
-      }
-    }
-
-    // check tasks (optional section)
-    if (model.getTasks() != null) {
-      List<CScheduledTask> tasks = model.getTasks();
-
-      for (CScheduledTask task : tasks) {
-        response.append(validateScheduledTask(context, task));
       }
     }
 
@@ -519,32 +508,6 @@ public class DefaultApplicationConfigurationValidator
   public ValidationResponse validateRemoteNexusInstance(ApplicationValidationContext ctx,
                                                         CRemoteNexusInstance settings)
   {
-    ValidationResponse response = new ApplicationValidationResponse();
-
-    if (ctx != null) {
-      response.setContext(ctx);
-    }
-
-    return response;
-  }
-
-  @Override
-  public ValidationResponse validateScheduledTask(ApplicationValidationContext ctx, CScheduledTask settings) {
-    ValidationResponse response = new ApplicationValidationResponse();
-
-    if (ctx != null) {
-      response.setContext(ctx);
-    }
-
-    ApplicationValidationContext context = (ApplicationValidationContext) response.getContext();
-
-    response.append(validateSchedule(context, settings.getSchedule()));
-
-    return response;
-  }
-
-  @Override
-  public ValidationResponse validateSchedule(ApplicationValidationContext ctx, CScheduleConfig settings) {
     ValidationResponse response = new ApplicationValidationResponse();
 
     if (ctx != null) {

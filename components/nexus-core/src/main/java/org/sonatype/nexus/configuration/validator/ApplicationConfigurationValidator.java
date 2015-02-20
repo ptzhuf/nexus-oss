@@ -27,8 +27,6 @@ import org.sonatype.nexus.configuration.model.CRepositoryGrouping;
 import org.sonatype.nexus.configuration.model.CRepositoryTarget;
 import org.sonatype.nexus.configuration.model.CRestApiSettings;
 import org.sonatype.nexus.configuration.model.CRouting;
-import org.sonatype.nexus.configuration.model.CScheduleConfig;
-import org.sonatype.nexus.configuration.model.CScheduledTask;
 import org.sonatype.nexus.configuration.model.CSmtpConfiguration;
 import org.sonatype.nexus.configuration.model.Configuration;
 
@@ -94,16 +92,6 @@ public interface ApplicationConfigurationValidator
    * Validates repository target item.
    */
   ValidationResponse validateRepositoryTarget(ApplicationValidationContext ctx, CRepositoryTarget settings);
-
-  /**
-   * Validates scheduled task.
-   */
-  ValidationResponse validateScheduledTask(ApplicationValidationContext ctx, CScheduledTask settings);
-
-  /**
-   * Validates schedule.
-   */
-  ValidationResponse validateSchedule(ApplicationValidationContext ctx, CScheduleConfig settings);
 
   /**
    * Validates smtp
