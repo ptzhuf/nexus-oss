@@ -22,6 +22,7 @@ import javax.annotation.Nullable;
  */
 public class ValidationResponse
 {
+  // FIXME: Remove unless there is good reason to keep this
   /**
    * A simple counter to enumerate messages.
    */
@@ -32,6 +33,7 @@ public class ValidationResponse
    */
   private boolean valid = true;
 
+  // FIXME: Sort out why this is here and how its used, doesn't belong
   /**
    * A flag to mark is the config modified during validation or not.
    */
@@ -41,9 +43,7 @@ public class ValidationResponse
 
   private List<ValidationMessage> validationWarnings;
 
-  /**
-   * Context for validators to communicate.
-   */
+  // FIXME: Use Object instead of pointless marker interface
   private ValidationContext context;
 
   public boolean isValid() {
@@ -64,56 +64,28 @@ public class ValidationResponse
 
   public List<ValidationMessage> getValidationErrors() {
     if (validationErrors == null) {
-      validationErrors = new ArrayList<ValidationMessage>();
+      validationErrors = new ArrayList<>();
     }
     return validationErrors;
   }
 
-  public ValidationMessage getValidationError(String key) {
-    if (validationErrors != null) {
-      for (ValidationMessage vm : validationErrors) {
-        if (vm.getKey().equals(key)) {
-          return vm;
-        }
-      }
-    }
-
-    return null;
-  }
-
   public void addValidationError(ValidationMessage message) {
     getValidationErrors().add(message);
-
     this.valid = false;
   }
 
+  /**
+   * @deprecated Avoid validation messages without keys!
+   */
+  @Deprecated
   public void addValidationError(String message) {
     ValidationMessage e = new ValidationMessage(String.valueOf(key++), message);
-
     addValidationError(e);
-  }
-
-  public void addValidationError(String message, Throwable t) {
-    ValidationMessage e = new ValidationMessage(String.valueOf(key++), message, t);
-
-    addValidationError(e);
-  }
-
-  public ValidationMessage getValidationWarning(String key) {
-    if (validationWarnings != null) {
-      for (ValidationMessage vm : validationWarnings) {
-        if (vm.getKey().equals(key)) {
-          return vm;
-        }
-      }
-    }
-
-    return null;
   }
 
   public List<ValidationMessage> getValidationWarnings() {
     if (validationWarnings == null) {
-      validationWarnings = new ArrayList<ValidationMessage>();
+      validationWarnings = new ArrayList<>();
     }
     return validationWarnings;
   }
@@ -122,9 +94,12 @@ public class ValidationResponse
     getValidationWarnings().add(message);
   }
 
+  /**
+   * @deprecated Avoid validation messages without keys!
+   */
+  @Deprecated
   public void addValidationWarning(String message) {
     ValidationMessage e = new ValidationMessage(String.valueOf(key++), message);
-
     addValidationWarning(e);
   }
 
@@ -132,28 +107,29 @@ public class ValidationResponse
    * A method to append a validation response to this validation response. The errors list and warnings list are
    * simply appended, and the isValid is logically AND-ed and isModified is logically OR-ed.
    */
-  public void append(ValidationResponse validationResponse) {
-    for (ValidationMessage msg : validationResponse.getValidationErrors()) {
+  public void append(final ValidationResponse response) {
+    for (ValidationMessage message : response.getValidationErrors()) {
       // FIXME: Sort out if this is important for anything, if so rebuild message with updated key
       //if (getValidationError(msg.getKey()) != null) {
       //  msg.setKey(msg.getKey() + "(" + key++ + ")");
       //}
 
-      addValidationError(msg);
+      addValidationError(message);
     }
 
-    for (ValidationMessage msg : validationResponse.getValidationWarnings()) {
+    for (ValidationMessage message : response.getValidationWarnings()) {
       // FIXME: Sort out if this is important for anything, if so rebuild message with updated key
       //if (getValidationWarning(msg.getKey()) != null) {
       //  msg.setKey(msg.getKey() + "(" + key++ + ")");
       //}
 
-      addValidationWarning(msg);
+      addValidationWarning(message);
     }
 
-    setValid(isValid() && validationResponse.isValid());
+    // FIXME: This is pointless, addValidationError() will set this flag as needed
+    setValid(isValid() && response.isValid());
 
-    setModified(isModified() || validationResponse.isModified());
+    setModified(isModified() || response.isModified());
   }
 
   public void setContext(final @Nullable ValidationContext context) {

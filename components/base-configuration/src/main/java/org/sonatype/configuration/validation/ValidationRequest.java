@@ -12,6 +12,8 @@
  */
 package org.sonatype.configuration.validation;
 
+// FIXME: This is rather pointless wrapper around a generic, never sub-classed just pass the fucking object
+
 /**
  * A request for validation, holding the configuration.
  *
