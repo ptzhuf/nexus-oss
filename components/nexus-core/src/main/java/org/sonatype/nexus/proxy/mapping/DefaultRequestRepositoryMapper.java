@@ -27,8 +27,8 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.sonatype.configuration.ConfigurationException;
-import org.sonatype.configuration.validation.InvalidConfigurationException;
 import org.sonatype.configuration.validation.ValidationResponse;
+import org.sonatype.configuration.validation.ValidationResponseException;
 import org.sonatype.nexus.configuration.AbstractLastingConfigurable;
 import org.sonatype.nexus.configuration.ApplicationConfiguration;
 import org.sonatype.nexus.configuration.CoreConfiguration;
@@ -398,7 +398,7 @@ public class DefaultRequestRepositoryMapper
     CPathMappingItem pathItem = convert(mapping);
     ValidationResponse response = this.validator.validateGroupsSettingPathMappingItem(null, pathItem);
     if (!response.isValid()) {
-      throw new InvalidConfigurationException(response);
+      throw new ValidationResponseException(response);
     }
 
     getCurrentConfiguration(true).addPathMapping(convert(mapping));

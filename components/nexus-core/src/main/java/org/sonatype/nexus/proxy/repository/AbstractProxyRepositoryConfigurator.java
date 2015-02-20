@@ -17,9 +17,9 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.sonatype.configuration.ConfigurationException;
-import org.sonatype.configuration.validation.InvalidConfigurationException;
 import org.sonatype.configuration.validation.ValidationMessage;
 import org.sonatype.configuration.validation.ValidationResponse;
+import org.sonatype.configuration.validation.ValidationResponseException;
 import org.sonatype.nexus.configuration.ApplicationConfiguration;
 import org.sonatype.nexus.configuration.AuthenticationInfoConverter;
 import org.sonatype.nexus.configuration.GlobalRemoteConnectionSettings;
@@ -115,12 +115,10 @@ public abstract class AbstractProxyRepositoryConfigurator
       }
       catch (RemoteStorageException e) {
         ValidationResponse response = new ApplicationValidationResponse();
-
         ValidationMessage error = new ValidationMessage("remoteStorageUrl", e.getMessage());
-
         response.addValidationError(error);
 
-        throw new InvalidConfigurationException(response);
+        throw new ValidationResponseException(response);
       }
     }
   }

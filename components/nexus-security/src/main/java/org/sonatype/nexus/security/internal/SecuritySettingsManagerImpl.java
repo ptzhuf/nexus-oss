@@ -21,8 +21,8 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.sonatype.configuration.ConfigurationException;
-import org.sonatype.configuration.validation.InvalidConfigurationException;
 import org.sonatype.configuration.validation.ValidationResponse;
+import org.sonatype.configuration.validation.ValidationResponseException;
 import org.sonatype.nexus.security.settings.SecuritySettings;
 import org.sonatype.nexus.security.settings.SecuritySettingsManager;
 import org.sonatype.nexus.security.settings.SecuritySettingsSource;
@@ -57,62 +57,62 @@ public class SecuritySettingsManagerImpl
 
   @Override
   public boolean isAnonymousAccessEnabled() {
-    return this.getConfiguration().isAnonymousAccessEnabled();
+    return getConfiguration().isAnonymousAccessEnabled();
   }
 
   @Override
   public void setAnonymousAccessEnabled(boolean anonymousAccessEnabled) {
-    this.getConfiguration().setAnonymousAccessEnabled(anonymousAccessEnabled);
+    getConfiguration().setAnonymousAccessEnabled(anonymousAccessEnabled);
   }
 
   @Override
   public String getAnonymousPassword() {
-    return this.getConfiguration().getAnonymousPassword();
+    return getConfiguration().getAnonymousPassword();
   }
 
   @Override
   public void setAnonymousPassword(String anonymousPassword) throws ConfigurationException {
-    ValidationResponse vr = validator.validateAnonymousPassword(this.initializeContext(), anonymousPassword);
+    ValidationResponse vr = validator.validateAnonymousPassword(initializeContext(), anonymousPassword);
 
     if (vr.isValid()) {
-      this.getConfiguration().setAnonymousPassword(anonymousPassword);
+      getConfiguration().setAnonymousPassword(anonymousPassword);
     }
     else {
-      throw new InvalidConfigurationException(vr);
+      throw new ValidationResponseException(vr);
     }
   }
 
   @Override
   public String getAnonymousUsername() {
-    return this.getConfiguration().getAnonymousUsername();
+    return getConfiguration().getAnonymousUsername();
   }
 
   @Override
   public void setAnonymousUsername(String anonymousUsername) throws ConfigurationException {
-    ValidationResponse vr = validator.validateAnonymousUsername(this.initializeContext(), anonymousUsername);
+    ValidationResponse vr = validator.validateAnonymousUsername(initializeContext(), anonymousUsername);
 
     if (vr.isValid()) {
-      this.getConfiguration().setAnonymousUsername(anonymousUsername);
+      getConfiguration().setAnonymousUsername(anonymousUsername);
     }
     else {
-      throw new InvalidConfigurationException(vr);
+      throw new ValidationResponseException(vr);
     }
   }
 
   @Override
   public List<String> getRealms() {
-    return Collections.unmodifiableList(this.getConfiguration().getRealms());
+    return Collections.unmodifiableList(getConfiguration().getRealms());
   }
 
   @Override
   public void setRealms(List<String> realms) throws ConfigurationException {
-    ValidationResponse vr = validator.validateRealms(this.initializeContext(), realms);
+    ValidationResponse vr = validator.validateRealms(initializeContext(), realms);
 
     if (vr.isValid()) {
-      this.getConfiguration().setRealms(realms);
+      getConfiguration().setRealms(realms);
     }
     else {
-      throw new InvalidConfigurationException(vr);
+      throw new ValidationResponseException(vr);
     }
   }
 
@@ -124,9 +124,9 @@ public class SecuritySettingsManagerImpl
     lock.lock();
 
     try {
-      this.configurationSource.loadConfiguration();
+      configurationSource.loadConfiguration();
 
-      configuration = this.configurationSource.getConfiguration();
+      configuration = configurationSource.getConfiguration();
     }
     finally {
       lock.unlock();
@@ -148,7 +148,7 @@ public class SecuritySettingsManagerImpl
     lock.lock();
 
     try {
-      this.configurationSource.storeConfiguration();
+      configurationSource.storeConfiguration();
     }
     finally {
       lock.unlock();
@@ -157,8 +157,7 @@ public class SecuritySettingsManagerImpl
 
   private SecuritySettingsValidationContext initializeContext() {
     SecuritySettingsValidationContext context = new SecuritySettingsValidationContext();
-    context.setSecuritySettings(this.getConfiguration());
-
+    context.setSecuritySettings(getConfiguration());
     return context;
   }
 }

@@ -27,8 +27,8 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.sonatype.configuration.ConfigurationException;
-import org.sonatype.configuration.validation.InvalidConfigurationException;
 import org.sonatype.configuration.validation.ValidationResponse;
+import org.sonatype.configuration.validation.ValidationResponseException;
 import org.sonatype.nexus.configuration.AbstractLastingConfigurable;
 import org.sonatype.nexus.configuration.ApplicationConfiguration;
 import org.sonatype.nexus.configuration.CoreConfiguration;
@@ -146,10 +146,10 @@ public class DefaultTargetRegistry
     return result;
   }
 
-  private void validate(CRepositoryTarget target) throws ConfigurationException {
+  private void validate(CRepositoryTarget target) {
     ValidationResponse response = validator.validateRepositoryTarget(null, target);
     if (!response.isValid()) {
-      throw new InvalidConfigurationException(response);
+      throw new ValidationResponseException(response);
     }
   }
 

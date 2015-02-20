@@ -25,9 +25,9 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.sonatype.configuration.ConfigurationException;
-import org.sonatype.configuration.validation.InvalidConfigurationException;
 import org.sonatype.configuration.validation.ValidationMessage;
 import org.sonatype.configuration.validation.ValidationResponse;
+import org.sonatype.configuration.validation.ValidationResponseException;
 import org.sonatype.nexus.common.text.Strings2;
 import org.sonatype.nexus.security.authz.AuthorizationConfigurationChanged;
 import org.sonatype.nexus.security.config.CPrivilege;
@@ -152,7 +152,7 @@ public class SecurityConfigurationManagerImpl
       logValidationWarnings(vr);
     }
     else {
-      throw new InvalidConfigurationException(vr);
+      throw new ValidationResponseException(vr);
     }
   }
 
@@ -173,7 +173,7 @@ public class SecurityConfigurationManagerImpl
       logValidationWarnings(vr);
     }
     else {
-      throw new InvalidConfigurationException(vr);
+      throw new ValidationResponseException(vr);
     }
   }
 
@@ -206,7 +206,7 @@ public class SecurityConfigurationManagerImpl
       logValidationWarnings(vr);
     }
     else {
-      throw new InvalidConfigurationException(vr);
+      throw new ValidationResponseException(vr);
     }
   }
 
@@ -296,7 +296,7 @@ public class SecurityConfigurationManagerImpl
       logValidationWarnings(vr);
     }
     else {
-      throw new InvalidConfigurationException(vr);
+      throw new ValidationResponseException(vr);
     }
   }
 
@@ -319,7 +319,7 @@ public class SecurityConfigurationManagerImpl
       logValidationWarnings(vr);
     }
     else {
-      throw new InvalidConfigurationException(vr);
+      throw new ValidationResponseException(vr);
     }
   }
 
@@ -354,7 +354,7 @@ public class SecurityConfigurationManagerImpl
       logValidationWarnings(vr);
     }
     else {
-      throw new InvalidConfigurationException(vr);
+      throw new ValidationResponseException(vr);
     }
   }
 
@@ -378,7 +378,7 @@ public class SecurityConfigurationManagerImpl
       vr.addValidationError(new ValidationMessage("*", "User Role Mapping for user '"
           + userRoleMapping.getUserId() + "' already exists."));
 
-      throw new InvalidConfigurationException(vr);
+      throw new ValidationResponseException(vr);
     }
     catch (NoSuchRoleMappingException e) {
       // expected
@@ -387,7 +387,7 @@ public class SecurityConfigurationManagerImpl
     ValidationResponse vr = validator.validateUserRoleMapping(context, userRoleMapping, false);
 
     if (vr.getValidationErrors().size() > 0) {
-      throw new InvalidConfigurationException(vr);
+      throw new ValidationResponseException(vr);
     }
 
     getDefaultConfiguration().addUserRoleMapping(userRoleMapping);
@@ -443,13 +443,13 @@ public class SecurityConfigurationManagerImpl
       vr.addValidationError(new ValidationMessage("*", "No User Role Mapping found for user '"
           + userRoleMapping.getUserId() + "'."));
 
-      throw new InvalidConfigurationException(vr);
+      throw new ValidationResponseException(vr);
     }
 
     ValidationResponse vr = validator.validateUserRoleMapping(context, userRoleMapping, true);
 
     if (vr.getValidationErrors().size() > 0) {
-      throw new InvalidConfigurationException(vr);
+      throw new ValidationResponseException(vr);
     }
 
     getDefaultConfiguration().updateUserRoleMapping(userRoleMapping);

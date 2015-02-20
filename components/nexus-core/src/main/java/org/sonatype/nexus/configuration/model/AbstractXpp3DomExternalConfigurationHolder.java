@@ -18,8 +18,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.sonatype.configuration.ConfigurationException;
-import org.sonatype.configuration.validation.InvalidConfigurationException;
 import org.sonatype.configuration.validation.ValidationResponse;
+import org.sonatype.configuration.validation.ValidationResponseException;
 import org.sonatype.nexus.configuration.ApplicationConfiguration;
 import org.sonatype.nexus.configuration.CoreConfiguration;
 
@@ -83,11 +83,9 @@ public abstract class AbstractXpp3DomExternalConfigurationHolder
 
   // ==
 
-  protected void checkValidationResponse(ValidationResponse response)
-      throws ConfigurationException
-  {
+  private void checkValidationResponse(ValidationResponse response) {
     if (!response.isValid()) {
-      throw new InvalidConfigurationException(response);
+      throw new ValidationResponseException(response);
     }
   }
 

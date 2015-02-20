@@ -19,9 +19,9 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.sonatype.configuration.ConfigurationException;
-import org.sonatype.configuration.validation.InvalidConfigurationException;
 import org.sonatype.configuration.validation.ValidationMessage;
 import org.sonatype.configuration.validation.ValidationResponse;
+import org.sonatype.configuration.validation.ValidationResponseException;
 import org.sonatype.nexus.configuration.ApplicationConfiguration;
 import org.sonatype.nexus.configuration.Configurator;
 import org.sonatype.nexus.configuration.model.CLocalStorage;
@@ -131,7 +131,7 @@ public abstract class AbstractRepositoryConfigurator
 
       response.addValidationError(error);
 
-      throw new InvalidConfigurationException(response);
+      throw new ValidationResponseException(response);
     }
 
     // clear the NotFoundCache

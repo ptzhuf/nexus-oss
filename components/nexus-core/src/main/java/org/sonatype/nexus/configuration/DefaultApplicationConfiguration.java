@@ -26,9 +26,9 @@ import javax.inject.Provider;
 import javax.inject.Singleton;
 
 import org.sonatype.configuration.ConfigurationException;
-import org.sonatype.configuration.validation.InvalidConfigurationException;
 import org.sonatype.configuration.validation.ValidationRequest;
 import org.sonatype.configuration.validation.ValidationResponse;
+import org.sonatype.configuration.validation.ValidationResponseException;
 import org.sonatype.nexus.configuration.model.CPathMappingItem;
 import org.sonatype.nexus.configuration.model.CRepository;
 import org.sonatype.nexus.configuration.model.Configuration;
@@ -627,7 +627,7 @@ public class DefaultApplicationConfiguration
     ValidationResponse vr = configurationValidator.validateRepository(ctx, settings);
 
     if (!vr.isValid()) {
-      throw new InvalidConfigurationException(vr);
+      throw new ValidationResponseException(vr);
     }
   }
 
