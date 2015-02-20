@@ -21,7 +21,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.sonatype.configuration.validation.InvalidConfigurationException;
+import org.sonatype.configuration.ConfigurationException;
 import org.sonatype.nexus.security.authz.AuthorizationConfigurationChanged;
 import org.sonatype.nexus.security.authz.AuthorizationManager;
 import org.sonatype.nexus.security.config.CPrivilege;
@@ -71,6 +71,7 @@ public class AuthorizationManagerImpl
     this.privilegeDescriptors = checkNotNull(privilegeDescriptors);
   }
 
+  @Override
   public String getSource() {
     return SOURCE;
   }
@@ -165,6 +166,7 @@ public class AuthorizationManagerImpl
   // ROLE CRUDS
   // //
 
+  @Override
   public Set<Role> listRoles() {
     Set<Role> roles = new HashSet<Role>();
     List<CRole> secRoles = this.configuration.listRoles();
@@ -176,11 +178,13 @@ public class AuthorizationManagerImpl
     return roles;
   }
 
+  @Override
   public Role getRole(String roleId) throws NoSuchRoleException {
     return this.toRole(this.configuration.readRole(roleId));
   }
 
-  public Role addRole(Role role) throws InvalidConfigurationException {
+  @Override
+  public Role addRole(Role role) throws ConfigurationException {
     // the roleId of the secRole might change, so we need to keep the reference
     final CRole secRole = this.toRole(role);
 
@@ -192,7 +196,8 @@ public class AuthorizationManagerImpl
     return this.toRole(secRole);
   }
 
-  public Role updateRole(Role role) throws NoSuchRoleException, InvalidConfigurationException {
+  @Override
+  public Role updateRole(Role role) throws NoSuchRoleException, ConfigurationException {
     final CRole secRole = this.toRole(role);
 
     configuration.updateRole(secRole);
@@ -203,6 +208,7 @@ public class AuthorizationManagerImpl
     return this.toRole(secRole);
   }
 
+  @Override
   public void deleteRole(final String roleId) throws NoSuchRoleException {
     configuration.deleteRole(roleId);
 
@@ -214,6 +220,7 @@ public class AuthorizationManagerImpl
   // PRIVILEGE CRUDS
   // //
 
+  @Override
   public Set<Privilege> listPrivileges() {
     Set<Privilege> privileges = new HashSet<Privilege>();
     List<CPrivilege> secPrivs = this.configuration.listPrivileges();
@@ -225,11 +232,13 @@ public class AuthorizationManagerImpl
     return privileges;
   }
 
+  @Override
   public Privilege getPrivilege(String privilegeId) throws NoSuchPrivilegeException {
     return this.toPrivilege(this.configuration.readPrivilege(privilegeId));
   }
 
-  public Privilege addPrivilege(Privilege privilege) throws InvalidConfigurationException {
+  @Override
+  public Privilege addPrivilege(Privilege privilege) throws ConfigurationException {
     final CPrivilege secPriv = this.toPrivilege(privilege);
     // create implies read, so we need to add logic for that
     addInheritedPrivileges(secPriv);
@@ -242,7 +251,8 @@ public class AuthorizationManagerImpl
     return this.toPrivilege(secPriv);
   }
 
-  public Privilege updatePrivilege(Privilege privilege) throws NoSuchPrivilegeException, InvalidConfigurationException {
+  @Override
+  public Privilege updatePrivilege(Privilege privilege) throws NoSuchPrivilegeException, ConfigurationException {
     final CPrivilege secPriv = this.toPrivilege(privilege);
 
     configuration.updatePrivilege(secPriv);
@@ -253,6 +263,7 @@ public class AuthorizationManagerImpl
     return this.toPrivilege(secPriv);
   }
 
+  @Override
   public void deletePrivilege(final String privilegeId) throws NoSuchPrivilegeException {
     configuration.deletePrivilege(privilegeId);
 
@@ -260,6 +271,7 @@ public class AuthorizationManagerImpl
     this.fireAuthorizationChangedEvent();
   }
 
+  @Override
   public boolean supportsWrite() {
     return true;
   }

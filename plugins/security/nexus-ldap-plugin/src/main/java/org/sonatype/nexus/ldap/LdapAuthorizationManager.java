@@ -84,9 +84,7 @@ public class LdapAuthorizationManager
   }
 
   @Override
-  public Role getRole(String roleId)
-      throws NoSuchRoleException
-  {
+  public Role getRole(String roleId) throws NoSuchRoleException {
     try {
       String roleName = this.ldapManager.getGroupName(roleId);
 
@@ -115,10 +113,7 @@ public class LdapAuthorizationManager
   }
 
   @Override
-  public Privilege getPrivilege(String privilegeId)
-      throws NoSuchPrivilegeException
-  {
+  public Privilege getPrivilege(String privilegeId) throws NoSuchPrivilegeException {
     return null;
   }
-
 }

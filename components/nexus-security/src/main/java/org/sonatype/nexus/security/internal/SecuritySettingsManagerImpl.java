@@ -20,6 +20,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.sonatype.configuration.ConfigurationException;
 import org.sonatype.configuration.validation.InvalidConfigurationException;
 import org.sonatype.configuration.validation.ValidationResponse;
 import org.sonatype.nexus.security.settings.SecuritySettings;
@@ -54,19 +55,23 @@ public class SecuritySettingsManagerImpl
     this.validator = validator;
   }
 
+  @Override
   public boolean isAnonymousAccessEnabled() {
     return this.getConfiguration().isAnonymousAccessEnabled();
   }
 
+  @Override
   public void setAnonymousAccessEnabled(boolean anonymousAccessEnabled) {
     this.getConfiguration().setAnonymousAccessEnabled(anonymousAccessEnabled);
   }
 
+  @Override
   public String getAnonymousPassword() {
     return this.getConfiguration().getAnonymousPassword();
   }
 
-  public void setAnonymousPassword(String anonymousPassword) throws InvalidConfigurationException {
+  @Override
+  public void setAnonymousPassword(String anonymousPassword) throws ConfigurationException {
     ValidationResponse vr = validator.validateAnonymousPassword(this.initializeContext(), anonymousPassword);
 
     if (vr.isValid()) {
@@ -77,11 +82,13 @@ public class SecuritySettingsManagerImpl
     }
   }
 
+  @Override
   public String getAnonymousUsername() {
     return this.getConfiguration().getAnonymousUsername();
   }
 
-  public void setAnonymousUsername(String anonymousUsername) throws InvalidConfigurationException {
+  @Override
+  public void setAnonymousUsername(String anonymousUsername) throws ConfigurationException {
     ValidationResponse vr = validator.validateAnonymousUsername(this.initializeContext(), anonymousUsername);
 
     if (vr.isValid()) {
@@ -92,11 +99,13 @@ public class SecuritySettingsManagerImpl
     }
   }
 
+  @Override
   public List<String> getRealms() {
     return Collections.unmodifiableList(this.getConfiguration().getRealms());
   }
 
-  public void setRealms(List<String> realms) throws InvalidConfigurationException {
+  @Override
+  public void setRealms(List<String> realms) throws ConfigurationException {
     ValidationResponse vr = validator.validateRealms(this.initializeContext(), realms);
 
     if (vr.isValid()) {
@@ -126,6 +135,7 @@ public class SecuritySettingsManagerImpl
     return configuration;
   }
 
+  @Override
   public void clearCache() {
     // Just to make sure we aren't fiddling w/ save/loading process
     lock.lock();
@@ -133,6 +143,7 @@ public class SecuritySettingsManagerImpl
     lock.unlock();
   }
 
+  @Override
   public void save() {
     lock.lock();
 

@@ -14,23 +14,26 @@ package org.sonatype.nexus.security.settings;
 
 import java.util.List;
 
-import org.sonatype.configuration.validation.InvalidConfigurationException;
+import org.sonatype.configuration.ConfigurationException;
 
+/**
+ * Security settings manager.
+ */
 public interface SecuritySettingsManager
 {
   void setAnonymousAccessEnabled(boolean anonymousAccessEnabled);
 
   boolean isAnonymousAccessEnabled();
 
-  void setAnonymousUsername(String anonymousUsername) throws InvalidConfigurationException;
+  void setAnonymousUsername(String anonymousUsername) throws ConfigurationException;
 
   String getAnonymousUsername();
 
-  void setAnonymousPassword(String anonymousPassword) throws InvalidConfigurationException;
+  void setAnonymousPassword(String anonymousPassword) throws ConfigurationException;
 
   String getAnonymousPassword();
 
-  void setRealms(List<String> realms) throws InvalidConfigurationException;
+  void setRealms(List<String> realms) throws ConfigurationException;
 
   List<String> getRealms();
 

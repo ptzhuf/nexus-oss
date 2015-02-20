@@ -12,7 +12,7 @@
  */
 package org.sonatype.nexus.security.authz;
 
-import org.sonatype.configuration.validation.InvalidConfigurationException;
+import org.sonatype.configuration.ConfigurationException;
 import org.sonatype.nexus.security.privilege.NoSuchPrivilegeException;
 import org.sonatype.nexus.security.privilege.Privilege;
 import org.sonatype.nexus.security.role.NoSuchRoleException;
@@ -25,34 +25,41 @@ import org.sonatype.nexus.security.role.Role;
 public abstract class AbstractReadOnlyAuthorizationManager
     implements AuthorizationManager
 {
+  @Override
   public boolean supportsWrite() {
     return false;
   }
 
-  public Privilege addPrivilege(Privilege privilege) throws InvalidConfigurationException {
+  @Override
+  public Privilege addPrivilege(Privilege privilege) throws ConfigurationException {
     throwException();
     return null;
   }
 
-  public Role addRole(Role role) throws InvalidConfigurationException {
+  @Override
+  public Role addRole(Role role) throws ConfigurationException {
     throwException();
     return null;
   }
 
+  @Override
   public void deletePrivilege(String privilegeId) throws NoSuchPrivilegeException {
     throwException();
   }
 
+  @Override
   public void deleteRole(String roleId) throws NoSuchRoleException {
     throwException();
   }
 
-  public Privilege updatePrivilege(Privilege privilege) throws NoSuchPrivilegeException, InvalidConfigurationException {
+  @Override
+  public Privilege updatePrivilege(Privilege privilege) throws NoSuchPrivilegeException, ConfigurationException {
     throwException();
     return null;
   }
 
-  public Role updateRole(Role role) throws NoSuchRoleException, InvalidConfigurationException {
+  @Override
+  public Role updateRole(Role role) throws NoSuchRoleException, ConfigurationException {
     throwException();
     return null;
   }

@@ -24,6 +24,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.sonatype.configuration.ConfigurationException;
 import org.sonatype.configuration.validation.InvalidConfigurationException;
 import org.sonatype.configuration.validation.ValidationMessage;
 import org.sonatype.configuration.validation.ValidationResponse;
@@ -133,12 +134,12 @@ public class SecurityConfigurationManagerImpl
   }
 
   @Override
-  public void createPrivilege(CPrivilege privilege) throws InvalidConfigurationException {
+  public void createPrivilege(CPrivilege privilege) throws ConfigurationException {
     createPrivilege(privilege, initializeContext());
   }
 
   private void createPrivilege(CPrivilege privilege, SecurityConfigurationValidationContext context)
-      throws InvalidConfigurationException
+      throws ConfigurationException
   {
     if (context == null) {
       context = initializeContext();
@@ -156,11 +157,11 @@ public class SecurityConfigurationManagerImpl
   }
 
   @Override
-  public void createRole(CRole role) throws InvalidConfigurationException {
+  public void createRole(CRole role) throws ConfigurationException {
     createRole(role, initializeContext());
   }
 
-  private void createRole(CRole role, SecurityConfigurationValidationContext context) throws InvalidConfigurationException {
+  private void createRole(CRole role, SecurityConfigurationValidationContext context) throws ConfigurationException {
     if (context == null) {
       context = initializeContext();
     }
@@ -177,17 +178,17 @@ public class SecurityConfigurationManagerImpl
   }
 
   @Override
-  public void createUser(CUser user, Set<String> roles) throws InvalidConfigurationException {
+  public void createUser(CUser user, Set<String> roles) throws ConfigurationException {
     createUser(user, null, roles, initializeContext());
   }
 
   @Override
-  public void createUser(CUser user, String password, Set<String> roles) throws InvalidConfigurationException {
+  public void createUser(CUser user, String password, Set<String> roles) throws ConfigurationException {
     createUser(user, password, roles, initializeContext());
   }
 
   private void createUser(CUser user, String password, Set<String> roles, SecurityConfigurationValidationContext context)
-      throws InvalidConfigurationException
+      throws ConfigurationException
   {
     if (context == null) {
       context = initializeContext();
@@ -277,12 +278,12 @@ public class SecurityConfigurationManagerImpl
   }
 
   @Override
-  public void updatePrivilege(CPrivilege privilege) throws InvalidConfigurationException, NoSuchPrivilegeException {
+  public void updatePrivilege(CPrivilege privilege) throws ConfigurationException, NoSuchPrivilegeException {
     updatePrivilege(privilege, initializeContext());
   }
 
   private void updatePrivilege(CPrivilege privilege, SecurityConfigurationValidationContext context)
-      throws InvalidConfigurationException, NoSuchPrivilegeException
+      throws ConfigurationException, NoSuchPrivilegeException
   {
     if (context == null) {
       context = initializeContext();
@@ -300,12 +301,12 @@ public class SecurityConfigurationManagerImpl
   }
 
   @Override
-  public void updateRole(CRole role) throws InvalidConfigurationException, NoSuchRoleException {
+  public void updateRole(CRole role) throws ConfigurationException, NoSuchRoleException {
     updateRole(role, initializeContext());
   }
 
   private void updateRole(CRole role, SecurityConfigurationValidationContext context)
-      throws InvalidConfigurationException, NoSuchRoleException
+      throws ConfigurationException, NoSuchRoleException
   {
     if (context == null) {
       context = initializeContext();
@@ -323,7 +324,7 @@ public class SecurityConfigurationManagerImpl
   }
 
   @Override
-  public void updateUser(CUser user) throws InvalidConfigurationException, UserNotFoundException {
+  public void updateUser(CUser user) throws ConfigurationException, UserNotFoundException {
     Set<String> roles = Collections.emptySet();
     try {
       roles = readUserRoleMapping(user.getId(), UserManager.DEFAULT_SOURCE).getRoles();
@@ -335,12 +336,12 @@ public class SecurityConfigurationManagerImpl
   }
 
   @Override
-  public void updateUser(CUser user, Set<String> roles) throws InvalidConfigurationException, UserNotFoundException {
+  public void updateUser(CUser user, Set<String> roles) throws ConfigurationException, UserNotFoundException {
     updateUser(user, roles, initializeContext());
   }
 
   private void updateUser(CUser user, Set<String> roles, SecurityConfigurationValidationContext context)
-      throws InvalidConfigurationException, UserNotFoundException
+      throws ConfigurationException, UserNotFoundException
   {
     if (context == null) {
       context = initializeContext();
@@ -358,12 +359,12 @@ public class SecurityConfigurationManagerImpl
   }
 
   @Override
-  public void createUserRoleMapping(CUserRoleMapping userRoleMapping) throws InvalidConfigurationException {
+  public void createUserRoleMapping(CUserRoleMapping userRoleMapping) throws ConfigurationException {
     createUserRoleMapping(userRoleMapping, initializeContext());
   }
 
   private void createUserRoleMapping(CUserRoleMapping userRoleMapping, SecurityConfigurationValidationContext context)
-      throws InvalidConfigurationException
+      throws ConfigurationException
   {
     if (context == null) {
       context = this.initializeContext();
@@ -425,13 +426,13 @@ public class SecurityConfigurationManagerImpl
 
   @Override
   public void updateUserRoleMapping(CUserRoleMapping userRoleMapping)
-      throws InvalidConfigurationException, NoSuchRoleMappingException
+      throws ConfigurationException, NoSuchRoleMappingException
   {
     updateUserRoleMapping(userRoleMapping, initializeContext());
   }
 
   private void updateUserRoleMapping(CUserRoleMapping userRoleMapping, SecurityConfigurationValidationContext context)
-      throws InvalidConfigurationException, NoSuchRoleMappingException
+      throws ConfigurationException, NoSuchRoleMappingException
   {
     if (context == null) {
       context = initializeContext();
@@ -592,9 +593,7 @@ public class SecurityConfigurationManagerImpl
     return configuration;
   }
 
-  private SecurityConfiguration appendConfig(final SecurityConfiguration to,
-                                                  final SecurityConfiguration from)
-  {
+  private SecurityConfiguration appendConfig(final SecurityConfiguration to, final SecurityConfiguration from) {
     for (CPrivilege privilege : from.getPrivileges()) {
       privilege.setReadOnly(true);
       to.addPrivilege(privilege);
