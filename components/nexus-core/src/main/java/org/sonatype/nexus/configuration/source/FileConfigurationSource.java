@@ -31,7 +31,6 @@ import org.sonatype.configuration.validation.ValidationResponse;
 import org.sonatype.nexus.SystemStatus;
 import org.sonatype.nexus.common.io.DirSupport;
 import org.sonatype.nexus.configuration.ApplicationDirectories;
-import org.sonatype.nexus.configuration.ApplicationInterpolatorProvider;
 import org.sonatype.nexus.configuration.model.Configuration;
 import org.sonatype.nexus.configuration.model.ConfigurationHelper;
 import org.sonatype.nexus.configuration.model.io.xpp3.NexusConfigurationXpp3Writer;
@@ -64,13 +63,11 @@ public class FileConfigurationSource
 
   @Inject
   public FileConfigurationSource(final ApplicationDirectories applicationDirectories,
-                                 final ApplicationInterpolatorProvider interpolatorProvider,
                                  final Provider<SystemStatus> systemStatusProvider,
                                  final ApplicationConfigurationValidator configurationValidator,
                                  final @Named("static") ApplicationConfigurationSource nexusDefaults,
                                  final ConfigurationHelper configHelper)
   {
-    super(interpolatorProvider);
     this.systemStatusProvider = checkNotNull(systemStatusProvider);
     this.configurationValidator = checkNotNull(configurationValidator);
     this.nexusDefaults = checkNotNull(nexusDefaults);
@@ -82,12 +79,9 @@ public class FileConfigurationSource
 
   @Override
   public Configuration loadConfiguration() throws ConfigurationException, IOException {
-    // propagate call and fill in defaults too
-    nexusDefaults.loadConfiguration();
-
     if (!configurationFile.exists()) {
       log.info("Installing default configuration");
-      setConfiguration(nexusDefaults.getConfiguration());
+      setConfiguration(nexusDefaults.loadConfiguration());
       saveConfiguration(configurationFile);
     }
 

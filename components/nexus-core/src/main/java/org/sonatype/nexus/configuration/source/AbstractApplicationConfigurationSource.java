@@ -17,6 +17,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 
+import javax.inject.Inject;
+
 import org.sonatype.configuration.ConfigurationException;
 import org.sonatype.nexus.configuration.ApplicationInterpolatorProvider;
 import org.sonatype.nexus.configuration.model.Configuration;
@@ -29,20 +31,19 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Abstract class that encapsulates Modello model loading and saving with interpolation.
- *
- * @author cstamas
+ * Support for {@link ApplicationConfigurationSource} implementations.
  */
 public abstract class AbstractApplicationConfigurationSource
     extends ComponentSupport
     implements ApplicationConfigurationSource
 {
-  private final ApplicationInterpolatorProvider interpolatorProvider;
+  private ApplicationInterpolatorProvider interpolatorProvider;
 
   private Configuration configuration;
 
-  public AbstractApplicationConfigurationSource(final ApplicationInterpolatorProvider interpolatorProvider) {
-    this.interpolatorProvider = checkNotNull(interpolatorProvider);
+  @Inject
+  public void installDependencies(final ApplicationInterpolatorProvider interpolator) {
+    this.interpolatorProvider = checkNotNull(interpolator);
   }
 
   @Override

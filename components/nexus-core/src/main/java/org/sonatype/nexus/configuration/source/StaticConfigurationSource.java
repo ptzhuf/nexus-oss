@@ -15,12 +15,10 @@ package org.sonatype.nexus.configuration.source;
 import java.io.IOException;
 import java.net.URL;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.sonatype.configuration.ConfigurationException;
-import org.sonatype.nexus.configuration.ApplicationInterpolatorProvider;
 import org.sonatype.nexus.configuration.model.Configuration;
 
 /**
@@ -34,11 +32,6 @@ import org.sonatype.nexus.configuration.model.Configuration;
 public class StaticConfigurationSource
     extends AbstractApplicationConfigurationSource
 {
-  @Inject
-  public StaticConfigurationSource(ApplicationInterpolatorProvider interpolatorProvider) {
-    super(interpolatorProvider);
-  }
-
   @Override
   public Configuration loadConfiguration() throws ConfigurationException, IOException {
     URL url = getClass().getResource("/META-INF/nexus/nexus.xml");
