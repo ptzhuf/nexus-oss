@@ -12,12 +12,9 @@
  */
 package org.sonatype.nexus.configuration.validator;
 
-import java.util.List;
-
 import org.sonatype.configuration.validation.ValidationRequest;
 import org.sonatype.configuration.validation.ValidationResponse;
 import org.sonatype.nexus.configuration.model.CHttpProxySettings;
-import org.sonatype.nexus.configuration.model.CMirror;
 import org.sonatype.nexus.configuration.model.CPathMappingItem;
 import org.sonatype.nexus.configuration.model.CRemoteAuthentication;
 import org.sonatype.nexus.configuration.model.CRemoteConnectionSettings;
@@ -99,9 +96,4 @@ public interface ApplicationConfigurationValidator
    * Validates smtp
    */
   ValidationResponse validateSmtpConfiguration(ApplicationValidationContext ctx, CSmtpConfiguration settings);
-
-  /**
-   * Validate mirror config
-   */
-  ValidationResponse validateRepositoryMirrors(ApplicationValidationContext ctx, List<CMirror> mirrors);
 }

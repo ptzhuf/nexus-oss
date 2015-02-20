@@ -24,7 +24,6 @@ import org.sonatype.configuration.validation.ValidationMessage;
 import org.sonatype.configuration.validation.ValidationRequest;
 import org.sonatype.configuration.validation.ValidationResponse;
 import org.sonatype.nexus.configuration.model.CHttpProxySettings;
-import org.sonatype.nexus.configuration.model.CMirror;
 import org.sonatype.nexus.configuration.model.CPathMappingItem;
 import org.sonatype.nexus.configuration.model.CRemoteAuthentication;
 import org.sonatype.nexus.configuration.model.CRemoteConnectionSettings;
@@ -398,38 +397,6 @@ public class DefaultApplicationConfigurationValidator
   }
 
   @Override
-  public ValidationResponse validateRepositoryMirrors(ApplicationValidationContext ctx, List<CMirror> mirrors) {
-    ValidationResponse response = new ApplicationValidationResponse();
-
-    if (ctx != null) {
-      response.setContext(ctx);
-    }
-
-    for (CMirror mirror : mirrors) {
-      if (StringUtils.isEmpty(mirror.getId())) {
-        String newId = generateId();
-
-        mirror.setId(newId);
-
-        response
-            .addValidationWarning("Fixed wrong mirror ID from '" + mirror.getId() + "' to '" + newId + "'");
-
-        response.setModified(true);
-      }
-
-      if (StringUtils.isEmpty(mirror.getId())) {
-        response.addValidationError("The Mirror may have no empty/null ID!");
-      }
-
-      if (StringUtils.isEmpty(mirror.getUrl())) {
-        response.addValidationError("The Mirror may have no empty/null URL!");
-      }
-    }
-
-    return response;
-  }
-
-  @Override
   public ValidationResponse validateRepositoryTarget(ApplicationValidationContext ctx, CRepositoryTarget settings) {
     ValidationResponse response = new ApplicationValidationResponse();
 
@@ -545,11 +512,11 @@ public class DefaultApplicationConfigurationValidator
   // --------------
   // Inner stuff
 
-  protected boolean validateLocalStatus(String ls) {
+  private boolean validateLocalStatus(String ls) {
     return LocalStatus.IN_SERVICE.name().equals(ls) || LocalStatus.OUT_OF_SERVICE.name().equals(ls);
   }
 
-  protected boolean isValidRegexp(String regexp) {
+  private boolean isValidRegexp(String regexp) {
     if (regexp == null) {
       return false;
     }
