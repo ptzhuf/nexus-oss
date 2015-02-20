@@ -15,59 +15,35 @@ package org.sonatype.configuration.validation;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+/**
+ * Validation message.
+ */
 public class ValidationMessage
 {
-  /**
-   * Message key.
-   */
   private String key;
 
-  /**
-   * Message body.
-   */
   private String message;
 
-  /**
-   * The short message, used to send back to UI for validation display
-   */
   private String shortMessage;
 
-  /**
-   * The cause of validation problem, if any.
-   */
   private Throwable cause;
 
-  /**
-   * Creates a validation message without a cause.
-   */
   public ValidationMessage(String key, String message) {
     this(key, message, (Throwable) null);
   }
 
-  /**
-   * Creates a validation message without a cause.
-   */
   public ValidationMessage(String key, String message, String shortMessage) {
     this(key, message, shortMessage, null);
   }
 
-  /**
-   * Creates a validation message with cause.
-   */
   public ValidationMessage(String key, String message, Throwable cause) {
     this(key, message, message, cause);
   }
 
-  /**
-   * Creates a validation message with cause.
-   */
   public ValidationMessage(String key, String message, String shortMessage, Throwable cause) {
     this.key = key;
-
     this.message = message;
-
     this.shortMessage = shortMessage;
-
     this.cause = cause;
   }
 

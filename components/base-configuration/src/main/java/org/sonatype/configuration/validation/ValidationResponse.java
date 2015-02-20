@@ -16,9 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A validation response, returned after configuration validation from validator.
- *
- * @author cstamas
+ * Validation response.
  */
 public class ValidationResponse
 {
@@ -37,14 +35,8 @@ public class ValidationResponse
    */
   private boolean modified = false;
 
-  /**
-   * List of validation errors.
-   */
   private List<ValidationMessage> validationErrors;
 
-  /**
-   * List of valiation warnings.
-   */
   private List<ValidationMessage> validationWarnings;
 
   /**

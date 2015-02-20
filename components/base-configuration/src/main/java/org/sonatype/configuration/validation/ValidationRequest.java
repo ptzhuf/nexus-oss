@@ -19,14 +19,9 @@ package org.sonatype.configuration.validation;
  */
 public class ValidationRequest<E>
 {
-  /**
-   * The configuration to validate.
-   */
   private E configuration;
 
   public ValidationRequest(E configuration) {
-    super();
-
     this.configuration = configuration;
   }
 

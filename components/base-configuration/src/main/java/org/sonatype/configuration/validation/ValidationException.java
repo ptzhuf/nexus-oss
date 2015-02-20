@@ -17,32 +17,21 @@ import java.io.StringWriter;
 import org.sonatype.configuration.ConfigurationException;
 
 /**
- * Thrown when some semantical error is detected in validated configuration.
+ * Validation exception.
  *
- * @author cstamas
+ * @since 3.0
  */
-public class InvalidConfigurationException
+public class ValidationException
     extends ConfigurationException
 {
-  private static final long serialVersionUID = -7524456367570093185L;
+  private ValidationResponse response;
 
-  private ValidationResponse validationResponse;
-
-  public InvalidConfigurationException(String msg) {
-    super(msg);
+  public ValidationException(ValidationResponse response) {
+    this.response = response;
   }
 
-  public InvalidConfigurationException(String msg, Throwable t) {
-    super(msg, t);
-  }
-
-  public InvalidConfigurationException(ValidationResponse validationResponse) {
-    super("Invalid configuration");
-    this.validationResponse = validationResponse;
-  }
-
-  public ValidationResponse getValidationResponse() {
-    return validationResponse;
+  public ValidationResponse getResponse() {
+    return response;
   }
 
   public String getMessage() {
@@ -50,20 +39,20 @@ public class InvalidConfigurationException
 
     sw.append(super.getMessage());
 
-    if (getValidationResponse() != null) {
-      if (getValidationResponse().getValidationErrors().size() > 0) {
+    if (getResponse() != null) {
+      if (getResponse().getValidationErrors().size() > 0) {
         sw.append("\nValidation errors follows:\n");
 
-        for (ValidationMessage error : getValidationResponse().getValidationErrors()) {
+        for (ValidationMessage error : getResponse().getValidationErrors()) {
           sw.append(error.toString());
         }
         sw.append("\n");
       }
 
-      if (getValidationResponse().getValidationWarnings().size() > 0) {
+      if (getResponse().getValidationWarnings().size() > 0) {
         sw.append("\nValidation warnings follows:\n");
 
-        for (ValidationMessage warning : getValidationResponse().getValidationWarnings()) {
+        for (ValidationMessage warning : getResponse().getValidationWarnings()) {
           sw.append(warning.toString());
         }
         sw.append("\n");
