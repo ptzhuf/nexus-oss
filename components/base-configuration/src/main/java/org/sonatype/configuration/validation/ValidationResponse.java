@@ -15,6 +15,8 @@ package org.sonatype.configuration.validation;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 /**
  * Validation response.
  */
@@ -154,10 +156,11 @@ public class ValidationResponse
     setModified(isModified() || validationResponse.isModified());
   }
 
-  public void setContext(ValidationContext context) {
+  public void setContext(final @Nullable ValidationContext context) {
     this.context = context;
   }
 
+  @Nullable
   public ValidationContext getContext() {
     return context;
   }

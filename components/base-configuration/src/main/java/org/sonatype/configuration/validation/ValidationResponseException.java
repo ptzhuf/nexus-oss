@@ -14,6 +14,8 @@ package org.sonatype.configuration.validation;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -35,14 +37,17 @@ public class ValidationResponseException
     this(null, response);
   }
 
+  @Nonnull
   public ValidationResponse getResponse() {
     return response;
   }
 
+  @Nonnull
   public List<ValidationMessage> getErrors() {
     return response.getValidationErrors();
   }
 
+  @Nonnull
   public List<ValidationMessage> getWarnings() {
     return response.getValidationWarnings();
   }
