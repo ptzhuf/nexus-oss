@@ -46,7 +46,6 @@ import org.sonatype.nexus.proxy.registry.RepositoryTypeRegistry;
 import org.sonatype.nexus.proxy.repository.GroupRepository;
 import org.sonatype.nexus.proxy.repository.LocalStatus;
 import org.sonatype.nexus.proxy.repository.Repository;
-import org.sonatype.nexus.proxy.repository.ShadowRepository;
 import org.sonatype.nexus.proxy.storage.local.DefaultLocalStorageContext;
 import org.sonatype.nexus.proxy.storage.local.LocalStorageContext;
 import org.sonatype.nexus.proxy.storage.remote.DefaultRemoteStorageContext;
@@ -686,21 +685,6 @@ public class DefaultApplicationConfiguration
     // disable indexing for same purpose
     repository.setIndexable(false);
     repository.setSearchable(false);
-
-    // remove dependants too
-
-    // =======
-    // shadows
-    // (fail if any repo references the currently processing one)
-    List<ShadowRepository> shadows = repositoryRegistry.getRepositoriesWithFacet(ShadowRepository.class);
-
-    for (Iterator<ShadowRepository> i = shadows.iterator(); i.hasNext(); ) {
-      ShadowRepository shadow = i.next();
-
-      if (repository.getId().equals(shadow.getMasterRepository().getId())) {
-        throw new RepositoryDependentException(repository, shadow);
-      }
-    }
 
     // ======
     // groups
