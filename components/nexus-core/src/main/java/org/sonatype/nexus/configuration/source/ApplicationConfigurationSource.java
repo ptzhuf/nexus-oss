@@ -13,10 +13,8 @@
 package org.sonatype.nexus.configuration.source;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 import org.sonatype.configuration.ConfigurationException;
-import org.sonatype.configuration.validation.ValidationResponse;
 import org.sonatype.nexus.configuration.model.Configuration;
 
 /**
@@ -26,50 +24,15 @@ import org.sonatype.nexus.configuration.model.Configuration;
  *
  * @author cstamas
  */
-public interface ApplicationConfigurationSource<E extends Configuration>
+public interface ApplicationConfigurationSource
 {
-  /**
-   * Returns the validation response, if any. It is created on the loading of the user configuration.
-   *
-   * @return the response or null if not applicable or config was still not loaded.
-   */
-  ValidationResponse getValidationResponse();
-
-  /**
-   * Persists the current configuration.
-   */
   void storeConfiguration() throws IOException;
 
-  /**
-   * Gets the current configuration.
-   *
-   * @return the configuration, null if not loaded
-   */
-  E getConfiguration();
+  Configuration getConfiguration();
 
-  void setConfiguration(E configuration);
+  void setConfiguration(Configuration configuration);
 
-  /**
-   * Forces reloading the user configuration.
-   *
-   * @return the configuration
-   */
-  E loadConfiguration() throws ConfigurationException, IOException;
+  Configuration loadConfiguration() throws ConfigurationException, IOException;
 
-  /**
-   * Returns the actual content of configuration as stream.
-   */
-  InputStream getConfigurationAsStream() throws IOException;
-
-  /**
-   * Returns the configuration that this configuration uses for defaulting.
-   *
-   * @return a config source that is default source for this config or null
-   */
-  ApplicationConfigurationSource getDefaultsSource();
-
-  /**
-   * Backup the current configuration.
-   */
   void backupConfiguration() throws IOException;
 }

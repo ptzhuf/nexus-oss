@@ -14,9 +14,7 @@ package org.sonatype.nexus.configuration.source;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
@@ -56,27 +54,13 @@ public class FileConfigurationSource
 {
   private final Provider<SystemStatus> systemStatusProvider;
 
-  /**
-   * The configuration file.
-   */
   private final File configurationFile;
 
-  /**
-   * The configuration validator.
-   */
   private final ApplicationConfigurationValidator configurationValidator;
 
-  /**
-   * The nexus defaults configuration source.
-   */
   private final ApplicationConfigurationSource nexusDefaults;
 
   private final ConfigurationHelper configHelper;
-
-  /**
-   * Flag to mark defaulted config
-   */
-  private boolean configurationDefaulted;
 
   @Inject
   public FileConfigurationSource(final ApplicationInterpolatorProvider interpolatorProvider,
@@ -117,26 +101,15 @@ public class FileConfigurationSource
 
       // get the defaults and stick it to place
       setConfiguration(nexusDefaults.getConfiguration());
-
       saveConfiguration(getConfigurationFile());
-
-      configurationDefaulted = true;
-    }
-    else {
-      configurationDefaulted = false;
     }
 
     loadConfiguration(getConfigurationFile());
 
     upgradeNexusVersion();
 
-    ValidationResponse vResponse =
-        getConfigurationValidator().validateModel(new ValidationRequest(getConfiguration()));
-
+    ValidationResponse vResponse = getConfigurationValidator().validateModel(new ValidationRequest(getConfiguration()));
     dumpValidationErrors(vResponse);
-
-    setValidationResponse(vResponse);
-
     if (vResponse.isValid()) {
       if (vResponse.isModified()) {
         log.info("Validation has modified the configuration, storing the changes.");
@@ -146,22 +119,17 @@ public class FileConfigurationSource
 
       return getConfiguration();
     }
-    else {
-      throw new InvalidConfigurationException(vResponse);
-    }
+    throw new InvalidConfigurationException(vResponse);
   }
 
   private void dumpValidationErrors(final ValidationResponse response) {
     if (response.getValidationErrors().size() > 0 || response.getValidationWarnings().size() > 0) {
       log.error("* * * * * * * * * * * * * * * * * * * * * * * * * *");
-
       log.error("Nexus configuration has validation errors/warnings");
-
       log.error("* * * * * * * * * * * * * * * * * * * * * * * * * *");
 
       if (response.getValidationErrors().size() > 0) {
         log.error("The ERRORS:");
-
         for (ValidationMessage msg : response.getValidationErrors()) {
           log.error(msg.toString());
         }
@@ -169,7 +137,6 @@ public class FileConfigurationSource
 
       if (response.getValidationWarnings().size() > 0) {
         log.error("The WARNINGS:");
-
         for (ValidationMessage msg : response.getValidationWarnings()) {
           log.error(msg.toString());
         }
@@ -196,35 +163,13 @@ public class FileConfigurationSource
     saveConfiguration(getConfigurationFile());
   }
 
-  @Override
-  public InputStream getConfigurationAsStream() throws IOException {
-    return new FileInputStream(getConfigurationFile());
-  }
-
-  @Override
-  public ApplicationConfigurationSource getDefaultsSource() {
-    return nexusDefaults;
-  }
-
   private void loadConfiguration(File file) throws IOException, ConfigurationException {
-    log.debug("Loading Nexus configuration from " + file.getAbsolutePath());
+    loadConfiguration(file.toURI().toURL());
 
-    FileInputStream fis = null;
-    try {
-      fis = new FileInputStream(file);
-
-      loadConfiguration(fis);
-
-      // seems a bit dirty, but the config might need to be upgraded.
-      if (this.getConfiguration() != null) {
-        // decrypt the passwords
-        setConfiguration(configHelper.encryptDecryptPasswords(getConfiguration(), false));
-      }
-    }
-    finally {
-      if (fis != null) {
-        fis.close();
-      }
+    // seems a bit dirty, but the config might need to be upgraded.
+    if (this.getConfiguration() != null) {
+      // decrypt the passwords
+      setConfiguration(configHelper.encryptDecryptPasswords(getConfiguration(), false));
     }
   }
 
@@ -237,7 +182,7 @@ public class FileConfigurationSource
     catch (IOException e) {
       String message =
           "\r\n******************************************************************************\r\n"
-              + "* Could not create configuration file [ " + file.toString() + "]!!!! *\r\n"
+              + "* Could not create configuration file [ " + file + "]!!!! *\r\n"
               + "* Nexus cannot start properly until the process has read+write permissions to this folder *\r\n"
               + "******************************************************************************";
 

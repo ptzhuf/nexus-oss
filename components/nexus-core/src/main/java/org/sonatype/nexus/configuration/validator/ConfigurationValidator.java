@@ -12,18 +12,14 @@
  */
 package org.sonatype.nexus.configuration.validator;
 
-import org.sonatype.configuration.Configuration;
 import org.sonatype.configuration.validation.ValidationRequest;
 import org.sonatype.configuration.validation.ValidationResponse;
 
 /**
  * The validator used to validate current configuration in boot-up sequence.
- *
- * @author cstamas
- * @deprecated see Configurable
  */
 @Deprecated
-public interface ConfigurationValidator<E extends Configuration>
+public interface ConfigurationValidator<E>
 {
   /**
    * Validates the model. This does "whole" (contextual) config validation.

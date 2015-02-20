@@ -13,7 +13,7 @@
 package org.sonatype.nexus.configuration.source;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.net.URL;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -39,26 +39,14 @@ public class StaticConfigurationSource
     super(interpolatorProvider);
   }
 
-  /**
-   * Gets the configuration using getResourceAsStream from "/META-INF/nexus/nexus.xml".
-   */
-  @Override
-  public InputStream getConfigurationAsStream() throws IOException {
-    InputStream result = getClass().getResourceAsStream("/META-INF/nexus/nexus.xml");
-
-    if (result != null) {
-      return result;
-    }
-    else {
-      log.info("No edition-specific configuration found, falling back to Core default configuration.");
-
-      return getClass().getResourceAsStream("/META-INF/nexus/default-oss-nexus.xml");
-    }
-  }
-
   @Override
   public Configuration loadConfiguration() throws ConfigurationException, IOException {
-    loadConfiguration(getConfigurationAsStream());
+    URL url = getClass().getResource("/META-INF/nexus/nexus.xml");
+    if (url == null) {
+      log.info("No edition-specific configuration found, falling back to Core default configuration.");
+      url = getClass().getResource("/META-INF/nexus/default-oss-nexus.xml");
+    }
+    loadConfiguration(url);
 
     return getConfiguration();
   }

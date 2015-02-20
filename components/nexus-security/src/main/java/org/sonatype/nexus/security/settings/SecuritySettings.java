@@ -20,7 +20,6 @@ import com.google.common.collect.Lists;
  * Global security settings.
  */
 public class SecuritySettings
-    implements org.sonatype.configuration.Configuration, java.io.Serializable
 {
   private boolean anonymousAccessEnabled = false;
 

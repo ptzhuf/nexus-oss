@@ -12,14 +12,12 @@
  */
 package org.sonatype.configuration.validation;
 
-import org.sonatype.configuration.Configuration;
-
 /**
  * A request for validation, holding the configuration.
  *
  * @author cstamas
  */
-public class ValidationRequest<E extends Configuration>
+public class ValidationRequest<E>
 {
   /**
    * The configuration to validate.
