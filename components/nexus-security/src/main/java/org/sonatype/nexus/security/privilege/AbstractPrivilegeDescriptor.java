@@ -69,23 +69,20 @@ public abstract class AbstractPrivilegeDescriptor
     if (!update && (Strings2.isEmpty(privilege.getId()) || "0".equals(privilege.getId()) || (existingIds.contains(privilege.getId())))) {
       String newId = idGenerator.generateId();
 
-      ValidationMessage message = new ValidationMessage("id",
-          "Fixed wrong privilege ID from '" + privilege.getId() + "' to '" + newId + "'");
+      ValidationMessage message = new ValidationMessage("id", "Fixed wrong privilege ID from '" + privilege.getId() + "' to '" + newId + "'");
       response.addValidationWarning(message);
       privilege.setId(newId);
       response.setModified(true);
     }
 
     if (Strings2.isEmpty(privilege.getType())) {
-      ValidationMessage message = new ValidationMessage("type",
-          "Cannot have an empty type", "Privilege cannot have an invalid type");
+      ValidationMessage message = new ValidationMessage("type", "Cannot have an empty type");
 
       response.addValidationError(message);
     }
 
     if (Strings2.isEmpty(privilege.getName())) {
-      ValidationMessage message = new ValidationMessage("name",
-          "Privilege ID '" + privilege.getId() + "' requires a name.", "Name is required.");
+      ValidationMessage message = new ValidationMessage("name", "Privilege ID '" + privilege.getId() + "' requires a name.");
       response.addValidationError(message);
     }
 

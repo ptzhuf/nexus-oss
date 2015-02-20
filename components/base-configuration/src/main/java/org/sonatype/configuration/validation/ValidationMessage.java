@@ -12,40 +12,30 @@
  */
 package org.sonatype.configuration.validation;
 
+import javax.annotation.Nullable;
+
 import com.google.common.base.Throwables;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Validation message.
  */
 public class ValidationMessage
 {
-  private String key;
+  private final String key;
 
-  private String message;
+  private final String message;
 
-  // FIXME: Remove unused shortMessage and related
-  private String shortMessage;
+  private final Throwable cause;
 
-  private Throwable cause;
-
-  public ValidationMessage(String key, String message) {
-    this(key, message, (Throwable) null);
+  public ValidationMessage(final String key, final String message) {
+    this(key, message,  null);
   }
 
-  @Deprecated
-  public ValidationMessage(String key, String message, String shortMessage) {
-    this(key, message, shortMessage, null);
-  }
-
-  public ValidationMessage(String key, String message, Throwable cause) {
-    this(key, message, message, cause);
-  }
-
-  @Deprecated
-  public ValidationMessage(String key, String message, String shortMessage, Throwable cause) {
-    this.key = key;
-    this.message = message;
-    this.shortMessage = shortMessage;
+  public ValidationMessage(final String key, final String message, final @Nullable Throwable cause) {
+    this.key = checkNotNull(key);
+    this.message = checkNotNull(message);
     this.cause = cause;
   }
 
@@ -53,32 +43,13 @@ public class ValidationMessage
     return key;
   }
 
-  public void setKey(String key) {
-    this.key = key;
-  }
-
   public String getMessage() {
     return message;
   }
 
-  public void setMessage(String message) {
-    this.message = message;
-  }
-
-  public String getShortMessage() {
-    return shortMessage;
-  }
-
-  public void setShortMessage(String shortMessage) {
-    this.shortMessage = shortMessage;
-  }
-
+  @Nullable
   public Throwable getCause() {
     return cause;
-  }
-
-  public void setCause(Throwable cause) {
-    this.cause = cause;
   }
 
   public String toString() {

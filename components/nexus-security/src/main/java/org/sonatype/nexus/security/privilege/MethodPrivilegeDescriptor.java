@@ -106,8 +106,7 @@ public class MethodPrivilegeDescriptor
       if (!valid) {
         ValidationMessage message =
             new ValidationMessage("method", "Privilege ID '" + privilege.getId()
-                + "' Method is wrong! (Allowed methods are: create, delete, read and update)",
-                "Invalid method selected.");
+                + "' Method is wrong! (Allowed methods are: create, delete, read and update)");
         response.addValidationError(message);
       }
     }

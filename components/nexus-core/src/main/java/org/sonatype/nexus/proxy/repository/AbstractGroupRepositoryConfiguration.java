@@ -80,8 +80,7 @@ public class AbstractGroupRepositoryConfiguration
 
     if (!allReposesIds.containsAll(memberRepositoryIds)) {
       ValidationMessage message =
-          new ValidationMessage(MEMBER_REPOSITORIES, "Group repository points to nonexistent members!",
-              "The source nexus repository is not existing.");
+          new ValidationMessage(MEMBER_REPOSITORIES, "Group repository points to nonexistent members!");
 
       response.addValidationError(message);
     }
@@ -90,7 +89,6 @@ public class AbstractGroupRepositoryConfiguration
     if (uniqueReposesIds.size() != memberRepositoryIds.size()) {
       response.addValidationError(new ValidationMessage(
           MEMBER_REPOSITORIES,
-          "Group repository has same member multiple times!",
           "Group repository has same member multiple times!"
       ));
     }

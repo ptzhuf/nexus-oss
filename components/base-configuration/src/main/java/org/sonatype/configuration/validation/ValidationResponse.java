@@ -132,17 +132,19 @@ public class ValidationResponse
    */
   public void append(ValidationResponse validationResponse) {
     for (ValidationMessage msg : validationResponse.getValidationErrors()) {
-      if (getValidationError(msg.getKey()) != null) {
-        msg.setKey(msg.getKey() + "(" + key++ + ")");
-      }
+      // FIXME: Sort out if this is important for anything, if so rebuild message with updated key
+      //if (getValidationError(msg.getKey()) != null) {
+      //  msg.setKey(msg.getKey() + "(" + key++ + ")");
+      //}
 
       addValidationError(msg);
     }
 
     for (ValidationMessage msg : validationResponse.getValidationWarnings()) {
-      if (getValidationWarning(msg.getKey()) != null) {
-        msg.setKey(msg.getKey() + "(" + key++ + ")");
-      }
+      // FIXME: Sort out if this is important for anything, if so rebuild message with updated key
+      //if (getValidationWarning(msg.getKey()) != null) {
+      //  msg.setKey(msg.getKey() + "(" + key++ + ")");
+      //}
 
       addValidationWarning(msg);
     }

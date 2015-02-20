@@ -109,7 +109,7 @@ public class TargetPrivilegeDescriptor
 
     if (StringUtils.isEmpty(repositoryTargetId)) {
       ValidationMessage message = new ValidationMessage("repositoryTargetId", "Privilege ID '"
-          + privilege.getId() + "' requires a repositoryTargetId.", "Repository Target is required.");
+          + privilege.getId() + "' requires a repositoryTargetId.");
       response.addValidationError(message);
     }
 
@@ -119,8 +119,7 @@ public class TargetPrivilegeDescriptor
           "Privilege ID '"
               + privilege.getId()
               + "' cannot be assigned to both a group and repository."
-              + "  Either assign a group, a repository or neither (which assigns to ALL repositories).",
-          "Cannot select both a Repository and Repository Group.");
+              + "  Either assign a group, a repository or neither (which assigns to ALL repositories).");
       response.addValidationError(message);
     }
 
@@ -155,8 +154,7 @@ public class TargetPrivilegeDescriptor
         ValidationMessage message = new ValidationMessage(
             "method",
             "Privilege ID '" + privilege.getId()
-                + "' Method is wrong! (Allowed methods are: create, delete, read and update)",
-            "Invalid method selected.");
+                + "' Method is wrong! (Allowed methods are: create, delete, read and update)");
         response.addValidationError(message);
       }
     }

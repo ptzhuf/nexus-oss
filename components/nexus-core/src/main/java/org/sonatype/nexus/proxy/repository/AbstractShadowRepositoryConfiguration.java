@@ -70,8 +70,7 @@ public abstract class AbstractShadowRepositoryConfiguration
       String id = ((CRepository) owner.getConfiguration(false)).getId();
       ValidationMessage message =
           new ValidationMessage("shadowOf", "Master repository id=\"" + getMasterRepositoryId()
-              + "\" not found for ShadowRepository with id=\"" + id + "\"!",
-              "The source nexus repository is not existing.");
+              + "\" not found for ShadowRepository with id=\"" + id + "\"!");
 
       response.addValidationError(message);
     }

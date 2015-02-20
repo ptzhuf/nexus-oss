@@ -44,9 +44,7 @@ public abstract class AbstractShadowRepositoryConfigurator
       shadowRepository.setMasterRepository(getRepositoryRegistry().getRepository(extConf.getMasterRepositoryId()));
     }
     catch (IncompatibleMasterRepositoryException e) {
-      ValidationMessage message =
-          new ValidationMessage("shadowOf", e.getMessage(),
-              "The source nexus repository is of an invalid Format.");
+      ValidationMessage message = new ValidationMessage("shadowOf", e.getMessage());
 
       ValidationResponse response = new ApplicationValidationResponse();
 
@@ -55,8 +53,7 @@ public abstract class AbstractShadowRepositoryConfigurator
       throw new InvalidConfigurationException(response);
     }
     catch (NoSuchRepositoryException e) {
-      ValidationMessage message =
-          new ValidationMessage("shadowOf", e.getMessage(), "The source nexus repository is not existing.");
+      ValidationMessage message = new ValidationMessage("shadowOf", e.getMessage());
 
       ValidationResponse response = new ApplicationValidationResponse();
 
