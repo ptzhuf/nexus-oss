@@ -48,6 +48,7 @@ public class SecuritySettingsManagerImpl
   }
 
   private SecuritySettings getModel() {
+    // FIXME this has race-condition potential
     if (model != null) {
       return model;
     }
