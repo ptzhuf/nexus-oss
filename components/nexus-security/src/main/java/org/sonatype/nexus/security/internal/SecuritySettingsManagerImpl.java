@@ -139,8 +139,12 @@ public class SecuritySettingsManagerImpl
   public void clearCache() {
     // Just to make sure we aren't fiddling w/ save/loading process
     lock.lock();
-    configuration = null;
-    lock.unlock();
+    try {
+      configuration = null;
+    }
+    finally {
+      lock.unlock();
+    }
   }
 
   @Override
