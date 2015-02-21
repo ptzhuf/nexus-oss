@@ -27,7 +27,7 @@ public interface SecuritySettingsManager
 
   String getAnonymousUsername();
 
-  void setAnonymousPassword(String passowrd);
+  void setAnonymousPassword(String password);
 
   String getAnonymousPassword();
 

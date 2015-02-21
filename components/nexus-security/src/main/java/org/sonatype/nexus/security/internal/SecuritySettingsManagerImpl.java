@@ -25,103 +25,96 @@ import org.sonatype.nexus.common.validation.ValidationResponseException;
 import org.sonatype.nexus.security.settings.SecuritySettings;
 import org.sonatype.nexus.security.settings.SecuritySettingsManager;
 import org.sonatype.nexus.security.settings.SecuritySettingsSource;
-import org.sonatype.nexus.security.settings.SecuritySettingsValidator;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
 
+/**
+ * Default {@link SecuritySettingsManager} implementation.
+ */
 @Named
 @Singleton
 public class SecuritySettingsManagerImpl
     extends ComponentSupport
     implements SecuritySettingsManager
 {
-  private final SecuritySettingsSource configurationSource;
+  private final SecuritySettingsSource source;
 
-  private final SecuritySettingsValidator validator;
+  private SecuritySettings model = null;
 
-  /**
-   * This will hold the current configuration in memory, to reload, will need to set this to null
-   */
-  private SecuritySettings configuration = null;
-
-  private ReentrantLock lock = new ReentrantLock();
+  private final ReentrantLock lock = new ReentrantLock();
 
   @Inject
-  public SecuritySettingsManagerImpl(final SecuritySettingsSource configurationSource,
-                                     final SecuritySettingsValidator validator)
-  {
-    this.configurationSource = configurationSource;
-    this.validator = validator;
+  public SecuritySettingsManagerImpl(final SecuritySettingsSource source) {
+    this.source = source;
   }
 
-  private SecuritySettings getConfiguration() {
-    if (configuration != null) {
-      return configuration;
+  private SecuritySettings getModel() {
+    if (model != null) {
+      return model;
     }
 
     lock.lock();
     try {
-      configurationSource.loadConfiguration();
-      configuration = configurationSource.getConfiguration();
+      source.load();
+      model = source.get();
     }
     finally {
       lock.unlock();
     }
 
-    return configuration;
+    return model;
   }
 
   @Override
   public boolean isAnonymousAccessEnabled() {
-    return getConfiguration().isAnonymousAccessEnabled();
+    return getModel().isAnonymousAccessEnabled();
   }
 
   @Override
   public void setAnonymousAccessEnabled(final boolean enabled) {
-    getConfiguration().setAnonymousAccessEnabled(enabled);
+    getModel().setAnonymousAccessEnabled(enabled);
   }
 
   @Override
   public String getAnonymousPassword() {
-    return getConfiguration().getAnonymousPassword();
+    return getModel().getAnonymousPassword();
   }
 
   @Override
   public void setAnonymousPassword(final String password) {
-    getConfiguration().setAnonymousPassword(password);
+    getModel().setAnonymousPassword(password);
   }
 
   @Override
   public String getAnonymousUsername() {
-    return getConfiguration().getAnonymousUsername();
+    return getModel().getAnonymousUsername();
   }
 
   @Override
   public void setAnonymousUsername(final String username) {
-    getConfiguration().setAnonymousUsername(username);
+    getModel().setAnonymousUsername(username);
   }
 
   @Override
   public List<String> getRealms() {
-    return Collections.unmodifiableList(getConfiguration().getRealms());
+    return Collections.unmodifiableList(getModel().getRealms());
   }
 
   @Override
   public void setRealms(final List<String> realms) {
-    ValidationResponse vr = validator.validateRealms(getConfiguration(), realms);
+    ValidationResponse response = new ValidationResponse();
+    if (realms.isEmpty()) {
+      response.addValidationError("At least one realm must be configured");
+      throw new ValidationResponseException(response);
+    }
 
-    if (vr.isValid()) {
-      getConfiguration().setRealms(realms);
-    }
-    else {
-      throw new ValidationResponseException(vr);
-    }
+    getModel().setRealms(realms);
   }
 
   @Override
   public void clearCache() {
     lock.lock();
     try {
-      configuration = null;
+      model = null;
     }
     finally {
       lock.unlock();
@@ -132,7 +125,7 @@ public class SecuritySettingsManagerImpl
   public void save() {
     lock.lock();
     try {
-      configurationSource.storeConfiguration();
+      source.save();
     }
     finally {
       lock.unlock();

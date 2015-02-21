@@ -17,9 +17,9 @@ package org.sonatype.nexus.security.settings;
  */
 public interface SecuritySettingsSource
 {
-  void storeConfiguration();
+  SecuritySettings get();
 
-  SecuritySettings getConfiguration();
+  SecuritySettings load();
 
-  SecuritySettings loadConfiguration();
+  void save();
 }
