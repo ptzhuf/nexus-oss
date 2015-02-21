@@ -12,7 +12,7 @@
  */
 package org.sonatype.nexus.configuration;
 
-import org.sonatype.configuration.ConfigurationException;
+import org.sonatype.nexus.common.throwables.ConfigurationException;
 
 /**
  * Revertable configuration is a configuration that is changeable, but may be be reverted (rollback the changes). The

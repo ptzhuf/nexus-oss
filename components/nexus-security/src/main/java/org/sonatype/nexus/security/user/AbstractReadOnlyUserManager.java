@@ -12,7 +12,7 @@
  */
 package org.sonatype.nexus.security.user;
 
-import org.sonatype.configuration.ConfigurationException;
+import org.sonatype.nexus.common.throwables.ConfigurationException;
 
 /**
  * An abstract UserManager, that just throws exceptions for all the write methods.

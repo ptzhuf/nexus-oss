@@ -12,7 +12,7 @@
  */
 package org.sonatype.nexus.proxy.repository;
 
-import org.sonatype.configuration.ConfigurationException;
+import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.common.validation.ValidationMessage;
 import org.sonatype.nexus.common.validation.ValidationResponse;
 import org.sonatype.nexus.common.validation.ValidationResponseException;

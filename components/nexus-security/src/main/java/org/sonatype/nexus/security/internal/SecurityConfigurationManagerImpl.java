@@ -24,8 +24,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.sonatype.configuration.ConfigurationException;
 import org.sonatype.nexus.common.text.Strings2;
+import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.common.validation.ValidationMessage;
 import org.sonatype.nexus.common.validation.ValidationResponse;
 import org.sonatype.nexus.common.validation.ValidationResponseException;

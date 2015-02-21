@@ -14,7 +14,7 @@ package org.sonatype.nexus.security.user;
 
 import java.util.Set;
 
-import org.sonatype.configuration.ConfigurationException;
+import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.security.role.RoleIdentifier;
 
 /**

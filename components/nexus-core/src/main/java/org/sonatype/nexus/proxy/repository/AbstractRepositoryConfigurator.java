@@ -18,7 +18,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import org.sonatype.configuration.ConfigurationException;
+import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.common.validation.ValidationMessage;
 import org.sonatype.nexus.common.validation.ValidationResponse;
 import org.sonatype.nexus.common.validation.ValidationResponseException;

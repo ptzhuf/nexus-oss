@@ -15,7 +15,7 @@ package org.sonatype.nexus.security;
 import java.util.List;
 import java.util.Set;
 
-import org.sonatype.configuration.ConfigurationException;
+import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.security.authz.AuthorizationManager;
 import org.sonatype.nexus.security.authz.NoSuchAuthorizationManagerException;
 import org.sonatype.nexus.security.privilege.Privilege;

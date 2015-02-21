@@ -20,7 +20,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import org.sonatype.configuration.ConfigurationException;
+import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.configuration.Configurator;
 import org.sonatype.nexus.configuration.ExternalConfiguration;
 import org.sonatype.nexus.configuration.model.CRepositoryCoreConfiguration;
@@ -31,7 +31,6 @@ import org.sonatype.nexus.proxy.AccessDeniedException;
 import org.sonatype.nexus.proxy.IllegalOperationException;
 import org.sonatype.nexus.proxy.IllegalRequestException;
 import org.sonatype.nexus.proxy.ItemNotFoundException;
-import org.sonatype.nexus.proxy.ItemNotFoundException.ItemNotFoundInRepositoryReason;
 import org.sonatype.nexus.proxy.LocalStorageException;
 import org.sonatype.nexus.proxy.RepositoryNotAvailableException;
 import org.sonatype.nexus.proxy.ResourceStoreRequest;

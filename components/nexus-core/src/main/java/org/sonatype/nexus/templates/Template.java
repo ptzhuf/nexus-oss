@@ -14,7 +14,7 @@ package org.sonatype.nexus.templates;
 
 import java.io.IOException;
 
-import org.sonatype.configuration.ConfigurationException;
+import org.sonatype.nexus.common.throwables.ConfigurationException;
 
 /**
  * A template for creation of various objects.

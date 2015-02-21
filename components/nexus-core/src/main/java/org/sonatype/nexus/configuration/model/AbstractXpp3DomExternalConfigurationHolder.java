@@ -17,7 +17,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.sonatype.configuration.ConfigurationException;
+import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.common.validation.ValidationResponse;
 import org.sonatype.nexus.common.validation.ValidationResponseException;
 import org.sonatype.nexus.configuration.ApplicationConfiguration;

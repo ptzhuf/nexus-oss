@@ -22,7 +22,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.sonatype.configuration.ConfigurationException;
+import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.configuration.model.CRemoteHttpProxySettings;
 import org.sonatype.nexus.configuration.model.CRemoteProxySettings;
 import org.sonatype.nexus.configuration.model.CRemoteProxySettingsCoreConfiguration;

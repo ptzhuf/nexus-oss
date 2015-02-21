@@ -12,7 +12,7 @@
  */
 package org.sonatype.nexus.configuration.model;
 
-import org.sonatype.configuration.ConfigurationException;
+import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.configuration.ApplicationConfiguration;
 
 /**

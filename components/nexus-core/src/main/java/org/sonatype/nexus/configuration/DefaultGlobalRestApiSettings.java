@@ -16,7 +16,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.sonatype.configuration.ConfigurationException;
+import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.configuration.model.CGlobalRestApiCoreConfiguration;
 import org.sonatype.nexus.configuration.model.CRestApiSettings;
 import org.sonatype.sisu.goodies.eventbus.EventBus;

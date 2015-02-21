@@ -12,7 +12,7 @@
  */
 package org.sonatype.nexus.security.user;
 
-import org.sonatype.configuration.ConfigurationException;
+import org.sonatype.nexus.common.throwables.ConfigurationException;
 
 import org.apache.shiro.authz.AuthorizationException;
 

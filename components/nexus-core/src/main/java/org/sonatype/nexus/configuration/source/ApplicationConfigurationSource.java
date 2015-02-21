@@ -14,7 +14,7 @@ package org.sonatype.nexus.configuration.source;
 
 import java.io.IOException;
 
-import org.sonatype.configuration.ConfigurationException;
+import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.configuration.model.Configuration;
 
 /**

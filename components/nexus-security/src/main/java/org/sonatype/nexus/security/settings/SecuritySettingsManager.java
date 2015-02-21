@@ -14,7 +14,7 @@ package org.sonatype.nexus.security.settings;
 
 import java.util.List;
 
-import org.sonatype.configuration.ConfigurationException;
+import org.sonatype.nexus.common.throwables.ConfigurationException;
 
 /**
  * Security settings manager.

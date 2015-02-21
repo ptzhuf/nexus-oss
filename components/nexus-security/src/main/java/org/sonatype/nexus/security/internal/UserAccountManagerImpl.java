@@ -16,7 +16,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.sonatype.configuration.ConfigurationException;
+import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.nexus.security.user.NoSuchUserManagerException;
 import org.sonatype.nexus.security.user.User;

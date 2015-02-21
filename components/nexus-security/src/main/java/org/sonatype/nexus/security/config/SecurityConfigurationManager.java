@@ -15,7 +15,7 @@ package org.sonatype.nexus.security.config;
 import java.util.List;
 import java.util.Set;
 
-import org.sonatype.configuration.ConfigurationException;
+import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.security.privilege.NoSuchPrivilegeException;
 import org.sonatype.nexus.security.role.NoSuchRoleException;
 import org.sonatype.nexus.security.user.NoSuchRoleMappingException;

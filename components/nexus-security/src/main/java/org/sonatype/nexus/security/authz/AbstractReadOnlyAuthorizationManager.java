@@ -12,7 +12,7 @@
  */
 package org.sonatype.nexus.security.authz;
 
-import org.sonatype.configuration.ConfigurationException;
+import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.security.privilege.NoSuchPrivilegeException;
 import org.sonatype.nexus.security.privilege.Privilege;
 import org.sonatype.nexus.security.role.NoSuchRoleException;

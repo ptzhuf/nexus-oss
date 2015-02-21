@@ -15,7 +15,7 @@ package org.sonatype.nexus.proxy.targets;
 import java.util.Collection;
 import java.util.Set;
 
-import org.sonatype.configuration.ConfigurationException;
+import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.proxy.registry.ContentClass;
 import org.sonatype.nexus.proxy.repository.Repository;
 

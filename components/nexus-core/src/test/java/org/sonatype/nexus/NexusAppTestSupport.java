@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.List;
 
-import org.sonatype.configuration.ConfigurationException;
+import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.configuration.ApplicationConfiguration;
 import org.sonatype.nexus.events.EventSubscriberHost;
 import org.sonatype.nexus.proxy.events.NexusStoppedEvent;

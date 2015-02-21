@@ -12,7 +12,7 @@
  */
 package org.sonatype.nexus.configuration;
 
-import org.sonatype.configuration.ConfigurationException;
+import org.sonatype.nexus.common.throwables.ConfigurationException;
 
 /**
  * A Configurable component.

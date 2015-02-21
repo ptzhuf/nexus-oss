@@ -17,7 +17,7 @@ import java.io.File;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.sonatype.configuration.ConfigurationException;
+import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.configuration.model.CRemoteAuthentication;
 import org.sonatype.nexus.proxy.repository.ClientSSLRemoteAuthenticationSettings;
 import org.sonatype.nexus.proxy.repository.NtlmRemoteAuthenticationSettings;

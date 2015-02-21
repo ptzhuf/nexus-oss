@@ -19,7 +19,6 @@ import javax.inject.Named;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 
-import org.sonatype.configuration.ConfigurationException;
 import org.sonatype.micromailer.Address;
 import org.sonatype.micromailer.EMailer;
 import org.sonatype.micromailer.EmailerConfiguration;
@@ -28,6 +27,7 @@ import org.sonatype.micromailer.MailRequestStatus;
 import org.sonatype.micromailer.MailType;
 import org.sonatype.micromailer.imp.DefaultMailType;
 import org.sonatype.nexus.SystemStatus;
+import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.configuration.AbstractLastingConfigurable;
 import org.sonatype.nexus.configuration.ApplicationConfiguration;
 import org.sonatype.nexus.configuration.CoreConfiguration;

@@ -20,7 +20,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import org.sonatype.configuration.ConfigurationException;
+import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.configuration.model.Configuration;
 import org.sonatype.nexus.configuration.model.io.xpp3.NexusConfigurationXpp3Reader;
 import org.sonatype.sisu.goodies.common.ComponentSupport;

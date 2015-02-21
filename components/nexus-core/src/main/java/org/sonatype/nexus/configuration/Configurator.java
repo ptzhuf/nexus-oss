@@ -12,7 +12,7 @@
  */
 package org.sonatype.nexus.configuration;
 
-import org.sonatype.configuration.ConfigurationException;
+import org.sonatype.nexus.common.throwables.ConfigurationException;
 
 /**
  * A component responsible for "apply" (config -> repo) and "prepare" (repo -> config) steps for all those config
