@@ -15,8 +15,7 @@ package org.sonatype.nexus.security.user;
 /**
  * Read-only {@link UserManager}, which just throws exceptions for all the write methods.
  *
- * Any call to theses methods should be checked by the <code>supportsWrite()</code> method,
- * so this should never be called.
+ * Any call to theses methods should be guarded by {@code #supportsWrite}.
  */
 public abstract class AbstractReadOnlyUserManager
     extends AbstractUserManager
