@@ -14,36 +14,28 @@ package org.sonatype.nexus.security.settings;
 
 import java.util.List;
 
-import org.sonatype.nexus.common.throwables.ConfigurationException;
-
 /**
  * Security settings manager.
  */
 public interface SecuritySettingsManager
 {
-  void setAnonymousAccessEnabled(boolean anonymousAccessEnabled);
+  void setAnonymousAccessEnabled(boolean enabled);
 
   boolean isAnonymousAccessEnabled();
 
-  void setAnonymousUsername(String anonymousUsername) throws ConfigurationException;
+  void setAnonymousUsername(String username);
 
   String getAnonymousUsername();
 
-  void setAnonymousPassword(String anonymousPassword) throws ConfigurationException;
+  void setAnonymousPassword(String passowrd);
 
   String getAnonymousPassword();
 
-  void setRealms(List<String> realms) throws ConfigurationException;
+  void setRealms(List<String> realms);
 
   List<String> getRealms();
 
-  /**
-   * Clear the cache and reload from file
-   */
   void clearCache();
 
-  /**
-   * Save to disk what is currently cached in memory
-   */
   void save();
 }

@@ -12,6 +12,8 @@
  */
 package org.sonatype.nexus.security.settings;
 
+// FIXME: Remove this, its just a simple object wrapper
+
 public class SecuritySettingsValidationContext
 {
   private SecuritySettings securitySettings;
