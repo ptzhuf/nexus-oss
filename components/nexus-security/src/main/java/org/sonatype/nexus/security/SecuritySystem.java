@@ -15,6 +15,8 @@ package org.sonatype.nexus.security;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Nullable;
+
 import org.sonatype.nexus.security.authz.AuthorizationManager;
 import org.sonatype.nexus.security.authz.NoSuchAuthorizationManagerException;
 import org.sonatype.nexus.security.privilege.Privilege;
@@ -129,6 +131,12 @@ public interface SecuritySystem
   // *********************
   // * user management
   // *********************
+
+  /**
+   * Return the current user, if there is one, else null.
+   */
+  @Nullable
+  User currentUser() throws UserNotFoundException;
 
   /**
    * Adds a new User to the system.<BR/>

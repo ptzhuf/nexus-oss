@@ -36,7 +36,6 @@ import org.sonatype.nexus.extdirect.model.StoreLoadParameters
 import org.sonatype.nexus.security.SecuritySystem
 import org.sonatype.nexus.security.role.RoleIdentifier
 import org.sonatype.nexus.security.user.User
-import org.sonatype.nexus.security.user.UserAccountManager
 import org.sonatype.nexus.security.user.UserManager
 import org.sonatype.nexus.security.user.UserSearchCriteria
 import org.sonatype.nexus.util.Tokens
@@ -66,9 +65,6 @@ extends DirectComponentSupport
 
   @Inject
   SecuritySystem securitySystem
-
-  @Inject
-  UserAccountManager userAccountManager
 
   @Inject
   AuthTicketService authTickets
@@ -114,9 +110,9 @@ extends DirectComponentSupport
    */
   @DirectMethod
   @RequiresUser
+  @RequiresPermissions('security:users')
   UserAccountXO readAccount() {
-    String currentUserId = securitySystem.getSubject().getPrincipal().toString()
-    User user = userAccountManager.readAccount(currentUserId)
+    User user = securitySystem.currentUser()
     return new UserAccountXO(
         userId: user.userId,
         firstName: user.firstName,
@@ -209,15 +205,16 @@ extends DirectComponentSupport
   @DirectMethod
   @RequiresUser
   @RequiresAuthentication
+  @RequiresPermissions('security:users')
   @Validate
   UserAccountXO updateAccount(final @NotNull(message = '[userAccountXO] may not be null') @Valid UserAccountXO userAccountXO) {
-    String currentUserId = securitySystem.getSubject().getPrincipal().toString()
-    userAccountManager.updateAccount(userAccountManager.readAccount(currentUserId).with {
+    User user = securitySystem.currentUser().with {
       firstName = userAccountXO.firstName
       lastName = userAccountXO.lastName
       emailAddress = userAccountXO.email
       return it
-    })
+    }
+    securitySystem.updateUser(user)
     return readAccount()
   }
 

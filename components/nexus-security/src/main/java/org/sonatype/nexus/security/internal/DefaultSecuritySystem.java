@@ -409,6 +409,17 @@ public class DefaultSecuritySystem
   }
 
   @Override
+  @Nullable
+  public User currentUser() throws UserNotFoundException {
+    Subject subject = getSubject();
+    if (subject.getPrincipal() == null) {
+      return null;
+    }
+
+    return getUser(subject.getPrincipal().toString());
+  }
+
+  @Override
   public User getUser(String userId) throws UserNotFoundException {
     log.trace("Finding user: {}", userId);
 
