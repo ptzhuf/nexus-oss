@@ -81,21 +81,21 @@ public class DefaultSecuritySystem
     extends ComponentSupport
     implements SecuritySystem
 {
-  private SecuritySettingsManager securitySettingsManager;
-
-  private RealmSecurityManager securityManager;
-
-  private CacheManager cacheManager;
-
-  private Map<String, UserManager> userManagers;
-
-  private Map<String, Realm> realmMap;
-
-  private Map<String, AuthorizationManager> authorizationManagers;
-
-  private EventBus eventBus;
-
   private static final String ALL_ROLES_KEY = "all";
+
+  private final SecuritySettingsManager securitySettingsManager;
+
+  private final RealmSecurityManager securityManager;
+
+  private final CacheManager cacheManager;
+
+  private final Map<String, UserManager> userManagers;
+
+  private final Map<String, Realm> realmMap;
+
+  private final Map<String, AuthorizationManager> authorizationManagers;
+
+  private final EventBus eventBus;
 
   private volatile boolean started;
 
@@ -108,16 +108,16 @@ public class DefaultSecuritySystem
                                final CacheManager cacheManager,
                                final Map<String, UserManager> userManagers)
   {
-    this.eventBus = eventBus;
-    this.authorizationManagers = authorizationManagers;
-    this.realmMap = realmMap;
-    this.securitySettingsManager = securitySettingsManager;
-    this.securityManager = securityManager;
-    this.cacheManager = cacheManager;
+    this.eventBus = checkNotNull(eventBus);
+    this.authorizationManagers = checkNotNull(authorizationManagers);
+    this.realmMap = checkNotNull(realmMap);
+    this.securitySettingsManager = checkNotNull(securitySettingsManager);
+    this.securityManager = checkNotNull(securityManager);
+    this.cacheManager = checkNotNull(cacheManager);
+    this.userManagers = checkNotNull(userManagers);
 
-    this.eventBus.register(this);
-    this.userManagers = userManagers;
-    SecurityUtils.setSecurityManager(getSecurityManager());
+    SecurityUtils.setSecurityManager(securityManager);
+    eventBus.register(this);
     started = false;
   }
 
@@ -142,7 +142,7 @@ public class DefaultSecuritySystem
     // The plexus wrapper can interpolate the config
     EhCacheManager ehCacheManager = new EhCacheManager();
     ehCacheManager.setCacheManager(cacheManager);
-    getSecurityManager().setCacheManager(ehCacheManager);
+    securityManager.setCacheManager(ehCacheManager);
 
     if (org.apache.shiro.util.Initializable.class.isInstance(getSecurityManager())) {
       ((org.apache.shiro.util.Initializable) getSecurityManager()).init();
@@ -153,8 +153,8 @@ public class DefaultSecuritySystem
 
   @Override
   public synchronized void stop() {
-    if (getSecurityManager().getRealms() != null) {
-      for (Realm realm : getSecurityManager().getRealms()) {
+    if (securityManager.getRealms() != null) {
+      for (Realm realm : securityManager.getRealms()) {
         if (AuthenticatingRealm.class.isInstance(realm)) {
           ((AuthenticatingRealm) realm).setAuthenticationCache(null);
         }
@@ -165,7 +165,7 @@ public class DefaultSecuritySystem
     }
 
     // we need to kill caches on stop
-    getSecurityManager().destroy();
+    securityManager.destroy();
     // cacheManagerComponent.shutdown();
   }
 
@@ -178,7 +178,7 @@ public class DefaultSecuritySystem
 
   @Override
   public AuthenticationInfo authenticate(AuthenticationToken token) throws AuthenticationException {
-    return getSecurityManager().authenticate(token);
+    return securityManager.authenticate(token);
   }
 
   @Override
@@ -188,17 +188,17 @@ public class DefaultSecuritySystem
 
   @Override
   public boolean isPermitted(PrincipalCollection principal, String permission) {
-    return getSecurityManager().isPermitted(principal, permission);
+    return securityManager.isPermitted(principal, permission);
   }
 
   @Override
   public boolean[] isPermitted(PrincipalCollection principal, List<String> permissions) {
-    return getSecurityManager().isPermitted(principal, permissions.toArray(new String[permissions.size()]));
+    return securityManager.isPermitted(principal, permissions.toArray(new String[permissions.size()]));
   }
 
   @Override
   public void checkPermission(PrincipalCollection principal, String permission) throws AuthorizationException {
-    getSecurityManager().checkPermission(principal, permission);
+    securityManager.checkPermission(principal, permission);
   }
 
   @Override
@@ -507,7 +507,7 @@ public class DefaultSecuritySystem
     }
 
     // get the sorted order of realms from the realm locator
-    Collection<Realm> realms = getSecurityManager().getRealms();
+    Collection<Realm> realms = securityManager.getRealms();
 
     for (Realm realm : realms) {
       // now user the realm.name to find the UserManager
@@ -564,7 +564,7 @@ public class DefaultSecuritySystem
     // first authenticate the user
     try {
       UsernamePasswordToken authenticationToken = new UsernamePasswordToken(userId, oldPassword);
-      if (getSecurityManager().authenticate(authenticationToken) == null) {
+      if (securityManager.authenticate(authenticationToken) == null) {
         throw new InvalidCredentialsException();
       }
     }
@@ -643,7 +643,7 @@ public class DefaultSecuritySystem
    */
   private void clearAuthcRealmCaches() {
     // NOTE: we don't need to iterate all the Sec Managers, they use the same Realms, so one is fine.
-    final Collection<Realm> realms = getSecurityManager().getRealms();
+    final Collection<Realm> realms = securityManager.getRealms();
     if (realms != null) {
       for (Realm realm : realms) {
         if (realm instanceof AuthenticatingRealm) {
@@ -658,7 +658,7 @@ public class DefaultSecuritySystem
    */
   private void clearAuthzRealmCaches() {
     // NOTE: we don't need to iterate all the Sec Managers, they use the same Realms, so one is fine.
-    final Collection<Realm> realms = getSecurityManager().getRealms();
+    final Collection<Realm> realms = securityManager.getRealms();
     if (realms != null) {
       for (Realm realm : realms) {
         if (realm instanceof AuthorizingRealm) {
@@ -671,11 +671,11 @@ public class DefaultSecuritySystem
   private void setSecurityManagerRealms() {
     Collection<Realm> realms = getRealmsFromConfigSource();
     log.debug("Security manager realms: {}", realms);
-    getSecurityManager().setRealms(Lists.newArrayList(realms));
+    securityManager.setRealms(Lists.newArrayList(realms));
   }
 
   private Collection<Realm> getRealmsFromConfigSource() {
-    List<Realm> realms = new ArrayList<Realm>();
+    List<Realm> realms = new ArrayList<>();
 
     List<String> realmIds = securitySettingsManager.getRealms();
 
