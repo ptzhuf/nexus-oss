@@ -98,18 +98,14 @@ public class DefaultRepositoryRouter
 
   // =
 
-  protected void initializeConfiguration()
-      throws ConfigurationException
-  {
+  protected void initializeConfiguration() {
     if (getApplicationConfiguration().getConfigurationModel() != null) {
       configure(getApplicationConfiguration());
     }
   }
 
   @Override
-  protected CoreConfiguration<CRouting> wrapConfiguration(Object configuration)
-      throws ConfigurationException
-  {
+  protected CoreConfiguration<CRouting> wrapConfiguration(Object configuration) {
     if (configuration instanceof ApplicationConfiguration) {
       return new CRoutingCoreConfiguration((ApplicationConfiguration) configuration);
     }

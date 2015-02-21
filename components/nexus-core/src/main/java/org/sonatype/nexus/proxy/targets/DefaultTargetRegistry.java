@@ -77,14 +77,14 @@ public class DefaultTargetRegistry
   }
 
   @Override
-  protected void initializeConfiguration() throws ConfigurationException {
+  protected void initializeConfiguration() {
     if (getApplicationConfiguration().getConfigurationModel() != null) {
       configure(getApplicationConfiguration());
     }
   }
 
   @Override
-  protected CoreConfiguration<List<CRepositoryTarget>> wrapConfiguration(Object configuration) throws ConfigurationException {
+  protected CoreConfiguration<List<CRepositoryTarget>> wrapConfiguration(Object configuration) {
     if (configuration instanceof ApplicationConfiguration) {
       return new CRepositoryTargetCoreConfiguration((ApplicationConfiguration) configuration);
     }
@@ -94,7 +94,7 @@ public class DefaultTargetRegistry
   }
 
   @Override
-  protected void doConfigure() throws ConfigurationException {
+  protected void doConfigure() {
     super.doConfigure();
     // rebuild the view
     rebuildView();
@@ -168,7 +168,7 @@ public class DefaultTargetRegistry
   }
 
   @Override
-  public synchronized boolean addRepositoryTarget(Target target) throws ConfigurationException {
+  public synchronized boolean addRepositoryTarget(Target target) {
     CRepositoryTarget cnf = convert(target);
     validate(cnf);
     removeRepositoryTarget(cnf.getId(), true);

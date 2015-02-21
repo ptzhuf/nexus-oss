@@ -16,7 +16,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.nexus.security.user.NoSuchUserManagerException;
 import org.sonatype.nexus.security.user.User;
@@ -53,7 +52,7 @@ public class UserAccountManagerImpl
 
   @Override
   public User updateAccount(User user)
-      throws ConfigurationException, UserNotFoundException, NoSuchUserManagerException, AuthorizationException
+    throws UserNotFoundException, NoSuchUserManagerException, AuthorizationException
   {
     checkPermission(user.getUserId());
 

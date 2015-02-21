@@ -17,7 +17,6 @@ import java.io.File;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.configuration.model.CRemoteAuthentication;
 import org.sonatype.nexus.proxy.repository.ClientSSLRemoteAuthenticationSettings;
 import org.sonatype.nexus.proxy.repository.NtlmRemoteAuthenticationSettings;
@@ -32,9 +31,7 @@ public class DefaultAuthenticationInfoConverter
     implements AuthenticationInfoConverter
 {
   @Override
-  public RemoteAuthenticationSettings convertAndValidateFromModel(CRemoteAuthentication model)
-      throws ConfigurationException
-  {
+  public RemoteAuthenticationSettings convertAndValidateFromModel(CRemoteAuthentication model) {
     if (model != null) {
       doValidate(model);
 
@@ -103,10 +100,7 @@ public class DefaultAuthenticationInfoConverter
 
   // ==
 
-  protected void doValidate(CRemoteAuthentication model)
-      throws ConfigurationException
-  {
+  protected void doValidate(CRemoteAuthentication model) {
     // FIXME: implement me
   }
-
 }

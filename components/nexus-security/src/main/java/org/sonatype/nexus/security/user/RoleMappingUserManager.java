@@ -14,7 +14,6 @@ package org.sonatype.nexus.security.user;
 
 import java.util.Set;
 
-import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.security.role.RoleIdentifier;
 
 /**
@@ -33,6 +32,5 @@ public interface RoleMappingUserManager
   /**
    * Sets a users roles.
    */
-  void setUsersRoles(String userId, String userSource, Set<RoleIdentifier> roleIdentifiers)
-      throws UserNotFoundException, ConfigurationException;
+  void setUsersRoles(String userId, String userSource, Set<RoleIdentifier> roleIdentifiers) throws UserNotFoundException;
 }

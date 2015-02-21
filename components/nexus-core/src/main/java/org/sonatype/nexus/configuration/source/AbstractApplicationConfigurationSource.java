@@ -61,7 +61,7 @@ public abstract class AbstractApplicationConfigurationSource
     this.configuration = configuration;
   }
 
-  protected void loadConfiguration(final URL url) throws IOException, ConfigurationException {
+  protected void loadConfiguration(final URL url) throws IOException {
     log.info("Loading configuration: {}", url);
 
     try (InputStream is = url.openStream()) {

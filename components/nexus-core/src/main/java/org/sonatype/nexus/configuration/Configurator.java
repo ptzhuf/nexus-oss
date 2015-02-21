@@ -12,8 +12,6 @@
  */
 package org.sonatype.nexus.configuration;
 
-import org.sonatype.nexus.common.throwables.ConfigurationException;
-
 /**
  * A component responsible for "apply" (config -> repo) and "prepare" (repo -> config) steps for all those config
  * elements that does not map directly to a model and some extra processing is needed.
@@ -25,8 +23,7 @@ public interface Configurator<T, C extends CoreConfiguration>
   /**
    * Will apply the configuration parameters from coreConfiguratuin to the target.
    */
-  void applyConfiguration(T target, ApplicationConfiguration configuration, C coreConfiguration)
-      throws ConfigurationException;
+  void applyConfiguration(T target, ApplicationConfiguration configuration, C coreConfiguration);
 
   /**
    * Will prepare model for save, by syncing it with target state (if needed).

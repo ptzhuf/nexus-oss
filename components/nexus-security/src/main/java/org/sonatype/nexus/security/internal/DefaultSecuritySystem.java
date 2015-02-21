@@ -245,7 +245,7 @@ public class DefaultSecuritySystem
   // *********************
 
   @Override
-  public User addUser(User user, String password) throws NoSuchUserManagerException, ConfigurationException {
+  public User addUser(User user, String password) throws NoSuchUserManagerException {
     // first save the user
     // this is the UserManager that owns the user
     UserManager userManager = getUserManager(user.getSource());
@@ -279,7 +279,7 @@ public class DefaultSecuritySystem
   }
 
   @Override
-  public User updateUser(User user) throws UserNotFoundException, NoSuchUserManagerException, ConfigurationException {
+  public User updateUser(User user) throws UserNotFoundException, NoSuchUserManagerException {
     // first update the user
     // this is the UserManager that owns the user
     UserManager userManager = getUserManager(user.getSource());
@@ -362,7 +362,7 @@ public class DefaultSecuritySystem
 
   @Override
   public void setUsersRoles(String userId, String source, Set<RoleIdentifier> roleIdentifiers)
-      throws ConfigurationException, UserNotFoundException
+      throws UserNotFoundException
   {
     // TODO: this is a bit sticky, what we really want to do is just expose the RoleMappingUserManagers this way (i
     // think), maybe this is too generic
@@ -559,7 +559,7 @@ public class DefaultSecuritySystem
 
   @Override
   public void changePassword(String userId, String oldPassword, String newPassword)
-      throws UserNotFoundException, InvalidCredentialsException, ConfigurationException
+      throws UserNotFoundException, InvalidCredentialsException
   {
     // first authenticate the user
     try {
@@ -578,9 +578,7 @@ public class DefaultSecuritySystem
   }
 
   @Override
-  public void changePassword(String userId, String newPassword)
-      throws UserNotFoundException, ConfigurationException
-  {
+  public void changePassword(String userId, String newPassword) throws UserNotFoundException {
     User user = getUser(userId);
 
     try {
@@ -706,7 +704,7 @@ public class DefaultSecuritySystem
   }
 
   @Override
-  public void setRealms(List<String> realms) throws ConfigurationException {
+  public void setRealms(List<String> realms) {
     securitySettingsManager.setRealms(realms);
     securitySettingsManager.save();
 
@@ -733,7 +731,7 @@ public class DefaultSecuritySystem
     return securitySettingsManager.getAnonymousUsername();
   }
 
-  private void setAnonymousUsername(String anonymousUsername) throws ConfigurationException {
+  private void setAnonymousUsername(String anonymousUsername) {
     User user = null;
     try {
       user = getUser(securitySettingsManager.getAnonymousUsername());
@@ -754,7 +752,7 @@ public class DefaultSecuritySystem
     return securitySettingsManager.getAnonymousPassword();
   }
 
-  private void setAnonymousPassword(String anonymousPassword) throws ConfigurationException {
+  private void setAnonymousPassword(String anonymousPassword) {
     User user = null;
     try {
       user = getUser(securitySettingsManager.getAnonymousUsername());
@@ -771,9 +769,7 @@ public class DefaultSecuritySystem
   }
 
   @Override
-  public void setAnonymousAccess(final boolean enabled, final String username, final String password)
-      throws ConfigurationException
-  {
+  public void setAnonymousAccess(final boolean enabled, final String username, final String password) {
     if (enabled) {
       if (Strings.isNullOrEmpty(username) || Strings.isNullOrEmpty(password)) {
         throw new ConfigurationException("Anonymous access is getting enabled without valid username and/or password!");
@@ -839,9 +835,7 @@ public class DefaultSecuritySystem
     // TODO: Save?  ATM relies on setAnonymousAccessEnabled() to save, pita
   }
 
-  private boolean setAnonymousUserEnabled(final String anonymousUsername, final boolean enabled)
-      throws ConfigurationException
-  {
+  private boolean setAnonymousUserEnabled(final String anonymousUsername, final boolean enabled) {
     try {
       final User anonymousUser = getUser(anonymousUsername, UserManager.DEFAULT_SOURCE);
       final UserStatus oldStatus = anonymousUser.getStatus();

@@ -189,18 +189,14 @@ public class DefaultNexusEmailer
   // ==
 
   @Override
-  protected void initializeConfiguration()
-      throws ConfigurationException
-  {
+  protected void initializeConfiguration() {
     if (getApplicationConfiguration().getConfigurationModel() != null) {
       configure(getApplicationConfiguration());
     }
   }
 
   @Override
-  protected CoreConfiguration<CSmtpConfiguration> wrapConfiguration(Object configuration)
-      throws ConfigurationException
-  {
+  protected CoreConfiguration<CSmtpConfiguration> wrapConfiguration(Object configuration) {
     if (configuration instanceof ApplicationConfiguration) {
       return new CSmtpConfigurationCoreConfiguration((ApplicationConfiguration) configuration);
     }
@@ -210,9 +206,7 @@ public class DefaultNexusEmailer
   }
 
   @Override
-  public void doConfigure()
-      throws ConfigurationException
-  {
+  public void doConfigure() {
     super.doConfigure();
 
     configureEmailer();

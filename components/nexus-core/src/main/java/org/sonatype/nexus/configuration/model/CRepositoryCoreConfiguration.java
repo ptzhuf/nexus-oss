@@ -12,7 +12,6 @@
  */
 package org.sonatype.nexus.configuration.model;
 
-import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.common.validation.ValidationMessage;
 import org.sonatype.nexus.common.validation.ValidationResponse;
 import org.sonatype.nexus.configuration.ApplicationConfiguration;
@@ -103,7 +102,7 @@ public class CRepositoryCoreConfiguration
   }
 
   @Override
-  public void validateChanges() throws ConfigurationException {
+  public void validateChanges() {
     super.validateChanges();
     if (getExternalConfiguration() != null) {
       getExternalConfiguration().validateChanges();
@@ -111,7 +110,7 @@ public class CRepositoryCoreConfiguration
   }
 
   @Override
-  public void commitChanges() throws ConfigurationException {
+  public void commitChanges() {
     super.commitChanges();
     if (getExternalConfiguration() != null) {
       getExternalConfiguration().commitChanges();

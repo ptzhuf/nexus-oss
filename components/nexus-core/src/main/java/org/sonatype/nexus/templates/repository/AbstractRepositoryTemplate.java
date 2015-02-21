@@ -90,7 +90,7 @@ public abstract class AbstractRepositoryTemplate
     return configurableRepository;
   }
 
-  public Repository create() throws ConfigurationException, IOException {
+  public Repository create() throws IOException {
     getCoreConfiguration().validateChanges();
 
     // to merge in user changes to CoreConfiguration

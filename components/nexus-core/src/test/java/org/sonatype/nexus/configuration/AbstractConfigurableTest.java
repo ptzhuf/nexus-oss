@@ -12,7 +12,6 @@
  */
 package org.sonatype.nexus.configuration;
 
-import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.sisu.goodies.eventbus.EventBus;
 import org.sonatype.sisu.litmus.testsupport.TestSupport;
 
@@ -42,9 +41,7 @@ public class AbstractConfigurableTest
     AbstractConfigurable configurable = new AbstractConfigurable(eventBus, applicationConfiguration)
     {
       @Override
-      protected CoreConfiguration wrapConfiguration(final Object configuration)
-          throws ConfigurationException
-      {
+      protected CoreConfiguration wrapConfiguration(final Object configuration) {
         return null;
       }
 

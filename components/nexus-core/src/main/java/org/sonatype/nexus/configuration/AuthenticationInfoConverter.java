@@ -12,14 +12,12 @@
  */
 package org.sonatype.nexus.configuration;
 
-import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.configuration.model.CRemoteAuthentication;
 import org.sonatype.nexus.proxy.repository.RemoteAuthenticationSettings;
 
 public interface AuthenticationInfoConverter
 {
-  RemoteAuthenticationSettings convertAndValidateFromModel(CRemoteAuthentication model)
-      throws ConfigurationException;
+  RemoteAuthenticationSettings convertAndValidateFromModel(CRemoteAuthentication model);
 
   CRemoteAuthentication convertToModel(RemoteAuthenticationSettings settings);
 }

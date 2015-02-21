@@ -25,7 +25,6 @@ import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLPeerUnverifiedException;
 
 import org.sonatype.nexus.common.property.SystemPropertiesHelper;
-import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.configuration.model.CRemoteStorage;
 import org.sonatype.nexus.proxy.IllegalOperationException;
 import org.sonatype.nexus.proxy.ItemNotFoundException;
@@ -212,17 +211,13 @@ public abstract class AbstractProxyRepository
   }
 
   @Override
-  protected void doConfigure()
-      throws ConfigurationException
-  {
+  protected void doConfigure() {
     super.doConfigure();
     createRepositoryStatusCheckerThread();
   }
 
   @Override
-  public boolean commitChanges()
-      throws ConfigurationException
-  {
+  public boolean commitChanges() {
     boolean result = super.commitChanges();
 
     if (result) {

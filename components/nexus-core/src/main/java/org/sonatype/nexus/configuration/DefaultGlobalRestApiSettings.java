@@ -33,18 +33,14 @@ public class DefaultGlobalRestApiSettings
   }
 
   @Override
-  protected void initializeConfiguration()
-      throws ConfigurationException
-  {
+  protected void initializeConfiguration() {
     if (getApplicationConfiguration().getConfigurationModel() != null) {
       configure(getApplicationConfiguration());
     }
   }
 
   @Override
-  protected CoreConfiguration<CRestApiSettings> wrapConfiguration(Object configuration)
-      throws ConfigurationException
-  {
+  protected CoreConfiguration<CRestApiSettings> wrapConfiguration(Object configuration) {
     if (configuration instanceof ApplicationConfiguration) {
       return new CGlobalRestApiCoreConfiguration((ApplicationConfiguration) configuration);
     }

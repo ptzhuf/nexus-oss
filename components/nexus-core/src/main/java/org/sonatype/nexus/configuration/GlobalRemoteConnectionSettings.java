@@ -12,15 +12,13 @@
  */
 package org.sonatype.nexus.configuration;
 
-import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.configuration.model.CRemoteConnectionSettings;
 import org.sonatype.nexus.proxy.repository.RemoteConnectionSettings;
 
 public interface GlobalRemoteConnectionSettings
     extends RemoteConnectionSettings
 {
-  RemoteConnectionSettings convertAndValidateFromModel(CRemoteConnectionSettings model)
-      throws ConfigurationException;
+  RemoteConnectionSettings convertAndValidateFromModel(CRemoteConnectionSettings model);
 
   CRemoteConnectionSettings convertToModel(RemoteConnectionSettings settings);
 }

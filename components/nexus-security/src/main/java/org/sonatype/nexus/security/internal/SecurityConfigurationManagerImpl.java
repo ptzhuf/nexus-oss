@@ -25,7 +25,6 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.sonatype.nexus.common.text.Strings2;
-import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.common.validation.ValidationMessage;
 import org.sonatype.nexus.common.validation.ValidationResponse;
 import org.sonatype.nexus.common.validation.ValidationResponseException;
@@ -134,13 +133,11 @@ public class SecurityConfigurationManagerImpl
   }
 
   @Override
-  public void createPrivilege(CPrivilege privilege) throws ConfigurationException {
+  public void createPrivilege(CPrivilege privilege) {
     createPrivilege(privilege, initializeContext());
   }
 
-  private void createPrivilege(CPrivilege privilege, SecurityConfigurationValidationContext context)
-      throws ConfigurationException
-  {
+  private void createPrivilege(CPrivilege privilege, SecurityConfigurationValidationContext context) {
     if (context == null) {
       context = initializeContext();
     }
@@ -157,11 +154,11 @@ public class SecurityConfigurationManagerImpl
   }
 
   @Override
-  public void createRole(CRole role) throws ConfigurationException {
+  public void createRole(CRole role) {
     createRole(role, initializeContext());
   }
 
-  private void createRole(CRole role, SecurityConfigurationValidationContext context) throws ConfigurationException {
+  private void createRole(CRole role, SecurityConfigurationValidationContext context) {
     if (context == null) {
       context = initializeContext();
     }
@@ -178,18 +175,16 @@ public class SecurityConfigurationManagerImpl
   }
 
   @Override
-  public void createUser(CUser user, Set<String> roles) throws ConfigurationException {
+  public void createUser(CUser user, Set<String> roles) {
     createUser(user, null, roles, initializeContext());
   }
 
   @Override
-  public void createUser(CUser user, String password, Set<String> roles) throws ConfigurationException {
+  public void createUser(CUser user, String password, Set<String> roles) {
     createUser(user, password, roles, initializeContext());
   }
 
-  private void createUser(CUser user, String password, Set<String> roles, SecurityConfigurationValidationContext context)
-      throws ConfigurationException
-  {
+  private void createUser(CUser user, String password, Set<String> roles, SecurityConfigurationValidationContext context) {
     if (context == null) {
       context = initializeContext();
     }
@@ -278,12 +273,12 @@ public class SecurityConfigurationManagerImpl
   }
 
   @Override
-  public void updatePrivilege(CPrivilege privilege) throws ConfigurationException, NoSuchPrivilegeException {
+  public void updatePrivilege(CPrivilege privilege) throws NoSuchPrivilegeException {
     updatePrivilege(privilege, initializeContext());
   }
 
   private void updatePrivilege(CPrivilege privilege, SecurityConfigurationValidationContext context)
-      throws ConfigurationException, NoSuchPrivilegeException
+      throws NoSuchPrivilegeException
   {
     if (context == null) {
       context = initializeContext();
@@ -301,13 +296,11 @@ public class SecurityConfigurationManagerImpl
   }
 
   @Override
-  public void updateRole(CRole role) throws ConfigurationException, NoSuchRoleException {
+  public void updateRole(CRole role) throws NoSuchRoleException {
     updateRole(role, initializeContext());
   }
 
-  private void updateRole(CRole role, SecurityConfigurationValidationContext context)
-      throws ConfigurationException, NoSuchRoleException
-  {
+  private void updateRole(CRole role, SecurityConfigurationValidationContext context) throws NoSuchRoleException {
     if (context == null) {
       context = initializeContext();
     }
@@ -324,7 +317,7 @@ public class SecurityConfigurationManagerImpl
   }
 
   @Override
-  public void updateUser(CUser user) throws ConfigurationException, UserNotFoundException {
+  public void updateUser(CUser user) throws UserNotFoundException {
     Set<String> roles = Collections.emptySet();
     try {
       roles = readUserRoleMapping(user.getId(), UserManager.DEFAULT_SOURCE).getRoles();
@@ -336,12 +329,12 @@ public class SecurityConfigurationManagerImpl
   }
 
   @Override
-  public void updateUser(CUser user, Set<String> roles) throws ConfigurationException, UserNotFoundException {
+  public void updateUser(CUser user, Set<String> roles) throws UserNotFoundException {
     updateUser(user, roles, initializeContext());
   }
 
   private void updateUser(CUser user, Set<String> roles, SecurityConfigurationValidationContext context)
-      throws ConfigurationException, UserNotFoundException
+      throws UserNotFoundException
   {
     if (context == null) {
       context = initializeContext();
@@ -359,13 +352,11 @@ public class SecurityConfigurationManagerImpl
   }
 
   @Override
-  public void createUserRoleMapping(CUserRoleMapping userRoleMapping) throws ConfigurationException {
+  public void createUserRoleMapping(CUserRoleMapping userRoleMapping) {
     createUserRoleMapping(userRoleMapping, initializeContext());
   }
 
-  private void createUserRoleMapping(CUserRoleMapping userRoleMapping, SecurityConfigurationValidationContext context)
-      throws ConfigurationException
-  {
+  private void createUserRoleMapping(CUserRoleMapping userRoleMapping, SecurityConfigurationValidationContext context) {
     if (context == null) {
       context = this.initializeContext();
     }
@@ -425,14 +416,12 @@ public class SecurityConfigurationManagerImpl
   }
 
   @Override
-  public void updateUserRoleMapping(CUserRoleMapping userRoleMapping)
-      throws ConfigurationException, NoSuchRoleMappingException
-  {
+  public void updateUserRoleMapping(CUserRoleMapping userRoleMapping) throws NoSuchRoleMappingException {
     updateUserRoleMapping(userRoleMapping, initializeContext());
   }
 
   private void updateUserRoleMapping(CUserRoleMapping userRoleMapping, SecurityConfigurationValidationContext context)
-      throws ConfigurationException, NoSuchRoleMappingException
+      throws NoSuchRoleMappingException
   {
     if (context == null) {
       context = initializeContext();

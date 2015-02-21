@@ -12,8 +12,6 @@
  */
 package org.sonatype.nexus.configuration;
 
-import org.sonatype.nexus.common.throwables.ConfigurationException;
-
 /**
  * A Configurable component.
  *
@@ -30,7 +28,7 @@ public interface Configurable<C>
    * Sets the configuration object and calls configure(). A shortcut for setCurrentConfiguration(config) and then
    * configure() calls.
    */
-  void configure(Object config) throws ConfigurationException;
+  void configure(Object config);
 
   /**
    * Returns true if there are some unsaved changes.
@@ -40,7 +38,7 @@ public interface Configurable<C>
   /**
    * Commits the changes. Resets the state of config "back to normal" (saved).
    */
-  boolean commitChanges() throws ConfigurationException;
+  boolean commitChanges();
 
   /**
    * Rollbacks the changes. Resets the state of config "back to normal" (saved).

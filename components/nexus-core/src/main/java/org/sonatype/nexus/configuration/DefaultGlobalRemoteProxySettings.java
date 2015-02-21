@@ -31,8 +31,6 @@ import org.sonatype.nexus.proxy.repository.DefaultRemoteProxySettings;
 import org.sonatype.nexus.proxy.repository.RemoteHttpProxySettings;
 import org.sonatype.sisu.goodies.eventbus.EventBus;
 
-import com.google.common.base.Throwables;
-
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -54,9 +52,7 @@ public class DefaultGlobalRemoteProxySettings
   }
 
   @Override
-  protected CoreConfiguration<CRemoteProxySettings> wrapConfiguration(Object configuration)
-      throws ConfigurationException
-  {
+  protected CoreConfiguration<CRemoteProxySettings> wrapConfiguration(Object configuration) {
     if (configuration instanceof ApplicationConfiguration) {
       return new CRemoteProxySettingsCoreConfiguration((ApplicationConfiguration) configuration);
     }
@@ -70,12 +66,7 @@ public class DefaultGlobalRemoteProxySettings
   @Override
   public RemoteHttpProxySettings getHttpProxySettings() {
     if (isEnabled()) {
-      try {
-        return convertFromModel(getCurrentConfiguration(false).getHttpProxySettings());
-      }
-      catch (ConfigurationException e) {
-        throw Throwables.propagate(e);
-      }
+      return convertFromModel(getCurrentConfiguration(false).getHttpProxySettings());
     }
 
     return null;
@@ -92,12 +83,7 @@ public class DefaultGlobalRemoteProxySettings
   @Override
   public RemoteHttpProxySettings getHttpsProxySettings() {
     if (isEnabled()) {
-      try {
-        return convertFromModel(getCurrentConfiguration(false).getHttpsProxySettings());
-      }
-      catch (ConfigurationException e) {
-        throw Throwables.propagate(e);
-      }
+      return convertFromModel(getCurrentConfiguration(false).getHttpsProxySettings());
     }
 
     return null;
@@ -136,9 +122,7 @@ public class DefaultGlobalRemoteProxySettings
     return DefaultRemoteProxySettings.getRemoteHttpProxySettingsFor(url, this);
   }
 
-  private RemoteHttpProxySettings convertFromModel(CRemoteHttpProxySettings model)
-      throws ConfigurationException
-  {
+  private RemoteHttpProxySettings convertFromModel(CRemoteHttpProxySettings model) {
     if (model == null) {
       return null;
     }
@@ -183,9 +167,7 @@ public class DefaultGlobalRemoteProxySettings
   }
 
   @Override
-  public boolean commitChanges()
-      throws ConfigurationException
-  {
+  public boolean commitChanges() {
     boolean wasDirty = super.commitChanges();
 
     if (wasDirty) {
@@ -194,5 +176,4 @@ public class DefaultGlobalRemoteProxySettings
 
     return wasDirty;
   }
-
 }

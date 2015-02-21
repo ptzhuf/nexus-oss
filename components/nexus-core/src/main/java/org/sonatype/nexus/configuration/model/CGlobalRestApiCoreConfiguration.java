@@ -12,7 +12,6 @@
  */
 package org.sonatype.nexus.configuration.model;
 
-import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.configuration.ApplicationConfiguration;
 
 public class CGlobalRestApiCoreConfiguration
@@ -41,9 +40,7 @@ public class CGlobalRestApiCoreConfiguration
   }
 
   @Override
-  public void commitChanges()
-      throws ConfigurationException
-  {
+  public void commitChanges() {
     if (nullified) {
       // nullified, nothing to validate and the super.commitChanges() will not work
       getApplicationConfiguration().getConfigurationModel().setRestApi(null);

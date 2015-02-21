@@ -15,7 +15,6 @@ package org.sonatype.nexus.security;
 import java.util.List;
 import java.util.Set;
 
-import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.security.authz.AuthorizationManager;
 import org.sonatype.nexus.security.authz.NoSuchAuthorizationManagerException;
 import org.sonatype.nexus.security.privilege.Privilege;
@@ -139,7 +138,7 @@ public interface SecuritySystem
    * @param password The users initial password.
    * @return The User that was just created.
    */
-  User addUser(User user, String password) throws NoSuchUserManagerException, ConfigurationException;
+  User addUser(User user, String password) throws NoSuchUserManagerException;
 
   /**
    * Get a User by id and source.
@@ -166,7 +165,7 @@ public interface SecuritySystem
    * @param user User to be updated.
    * @return The User that was just updated.
    */
-  User updateUser(User user) throws UserNotFoundException, NoSuchUserManagerException, ConfigurationException;
+  User updateUser(User user) throws UserNotFoundException, NoSuchUserManagerException;
 
   /**
    * Remove a user based on the Id.
@@ -192,8 +191,7 @@ public interface SecuritySystem
    * @param sourceId        The sourceId where the user is located.
    * @param roleIdentifiers The list of roles to give the user.
    */
-  void setUsersRoles(String userId, String sourceId, Set<RoleIdentifier> roleIdentifiers)
-      throws UserNotFoundException, ConfigurationException;
+  void setUsersRoles(String userId, String sourceId, Set<RoleIdentifier> roleIdentifiers) throws UserNotFoundException;
 
   /**
    * Retrieve all Users . NOTE: This could be slow if there lots of users coming from external realms (a database).
@@ -216,7 +214,7 @@ public interface SecuritySystem
    * @param newPassword The user's new password.
    */
   void changePassword(String userId, String oldPassword, String newPassword)
-      throws UserNotFoundException, InvalidCredentialsException, ConfigurationException;
+      throws UserNotFoundException, InvalidCredentialsException;
 
   /**
    * Updates a users password. NOTE: This method does not require the old password to be known, it is meant for
@@ -225,7 +223,7 @@ public interface SecuritySystem
    * @param userId      The id of the user.
    * @param newPassword The user's new password.
    */
-  void changePassword(String userId, String newPassword) throws UserNotFoundException, ConfigurationException;
+  void changePassword(String userId, String newPassword) throws UserNotFoundException;
 
   // *********************
   // * Authorization Management
@@ -254,7 +252,7 @@ public interface SecuritySystem
   /**
    * Set the currently configured realms.
    */
-  void setRealms(List<String> realms) throws ConfigurationException;
+  void setRealms(List<String> realms);
 
   /**
    * Returns the configured shiro SecurityManager
@@ -265,7 +263,7 @@ public interface SecuritySystem
   // Anonymous
   //
 
-  void setAnonymousAccess(boolean enabled, String username, String password) throws ConfigurationException;
+  void setAnonymousAccess(boolean enabled, String username, String password);
 
   boolean isAnonymousAccessEnabled();
 

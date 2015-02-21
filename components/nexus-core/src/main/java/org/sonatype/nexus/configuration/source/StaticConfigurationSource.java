@@ -18,7 +18,6 @@ import java.net.URL;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.configuration.model.Configuration;
 
 /**
@@ -33,7 +32,7 @@ public class StaticConfigurationSource
     extends AbstractApplicationConfigurationSource
 {
   @Override
-  public Configuration loadConfiguration() throws ConfigurationException, IOException {
+  public Configuration loadConfiguration() throws IOException {
     URL url = getClass().getResource("/META-INF/nexus/nexus.xml");
     if (url == null) {
       log.info("No edition-specific configuration found, falling back to Core default configuration.");

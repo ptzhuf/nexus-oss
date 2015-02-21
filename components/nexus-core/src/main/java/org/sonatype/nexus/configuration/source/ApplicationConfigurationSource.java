@@ -14,7 +14,6 @@ package org.sonatype.nexus.configuration.source;
 
 import java.io.IOException;
 
-import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.configuration.model.Configuration;
 
 /**
@@ -32,5 +31,5 @@ public interface ApplicationConfigurationSource
 
   void setConfiguration(Configuration configuration);
 
-  Configuration loadConfiguration() throws ConfigurationException, IOException;
+  Configuration loadConfiguration() throws IOException;
 }

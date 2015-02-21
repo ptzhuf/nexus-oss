@@ -12,7 +12,6 @@
  */
 package org.sonatype.nexus.security.authz;
 
-import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.security.privilege.NoSuchPrivilegeException;
 import org.sonatype.nexus.security.privilege.Privilege;
 import org.sonatype.nexus.security.role.NoSuchRoleException;
@@ -31,13 +30,13 @@ public abstract class AbstractReadOnlyAuthorizationManager
   }
 
   @Override
-  public Privilege addPrivilege(Privilege privilege) throws ConfigurationException {
+  public Privilege addPrivilege(Privilege privilege) {
     throwException();
     return null;
   }
 
   @Override
-  public Role addRole(Role role) throws ConfigurationException {
+  public Role addRole(Role role) {
     throwException();
     return null;
   }
@@ -53,13 +52,13 @@ public abstract class AbstractReadOnlyAuthorizationManager
   }
 
   @Override
-  public Privilege updatePrivilege(Privilege privilege) throws NoSuchPrivilegeException, ConfigurationException {
+  public Privilege updatePrivilege(Privilege privilege) throws NoSuchPrivilegeException {
     throwException();
     return null;
   }
 
   @Override
-  public Role updateRole(Role role) throws NoSuchRoleException, ConfigurationException {
+  public Role updateRole(Role role) throws NoSuchRoleException {
     throwException();
     return null;
   }

@@ -12,8 +12,6 @@
  */
 package org.sonatype.nexus.security.user;
 
-import org.sonatype.nexus.common.throwables.ConfigurationException;
-
 /**
  * An abstract UserManager, that just throws exceptions for all the write methods.
  *
@@ -29,7 +27,7 @@ public abstract class AbstractReadOnlyUserManager
   }
 
   @Override
-  public User addUser(User user, String password) throws ConfigurationException {
+  public User addUser(User user, String password) {
     throwException();
     return null;
   }
@@ -45,7 +43,7 @@ public abstract class AbstractReadOnlyUserManager
   }
 
   @Override
-  public User updateUser(User user) throws UserNotFoundException, ConfigurationException {
+  public User updateUser(User user) throws UserNotFoundException {
     throwException();
     return null;
   }

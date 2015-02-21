@@ -17,7 +17,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.common.validation.ValidationResponse;
 import org.sonatype.nexus.common.validation.ValidationResponseException;
 import org.sonatype.nexus.configuration.ApplicationConfiguration;
@@ -72,9 +71,7 @@ public abstract class AbstractXpp3DomExternalConfigurationHolder
     }
   }
 
-  public final void validate(ApplicationConfiguration applicationConfiguration, CoreConfiguration owner)
-      throws ConfigurationException
-  {
+  public final void validate(ApplicationConfiguration applicationConfiguration, CoreConfiguration owner) {
     checkValidationResponse(doValidateChanges(applicationConfiguration, owner, configuration));
   }
 

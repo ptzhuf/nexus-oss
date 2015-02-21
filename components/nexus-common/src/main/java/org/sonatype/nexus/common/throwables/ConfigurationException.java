@@ -23,7 +23,7 @@ package org.sonatype.nexus.common.throwables;
  */
 @Deprecated
 public class ConfigurationException
-    extends Exception
+    extends RuntimeException
 {
   public ConfigurationException() {
   }

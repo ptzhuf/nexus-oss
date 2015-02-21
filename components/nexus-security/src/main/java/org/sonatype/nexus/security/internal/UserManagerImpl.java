@@ -20,7 +20,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.nexus.security.config.CRole;
 import org.sonatype.nexus.security.config.CUser;
@@ -165,7 +164,7 @@ public class UserManagerImpl
   }
 
   @Override
-  public User addUser(final User user, String password) throws ConfigurationException {
+  public User addUser(final User user, String password) {
     final CUser secUser = this.toUser(user);
     secUser.setPassword(this.hashPassword(password));
 
@@ -176,16 +175,14 @@ public class UserManagerImpl
   }
 
   @Override
-  public void changePassword(final String userId, final String newPassword)
-    throws UserNotFoundException, ConfigurationException
-  {
+  public void changePassword(final String userId, final String newPassword) throws UserNotFoundException {
     final CUser secUser = configuration.readUser(userId);
     secUser.setPassword(hashPassword(newPassword));
     configuration.updateUser(secUser);
   }
 
   @Override
-  public User updateUser(final User user) throws UserNotFoundException, ConfigurationException {
+  public User updateUser(final User user) throws UserNotFoundException {
     // we need to pull the users password off off the old user object
     CUser oldSecUser = configuration.readUser(user.getUserId());
     CUser newSecUser = toUser(user);
@@ -270,7 +267,7 @@ public class UserManagerImpl
 
   @Override
   public void setUsersRoles(final String userId, final String userSource, final Set<RoleIdentifier> roleIdentifiers)
-      throws UserNotFoundException, ConfigurationException
+      throws UserNotFoundException
   {
     // delete if no roleIdentifiers
     if (roleIdentifiers == null || roleIdentifiers.isEmpty()) {

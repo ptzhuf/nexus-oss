@@ -14,7 +14,6 @@ package org.sonatype.nexus.security.authz;
 
 import java.util.Set;
 
-import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.security.privilege.NoSuchPrivilegeException;
 import org.sonatype.nexus.security.privilege.Privilege;
 import org.sonatype.nexus.security.role.NoSuchRoleException;
@@ -49,12 +48,12 @@ public interface AuthorizationManager
   /**
    * Adds a role to this AuthorizationManager.
    */
-  Role addRole(Role role) throws ConfigurationException;
+  Role addRole(Role role);
 
   /**
    * Updates a role in this AuthorizationManager.
    */
-  Role updateRole(Role role) throws NoSuchRoleException, ConfigurationException;
+  Role updateRole(Role role) throws NoSuchRoleException;
 
   /**
    * Removes a role in this AuthorizationManager.
@@ -76,12 +75,12 @@ public interface AuthorizationManager
   /**
    * Adds a Privilege to this AuthorizationManager.
    */
-  Privilege addPrivilege(Privilege privilege) throws ConfigurationException;
+  Privilege addPrivilege(Privilege privilege);
 
   /**
    * Updates a Privilege in this AuthorizationManager.
    */
-  Privilege updatePrivilege(Privilege privilege) throws NoSuchPrivilegeException, ConfigurationException;
+  Privilege updatePrivilege(Privilege privilege) throws NoSuchPrivilegeException;
 
   /**
    * Removes a Privilege in this AuthorizationManager.

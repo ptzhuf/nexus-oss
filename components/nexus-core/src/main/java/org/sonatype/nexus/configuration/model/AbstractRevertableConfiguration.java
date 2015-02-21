@@ -106,13 +106,13 @@ public abstract class AbstractRevertableConfiguration<C>
     return isThisDirty();
   }
 
-  public void validateChanges() throws ConfigurationException {
+  public void validateChanges() {
     if (isThisDirty()) {
       checkValidationResponse(doValidateChanges(getChangedConfiguration()));
     }
   }
 
-  public synchronized void commitChanges() throws ConfigurationException {
+  public synchronized void commitChanges() {
     if (isThisDirty()) {
       try {
         checkValidationResponse(doValidateChanges(getChangedConfiguration()));

@@ -57,9 +57,9 @@ public abstract class AbstractProxyRepositoryConfigurator
   }
 
   @Override
-  public void doApplyConfiguration(Repository repository, ApplicationConfiguration configuration,
+  public void doApplyConfiguration(Repository repository,
+                                   ApplicationConfiguration configuration,
                                    CRepositoryCoreConfiguration coreConfig)
-      throws ConfigurationException
   {
     super.doApplyConfiguration(repository, configuration, coreConfig);
 
@@ -167,7 +167,6 @@ public abstract class AbstractProxyRepositoryConfigurator
   private RemoteRepositoryStorage getRemoteRepositoryStorage(final String repoId,
                                                              final String remoteUrl,
                                                              final String provider)
-      throws ConfigurationException
   {
     try {
       final String mungledHint = remoteProviderHintFactory.getRoleHint(remoteUrl, provider);

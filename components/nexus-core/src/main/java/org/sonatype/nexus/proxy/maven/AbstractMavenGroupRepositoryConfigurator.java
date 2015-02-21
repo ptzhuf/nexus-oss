@@ -12,7 +12,6 @@
  */
 package org.sonatype.nexus.proxy.maven;
 
-import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.configuration.ApplicationConfiguration;
 import org.sonatype.nexus.configuration.model.CRepositoryCoreConfiguration;
 import org.sonatype.nexus.proxy.repository.AbstractGroupRepositoryConfigurator;
@@ -22,9 +21,9 @@ public abstract class AbstractMavenGroupRepositoryConfigurator
     extends AbstractGroupRepositoryConfigurator
 {
   @Override
-  protected void doApplyConfiguration(Repository repository, ApplicationConfiguration configuration,
+  protected void doApplyConfiguration(Repository repository,
+                                      ApplicationConfiguration configuration,
                                       CRepositoryCoreConfiguration coreConfiguration)
-      throws ConfigurationException
   {
     super.doApplyConfiguration(repository, configuration, coreConfiguration);
 

@@ -52,9 +52,7 @@ public abstract class AbstractRepositoryTemplateProvider
     this.repositoryTypeRegistry = checkNotNull(repositoryTypeRegistry);
   }
 
-  protected Repository createRepository(CRepository repository)
-      throws ConfigurationException, IOException
-  {
+  protected Repository createRepository(CRepository repository) throws IOException {
     return getApplicationConfiguration().createRepository(repository);
   }
 
@@ -70,9 +68,7 @@ public abstract class AbstractRepositoryTemplateProvider
     return getTemplates().getTemplates(filters);
   }
 
-  public ManuallyConfiguredRepositoryTemplate createManuallyTemplate(CRepositoryCoreConfiguration configuration)
-      throws ConfigurationException
-  {
+  public ManuallyConfiguredRepositoryTemplate createManuallyTemplate(CRepositoryCoreConfiguration configuration) {
     final CRepository repoConfig = configuration.getConfiguration(false);
 
     RepositoryTypeDescriptor rtd =

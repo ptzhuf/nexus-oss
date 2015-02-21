@@ -35,9 +35,7 @@ public class DefaultGlobalRemoteConnectionSettings
   }
 
   @Override
-  protected CoreConfiguration<CRemoteConnectionSettings> wrapConfiguration(Object configuration)
-      throws ConfigurationException
-  {
+  protected CoreConfiguration<CRemoteConnectionSettings> wrapConfiguration(Object configuration) {
     if (configuration instanceof ApplicationConfiguration) {
       return new CGlobalRemoteConnectionSettingsCoreConfiguration((ApplicationConfiguration) configuration);
     }
@@ -91,9 +89,7 @@ public class DefaultGlobalRemoteConnectionSettings
   // ==
 
   @Override 
-  public RemoteConnectionSettings convertAndValidateFromModel(CRemoteConnectionSettings model)
-      throws ConfigurationException
-  {
+  public RemoteConnectionSettings convertAndValidateFromModel(CRemoteConnectionSettings model) {
     if (model != null) {
       RemoteConnectionSettings remoteConnectionSettings = new DefaultRemoteConnectionSettings();
       remoteConnectionSettings.setConnectionTimeout(model.getConnectionTimeout());
@@ -123,7 +119,7 @@ public class DefaultGlobalRemoteConnectionSettings
   }
 
   @Override
-  public boolean commitChanges() throws ConfigurationException {
+  public boolean commitChanges() {
     boolean wasDirty = super.commitChanges();
     if (wasDirty) {
       eventBus().post(new GlobalRemoteConnectionSettingsChangedEvent(this));

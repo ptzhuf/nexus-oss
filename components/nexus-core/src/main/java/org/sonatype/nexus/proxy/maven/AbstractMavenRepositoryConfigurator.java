@@ -14,7 +14,6 @@ package org.sonatype.nexus.proxy.maven;
 
 import javax.inject.Inject;
 
-import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.configuration.ApplicationConfiguration;
 import org.sonatype.nexus.configuration.model.CRepositoryCoreConfiguration;
 import org.sonatype.nexus.proxy.repository.AbstractProxyRepositoryConfigurator;
@@ -40,9 +39,9 @@ public abstract class AbstractMavenRepositoryConfigurator
   }
 
   @Override
-  public void doApplyConfiguration(Repository repository, ApplicationConfiguration configuration,
+  public void doApplyConfiguration(Repository repository,
+                                   ApplicationConfiguration configuration,
                                    CRepositoryCoreConfiguration coreConfiguration)
-      throws ConfigurationException
   {
     super.doApplyConfiguration(repository, configuration, coreConfiguration);
 

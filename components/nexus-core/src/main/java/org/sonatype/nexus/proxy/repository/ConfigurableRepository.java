@@ -70,9 +70,7 @@ public class ConfigurableRepository
   }
 
   @Override
-  protected CRepositoryCoreConfiguration wrapConfiguration(Object configuration)
-      throws ConfigurationException
-  {
+  protected CRepositoryCoreConfiguration wrapConfiguration(Object configuration) {
     if (configuration instanceof CRepository) {
       return new CRepositoryCoreConfiguration(getApplicationConfiguration(), (CRepository) configuration,
           getExternalConfigurationHolderFactory());

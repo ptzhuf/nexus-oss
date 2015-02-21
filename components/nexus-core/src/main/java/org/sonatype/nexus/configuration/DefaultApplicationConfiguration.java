@@ -161,7 +161,7 @@ public class DefaultApplicationConfiguration
   }
 
   @Override
-  public void loadConfiguration() throws ConfigurationException, IOException {
+  public void loadConfiguration() throws IOException {
     loadConfiguration(false);
   }
 
@@ -215,9 +215,7 @@ public class DefaultApplicationConfiguration
   }
 
   @Override
-  public synchronized void loadConfiguration(boolean force)
-      throws ConfigurationException, IOException
-  {
+  public synchronized void loadConfiguration(boolean force) throws IOException {
     if (force || configurationSource.getConfiguration() == null) {
       log.info("Loading Nexus Configuration...");
 
@@ -407,7 +405,7 @@ public class DefaultApplicationConfiguration
   // Booting
 
   @Override
-  public void createInternals() throws ConfigurationException {
+  public void createInternals() {
     createRepositories();
   }
 
@@ -416,7 +414,7 @@ public class DefaultApplicationConfiguration
     dropRepositories();
   }
 
-  private void createRepositories() throws ConfigurationException {
+  private void createRepositories() {
     List<CRepository> reposes = getConfigurationModel().getRepositories();
 
     for (CRepository repo : reposes) {
@@ -444,9 +442,7 @@ public class DefaultApplicationConfiguration
     }
   }
 
-  private Repository instantiateRepository(final Configuration configuration, final CRepository repositoryModel)
-      throws ConfigurationException
-  {
+  private Repository instantiateRepository(final Configuration configuration, final CRepository repositoryModel) {
     try {
       // core realm will search child/plugin realms too
       final Class<Repository> klazz = (Class<Repository>) uberClassLoader.loadClass(repositoryModel.getProviderRole());
@@ -458,7 +454,7 @@ public class DefaultApplicationConfiguration
     }
   }
 
-  private Repository createRepository(Class<? extends Repository> type, String name) throws ConfigurationException {
+  private Repository createRepository(Class<? extends Repository> type, String name) {
     try {
       final Provider<? extends Repository> rp =
           beanLocator.locate(Key.get(type, Names.named(name))).iterator().next().getProvider();
@@ -473,7 +469,6 @@ public class DefaultApplicationConfiguration
                                            final Class<? extends Repository> klazz,
                                            final String name,
                                            final CRepository repositoryModel)
-      throws ConfigurationException
   {
     checkRepositoryMaxInstanceCountForCreation(klazz, name, repositoryModel);
 
@@ -568,9 +563,9 @@ public class DefaultApplicationConfiguration
     }
   }
 
-  private void checkRepositoryMaxInstanceCountForCreation(Class<? extends Repository> klazz, String name,
-                                                            CRepository repositoryModel)
-      throws ConfigurationException
+  private void checkRepositoryMaxInstanceCountForCreation(Class<? extends Repository> klazz,
+                                                          String name,
+                                                          CRepository repositoryModel)
   {
     RepositoryTypeDescriptor rtd =
         repositoryTypeRegistry.getRepositoryTypeDescriptor(klazz, name);
@@ -611,9 +606,7 @@ public class DefaultApplicationConfiguration
 
   // CRepository: CRUD
 
-  private void validateRepository(CRepository settings, boolean create)
-      throws ConfigurationException
-  {
+  private void validateRepository(CRepository settings, boolean create) {
     ApplicationValidationContext ctx = getRepositoryValidationContext();
 
     if (!create && !Strings.isNullOrEmpty(settings.getId())) {
@@ -629,9 +622,7 @@ public class DefaultApplicationConfiguration
   }
 
   @Override
-  public synchronized Repository createRepository(CRepository settings)
-      throws ConfigurationException, IOException
-  {
+  public synchronized Repository createRepository(CRepository settings) throws IOException {
     validateRepository(settings, true);
 
     // create it, will do runtime validation
@@ -648,14 +639,14 @@ public class DefaultApplicationConfiguration
 
   @Override
   public void deleteRepository(String id)
-      throws NoSuchRepositoryException, IOException, ConfigurationException, AccessDeniedException
+      throws NoSuchRepositoryException, IOException, AccessDeniedException
   {
     deleteRepository(id, false);
   }
 
   @Override
   public synchronized void deleteRepository(String id, boolean force)
-      throws NoSuchRepositoryException, IOException, ConfigurationException, AccessDeniedException
+      throws NoSuchRepositoryException, IOException, AccessDeniedException
   {
     Repository repository = repositoryRegistry.getRepository(id);
 

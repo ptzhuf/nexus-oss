@@ -12,7 +12,6 @@
  */
 package org.sonatype.nexus.proxy.repository;
 
-import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.common.validation.ValidationMessage;
 import org.sonatype.nexus.common.validation.ValidationResponse;
 import org.sonatype.nexus.common.validation.ValidationResponseException;
@@ -26,9 +25,9 @@ public abstract class AbstractShadowRepositoryConfigurator
 {
 
   @Override
-  public void doApplyConfiguration(Repository repository, ApplicationConfiguration configuration,
+  public void doApplyConfiguration(Repository repository,
+                                   ApplicationConfiguration configuration,
                                    CRepositoryCoreConfiguration coreConfig)
-      throws ConfigurationException
   {
     // Shadows are read only
     repository.setWritePolicy(RepositoryWritePolicy.READ_ONLY);

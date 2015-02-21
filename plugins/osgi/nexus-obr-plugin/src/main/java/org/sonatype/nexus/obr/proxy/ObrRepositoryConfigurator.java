@@ -29,9 +29,9 @@ public class ObrRepositoryConfigurator
     extends AbstractProxyRepositoryConfigurator
 {
   @Override
-  public void doApplyConfiguration(final Repository repository, final ApplicationConfiguration configuration,
+  public void doApplyConfiguration(final Repository repository,
+                                   final ApplicationConfiguration configuration,
                                    final CRepositoryCoreConfiguration coreConfig)
-      throws ConfigurationException
   {
     repository.setIndexable(false);
 

@@ -70,9 +70,7 @@ public abstract class AbstractConfigurable<C>
     return coreConfiguration != null && coreConfiguration.getConfiguration(false) != null;
   }
 
-  protected void initializeConfiguration()
-      throws ConfigurationException
-  {
+  protected void initializeConfiguration() {
     // someone needs this, someone not
     // for example, whoever is configured using framework, will not need this,
     // but we still have components on their own, like DefaultTaskConfigManager
@@ -137,9 +135,7 @@ public abstract class AbstractConfigurable<C>
   }
 
   @Override
-  public final void configure(Object config)
-      throws ConfigurationException
-  {
+  public final void configure(Object config) {
     this.coreConfiguration = wrapConfiguration(config);
 
     // "pull" the config to make it dirty
@@ -155,9 +151,7 @@ public abstract class AbstractConfigurable<C>
     return cc != null && cc.isDirty();
   }
 
-  protected void prepareForSave()
-      throws ConfigurationException
-  {
+  protected void prepareForSave() {
     if (isDirty()) {
       getCurrentCoreConfiguration().validateChanges();
 
@@ -169,9 +163,7 @@ public abstract class AbstractConfigurable<C>
   }
 
   @Override
-  public boolean commitChanges()
-      throws ConfigurationException
-  {
+  public boolean commitChanges() {
     if (isDirty()) {
       doConfigure();
       return true;
@@ -195,9 +187,7 @@ public abstract class AbstractConfigurable<C>
 
   // ==
 
-  protected void doConfigure()
-      throws ConfigurationException
-  {
+  protected void doConfigure() {
     // 1st, validate
     getCurrentCoreConfiguration().validateChanges();
 
@@ -241,7 +231,5 @@ public abstract class AbstractConfigurable<C>
     return getCurrentCoreConfiguration().getConfiguration(forWrite);
   }
 
-  protected abstract CoreConfiguration<C> wrapConfiguration(Object configuration)
-      throws ConfigurationException;
-
+  protected abstract CoreConfiguration<C> wrapConfiguration(Object configuration);
 }

@@ -21,7 +21,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.security.authz.AuthorizationConfigurationChanged;
 import org.sonatype.nexus.security.authz.AuthorizationManager;
 import org.sonatype.nexus.security.config.CPrivilege;
@@ -181,7 +180,7 @@ public class AuthorizationManagerImpl
   }
 
   @Override
-  public Role addRole(Role role) throws ConfigurationException {
+  public Role addRole(Role role) {
     // the roleId of the secRole might change, so we need to keep the reference
     final CRole secRole = this.convert(role);
 
@@ -194,7 +193,7 @@ public class AuthorizationManagerImpl
   }
 
   @Override
-  public Role updateRole(Role role) throws NoSuchRoleException, ConfigurationException {
+  public Role updateRole(Role role) throws NoSuchRoleException {
     final CRole secRole = this.convert(role);
 
     configuration.updateRole(secRole);
@@ -235,7 +234,7 @@ public class AuthorizationManagerImpl
   }
 
   @Override
-  public Privilege addPrivilege(Privilege privilege) throws ConfigurationException {
+  public Privilege addPrivilege(Privilege privilege) {
     final CPrivilege secPriv = this.convert(privilege);
     // create implies read, so we need to add logic for that
     addInheritedPrivileges(secPriv);
@@ -249,7 +248,7 @@ public class AuthorizationManagerImpl
   }
 
   @Override
-  public Privilege updatePrivilege(Privilege privilege) throws NoSuchPrivilegeException, ConfigurationException {
+  public Privilege updatePrivilege(Privilege privilege) throws NoSuchPrivilegeException {
     final CPrivilege secPriv = this.convert(privilege);
 
     configuration.updatePrivilege(secPriv);

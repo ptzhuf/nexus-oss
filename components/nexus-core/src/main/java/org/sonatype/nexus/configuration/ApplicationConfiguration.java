@@ -15,7 +15,6 @@ package org.sonatype.nexus.configuration;
 import java.io.File;
 import java.io.IOException;
 
-import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.configuration.model.CRepository;
 import org.sonatype.nexus.configuration.model.Configuration;
 import org.sonatype.nexus.proxy.AccessDeniedException;
@@ -79,17 +78,17 @@ public interface ApplicationConfiguration
   Configuration getConfigurationModel();
 
   // FIXME: Only used by tests
-  void loadConfiguration() throws ConfigurationException, IOException;
+  void loadConfiguration() throws IOException;
 
   /**
    * Explicit loading of configuration. Enables to force reloading of config.
    */
-  void loadConfiguration(boolean forceReload) throws ConfigurationException, IOException;
+  void loadConfiguration(boolean forceReload) throws IOException;
 
   /**
    * Creates internals like reposes configured in nexus.xml. Called on startup.
    */
-  void createInternals() throws ConfigurationException;
+  void createInternals();
 
   /**
    * Cleanups the internals, like on shutdown.
@@ -122,7 +121,7 @@ public interface ApplicationConfiguration
    *
    * @return the repository instance.
    */
-  Repository createRepository(CRepository settings) throws ConfigurationException, IOException;
+  Repository createRepository(CRepository settings) throws IOException;
 
   /**
    * Drops a user managed repository.
@@ -130,7 +129,7 @@ public interface ApplicationConfiguration
    * @see #deleteRepository(String, boolean)
    */
   void deleteRepository(String id)
-      throws NoSuchRepositoryException, IOException, ConfigurationException, AccessDeniedException;
+      throws NoSuchRepositoryException, IOException, AccessDeniedException;
 
   /**
    * Drops a repository, can only delete user managed repository unless force parameter is {@code true}.
@@ -138,5 +137,5 @@ public interface ApplicationConfiguration
    * @throws AccessDeniedException when try to delete a non-user-managed repository and without force enabled
    */
   void deleteRepository(String id, boolean force)
-      throws NoSuchRepositoryException, IOException, ConfigurationException, AccessDeniedException;
+      throws NoSuchRepositoryException, IOException, AccessDeniedException;
 }

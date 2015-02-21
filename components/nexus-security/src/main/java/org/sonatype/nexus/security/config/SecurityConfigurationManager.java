@@ -15,7 +15,6 @@ package org.sonatype.nexus.security.config;
 import java.util.List;
 import java.util.Set;
 
-import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.security.privilege.NoSuchPrivilegeException;
 import org.sonatype.nexus.security.role.NoSuchRoleException;
 import org.sonatype.nexus.security.user.NoSuchRoleMappingException;
@@ -51,22 +50,22 @@ public interface SecurityConfigurationManager
   /**
    * Create a new user.
    */
-  void createUser(CUser user, Set<String> roles) throws ConfigurationException;
+  void createUser(CUser user, Set<String> roles);
 
   /**
    * Create a new user and sets the password.
    */
-  void createUser(CUser user, String password, Set<String> roles) throws ConfigurationException;
+  void createUser(CUser user, String password, Set<String> roles);
 
   /**
    * Create a new role
    */
-  void createRole(CRole role) throws ConfigurationException;
+  void createRole(CRole role);
 
   /**
    * Create a new privilege
    */
-  void createPrivilege(CPrivilege privilege) throws ConfigurationException;
+  void createPrivilege(CPrivilege privilege);
 
   /**
    * Retrieve an existing user
@@ -88,22 +87,21 @@ public interface SecurityConfigurationManager
    *
    * @param user to update
    */
-  void updateUser(CUser user) throws ConfigurationException, UserNotFoundException;
+  void updateUser(CUser user) throws UserNotFoundException;
 
   /**
    * Update an existing user and their roles
    */
-  void updateUser(CUser user, Set<String> roles) throws ConfigurationException, UserNotFoundException;
+  void updateUser(CUser user, Set<String> roles) throws UserNotFoundException;
 
   /**
    * Update an existing role
    */
-  void updateRole(CRole role) throws ConfigurationException, NoSuchRoleException;
+  void updateRole(CRole role) throws NoSuchRoleException;
 
-  void createUserRoleMapping(CUserRoleMapping userRoleMapping) throws ConfigurationException;
+  void createUserRoleMapping(CUserRoleMapping userRoleMapping);
 
-  void updateUserRoleMapping(CUserRoleMapping userRoleMapping)
-      throws ConfigurationException, NoSuchRoleMappingException;
+  void updateUserRoleMapping(CUserRoleMapping userRoleMapping) throws NoSuchRoleMappingException;
 
   CUserRoleMapping readUserRoleMapping(String userId, String source) throws NoSuchRoleMappingException;
 
@@ -114,7 +112,7 @@ public interface SecurityConfigurationManager
   /**
    * Update an existing privilege
    */
-  void updatePrivilege(CPrivilege privilege) throws ConfigurationException, NoSuchPrivilegeException;
+  void updatePrivilege(CPrivilege privilege) throws NoSuchPrivilegeException;
 
   /**
    * Delete an existing user

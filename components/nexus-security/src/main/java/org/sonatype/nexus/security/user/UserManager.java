@@ -14,8 +14,6 @@ package org.sonatype.nexus.security.user;
 
 import java.util.Set;
 
-import org.sonatype.nexus.common.throwables.ConfigurationException;
-
 import org.apache.shiro.realm.Realm;
 
 /**
@@ -53,12 +51,12 @@ public interface UserManager
   /**
    * Add a user.
    */
-  User addUser(User user, String password) throws ConfigurationException;
+  User addUser(User user, String password);
 
   /**
    * Update a user.
    */
-  User updateUser(User user) throws UserNotFoundException, ConfigurationException;
+  User updateUser(User user) throws UserNotFoundException;
 
   /**
    * Delete a user based on id.
@@ -78,5 +76,5 @@ public interface UserManager
   /**
    * Update a users password.
    */
-  void changePassword(String userId, String newPassword) throws UserNotFoundException, ConfigurationException;
+  void changePassword(String userId, String newPassword) throws UserNotFoundException;
 }

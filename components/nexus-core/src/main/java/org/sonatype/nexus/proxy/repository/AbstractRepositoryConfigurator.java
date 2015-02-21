@@ -56,7 +56,6 @@ public abstract class AbstractRepositoryConfigurator
   public final void applyConfiguration(final Repository target,
                                        final ApplicationConfiguration configuration,
                                        final CRepositoryCoreConfiguration config)
-      throws ConfigurationException
   {
     doApplyConfiguration(target, configuration, config);
   }
@@ -69,9 +68,9 @@ public abstract class AbstractRepositoryConfigurator
     doPrepareForSave(target, configuration, config);
   }
 
-  protected void doApplyConfiguration(Repository repository, ApplicationConfiguration configuration,
+  protected void doApplyConfiguration(Repository repository,
+                                      ApplicationConfiguration configuration,
                                       CRepositoryCoreConfiguration coreConfiguration)
-      throws ConfigurationException
   {
     // Setting common things on a repository
 
@@ -140,7 +139,8 @@ public abstract class AbstractRepositoryConfigurator
     }
   }
 
-  protected void doPrepareForSave(Repository repository, ApplicationConfiguration configuration,
+  protected void doPrepareForSave(Repository repository,
+                                  ApplicationConfiguration configuration,
                                   CRepositoryCoreConfiguration coreConfiguration)
   {
     // Setting common things on a repository
@@ -152,7 +152,7 @@ public abstract class AbstractRepositoryConfigurator
     return repositoryRegistry;
   }
 
-  private LocalRepositoryStorage getLocalRepositoryStorage(String repoId, String provider) throws ConfigurationException {
+  private LocalRepositoryStorage getLocalRepositoryStorage(String repoId, String provider) {
     final LocalRepositoryStorage result = localRepositoryStorages.get(provider);
     if (result != null) {
       return result;

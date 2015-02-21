@@ -23,7 +23,6 @@ import javax.inject.Singleton;
 
 import org.sonatype.nexus.SystemStatus;
 import org.sonatype.nexus.common.io.DirSupport;
-import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.common.validation.ValidationMessage;
 import org.sonatype.nexus.common.validation.ValidationResponse;
 import org.sonatype.nexus.common.validation.ValidationResponseException;
@@ -75,7 +74,7 @@ public class FileConfigurationSource
   }
 
   @Override
-  public Configuration loadConfiguration() throws ConfigurationException, IOException {
+  public Configuration loadConfiguration() throws IOException {
     if (!configurationFile.exists()) {
       log.info("Installing default configuration");
       setConfiguration(nexusDefaults.loadConfiguration());

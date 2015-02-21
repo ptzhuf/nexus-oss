@@ -100,16 +100,14 @@ public class DefaultRequestRepositoryMapper
   // ==
 
   @Override
-  protected void initializeConfiguration() throws ConfigurationException {
+  protected void initializeConfiguration() {
     if (getApplicationConfiguration().getConfigurationModel() != null) {
       configure(getApplicationConfiguration());
     }
   }
 
   @Override
-  protected CoreConfiguration<CRepositoryGrouping> wrapConfiguration(Object configuration)
-      throws ConfigurationException
-  {
+  protected CoreConfiguration<CRepositoryGrouping> wrapConfiguration(Object configuration) {
     if (configuration instanceof ApplicationConfiguration) {
       return new CRepositoryGroupingCoreConfiguration((ApplicationConfiguration) configuration);
     }
@@ -119,7 +117,7 @@ public class DefaultRequestRepositoryMapper
   }
 
   @Override
-  public boolean commitChanges() throws ConfigurationException {
+  public boolean commitChanges() {
     boolean wasDirty = super.commitChanges();
     if (wasDirty) {
       compiled = false;
@@ -390,7 +388,7 @@ public class DefaultRequestRepositoryMapper
   // ==
 
   @Override
-  public boolean addMapping(RepositoryPathMapping mapping) throws ConfigurationException {
+  public boolean addMapping(RepositoryPathMapping mapping) {
     removeMapping(mapping.getId());
 
     CPathMappingItem pathItem = convert(mapping);
