@@ -202,6 +202,10 @@ public class OrientSecurityConfigurationSource
   private class OrientSecurityConfiguration
       implements SecurityConfiguration
   {
+    private ConcurrentModificationException concurrentlyModified(final String type, final String value) {
+      throw new ConcurrentModificationException(type + " '" + value + "' updated in the meantime");
+    }
+
     @Override
     public List<CUser> getUsers() {
       log.trace("Retrieving all users");
@@ -249,7 +253,7 @@ public class OrientSecurityConfigurationSource
           throw new UserNotFoundException(user.getId());
         }
         if (user.getVersion() != null && !Objects.equals(user.getVersion(), valueOf(document.getVersion()))) {
-          throw new ConcurrentModificationException("User " + user.getId() + " updated in the meantime");
+          throw concurrentlyModified("User", user.getId());
         }
         userEntityAdapter.write(document, user);
 
@@ -262,7 +266,7 @@ public class OrientSecurityConfigurationSource
         }
       }
       catch (OConcurrentModificationException e) {
-        throw new ConcurrentModificationException("User " + user.getId() + " updated in the meantime");
+        throw concurrentlyModified("User", user.getId());
       }
     }
 
@@ -279,7 +283,7 @@ public class OrientSecurityConfigurationSource
         return false;
       }
       catch (OConcurrentModificationException e) {
-        throw new ConcurrentModificationException("User " + id + " updated in the meantime");
+        throw concurrentlyModified("User", id);
       }
     }
 
@@ -332,12 +336,12 @@ public class OrientSecurityConfigurationSource
           throw new NoSuchRoleMappingException(mapping.getUserId());
         }
         if (mapping.getVersion() != null && !Objects.equals(mapping.getVersion(), valueOf(document.getVersion()))) {
-          throw new ConcurrentModificationException("User " + mapping.getUserId() + " role mappings updated in the meantime");
+          throw concurrentlyModified("User-role mapping", mapping.getUserId());
         }
         userRoleMappingEntityAdapter.write(document, mapping);
       }
       catch (OConcurrentModificationException e) {
-        throw new ConcurrentModificationException("User " + mapping.getUserId() + " role mappings updated in the meantime");
+        throw concurrentlyModified("User-role mapping", mapping.getUserId());
       }
     }
 
@@ -351,7 +355,7 @@ public class OrientSecurityConfigurationSource
         return userRoleMappingEntityAdapter.delete(db, userId, source);
       }
       catch (OConcurrentModificationException e) {
-        throw new ConcurrentModificationException("User " + userId + " role mappings updated in the meantime");
+        throw concurrentlyModified("User-role mapping", userId);
       }
     }
 
@@ -401,12 +405,12 @@ public class OrientSecurityConfigurationSource
           throw new NoSuchPrivilegeException(privilege.getId());
         }
         if (privilege.getVersion() != null && !Objects.equals(privilege.getVersion(), valueOf(document.getVersion()))) {
-          throw new ConcurrentModificationException("Privilege " + privilege.getId() + " updated in the meantime");
+          throw concurrentlyModified("Privilege", privilege.getId());
         }
         privilegeEntityAdapter.write(document, privilege);
       }
       catch (OConcurrentModificationException e) {
-        throw new ConcurrentModificationException("Privilege " + privilege.getId() + " updated in the meantime");
+        throw concurrentlyModified("Privilege", privilege.getId());
       }
     }
 
@@ -419,7 +423,7 @@ public class OrientSecurityConfigurationSource
         return privilegeEntityAdapter.delete(db, id);
       }
       catch (OConcurrentModificationException e) {
-        throw new ConcurrentModificationException("Privilege " + id + " updated in the meantime");
+        throw concurrentlyModified("Privilege", id);
       }
     }
 
@@ -469,12 +473,12 @@ public class OrientSecurityConfigurationSource
           throw new NoSuchRoleException(role.getId());
         }
         if (role.getVersion() != null && !Objects.equals(role.getVersion(), valueOf(document.getVersion()))) {
-          throw new ConcurrentModificationException("Role " + role.getId() + " updated in the meantime");
+          throw concurrentlyModified("Role", role.getId());
         }
         roleEntityAdapter.write(document, role);
       }
       catch (OConcurrentModificationException e) {
-        throw new ConcurrentModificationException("Role " + role.getId() + " updated in the meantime");
+        throw concurrentlyModified("Role", role.getId());
       }
     }
 
@@ -487,7 +491,7 @@ public class OrientSecurityConfigurationSource
         return roleEntityAdapter.delete(db, id);
       }
       catch (OConcurrentModificationException e) {
-        throw new ConcurrentModificationException("Role " + id + " updated in the meantime");
+        throw concurrentlyModified("Role", id);
       }
     }
 
