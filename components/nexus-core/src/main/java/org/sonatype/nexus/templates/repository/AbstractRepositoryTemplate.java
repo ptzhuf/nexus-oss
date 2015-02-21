@@ -15,6 +15,7 @@ package org.sonatype.nexus.templates.repository;
 import java.io.IOException;
 
 import org.sonatype.nexus.common.throwables.ConfigurationException;
+import org.sonatype.nexus.common.validation.ValidationResponseException;
 import org.sonatype.nexus.configuration.model.CRepositoryCoreConfiguration;
 import org.sonatype.nexus.proxy.registry.ContentClass;
 import org.sonatype.nexus.proxy.repository.ConfigurableRepository;
@@ -78,9 +79,10 @@ public abstract class AbstractRepositoryTemplate
       configurableRepository = new ConfigurableRepository(getTemplateProvider().getApplicationConfiguration());
 
       try {
+        // FIXME: This will always throw validation exceptions
         configurableRepository.configure(getCoreConfiguration());
       }
-      catch (Exception e) {
+      catch (ConfigurationException | ValidationResponseException e) {
         // will not happen, since ConfigurableRepository will not validate!
         // TODO: get rid of this exception from here
       }
