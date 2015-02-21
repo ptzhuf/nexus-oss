@@ -24,12 +24,4 @@ public class UserNotFoundTransientException
   public UserNotFoundTransientException(final String userId, final String message, final Throwable cause) {
     super(userId, message, cause);
   }
-
-  public UserNotFoundTransientException(final String userId, final String message) {
-    super(userId, message);
-  }
-
-  public UserNotFoundTransientException(final String userId) {
-    super(userId);
-  }
 }

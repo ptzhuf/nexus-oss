@@ -255,12 +255,10 @@ public class OrientSecurityConfigurationSource
       try (ODatabaseDocumentTx db = openDb()) {
         ODocument document = userEntityAdapter.get(db, user.getId());
         if (document == null) {
-          throw new UserNotFoundException("User " + user.getId() + " not found");
+          throw new UserNotFoundException(user.getId());
         }
         if (user.getVersion() != null && !Objects.equals(user.getVersion(), valueOf(document.getVersion()))) {
-          throw new ConcurrentModificationException(
-              "User " + user.getId() + " updated in the meantime"
-          );
+          throw new ConcurrentModificationException("User " + user.getId() + " updated in the meantime");
         }
         userEntityAdapter.write(document, user);
 
@@ -354,7 +352,7 @@ public class OrientSecurityConfigurationSource
       try (ODatabaseDocumentTx db = openDb()) {
         ODocument document = userRoleMappingEntityAdapter.get(db, mapping.getUserId(), mapping.getSource());
         if (document == null) {
-          throw new NoSuchRoleMappingException("User " + mapping.getUserId() + " role mappings not found");
+          throw new NoSuchRoleMappingException(mapping.getUserId());
         }
         if (mapping.getVersion() != null && !Objects.equals(mapping.getVersion(), valueOf(document.getVersion()))) {
           throw new ConcurrentModificationException(
@@ -439,19 +437,15 @@ public class OrientSecurityConfigurationSource
       try (ODatabaseDocumentTx db = openDb()) {
         ODocument document = privilegeEntityAdapter.get(db, privilege.getId());
         if (document == null) {
-          throw new NoSuchPrivilegeException("Privilege " + privilege.getId() + " not found");
+          throw new NoSuchPrivilegeException(privilege.getId());
         }
         if (privilege.getVersion() != null && !Objects.equals(privilege.getVersion(), valueOf(document.getVersion()))) {
-          throw new ConcurrentModificationException(
-              "Privilege " + privilege.getId() + " updated in the meantime"
-          );
+          throw new ConcurrentModificationException("Privilege " + privilege.getId() + " updated in the meantime");
         }
         privilegeEntityAdapter.write(document, privilege);
       }
       catch (OConcurrentModificationException e) {
-        throw new ConcurrentModificationException(
-            "Privilege " + privilege.getId() + " updated in the meantime"
-        );
+        throw new ConcurrentModificationException("Privilege " + privilege.getId() + " updated in the meantime");
       }
     }
 
@@ -466,9 +460,7 @@ public class OrientSecurityConfigurationSource
         return privilegeEntityAdapter.delete(db, id);
       }
       catch (OConcurrentModificationException e) {
-        throw new ConcurrentModificationException(
-            "Privilege " + id + " updated in the meantime"
-        );
+        throw new ConcurrentModificationException("Privilege " + id + " updated in the meantime");
       }
     }
 
@@ -523,19 +515,15 @@ public class OrientSecurityConfigurationSource
       try (ODatabaseDocumentTx db = openDb()) {
         ODocument document = roleEntityAdapter.get(db, role.getId());
         if (document == null) {
-          throw new NoSuchRoleException("Role " + role.getId() + " not found");
+          throw new NoSuchRoleException(role.getId());
         }
         if (role.getVersion() != null && !Objects.equals(role.getVersion(), valueOf(document.getVersion()))) {
-          throw new ConcurrentModificationException(
-              "Role " + role.getId() + " updated in the meantime"
-          );
+          throw new ConcurrentModificationException("Role " + role.getId() + " updated in the meantime");
         }
         roleEntityAdapter.write(document, role);
       }
       catch (OConcurrentModificationException e) {
-        throw new ConcurrentModificationException(
-            "Role " + role.getId() + " updated in the meantime"
-        );
+        throw new ConcurrentModificationException("Role " + role.getId() + " updated in the meantime");
       }
     }
 
@@ -550,9 +538,7 @@ public class OrientSecurityConfigurationSource
         return roleEntityAdapter.delete(db, id);
       }
       catch (OConcurrentModificationException e) {
-        throw new ConcurrentModificationException(
-            "Role " + id + " updated in the meantime"
-        );
+        throw new ConcurrentModificationException("Role " + id + " updated in the meantime");
       }
     }
 

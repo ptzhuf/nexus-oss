@@ -96,7 +96,7 @@ public class MemorySecurityConfiguration
     checkNotNull(user, "user");
     checkNotNull(user.getId(), "user id");
     if (users.replace(user.getId(), user) == null) {
-      throw new UserNotFoundException("User " + user.getId() + " not found");
+      throw new UserNotFoundException(user.getId());
     }
 
     CUserRoleMapping mapping = new CUserRoleMapping();
@@ -159,7 +159,7 @@ public class MemorySecurityConfiguration
     checkNotNull(mapping.getUserId(), "user id");
     checkNotNull(mapping.getSource(), "source");
     if (userRoleMappings.replace(userRoleMappingKey(mapping.getUserId(), mapping.getSource()), mapping) == null) {
-      throw new NoSuchRoleMappingException("User " + mapping.getUserId() + " role mappings not found");
+      throw new NoSuchRoleMappingException(mapping.getUserId());
     }
   }
 
@@ -202,7 +202,7 @@ public class MemorySecurityConfiguration
     checkNotNull(privilege, "privilege");
     checkNotNull(privilege.getId(), "privilege id");
     if (privileges.replace(privilege.getId(), privilege) == null) {
-      throw new NoSuchPrivilegeException("Privilege " + privilege.getId() + " not found");
+      throw new NoSuchPrivilegeException(privilege.getId());
     }
   }
 
@@ -244,7 +244,7 @@ public class MemorySecurityConfiguration
     checkNotNull(role, "role");
     checkNotNull(role.getId(), "role id");
     if (roles.replace(role.getId(), role) == null) {
-      throw new NoSuchRoleException("Role " + role.getId() + " not found");
+      throw new NoSuchRoleException(role.getId());
     }
   }
 

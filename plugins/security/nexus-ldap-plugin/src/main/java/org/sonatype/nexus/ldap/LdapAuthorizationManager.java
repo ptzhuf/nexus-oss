@@ -89,7 +89,7 @@ public class LdapAuthorizationManager
       String roleName = this.ldapManager.getGroupName(roleId);
 
       if (roleName == null) {
-        throw new NoSuchRoleException("Role: " + roleId + " was not found in LDAP.");
+        throw new NoSuchRoleException(roleId);
       }
 
       Role role = new Role();
@@ -99,11 +99,8 @@ public class LdapAuthorizationManager
 
       return role;
     }
-    catch (LdapDAOException e) {
-      throw new NoSuchRoleException("Role: " + roleId + " was not found in LDAP.", e);
-    }
-    catch (NoSuchLdapGroupException e) {
-      throw new NoSuchRoleException("Role: " + roleId + " was not found in LDAP.", e);
+    catch (LdapDAOException | NoSuchLdapGroupException e) {
+      throw new NoSuchRoleException(roleId, e);
     }
   }
 

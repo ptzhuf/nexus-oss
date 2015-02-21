@@ -167,6 +167,8 @@ public class DefaultSecuritySystem
     // we need to kill caches on stop
     securityManager.destroy();
     // cacheManagerComponent.shutdown();
+
+    // FIXME: We never set started=false ?!
   }
 
   @Override
@@ -203,15 +205,15 @@ public class DefaultSecuritySystem
 
   @Override
   public Set<Role> listRoles() {
-    Set<Role> roles = new HashSet<>();
+    Set<Role> result = new HashSet<>();
     for (AuthorizationManager authzManager : authorizationManagers.values()) {
-      Set<Role> tmpRoles = authzManager.listRoles();
-      if (tmpRoles != null) {
-        roles.addAll(tmpRoles);
+      Set<Role> roles = authzManager.listRoles();
+      if (roles != null) {
+        result.addAll(roles);
       }
     }
 
-    return roles;
+    return result;
   }
 
   @Override
@@ -227,15 +229,15 @@ public class DefaultSecuritySystem
 
   @Override
   public Set<Privilege> listPrivileges() {
-    Set<Privilege> privileges = new HashSet<>();
+    Set<Privilege> result = new HashSet<>();
     for (AuthorizationManager authzManager : authorizationManagers.values()) {
-      Set<Privilege> tmpPrivileges = authzManager.listPrivileges();
-      if (tmpPrivileges != null) {
-        privileges.addAll(tmpPrivileges);
+      Set<Privilege> privileges = authzManager.listPrivileges();
+      if (privileges != null) {
+        result.addAll(privileges);
       }
     }
 
-    return privileges;
+    return result;
   }
 
   // *********************
@@ -258,17 +260,17 @@ public class DefaultSecuritySystem
     for (UserManager tmpUserManager : getUserManagers()) {
       // skip the user manager that owns the user, we already did that
       // these user managers will only save roles
-      if (!tmpUserManager.getSource().equals(user.getSource())
-          && RoleMappingUserManager.class.isInstance(tmpUserManager)) {
+      if (!tmpUserManager.getSource().equals(user.getSource()) && RoleMappingUserManager.class.isInstance(tmpUserManager)) {
         try {
           RoleMappingUserManager roleMappingUserManager = (RoleMappingUserManager) tmpUserManager;
-          roleMappingUserManager.setUsersRoles(user.getUserId(), user.getSource(),
-              RoleIdentifier.getRoleIdentifiersForSource(user.getSource(),
-                  user.getRoles()));
+          roleMappingUserManager.setUsersRoles(
+              user.getUserId(),
+              user.getSource(),
+              RoleIdentifier.getRoleIdentifiersForSource(user.getSource(), user.getRoles())
+          );
         }
         catch (UserNotFoundException e) {
-          log.debug("User '{}' is not managed by the user-manager: {}",
-              user.getUserId(), tmpUserManager.getSource());
+          log.debug("User '{}' is not managed by the user-manager: {}", user.getUserId(), tmpUserManager.getSource());
         }
       }
     }
@@ -301,13 +303,14 @@ public class DefaultSecuritySystem
           && RoleMappingUserManager.class.isInstance(tmpUserManager)) {
         try {
           RoleMappingUserManager roleMappingUserManager = (RoleMappingUserManager) tmpUserManager;
-          roleMappingUserManager.setUsersRoles(user.getUserId(), user.getSource(),
-              RoleIdentifier.getRoleIdentifiersForSource(user.getSource(),
-                  user.getRoles()));
+          roleMappingUserManager.setUsersRoles(
+              user.getUserId(),
+              user.getSource(),
+              RoleIdentifier.getRoleIdentifiersForSource(user.getSource(), user.getRoles())
+          );
         }
         catch (UserNotFoundException e) {
-          log.debug("User '{}' is not managed by the user-manager: {}",
-              user.getUserId(), tmpUserManager.getSource());
+          log.debug("User '{}' is not managed by the user-manager: {}", user.getUserId(), tmpUserManager.getSource());
         }
       }
     }
@@ -359,19 +362,19 @@ public class DefaultSecuritySystem
 
     boolean foundUser = false;
 
-    for (UserManager tmpUserManager : getUserManagers()) {
-      if (RoleMappingUserManager.class.isInstance(tmpUserManager)) {
-        RoleMappingUserManager roleMappingUserManager = (RoleMappingUserManager) tmpUserManager;
+    for (UserManager userManager : getUserManagers()) {
+      if (RoleMappingUserManager.class.isInstance(userManager)) {
+        RoleMappingUserManager roleMappingUserManager = (RoleMappingUserManager) userManager;
         try {
           foundUser = true;
-          roleMappingUserManager.setUsersRoles(userId,
+          roleMappingUserManager.setUsersRoles(
+              userId,
               source,
-              RoleIdentifier.getRoleIdentifiersForSource(tmpUserManager.getSource(),
-                  roleIdentifiers));
+              RoleIdentifier.getRoleIdentifiersForSource(userManager.getSource(), roleIdentifiers)
+          );
         }
         catch (UserNotFoundException e) {
-          log.debug("User '{}' is not managed by the user-manager: {}",
-              userId, tmpUserManager.getSource());
+          log.debug("User '{}' is not managed by the user-manager: {}", userId, userManager.getSource());
         }
       }
     }
@@ -436,38 +439,38 @@ public class DefaultSecuritySystem
 
   @Override
   public Set<User> listUsers() {
-    Set<User> users = new HashSet<>();
+    Set<User> result = new HashSet<>();
 
-    for (UserManager tmpUserManager : getUserManagers()) {
-      users.addAll(tmpUserManager.listUsers());
+    for (UserManager userManager : getUserManagers()) {
+      result.addAll(userManager.listUsers());
     }
 
     // now add all the roles to the users
-    for (User user : users) {
+    for (User user : result) {
       // add roles from other user managers
       addOtherRolesToUser(user);
     }
 
-    return users;
+    return result;
   }
 
   @Override
   public Set<User> searchUsers(UserSearchCriteria criteria) {
-    Set<User> users = new HashSet<>();
+    Set<User> result = new HashSet<>();
 
     // if the source is not set search all realms.
     if (Strings2.isEmpty(criteria.getSource())) {
       // search all user managers
-      for (UserManager tmpUserManager : getUserManagers()) {
-        Set<User> result = tmpUserManager.searchUsers(criteria);
-        if (result != null) {
-          users.addAll(result);
+      for (UserManager userManager : getUserManagers()) {
+        Set<User> users = userManager.searchUsers(criteria);
+        if (users != null) {
+          result.addAll(users);
         }
       }
     }
     else {
       try {
-        users.addAll(getUserManager(criteria.getSource()).searchUsers(criteria));
+        result.addAll(getUserManager(criteria.getSource()).searchUsers(criteria));
       }
       catch (NoSuchUserManagerException e) {
         log.warn("UserManager: {} was not found.", criteria.getSource(), e);
@@ -475,12 +478,12 @@ public class DefaultSecuritySystem
     }
 
     // now add all the roles to the users
-    for (User user : users) {
+    for (User user : result) {
       // add roles from other user managers
       addOtherRolesToUser(user);
     }
 
-    return users;
+    return result;
   }
 
   /**
@@ -525,24 +528,21 @@ public class DefaultSecuritySystem
     return orderedLocators;
   }
 
-  private void addOtherRolesToUser(User user) {
+  private void addOtherRolesToUser(final User user) {
     // then save the users Roles
-    for (UserManager tmpUserManager : getUserManagers()) {
+    for (UserManager userManager : getUserManagers()) {
       // skip the user manager that owns the user, we already did that
       // these user managers will only have roles
-      if (!tmpUserManager.getSource().equals(user.getSource())
-          && RoleMappingUserManager.class.isInstance(tmpUserManager)) {
+      if (!userManager.getSource().equals(user.getSource()) && RoleMappingUserManager.class.isInstance(userManager)) {
         try {
-          RoleMappingUserManager roleMappingUserManager = (RoleMappingUserManager) tmpUserManager;
-          Set<RoleIdentifier> roleIdentifiers =
-              roleMappingUserManager.getUsersRoles(user.getUserId(), user.getSource());
+          RoleMappingUserManager roleMappingUserManager = (RoleMappingUserManager) userManager;
+          Set<RoleIdentifier> roleIdentifiers = roleMappingUserManager.getUsersRoles(user.getUserId(), user.getSource());
           if (roleIdentifiers != null) {
             user.addAllRoles(roleIdentifiers);
           }
         }
         catch (UserNotFoundException e) {
-          log.debug("User '{}' is not managed by the user-manager: {}",
-              user.getUserId(), tmpUserManager.getSource());
+          log.debug("User '{}' is not managed by the user-manager: {}", user.getUserId(), userManager.getSource());
         }
       }
     }
@@ -551,7 +551,7 @@ public class DefaultSecuritySystem
   @Override
   public AuthorizationManager getAuthorizationManager(String source) throws NoSuchAuthorizationManagerException {
     if (!authorizationManagers.containsKey(source)) {
-      throw new NoSuchAuthorizationManagerException("AuthorizationManager with source: '" + source + "' could not be found.");
+      throw new NoSuchAuthorizationManagerException(source);
     }
 
     return authorizationManagers.get(source);
@@ -601,7 +601,7 @@ public class DefaultSecuritySystem
 
   private UserManager getUserManager(final String source) throws NoSuchUserManagerException {
     if (!userManagers.containsKey(source)) {
-      throw new NoSuchUserManagerException("UserManager with source: '" + source + "' could not be found.");
+      throw new NoSuchUserManagerException(source);
     }
     return userManagers.get(source);
   }
@@ -675,19 +675,18 @@ public class DefaultSecuritySystem
   }
 
   private Collection<Realm> getRealmsFromConfigSource() {
-    List<Realm> realms = new ArrayList<>();
-
+    List<Realm> result = new ArrayList<>();
     List<String> realmIds = securitySettingsManager.getRealms();
 
     for (String realmId : realmIds) {
       if (realmMap.containsKey(realmId)) {
-        realms.add(realmMap.get(realmId));
+        result.add(realmMap.get(realmId));
       }
       else {
         log.debug("Failed to look up realm as a component, trying reflection");
         // If that fails, will simply use reflection to load
         try {
-          realms.add((Realm) getClass().getClassLoader().loadClass(realmId).newInstance());
+          result.add((Realm) getClass().getClassLoader().loadClass(realmId).newInstance());
         }
         catch (Exception e) {
           log.error("Unable to lookup security realms", e);
@@ -695,7 +694,7 @@ public class DefaultSecuritySystem
       }
     }
 
-    return realms;
+    return result;
   }
 
   @Override

@@ -387,15 +387,15 @@ public class SecurityConfigurationManagerImpl
 
   private void logValidationWarnings(final ValidationResponse vr) {
     final List<ValidationMessage> validationWarnings = vr.getValidationWarnings();
-    if (validationWarnings != null && validationWarnings.size() > 0) {
-      final StringBuilder sb = new StringBuilder();
+    if (validationWarnings.size() > 0) {
+      final StringBuilder buff = new StringBuilder();
       for (ValidationMessage msg : validationWarnings) {
-        if (sb.length() >= 0) {
-          sb.append(",");
+        if (buff.length() >= 0) {
+          buff.append(",");
         }
-        sb.append(" ").append(msg.toString());
+        buff.append(" ").append(msg.toString());
       }
-      log.warn("Security configuration has validation warnings:" + sb.toString());
+      log.warn("Security configuration has validation warnings: {}", buff);
     }
   }
 
@@ -406,7 +406,7 @@ public class SecurityConfigurationManagerImpl
       return mapping;
     }
     else {
-      throw new NoSuchRoleMappingException("No User Role Mapping for user: " + userId);
+      throw new NoSuchRoleMappingException(userId);
     }
   }
 
@@ -449,7 +449,7 @@ public class SecurityConfigurationManagerImpl
     boolean found = getDefaultConfiguration().removeUserRoleMapping(userId, source);
 
     if (!found) {
-      throw new NoSuchRoleMappingException("No User Role Mapping for user: " + userId);
+      throw new NoSuchRoleMappingException(userId);
     }
   }
 

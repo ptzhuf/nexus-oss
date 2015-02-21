@@ -92,7 +92,7 @@ public class SimpleAuthorizationManager
         return role;
       }
     }
-    throw new NoSuchRoleException("Role '" + roleId + "' not found.");
+    throw new NoSuchRoleException(roleId);
   }
 
   @Override

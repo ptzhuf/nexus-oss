@@ -24,10 +24,6 @@ public class UserNotFoundException
     super(buildMessage(userId, message), cause);
   }
 
-  public UserNotFoundException(final String userId, final String message) {
-    super(buildMessage(userId, message));
-  }
-
   public UserNotFoundException(final String userId) {
     super(buildMessage(userId, ""));
   }

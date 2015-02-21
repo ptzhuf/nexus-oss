@@ -48,7 +48,7 @@ public class MockAuthorizationManager
         return role;
       }
     }
-    throw new NoSuchRoleException("Role: " + roleId + " could not be found.");
+    throw new NoSuchRoleException(roleId);
   }
 
   @Override
@@ -58,6 +58,6 @@ public class MockAuthorizationManager
 
   @Override
   public Privilege getPrivilege(String privilegeId) throws NoSuchPrivilegeException {
-    throw new NoSuchPrivilegeException("Privilege: " + privilegeId + " could not be found.");
+    throw new NoSuchPrivilegeException(privilegeId);
   }
 }
