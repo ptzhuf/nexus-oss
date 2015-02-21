@@ -23,15 +23,15 @@ public class NoSuchRoleMappingException
   public NoSuchRoleMappingException() {
   }
 
-  public NoSuchRoleMappingException(String message, Throwable cause) {
+  public NoSuchRoleMappingException(final String message, final Throwable cause) {
     super(message, cause);
   }
 
-  public NoSuchRoleMappingException(String message) {
+  public NoSuchRoleMappingException(final String message) {
     super(message);
   }
 
-  public NoSuchRoleMappingException(Throwable cause) {
+  public NoSuchRoleMappingException(final Throwable cause) {
     super(cause);
   }
 }

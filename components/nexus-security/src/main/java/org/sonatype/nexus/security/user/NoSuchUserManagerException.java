@@ -23,15 +23,15 @@ public class NoSuchUserManagerException
   public NoSuchUserManagerException() {
   }
 
-  public NoSuchUserManagerException(String message, Throwable cause) {
+  public NoSuchUserManagerException(final String message, final Throwable cause) {
     super(message, cause);
   }
 
-  public NoSuchUserManagerException(String message) {
+  public NoSuchUserManagerException(final String message) {
     super(message);
   }
 
-  public NoSuchUserManagerException(Throwable cause) {
+  public NoSuchUserManagerException(final Throwable cause) {
     super(cause);
   }
 }

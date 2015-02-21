@@ -13,7 +13,7 @@
 package org.sonatype.nexus.security.user;
 
 /**
- * An abstract UserManager, that just throws exceptions for all the write methods.
+ * Read-only {@link UserManager}, which just throws exceptions for all the write methods.
  *
  * Any call to theses methods should be checked by the <code>supportsWrite()</code> method,
  * so this should never be called.
@@ -27,28 +27,27 @@ public abstract class AbstractReadOnlyUserManager
   }
 
   @Override
-  public User addUser(User user, String password) {
-    throwException();
-    return null;
+  public User addUser(final User user, final String password) {
+    throw unsupported();
   }
 
   @Override
-  public void changePassword(String userId, String newPassword) throws UserNotFoundException {
-    throwException();
+  public void changePassword(final String userId, final String newPassword) throws UserNotFoundException {
+    throw unsupported();
   }
 
   @Override
-  public void deleteUser(String userId) throws UserNotFoundException {
-    throwException();
+  public void deleteUser(final String userId) throws UserNotFoundException {
+    throw unsupported();
   }
 
   @Override
-  public User updateUser(User user) throws UserNotFoundException {
-    throwException();
-    return null;
+  public User updateUser(final User user) throws UserNotFoundException {
+    throw unsupported();
   }
 
-  private void throwException() {
+  private IllegalStateException unsupported() {
+    // TODO: Should probably use UnsupportedOperationException
     throw new IllegalStateException("UserManager: '" + getSource() + "' does not support write operations.");
   }
 }
