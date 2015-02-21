@@ -12,10 +12,7 @@
  */
 package org.sonatype.nexus.security.settings;
 
-import org.sonatype.configuration.validation.ValidationContext;
-
 public class SecuritySettingsValidationContext
-    implements ValidationContext
 {
   private SecuritySettings securitySettings;
 

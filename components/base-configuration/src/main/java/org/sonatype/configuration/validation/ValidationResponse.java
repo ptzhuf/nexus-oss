@@ -43,8 +43,7 @@ public class ValidationResponse
 
   private List<ValidationMessage> validationWarnings;
 
-  // FIXME: Use Object instead of pointless marker interface
-  private ValidationContext context;
+  private Object context;
 
   public boolean isValid() {
     return valid;
@@ -132,12 +131,12 @@ public class ValidationResponse
     setModified(isModified() || response.isModified());
   }
 
-  public void setContext(final @Nullable ValidationContext context) {
+  public void setContext(final @Nullable Object context) {
     this.context = context;
   }
 
   @Nullable
-  public ValidationContext getContext() {
+  public Object getContext() {
     return context;
   }
 }
