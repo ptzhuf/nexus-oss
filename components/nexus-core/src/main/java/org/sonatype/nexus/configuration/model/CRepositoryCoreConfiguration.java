@@ -48,16 +48,16 @@ public class CRepositoryCoreConfiguration
 
   @Override
   protected void copyTransients(CRepository source, CRepository destination) {
-    ((CRepository) destination).setExternalConfiguration(((CRepository) source).getExternalConfiguration());
+    destination.setExternalConfiguration(source.getExternalConfiguration());
 
-    ((CRepository) destination).externalConfigurationImple = ((CRepository) source).externalConfigurationImple;
+    destination.externalConfigurationImple = source.externalConfigurationImple;
 
-    ((CRepository) destination).defaultLocalStorageUrl = ((CRepository) source).defaultLocalStorageUrl;
+    destination.defaultLocalStorageUrl = source.defaultLocalStorageUrl;
 
     // trick with RemoteStorage, which is an object, and XStream will not "overlap" it properly (ie. destionation !=
     // null but source == null)
-    if (((CRepository) source).getRemoteStorage() == null) {
-      ((CRepository) destination).setRemoteStorage(null);
+    if (source.getRemoteStorage() == null) {
+      destination.setRemoteStorage(null);
     }
   }
 
@@ -87,7 +87,7 @@ public class CRepositoryCoreConfiguration
           .createExternalConfigurationHolder(repositoryModel);
     }
 
-    return new DefaultExternalConfiguration<AbstractXpp3DomExternalConfigurationHolder>(getApplicationConfiguration(),
+    return new DefaultExternalConfiguration<>(getApplicationConfiguration(),
         this, (AbstractXpp3DomExternalConfigurationHolder) repositoryModel.externalConfigurationImple);
   }
 
@@ -130,7 +130,7 @@ public class CRepositoryCoreConfiguration
 
   @Override
   public ValidationResponse doValidateChanges(CRepository changedConfiguration) {
-    CRepository cfg = (CRepository) changedConfiguration;
+    CRepository cfg = changedConfiguration;
 
     ValidationResponse response = new ApplicationValidationResponse();
 
