@@ -19,7 +19,6 @@ import javax.inject.Singleton;
 
 import org.sonatype.nexus.common.validation.ValidationResponse;
 import org.sonatype.nexus.security.settings.SecuritySettings;
-import org.sonatype.nexus.security.settings.SecuritySettingsValidationContext;
 import org.sonatype.nexus.security.settings.SecuritySettingsValidator;
 
 @Named
@@ -27,42 +26,24 @@ import org.sonatype.nexus.security.settings.SecuritySettingsValidator;
 public class SecuritySettingsValidatorImpl
     implements SecuritySettingsValidator
 {
-  public ValidationResponse validateModel(SecuritySettingsValidationContext context, SecuritySettings configuration) {
-    ValidationResponse validationResponse = new ValidationResponse();
-    validationResponse.setContext(context);
-
-    validationResponse.append(validateAnonymousUsername(context, configuration.getAnonymousUsername()));
-    validationResponse.append(validateAnonymousPassword(context, configuration.getAnonymousPassword()));
-    validationResponse.append(validateRealms(context, configuration.getRealms()));
-
-    return validationResponse;
+  public ValidationResponse validateModel(final SecuritySettings model) {
+    ValidationResponse response = new ValidationResponse();
+    response.setContext(model);
+    response.append(validateRealms(model, model.getRealms()));
+    return response;
   }
 
-  public ValidationResponse validateAnonymousPassword(SecuritySettingsValidationContext context, String anonymousPassword) {
-    // we are not currently doing anything here
-    ValidationResponse validationResponse = new ValidationResponse();
-    validationResponse.setContext(context);
-    return validationResponse;
-  }
+  public ValidationResponse validateRealms(final SecuritySettings model, List<String> realms) {
+    ValidationResponse response = new ValidationResponse();
+    response.setContext(model);
 
-  public ValidationResponse validateAnonymousUsername(SecuritySettingsValidationContext context, String anonymousUsername) {
-    // we are not currently doing anything here
-    ValidationResponse validationResponse = new ValidationResponse();
-    validationResponse.setContext(context);
-    return validationResponse;
-  }
-
-  public ValidationResponse validateRealms(SecuritySettingsValidationContext context, List<String> realms) {
-    ValidationResponse validationResponse = new ValidationResponse();
-    validationResponse.setContext(context);
-
-    if (context.getSecuritySettings() == null) {
+    if (model == null) {
       if (realms.size() < 1) {
-        validationResponse.addValidationError("Security is enabled, You must have at least one realm enabled.");
+        response.addValidationError("Security is enabled, You must have at least one realm enabled.");
       }
       // TODO: we should also try to load each one to see if it exists
     }
 
-    return validationResponse;
+    return response;
   }
 }

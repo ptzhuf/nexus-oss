@@ -18,11 +18,7 @@ import org.sonatype.nexus.common.validation.ValidationResponse;
 
 public interface SecuritySettingsValidator
 {
-  ValidationResponse validateModel(SecuritySettingsValidationContext context, SecuritySettings model);
+  ValidationResponse validateModel(SecuritySettings model);
 
-  ValidationResponse validateAnonymousUsername(SecuritySettingsValidationContext context, String anonymousUsername);
-
-  ValidationResponse validateAnonymousPassword(SecuritySettingsValidationContext context, String anonymousPassword);
-
-  ValidationResponse validateRealms(SecuritySettingsValidationContext context, List<String> realms);
+  ValidationResponse validateRealms(SecuritySettings model, List<String> realms);
 }

@@ -25,7 +25,6 @@ import org.sonatype.nexus.common.validation.ValidationResponseException;
 import org.sonatype.nexus.security.settings.SecuritySettings;
 import org.sonatype.nexus.security.settings.SecuritySettingsManager;
 import org.sonatype.nexus.security.settings.SecuritySettingsSource;
-import org.sonatype.nexus.security.settings.SecuritySettingsValidationContext;
 import org.sonatype.nexus.security.settings.SecuritySettingsValidator;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
 
@@ -71,12 +70,6 @@ public class SecuritySettingsManagerImpl
     return configuration;
   }
 
-  private SecuritySettingsValidationContext initializeContext() {
-    SecuritySettingsValidationContext context = new SecuritySettingsValidationContext();
-    context.setSecuritySettings(getConfiguration());
-    return context;
-  }
-
   @Override
   public boolean isAnonymousAccessEnabled() {
     return getConfiguration().isAnonymousAccessEnabled();
@@ -94,14 +87,7 @@ public class SecuritySettingsManagerImpl
 
   @Override
   public void setAnonymousPassword(final String password) {
-    ValidationResponse vr = validator.validateAnonymousPassword(initializeContext(), password);
-
-    if (vr.isValid()) {
-      getConfiguration().setAnonymousPassword(password);
-    }
-    else {
-      throw new ValidationResponseException(vr);
-    }
+    getConfiguration().setAnonymousPassword(password);
   }
 
   @Override
@@ -111,14 +97,7 @@ public class SecuritySettingsManagerImpl
 
   @Override
   public void setAnonymousUsername(final String username) {
-    ValidationResponse vr = validator.validateAnonymousUsername(initializeContext(), username);
-
-    if (vr.isValid()) {
-      getConfiguration().setAnonymousUsername(username);
-    }
-    else {
-      throw new ValidationResponseException(vr);
-    }
+    getConfiguration().setAnonymousUsername(username);
   }
 
   @Override
@@ -128,7 +107,7 @@ public class SecuritySettingsManagerImpl
 
   @Override
   public void setRealms(final List<String> realms) {
-    ValidationResponse vr = validator.validateRealms(initializeContext(), realms);
+    ValidationResponse vr = validator.validateRealms(getConfiguration(), realms);
 
     if (vr.isValid()) {
       getConfiguration().setRealms(realms);
