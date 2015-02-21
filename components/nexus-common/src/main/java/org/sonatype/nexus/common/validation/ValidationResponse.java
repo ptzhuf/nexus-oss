@@ -50,7 +50,7 @@ public class ValidationResponse
     return valid;
   }
 
-  public void setValid(boolean valid) {
+  public void setValid(final boolean valid) {
     this.valid = valid;
   }
 
@@ -58,7 +58,7 @@ public class ValidationResponse
     return modified;
   }
 
-  public void setModified(boolean modified) {
+  public void setModified(final boolean modified) {
     this.modified = modified;
   }
 
