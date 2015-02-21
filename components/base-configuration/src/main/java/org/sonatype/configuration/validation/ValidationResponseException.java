@@ -56,13 +56,13 @@ public class ValidationResponseException
     StringBuilder buff = new StringBuilder();
 
     if (super.getMessage() != null) {
-      buff.append(super.getMessage()).append("\n");
+      buff.append(super.getMessage());
     }
 
     // FIXME: Refine this output and ValidationMessage.toString() for sanity
 
     if (!response.getValidationErrors().isEmpty()) {
-      buff.append("Validation errors:\n");
+      buff.append("\nValidation errors:\n");
 
       for (ValidationMessage message : response.getValidationErrors()) {
         buff.append(message);
@@ -71,7 +71,7 @@ public class ValidationResponseException
     }
 
     if (!response.getValidationWarnings().isEmpty()) {
-      buff.append("Validation warnings:\n");
+      buff.append("\nValidation warnings:\n");
 
       for (ValidationMessage message : response.getValidationWarnings()) {
         buff.append(message);
