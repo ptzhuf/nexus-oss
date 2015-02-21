@@ -23,12 +23,12 @@ import org.apache.shiro.authz.annotation.RequiresPermissions
 import org.codehaus.plexus.util.StringUtils
 import org.codehaus.plexus.util.xml.Xpp3Dom
 import org.hibernate.validator.constraints.NotEmpty
-import org.sonatype.configuration.validation.ValidationMessage
-import org.sonatype.configuration.validation.ValidationResponse
-import org.sonatype.configuration.validation.ValidationResponseException
 import org.sonatype.nexus.common.validation.Create
 import org.sonatype.nexus.common.validation.Update
 import org.sonatype.nexus.common.validation.Validate
+import org.sonatype.nexus.common.validation.ValidationMessage
+import org.sonatype.nexus.common.validation.ValidationResponse
+import org.sonatype.nexus.common.validation.ValidationResponseException
 import org.sonatype.nexus.configuration.ApplicationConfiguration
 import org.sonatype.nexus.configuration.model.CLocalStorage
 import org.sonatype.nexus.configuration.model.CRemoteAuthentication

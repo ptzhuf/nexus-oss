@@ -12,7 +12,7 @@
  */
 package org.sonatype.nexus.configuration.validator;
 
-import org.sonatype.configuration.validation.ValidationResponse;
+import org.sonatype.nexus.common.validation.ValidationResponse;
 
 public class ApplicationValidationResponse
     extends ValidationResponse

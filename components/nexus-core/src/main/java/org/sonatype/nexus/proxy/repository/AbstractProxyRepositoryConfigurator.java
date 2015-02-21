@@ -17,9 +17,9 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.sonatype.configuration.ConfigurationException;
-import org.sonatype.configuration.validation.ValidationMessage;
-import org.sonatype.configuration.validation.ValidationResponse;
-import org.sonatype.configuration.validation.ValidationResponseException;
+import org.sonatype.nexus.common.validation.ValidationMessage;
+import org.sonatype.nexus.common.validation.ValidationResponse;
+import org.sonatype.nexus.common.validation.ValidationResponseException;
 import org.sonatype.nexus.configuration.ApplicationConfiguration;
 import org.sonatype.nexus.configuration.AuthenticationInfoConverter;
 import org.sonatype.nexus.configuration.GlobalRemoteConnectionSettings;

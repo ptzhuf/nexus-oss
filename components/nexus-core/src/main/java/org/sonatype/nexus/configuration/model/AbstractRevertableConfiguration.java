@@ -15,8 +15,8 @@ package org.sonatype.nexus.configuration.model;
 import java.util.Collection;
 
 import org.sonatype.configuration.ConfigurationException;
-import org.sonatype.configuration.validation.ValidationResponse;
-import org.sonatype.configuration.validation.ValidationResponseException;
+import org.sonatype.nexus.common.validation.ValidationResponse;
+import org.sonatype.nexus.common.validation.ValidationResponseException;
 import org.sonatype.nexus.configuration.RevertableConfiguration;
 
 import com.thoughtworks.xstream.XStream;

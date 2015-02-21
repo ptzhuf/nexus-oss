@@ -21,8 +21,8 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.sonatype.configuration.ConfigurationException;
-import org.sonatype.configuration.validation.ValidationResponse;
-import org.sonatype.configuration.validation.ValidationResponseException;
+import org.sonatype.nexus.common.validation.ValidationResponse;
+import org.sonatype.nexus.common.validation.ValidationResponseException;
 import org.sonatype.nexus.security.settings.SecuritySettings;
 import org.sonatype.nexus.security.settings.SecuritySettingsManager;
 import org.sonatype.nexus.security.settings.SecuritySettingsSource;

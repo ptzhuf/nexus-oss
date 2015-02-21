@@ -16,8 +16,8 @@ package org.sonatype.nexus.proxy.targets;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.sonatype.configuration.validation.ValidationMessage;
-import org.sonatype.configuration.validation.ValidationResponse;
+import org.sonatype.nexus.common.validation.ValidationMessage;
+import org.sonatype.nexus.common.validation.ValidationResponse;
 import org.sonatype.nexus.security.config.CPrivilege;
 import org.sonatype.nexus.security.config.SecurityConfigurationValidationContext;
 import org.sonatype.nexus.security.privilege.AbstractPrivilegeDescriptor;

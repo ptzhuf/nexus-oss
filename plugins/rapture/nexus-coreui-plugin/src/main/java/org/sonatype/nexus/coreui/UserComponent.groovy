@@ -22,13 +22,13 @@ import org.apache.shiro.authz.annotation.RequiresUser
 import org.apache.shiro.subject.Subject
 import org.eclipse.sisu.inject.BeanLocator
 import org.hibernate.validator.constraints.NotEmpty
-import org.sonatype.configuration.validation.ValidationMessage
-import org.sonatype.configuration.validation.ValidationResponse
-import org.sonatype.configuration.validation.ValidationResponseException
 import org.sonatype.micromailer.Address
 import org.sonatype.nexus.common.validation.Create
 import org.sonatype.nexus.common.validation.Update
 import org.sonatype.nexus.common.validation.Validate
+import org.sonatype.nexus.common.validation.ValidationMessage
+import org.sonatype.nexus.common.validation.ValidationResponse
+import org.sonatype.nexus.common.validation.ValidationResponseException
 import org.sonatype.nexus.extdirect.DirectComponent
 import org.sonatype.nexus.extdirect.DirectComponentSupport
 import org.sonatype.nexus.extdirect.model.Password

@@ -14,7 +14,7 @@ package org.sonatype.nexus.security.settings;
 
 import java.util.List;
 
-import org.sonatype.configuration.validation.ValidationResponse;
+import org.sonatype.nexus.common.validation.ValidationResponse;
 
 public interface SecuritySettingsValidator
 {

@@ -17,7 +17,7 @@ import java.util.List;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.sonatype.configuration.validation.ValidationResponse;
+import org.sonatype.nexus.common.validation.ValidationResponse;
 import org.sonatype.nexus.security.settings.SecuritySettings;
 import org.sonatype.nexus.security.settings.SecuritySettingsValidationContext;
 import org.sonatype.nexus.security.settings.SecuritySettingsValidator;

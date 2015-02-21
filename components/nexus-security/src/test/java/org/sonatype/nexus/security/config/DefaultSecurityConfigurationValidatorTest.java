@@ -14,7 +14,7 @@ package org.sonatype.nexus.security.config;
 
 import java.util.ArrayList;
 
-import org.sonatype.configuration.validation.ValidationResponse;
+import org.sonatype.nexus.common.validation.ValidationResponse;
 
 import org.eclipse.sisu.launch.InjectedTestCase;
 
