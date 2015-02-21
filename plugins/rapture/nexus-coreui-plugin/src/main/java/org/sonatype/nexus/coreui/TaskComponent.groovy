@@ -347,14 +347,14 @@ class TaskComponent
       }
       catch (Exception e) {
         def response = new ValidationResponse()
-        response.addValidationError(new ValidationMessage('cronExpression', e.getMessage()))
+        response.addError(new ValidationMessage('cronExpression', e.getMessage()))
         throw new ValidationResponseException(response)
       }
     }
     if (taskXO.schedule != 'manual') {
       if (!taskXO.startDate) {
         def response = new ValidationResponse()
-        response.addValidationError(new ValidationMessage('startDate', 'May not be null'))
+        response.addError(new ValidationMessage('startDate', 'May not be null'))
         throw new ValidationResponseException(response)
       }
       def date = Calendar.instance
@@ -369,10 +369,10 @@ class TaskComponent
             if (currentDate.get(Calendar.YEAR) == date.get(Calendar.YEAR)
                 && currentDate.get(Calendar.MONTH) == date.get(Calendar.MONTH)
                 && currentDate.get(Calendar.DAY_OF_YEAR) == date.get(Calendar.DAY_OF_YEAR)) {
-              response.addValidationError(new ValidationMessage('startTime', 'Time is in the past'))
+              response.addError(new ValidationMessage('startTime', 'Time is in the past'))
             }
             else {
-              response.addValidationError(new ValidationMessage('startDate', 'Date is in the past'))
+              response.addError(new ValidationMessage('startDate', 'Date is in the past'))
             }
             throw new ValidationResponseException(response)
           }

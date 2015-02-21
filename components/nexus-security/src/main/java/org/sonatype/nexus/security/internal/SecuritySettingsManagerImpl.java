@@ -104,7 +104,7 @@ public class SecuritySettingsManagerImpl
   public void setRealms(final List<String> realms) {
     ValidationResponse response = new ValidationResponse();
     if (realms.isEmpty()) {
-      response.addValidationError("At least one realm must be configured");
+      response.addError("At least one realm must be configured");
       throw new ValidationResponseException(response);
     }
 

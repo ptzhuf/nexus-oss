@@ -106,21 +106,21 @@ public class FileConfigurationSource
   }
 
   private void dumpValidationErrors(final ValidationResponse response) {
-    if (response.getValidationErrors().size() > 0 || response.getValidationWarnings().size() > 0) {
+    if (response.getErrors().size() > 0 || response.getWarnings().size() > 0) {
       log.error("* * * * * * * * * * * * * * * * * * * * * * * * * *");
       log.error("Nexus configuration has validation errors/warnings");
       log.error("* * * * * * * * * * * * * * * * * * * * * * * * * *");
 
-      if (response.getValidationErrors().size() > 0) {
+      if (response.getErrors().size() > 0) {
         log.error("The ERRORS:");
-        for (ValidationMessage msg : response.getValidationErrors()) {
+        for (ValidationMessage msg : response.getErrors()) {
           log.error(msg.toString());
         }
       }
 
-      if (response.getValidationWarnings().size() > 0) {
+      if (response.getWarnings().size() > 0) {
         log.error("The WARNINGS:");
-        for (ValidationMessage msg : response.getValidationWarnings()) {
+        for (ValidationMessage msg : response.getWarnings()) {
           log.error(msg.toString());
         }
       }

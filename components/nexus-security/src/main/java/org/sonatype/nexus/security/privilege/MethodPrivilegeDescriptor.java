@@ -74,11 +74,11 @@ public class MethodPrivilegeDescriptor
     String permission = privilege.getProperty(P_PERMISSION);
 
     if (Strings2.isEmpty(permission)) {
-      response.addValidationError("Permission cannot be empty on a privilege!");
+      response.addError("Permission cannot be empty on a privilege!");
     }
 
     if (Strings2.isEmpty(method)) {
-      response.addValidationError("Method cannot be empty on a privilege!");
+      response.addError("Method cannot be empty on a privilege!");
     }
     else {
       String[] methods = null;
@@ -107,7 +107,7 @@ public class MethodPrivilegeDescriptor
         ValidationMessage message =
             new ValidationMessage("method", "Privilege ID '" + privilege.getId()
                 + "' Method is wrong! (Allowed methods are: create, delete, read and update)");
-        response.addValidationError(message);
+        response.addError(message);
       }
     }
 

@@ -147,7 +147,7 @@ extends DirectComponentSupport
 
     def contentClass = repositoryTypeRegistry.contentClasses[target.format]
     if (!contentClass) {
-      validations.addValidationError(new ValidationMessage('format', 'Repository type does not exist'))
+      validations.addError(new ValidationMessage('format', 'Repository type does not exist'))
     }
 
     def invalidPatterns = []
@@ -160,7 +160,7 @@ extends DirectComponentSupport
       }
     }
     if (invalidPatterns.size() > 0) {
-      validations.addValidationError(new ValidationMessage(
+      validations.addError(new ValidationMessage(
           'patterns', 'The following are not valid regular expressions: ' + invalidPatterns.join(','))
       )
     }

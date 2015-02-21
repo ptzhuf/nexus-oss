@@ -77,7 +77,7 @@ extends DirectComponentSupport
   {
     if (files.size() == 0) {
       def validations = new ValidationResponse()
-      validations.addValidationError(new ValidationMessage('*', 'At least one file should be uploaded'))
+      validations.addError(new ValidationMessage('*', 'At least one file should be uploaded'))
       throw new ValidationResponseException(validations)
     }
 
@@ -156,7 +156,7 @@ extends DirectComponentSupport
     }
     if (poms.size() > 1) {
       def validations = new ValidationResponse()
-      validations.addValidationError(new ValidationMessage('*', 'Only one POM file can be uploaded'))
+      validations.addError(new ValidationMessage('*', 'Only one POM file can be uploaded'))
       throw new ValidationResponseException(validations)
     }
     FileItem pom = poms[0]
@@ -174,16 +174,16 @@ extends DirectComponentSupport
 
     def validations = new ValidationResponse()
     if (!context.groupId) {
-      validations.addValidationError(new ValidationMessage('groupId', 'May not be null'))
+      validations.addError(new ValidationMessage('groupId', 'May not be null'))
     }
     if (!context.artifactId) {
-      validations.addValidationError(new ValidationMessage('artifactId', 'May not be null'))
+      validations.addError(new ValidationMessage('artifactId', 'May not be null'))
     }
     if (!context.version) {
-      validations.addValidationError(new ValidationMessage('version', 'May not be null'))
+      validations.addError(new ValidationMessage('version', 'May not be null'))
     }
     if (!context.repositoryId) {
-      validations.addValidationError(new ValidationMessage('repositoryId', 'May not be null'))
+      validations.addError(new ValidationMessage('repositoryId', 'May not be null'))
     }
     if (!validations.valid) {
       throw new ValidationResponseException(validations)
@@ -222,14 +222,14 @@ extends DirectComponentSupport
     def validations = new ValidationResponse()
     if (Gav.isSnapshot(version)) {
       if (RepositoryPolicy.RELEASE == mavenRepository.repositoryPolicy) {
-        validations.addValidationError(new ValidationMessage(
+        validations.addError(new ValidationMessage(
             'version', 'Snapshot artifacts are not allowed by repository policy'
         ))
       }
     }
     else {
       if (RepositoryPolicy.SNAPSHOT == mavenRepository.repositoryPolicy) {
-        validations.addValidationError(new ValidationMessage(
+        validations.addError(new ValidationMessage(
             'version', 'Release artifacts are not allowed by repository policy'
         ))
       }

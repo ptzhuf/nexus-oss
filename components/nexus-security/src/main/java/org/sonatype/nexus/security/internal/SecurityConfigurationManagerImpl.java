@@ -366,7 +366,7 @@ public class SecurityConfigurationManagerImpl
       readUserRoleMapping(userRoleMapping.getUserId(), userRoleMapping.getSource());
 
       ValidationResponse vr = new ValidationResponse();
-      vr.addValidationError(new ValidationMessage("*", "User Role Mapping for user '"
+      vr.addError(new ValidationMessage("*", "User Role Mapping for user '"
           + userRoleMapping.getUserId() + "' already exists."));
 
       throw new ValidationResponseException(vr);
@@ -377,7 +377,7 @@ public class SecurityConfigurationManagerImpl
 
     ValidationResponse vr = validator.validateUserRoleMapping(context, userRoleMapping, false);
 
-    if (vr.getValidationErrors().size() > 0) {
+    if (vr.getErrors().size() > 0) {
       throw new ValidationResponseException(vr);
     }
 
@@ -386,7 +386,7 @@ public class SecurityConfigurationManagerImpl
   }
 
   private void logValidationWarnings(final ValidationResponse vr) {
-    final List<ValidationMessage> validationWarnings = vr.getValidationWarnings();
+    final List<ValidationMessage> validationWarnings = vr.getWarnings();
     if (validationWarnings.size() > 0) {
       final StringBuilder buff = new StringBuilder();
       for (ValidationMessage msg : validationWarnings) {
@@ -429,7 +429,7 @@ public class SecurityConfigurationManagerImpl
 
     if (readUserRoleMapping(userRoleMapping.getUserId(), userRoleMapping.getSource()) == null) {
       ValidationResponse vr = new ValidationResponse();
-      vr.addValidationError(new ValidationMessage("*", "No User Role Mapping found for user '"
+      vr.addError(new ValidationMessage("*", "No User Role Mapping found for user '"
           + userRoleMapping.getUserId() + "'."));
 
       throw new ValidationResponseException(vr);
@@ -437,7 +437,7 @@ public class SecurityConfigurationManagerImpl
 
     ValidationResponse vr = validator.validateUserRoleMapping(context, userRoleMapping, true);
 
-    if (vr.getValidationErrors().size() > 0) {
+    if (vr.getErrors().size() > 0) {
       throw new ValidationResponseException(vr);
     }
 

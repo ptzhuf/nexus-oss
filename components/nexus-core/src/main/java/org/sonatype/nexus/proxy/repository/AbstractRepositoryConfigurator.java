@@ -128,7 +128,7 @@ public abstract class AbstractRepositoryConfigurator
       ValidationMessage error =
           new ValidationMessage("overrideLocalStorageUrl", "Repository has an invalid local storage URL '" + localUrl);
 
-      response.addValidationError(error);
+      response.addError(error);
 
       throw new ValidationResponseException(response);
     }

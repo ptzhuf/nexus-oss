@@ -97,7 +97,7 @@ public class CRepositoryGroupingCoreConfiguration
 
       item.setId(newId);
 
-      response.addValidationWarning("Fixed wrong route ID from '" + item.getId() + "' to '" + newId + "'");
+      response.addWarning("Fixed wrong route ID from '" + item.getId() + "' to '" + newId + "'");
 
       response.setModified(true);
     }
@@ -105,20 +105,20 @@ public class CRepositoryGroupingCoreConfiguration
     if (StringUtils.isEmpty(item.getGroupId())) {
       item.setGroupId(CPathMappingItem.ALL_GROUPS);
 
-      response.addValidationWarning("Fixed route without groupId set, set to ALL_GROUPS to keep backward comp, ID='"
+      response.addWarning("Fixed route without groupId set, set to ALL_GROUPS to keep backward comp, ID='"
           + item.getId() + "'.");
 
       response.setModified(true);
     }
 
     if (item.getRoutePatterns() == null || item.getRoutePatterns().isEmpty()) {
-      response.addValidationError("The Route with ID='" + item.getId()
+      response.addError("The Route with ID='" + item.getId()
           + "' must contain at least one Route Pattern.");
     }
 
     for (String regexp : (List<String>) item.getRoutePatterns()) {
       if (!isValidRegexp(regexp)) {
-        response.addValidationError("The regexp in Route with ID='" + item.getId() + "' is not valid: "
+        response.addError("The regexp in Route with ID='" + item.getId() + "' is not valid: "
             + regexp);
       }
     }
@@ -130,7 +130,7 @@ public class CRepositoryGroupingCoreConfiguration
     if (!CPathMappingItem.INCLUSION_RULE_TYPE.equals(item.getRouteType())
         && !CPathMappingItem.EXCLUSION_RULE_TYPE.equals(item.getRouteType())
         && !CPathMappingItem.BLOCKING_RULE_TYPE.equals(item.getRouteType())) {
-      response.addValidationError("The groupMapping pattern with ID=" + item.getId()
+      response.addError("The groupMapping pattern with ID=" + item.getId()
           + " have invalid routeType='" + item.getRouteType() + "'. Valid route types are '"
           + CPathMappingItem.INCLUSION_RULE_TYPE + "', '" + CPathMappingItem.EXCLUSION_RULE_TYPE + "' and '"
           + CPathMappingItem.BLOCKING_RULE_TYPE + "'.");
@@ -145,7 +145,7 @@ public class CRepositoryGroupingCoreConfiguration
       // here we must have a repo list
       // if ( item.getRepositories() == null || item.getRepositories().size() == 0 )
       // {
-      // response.addValidationError( "The repository list in Route with ID='" + item.getId()
+      // response.addError( "The repository list in Route with ID='" + item.getId()
       // + "' is not valid: it cannot be empty!" );
       // }
     }
@@ -157,7 +157,7 @@ public class CRepositoryGroupingCoreConfiguration
 
       for (String repoId : (List<String>) item.getRepositories()) {
         if (!existingReposes.contains(repoId) && !existingShadows.contains(repoId)) {
-          response.addValidationError("The groupMapping pattern with ID=" + item.getId()
+          response.addError("The groupMapping pattern with ID=" + item.getId()
               + " refers to a nonexistent repository with repoID = " + repoId);
         }
       }

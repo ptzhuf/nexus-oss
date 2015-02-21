@@ -110,7 +110,7 @@ public class TargetPrivilegeDescriptor
     if (StringUtils.isEmpty(repositoryTargetId)) {
       ValidationMessage message = new ValidationMessage("repositoryTargetId", "Privilege ID '"
           + privilege.getId() + "' requires a repositoryTargetId.");
-      response.addValidationError(message);
+      response.addError(message);
     }
 
     if (!StringUtils.isEmpty(repositoryId) && !StringUtils.isEmpty(repositoryGroupId)) {
@@ -120,11 +120,11 @@ public class TargetPrivilegeDescriptor
               + privilege.getId()
               + "' cannot be assigned to both a group and repository."
               + "  Either assign a group, a repository or neither (which assigns to ALL repositories).");
-      response.addValidationError(message);
+      response.addError(message);
     }
 
     if (StringUtils.isEmpty(method)) {
-      response.addValidationError("Method cannot be empty on a privilege!");
+      response.addError("Method cannot be empty on a privilege!");
     }
     else {
       String[] methods = null;
@@ -155,7 +155,7 @@ public class TargetPrivilegeDescriptor
             "method",
             "Privilege ID '" + privilege.getId()
                 + "' Method is wrong! (Allowed methods are: create, delete, read and update)");
-        response.addValidationError(message);
+        response.addError(message);
       }
     }
 

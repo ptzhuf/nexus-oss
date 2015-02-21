@@ -46,12 +46,12 @@ public class ValidationResponseException
 
   @Nonnull
   public List<ValidationMessage> getErrors() {
-    return response.getValidationErrors();
+    return response.getErrors();
   }
 
   @Nonnull
   public List<ValidationMessage> getWarnings() {
-    return response.getValidationWarnings();
+    return response.getWarnings();
   }
 
   public String getMessage() {
@@ -61,8 +61,8 @@ public class ValidationResponseException
       buff.append(super.getMessage());
     }
 
-    append(buff, "errors", response.getValidationErrors());
-    append(buff, "warnings", response.getValidationWarnings());
+    append(buff, "errors", response.getErrors());
+    append(buff, "warnings", response.getWarnings());
     return buff.toString();
   }
 

@@ -40,9 +40,9 @@ public class DefaultSecurityConfigurationValidatorTest
     assertFalse(response.isModified());
 
     // emails are not longer unique!
-    assertEquals(11, response.getValidationErrors().size());
+    assertEquals(11, response.getErrors().size());
 
-    assertEquals(0, response.getValidationWarnings().size());
+    assertEquals(0, response.getWarnings().size());
   }
 
   public void testBad2() throws Exception {
@@ -54,9 +54,9 @@ public class DefaultSecurityConfigurationValidatorTest
 
     assertTrue(response.isModified());
 
-    assertEquals(3, response.getValidationWarnings().size());
+    assertEquals(3, response.getWarnings().size());
 
-    assertEquals(10, response.getValidationErrors().size());
+    assertEquals(10, response.getErrors().size());
   }
 
   public void testBad3() throws Exception {
@@ -68,9 +68,9 @@ public class DefaultSecurityConfigurationValidatorTest
 
     assertTrue(response.isModified());
 
-    assertEquals(1, response.getValidationWarnings().size());
+    assertEquals(1, response.getWarnings().size());
 
-    assertEquals(2, response.getValidationErrors().size());
+    assertEquals(2, response.getErrors().size());
   }
 
   public void testRoles() throws Exception {
@@ -122,7 +122,7 @@ public class DefaultSecurityConfigurationValidatorTest
     ValidationResponse vr = configurationValidator.validateRoleContainment(context);
 
     assertFalse(vr.isValid());
-    assertEquals(vr.getValidationErrors().size(), 3);
+    assertEquals(vr.getErrors().size(), 3);
 
   }
 
@@ -152,10 +152,10 @@ public class DefaultSecurityConfigurationValidatorTest
     ValidationResponse vr = configurationValidator.validateRole(context, role1, true);
 
     assertTrue(vr.isValid());
-    assertEquals(vr.getValidationErrors().size(), 0);
-    assertEquals(vr.getValidationWarnings().size(), 1);
+    assertEquals(vr.getErrors().size(), 0);
+    assertEquals(vr.getWarnings().size(), 1);
     assertEquals(
-        vr.getValidationWarnings().get(0).getMessage(),
+        vr.getWarnings().get(0).getMessage(),
         "Role ID 'role1' Invalid privilege id 'foo' found."
     );
   }

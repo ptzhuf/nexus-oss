@@ -165,19 +165,19 @@ extends DirectComponentSupport
       Pattern.compile(routeXO.pattern)
     }
     catch (PatternSyntaxException e) {
-      validations.addValidationError(new ValidationMessage('pattern', 'Not a valid regular expression'))
+      validations.addError(new ValidationMessage('pattern', 'Not a valid regular expression'))
     }
 
     if (routeXO.mappingType == RepositoryPathMapping.MappingType.BLOCKING) {
       if (routeXO.mappedRepositoriesIds && !routeXO.mappedRepositoriesIds.empty) {
-        validations.addValidationError(new ValidationMessage(
+        validations.addError(new ValidationMessage(
             '*', 'Blocking rule does not allow selecting repositories')
         )
       }
     }
     else {
       if (!routeXO.mappedRepositoriesIds || routeXO.mappedRepositoriesIds.empty) {
-        validations.addValidationError(new ValidationMessage(
+        validations.addError(new ValidationMessage(
             'mappedRepositories', 'At least one repository must be selected')
         )
       }

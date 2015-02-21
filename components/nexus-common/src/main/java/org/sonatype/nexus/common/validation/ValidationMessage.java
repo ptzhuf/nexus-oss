@@ -29,14 +29,14 @@ public class ValidationMessage
 
   private final Throwable cause;
 
-  public ValidationMessage(final String key, final String message) {
-    this(key, message,  null);
-  }
-
   public ValidationMessage(final String key, final String message, final @Nullable Throwable cause) {
     this.key = checkNotNull(key);
     this.message = checkNotNull(message);
     this.cause = cause;
+  }
+
+  public ValidationMessage(final String key, final String message) {
+    this(key, message,  null);
   }
 
   public String getKey() {

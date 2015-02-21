@@ -82,12 +82,12 @@ public class AbstractGroupRepositoryConfiguration
       ValidationMessage message =
           new ValidationMessage(MEMBER_REPOSITORIES, "Group repository points to nonexistent members!");
 
-      response.addValidationError(message);
+      response.addError(message);
     }
 
     final Set<String> uniqueReposesIds = Sets.newHashSet(memberRepositoryIds);
     if (uniqueReposesIds.size() != memberRepositoryIds.size()) {
-      response.addValidationError(new ValidationMessage(
+      response.addError(new ValidationMessage(
           MEMBER_REPOSITORIES,
           "Group repository has same member multiple times!"
       ));

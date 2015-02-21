@@ -116,7 +116,7 @@ public abstract class AbstractProxyRepositoryConfigurator
       catch (RemoteStorageException e) {
         ValidationResponse response = new ApplicationValidationResponse();
         ValidationMessage error = new ValidationMessage("remoteStorageUrl", e.getMessage());
-        response.addValidationError(error);
+        response.addError(error);
 
         throw new ValidationResponseException(response);
       }

@@ -47,7 +47,7 @@ public abstract class AbstractShadowRepositoryConfigurator
 
       ValidationResponse response = new ApplicationValidationResponse();
 
-      response.addValidationError(message);
+      response.addError(message);
 
       throw new ValidationResponseException(response);
     }
@@ -56,7 +56,7 @@ public abstract class AbstractShadowRepositoryConfigurator
 
       ValidationResponse response = new ApplicationValidationResponse();
 
-      response.addValidationError(message);
+      response.addError(message);
 
       throw new ValidationResponseException(response);
     }

@@ -578,7 +578,7 @@ extends DirectComponentSupport
     }
     catch (RemoteStorageException e) {
       def validations = new ValidationResponse()
-      validations.addValidationError(new ValidationMessage("remoteStorageUrl", e.getMessage()))
+      validations.addError(new ValidationMessage("remoteStorageUrl", e.getMessage()))
       throw new ValidationResponseException(validations);
     }
     repo.autoBlockActive = repositoryXO.autoBlockActive

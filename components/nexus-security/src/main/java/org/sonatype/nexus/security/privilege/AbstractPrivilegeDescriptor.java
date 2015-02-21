@@ -70,7 +70,7 @@ public abstract class AbstractPrivilegeDescriptor
       String newId = idGenerator.generateId();
 
       ValidationMessage message = new ValidationMessage("id", "Fixed wrong privilege ID from '" + privilege.getId() + "' to '" + newId + "'");
-      response.addValidationWarning(message);
+      response.addWarning(message);
       privilege.setId(newId);
       response.setModified(true);
     }
@@ -78,12 +78,12 @@ public abstract class AbstractPrivilegeDescriptor
     if (Strings2.isEmpty(privilege.getType())) {
       ValidationMessage message = new ValidationMessage("type", "Cannot have an empty type");
 
-      response.addValidationError(message);
+      response.addError(message);
     }
 
     if (Strings2.isEmpty(privilege.getName())) {
       ValidationMessage message = new ValidationMessage("name", "Privilege ID '" + privilege.getId() + "' requires a name.");
-      response.addValidationError(message);
+      response.addError(message);
     }
 
     return response;

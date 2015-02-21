@@ -67,9 +67,9 @@ public class AnAbstractGroupRepositoryConfigurationTest
     );
 
     assertThat(validationResponse.isValid(), is(false));
-    assertThat(validationResponse.getValidationErrors().size(), is(1));
+    assertThat(validationResponse.getErrors().size(), is(1));
     assertThat(
-        validationResponse.getValidationErrors().get(0).getMessage(),
+        validationResponse.getErrors().get(0).getMessage(),
         is("Group repository has same member multiple times!")
     );
   }

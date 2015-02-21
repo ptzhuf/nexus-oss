@@ -18,31 +18,28 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Validation response.
  */
 public class ValidationResponse
 {
-  // FIXME: Remove unless there is good reason to keep this
-  /**
-   * A simple counter to enumerate messages.
-   */
+  // FIXME: Remove, this is only used for deprecated non-message based add methods
   private int key = 1;
 
-  /**
-   * A flag to mark is the config valid (usable) or not.
-   */
   private boolean valid = true;
 
   // FIXME: Sort out why this is here and how its used, doesn't belong
+  // FIXME: This seems to be due to validation handling making changes to the models
   /**
    * A flag to mark is the config modified during validation or not.
    */
   private boolean modified = false;
 
-  private List<ValidationMessage> validationErrors;
+  private List<ValidationMessage> errors;
 
-  private List<ValidationMessage> validationWarnings;
+  private List<ValidationMessage> warnings;
 
   private Object context;
 
@@ -63,46 +60,46 @@ public class ValidationResponse
   }
 
   @Nonnull
-  public List<ValidationMessage> getValidationErrors() {
-    if (validationErrors == null) {
-      validationErrors = new ArrayList<>();
+  public List<ValidationMessage> getErrors() {
+    if (errors == null) {
+      errors = new ArrayList<>();
     }
-    return validationErrors;
+    return errors;
   }
 
-  public void addValidationError(final ValidationMessage message) {
-    getValidationErrors().add(message);
-    this.valid = false;
+  public void addError(final ValidationMessage message) {
+    checkNotNull(message);
+    getErrors().add(message);
+    valid = false;
   }
 
   /**
    * @deprecated Avoid validation messages without keys!
    */
   @Deprecated
-  public void addValidationError(final String message) {
-    ValidationMessage e = new ValidationMessage(String.valueOf(key++), message);
-    addValidationError(e);
+  public void addError(final String message) {
+    addError(new ValidationMessage(String.valueOf(key++), message));
   }
 
   @Nonnull
-  public List<ValidationMessage> getValidationWarnings() {
-    if (validationWarnings == null) {
-      validationWarnings = new ArrayList<>();
+  public List<ValidationMessage> getWarnings() {
+    if (warnings == null) {
+      warnings = new ArrayList<>();
     }
-    return validationWarnings;
+    return warnings;
   }
 
-  public void addValidationWarning(final ValidationMessage message) {
-    getValidationWarnings().add(message);
+  public void addWarning(final ValidationMessage message) {
+    checkNotNull(message);
+    getWarnings().add(message);
   }
 
   /**
    * @deprecated Avoid validation messages without keys!
    */
   @Deprecated
-  public void addValidationWarning(final String message) {
-    ValidationMessage e = new ValidationMessage(String.valueOf(key++), message);
-    addValidationWarning(e);
+  public void addWarning(final String message) {
+    addWarning(new ValidationMessage(String.valueOf(key++), message));
   }
 
   /**
@@ -110,17 +107,15 @@ public class ValidationResponse
    * simply appended, and the isValid is logically AND-ed and isModified is logically OR-ed.
    */
   public void append(final ValidationResponse response) {
-    for (ValidationMessage message : response.getValidationErrors()) {
-      addValidationError(message);
+    for (ValidationMessage message : response.getErrors()) {
+      addError(message);
+    }
+    for (ValidationMessage message : response.getWarnings()) {
+      addWarning(message);
     }
 
-    for (ValidationMessage message : response.getValidationWarnings()) {
-      addValidationWarning(message);
-    }
-
-    // FIXME: This is pointless, addValidationError() will set this flag as needed
+    // FIXME: This is pointless, addError() will set this flag as needed
     setValid(isValid() && response.isValid());
-
     setModified(isModified() || response.isModified());
   }
 

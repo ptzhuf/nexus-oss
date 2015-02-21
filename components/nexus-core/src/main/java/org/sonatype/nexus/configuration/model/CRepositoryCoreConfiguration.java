@@ -135,21 +135,21 @@ public class CRepositoryCoreConfiguration
 
     // ID
     if (StringUtils.isBlank(cfg.getId())) {
-      response.addValidationError(new ValidationMessage("id", "Repository ID must not be blank!"));
+      response.addError(new ValidationMessage("id", "Repository ID must not be blank!"));
     }
     else if (!cfg.getId().matches(REPOSITORY_ID_PATTERN)) {
-      response.addValidationError(new ValidationMessage("id",
+      response.addError(new ValidationMessage("id",
           "Only letters, digits, underscores, hyphens, and dots are allowed in Repository ID"));
     }
 
     // ID not 'all'
     if ("all".equals(cfg.getId())) {
-      response.addValidationError(new ValidationMessage("id", "Repository ID can't be 'all', reserved word"));
+      response.addError(new ValidationMessage("id", "Repository ID can't be 'all', reserved word"));
     }
 
     // Name
     if (StringUtils.isBlank(cfg.getName())) {
-      response.addValidationWarning(new ValidationMessage("id", "Repository with ID='" + cfg.getId()
+      response.addWarning(new ValidationMessage("id", "Repository with ID='" + cfg.getId()
           + "' has no name, defaulted it's name to it's ID."));
 
       cfg.setName(cfg.getId());
@@ -162,14 +162,14 @@ public class CRepositoryCoreConfiguration
       LocalStatus.valueOf(cfg.getLocalStatus());
     }
     catch (Exception e) {
-      response.addValidationError(new ValidationMessage("localStatus", "LocalStatus of repository with ID=\""
+      response.addError(new ValidationMessage("localStatus", "LocalStatus of repository with ID=\""
           + cfg.getId() + "\" has unacceptable value \"" + cfg.getLocalStatus() + "\"! (Allowed values are: \""
           + LocalStatus.IN_SERVICE + "\" and \"" + LocalStatus.OUT_OF_SERVICE + "\")", e));
     }
 
     // indexable
     if (cfg.isIndexable() && (!"maven2".equals(cfg.getProviderHint()))) {
-      response.addValidationWarning(new ValidationMessage("indexable", "Indexing isn't supported for \""
+      response.addWarning(new ValidationMessage("indexable", "Indexing isn't supported for \""
           + cfg.getProviderHint() + "\" repositories, only Maven2 repositories are indexable!"));
 
       cfg.setIndexable(false);

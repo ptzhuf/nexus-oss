@@ -84,7 +84,7 @@ extends DirectComponentSupport
         new URL(generalSettingsXO.baseUrl)
       }
       catch (MalformedURLException e) {
-        validations.addValidationError(new ValidationMessage('baseUrl', e.message))
+        validations.addError(new ValidationMessage('baseUrl', e.message))
       }
     }
     if (!validations.valid) {

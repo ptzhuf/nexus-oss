@@ -398,15 +398,15 @@ public class DefaultCapabilityRegistry
     final ValidationResponse vr = new ValidationResponse();
 
     if (type == null) {
-      vr.addValidationError(new ValidationMessage("typeId", "Type must be provided"));
+      vr.addError(new ValidationMessage("typeId", "Type must be provided"));
     }
     else {
       if (capabilityFactoryRegistry.get(type) == null || capabilityDescriptorRegistry.get(type) == null) {
-        vr.addValidationError(new ValidationMessage("typeId", "Type '" + type + "' is not supported"));
+        vr.addError(new ValidationMessage("typeId", "Type '" + type + "' is not supported"));
       }
     }
 
-    if (!vr.getValidationErrors().isEmpty()) {
+    if (!vr.getErrors().isEmpty()) {
       throw new ValidationResponseException(vr);
     }
   }
@@ -425,7 +425,7 @@ public class DefaultCapabilityRegistry
         final ValidationResult validationResult = validator.validate(properties);
         if (!validationResult.isValid()) {
           for (final ValidationResult.Violation violation : validationResult.violations()) {
-            vr.addValidationError(new ValidationMessage(
+            vr.addError(new ValidationMessage(
                 violation.key(),
                 violation.message()
             ));
@@ -433,7 +433,7 @@ public class DefaultCapabilityRegistry
         }
       }
 
-      if (!vr.getValidationErrors().isEmpty()) {
+      if (!vr.getErrors().isEmpty()) {
         throw new ValidationResponseException(vr);
       }
     }

@@ -105,25 +105,25 @@ public class SecurityConfigurationValidatorImpl
     }
 
     // summary
-    if (response.getValidationErrors().size() > 0 || response.getValidationWarnings().size() > 0) {
+    if (response.getErrors().size() > 0 || response.getWarnings().size() > 0) {
       log.error("* * * * * * * * * * * * * * * * * * * * * * * * * *");
 
       log.error("Security configuration has validation errors/warnings");
 
       log.error("* * * * * * * * * * * * * * * * * * * * * * * * * *");
 
-      if (response.getValidationErrors().size() > 0) {
+      if (response.getErrors().size() > 0) {
         log.error("The ERRORS:");
 
-        for (ValidationMessage msg : response.getValidationErrors()) {
+        for (ValidationMessage msg : response.getErrors()) {
           log.error(msg.toString());
         }
       }
 
-      if (response.getValidationWarnings().size() > 0) {
+      if (response.getWarnings().size() > 0) {
         log.error("The WARNINGS:");
 
-        for (ValidationMessage msg : response.getValidationWarnings()) {
+        for (ValidationMessage msg : response.getWarnings()) {
           log.error(msg.toString());
         }
       }
@@ -209,7 +209,7 @@ public class SecurityConfigurationValidatorImpl
           ValidationMessage message =
               new ValidationMessage("roles", "Role '" + getRoleTextForDisplay(baseRoleId, ctx) + "' contains an invalid role");
 
-          response.addValidationWarning(message);
+          response.addWarning(message);
         }
       }
 
@@ -219,7 +219,7 @@ public class SecurityConfigurationValidatorImpl
                 + "' contains itself through Role '" + getRoleTextForDisplay(roleId, ctx)
                 + "'.  This is not valid.");
 
-        response.addValidationError(message);
+        response.addError(message);
 
         break;
       }
@@ -233,7 +233,7 @@ public class SecurityConfigurationValidatorImpl
             new ValidationMessage("roles", "Role '" + getRoleTextForDisplay(roleId, ctx)
                 + "' contains an invalid role '" + getRoleTextForDisplay(containedRoleId, ctx) + "'.");
 
-        response.addValidationWarning(message);
+        response.addWarning(message);
       }
     }
 
@@ -259,18 +259,18 @@ public class SecurityConfigurationValidatorImpl
 
     if (!update && existingIds.contains(role.getId())) {
       ValidationMessage message = new ValidationMessage("id", "Role ID must be unique.");
-      response.addValidationError(message);
+      response.addError(message);
     }
 
     if (update && !existingIds.contains(role.getId())) {
       ValidationMessage message = new ValidationMessage("id", "Role ID cannot be changed.");
-      response.addValidationError(message);
+      response.addError(message);
     }
 
     if (!update && (Strings2.isEmpty(role.getId()) || "0".equals(role.getId()))) {
       String newId = idGenerator.generateId();
 
-      response.addValidationWarning("Fixed wrong role ID from '" + role.getId() + "' to '" + newId + "'");
+      response.addWarning("Fixed wrong role ID from '" + role.getId() + "' to '" + newId + "'");
 
       role.setId(newId);
 
@@ -282,12 +282,12 @@ public class SecurityConfigurationValidatorImpl
     if (Strings2.isEmpty(role.getName())) {
       ValidationMessage message =
           new ValidationMessage("name", "Role ID '" + role.getId() + "' requires a name.");
-      response.addValidationError(message);
+      response.addError(message);
     }
     else if (isRoleNameAlreadyInUse(existingRoleNameMap, role)) {
       ValidationMessage message =
           new ValidationMessage("name", "Role ID '" + role.getId() + "' can't use the name '" + role.getName() + "'.");
-      response.addValidationError(message);
+      response.addError(message);
     }
     else {
       existingRoleNameMap.put(role.getId(), role.getName());
@@ -299,7 +299,7 @@ public class SecurityConfigurationValidatorImpl
           ValidationMessage message =
               new ValidationMessage("privileges", "Role ID '" + role.getId() + "' Invalid privilege id '"
                   + privId + "' found.");
-          response.addValidationWarning(message);
+          response.addWarning(message);
         }
       }
     }
@@ -315,7 +315,7 @@ public class SecurityConfigurationValidatorImpl
       if (roleId.equals(role.getId())) {
         ValidationMessage message =
             new ValidationMessage("roles", "Role ID '" + role.getId() + "' cannot contain itself.");
-        response.addValidationError(message);
+        response.addError(message);
       }
       else if (context.getRoleContainmentMap() != null) {
         containedRoles.add(roleId);
@@ -353,21 +353,21 @@ public class SecurityConfigurationValidatorImpl
       ValidationMessage message =
           new ValidationMessage("userId", "User ID is required.");
 
-      response.addValidationError(message);
+      response.addError(message);
     }
 
     if (!update && Strings2.isNotEmpty(user.getId()) && existingIds.contains(user.getId())) {
       ValidationMessage message =
           new ValidationMessage("userId", "User ID '" + user.getId() + "' is already in use.");
 
-      response.addValidationError(message);
+      response.addError(message);
     }
 
     if (Strings2.isNotEmpty(user.getId()) && user.getId().contains(" ")) {
       ValidationMessage message =
           new ValidationMessage("userId", "User ID '" + user.getId() + "' cannot contain spaces.");
 
-      response.addValidationError(message);
+      response.addError(message);
     }
 
     if (Strings2.isNotEmpty(user.getFirstName())) {
@@ -382,20 +382,20 @@ public class SecurityConfigurationValidatorImpl
       ValidationMessage message =
           new ValidationMessage("password", "User ID '" + user.getId()
               + "' has no password.  This is a required field.");
-      response.addValidationError(message);
+      response.addError(message);
     }
 
     if (Strings2.isEmpty(user.getEmail())) {
       ValidationMessage message =
           new ValidationMessage("email", "User ID '" + user.getId() + "' has no email address");
-      response.addValidationError(message);
+      response.addError(message);
     }
     else {
       try {
         if (!user.getEmail().matches(".+@.+")) {
           ValidationMessage message =
               new ValidationMessage("email", "User ID '" + user.getId() + "' has an invalid email address.");
-          response.addValidationError(message);
+          response.addError(message);
         }
       }
       catch (PatternSyntaxException e) {
@@ -409,7 +409,7 @@ public class SecurityConfigurationValidatorImpl
           new ValidationMessage("status", "User ID '" + user.getId() + "' has invalid status '"
               + user.getStatus() + "'.  (Allowed values are: " + CUser.STATUS_ACTIVE + " and "
               + CUser.STATUS_DISABLED + ")");
-      response.addValidationError(message);
+      response.addError(message);
     }
 
     if (context.getExistingRoleIds() != null) {
@@ -419,7 +419,7 @@ public class SecurityConfigurationValidatorImpl
           if (!context.getExistingRoleIds().contains(roleId)) {
             ValidationMessage message =
                 new ValidationMessage("roles", "User ID '" + user.getId() + "' Invalid role id '" + roleId + "' found.");
-            response.addValidationError(message);
+            response.addError(message);
           }
         }
       }
@@ -441,7 +441,7 @@ public class SecurityConfigurationValidatorImpl
     if (Strings2.isEmpty(userRoleMapping.getUserId())) {
       ValidationMessage message =
           new ValidationMessage("userId", "UserRoleMapping has no userId.  This is a required field.");
-      response.addValidationError(message);
+      response.addError(message);
     }
 
     // source must be not empty
@@ -449,7 +449,7 @@ public class SecurityConfigurationValidatorImpl
       ValidationMessage message =
           new ValidationMessage("source", "User Role Mapping for user '" + userRoleMapping.getUserId()
               + "' has no source.  This is a required field.");
-      response.addValidationError(message);
+      response.addError(message);
     }
 
     Set<String> roles = userRoleMapping.getRoles();
@@ -462,7 +462,7 @@ public class SecurityConfigurationValidatorImpl
             ValidationMessage message =
                 new ValidationMessage("roles", "User Role Mapping for user '"
                     + userRoleMapping.getUserId() + "' Invalid role id '" + roleId + "' found.");
-            response.addValidationError(message);
+            response.addError(message);
           }
         }
       }

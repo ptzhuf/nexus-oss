@@ -66,7 +66,7 @@ public class DefaultApplicationConfigurationValidator
     // global conn settings
     if (model.getGlobalConnectionSettings() == null) {
       model.setGlobalConnectionSettings(new CRemoteConnectionSettings());
-      response.addValidationWarning("Global connection settings block, which is mandatory, was missing. Reset with defaults.");
+      response.addWarning("Global connection settings block, which is mandatory, was missing. Reset with defaults.");
       response.setModified(true);
     }
 
@@ -87,14 +87,14 @@ public class DefaultApplicationConfigurationValidator
     }
     else {
       model.setHttpProxy(new CHttpProxySettings());
-      response.addValidationWarning("The HTTP Proxy section was missing from configuration, defaulted it.");
+      response.addWarning("The HTTP Proxy section was missing from configuration, defaulted it.");
       response.setModified(true);
     }
 
     // routing
     if (model.getRouting() == null) {
       model.setRouting(new CRouting());
-      response.addValidationWarning("The routing section was missing from configuration, defaulted it.");
+      response.addWarning("The routing section was missing from configuration, defaulted it.");
       response.setModified(true);
     }
 
@@ -140,10 +140,10 @@ public class DefaultApplicationConfigurationValidator
     ApplicationValidationContext context = (ApplicationValidationContext) response.getContext();
 
     if (StringUtils.isEmpty(repo.getId())) {
-      response.addValidationError(new ValidationMessage("id", "Repository ID's may not be empty!"));
+      response.addError(new ValidationMessage("id", "Repository ID's may not be empty!"));
     }
     else if (!repo.getId().matches(REPOSITORY_ID_PATTERN)) {
-      response.addValidationError(
+      response.addError(
           new ValidationMessage("id",
               "Only letters, digits, underscores(_), hyphens(-), and dots(.) are allowed in Repository ID"));
     }
@@ -152,21 +152,21 @@ public class DefaultApplicationConfigurationValidator
       if (StringUtils.isEmpty(repo.getName())) {
         repo.setName(repo.getId());
 
-        response.addValidationWarning(new ValidationMessage("id", "Repository with ID='" + repo.getId()
+        response.addWarning(new ValidationMessage("id", "Repository with ID='" + repo.getId()
             + "' has no name, defaulted to it's ID."));
 
         response.setModified(true);
       }
 
       if (!validateLocalStatus(repo.getLocalStatus())) {
-        response.addValidationError(
+        response.addError(
             new ValidationMessage("id", "LocalStatus of repository with ID='" + repo.getId()) + "' is wrong "
                 + repo.getLocalStatus() + "! (Allowed values are: '" + LocalStatus.IN_SERVICE + "' and '"
                 + LocalStatus.OUT_OF_SERVICE + "')");
       }
       if (context.getExistingRepositoryIds() != null) {
         if (context.getExistingRepositoryIds().contains(repo.getId())) {
-          response.addValidationError(
+          response.addError(
               new ValidationMessage("id", "Repository with ID=" + repo.getId() + " already exists!"));
         }
 
@@ -175,14 +175,14 @@ public class DefaultApplicationConfigurationValidator
 
       if (context.getExistingRepositoryShadowIds() != null) {
         if (context.getExistingRepositoryShadowIds().contains(repo.getId())) {
-          response.addValidationError(new ValidationMessage("id", "Repository " + repo.getId()
+          response.addError(new ValidationMessage("id", "Repository " + repo.getId()
               + " conflicts with existing Shadow with same ID='" + repo.getId() + "'!"));
         }
       }
 
       if (context.getExistingRepositoryGroupIds() != null) {
         if (context.getExistingRepositoryGroupIds().contains(repo.getId())) {
-          response.addValidationError(new ValidationMessage("id", "Repository " + repo.getId()
+          response.addError(new ValidationMessage("id", "Repository " + repo.getId()
               + " conflicts with existing Group with same ID='" + repo.getId() + "'!"));
         }
       }
@@ -232,29 +232,24 @@ public class DefaultApplicationConfigurationValidator
 
       item.setId(newId);
 
-      response.addValidationWarning("Fixed wrong route ID from '" + item.getId() + "' to '" + newId + "'");
+      response.addWarning("Fixed wrong route ID from '" + item.getId() + "' to '" + newId + "'");
 
       response.setModified(true);
     }
 
     if (StringUtils.isEmpty(item.getGroupId())) {
       item.setGroupId(CPathMappingItem.ALL_GROUPS);
-
-      response
-          .addValidationWarning("Fixed route without groupId set, set to ALL_GROUPS to keep backward comp, ID='"
-              + item.getId() + "'.");
-
+      response.addWarning("Fixed route without groupId set, set to ALL_GROUPS to keep backward comp, ID='" + item.getId() + "'.");
       response.setModified(true);
     }
 
     if (item.getRoutePatterns() == null || item.getRoutePatterns().isEmpty()) {
-      response.addValidationError("The Route with ID='" + item.getId() + "' must contain at least one Route Pattern.");
+      response.addError("The Route with ID='" + item.getId() + "' must contain at least one Route Pattern.");
     }
 
     for (String regexp : item.getRoutePatterns()) {
       if (!isValidRegexp(regexp)) {
-        response.addValidationError("The regexp in Route with ID='" + item.getId() + "' is not valid: "
-            + regexp);
+        response.addError("The regexp in Route with ID='" + item.getId() + "' is not valid: " + regexp);
       }
     }
 
@@ -265,7 +260,7 @@ public class DefaultApplicationConfigurationValidator
     if (!CPathMappingItem.INCLUSION_RULE_TYPE.equals(item.getRouteType())
         && !CPathMappingItem.EXCLUSION_RULE_TYPE.equals(item.getRouteType())
         && !CPathMappingItem.BLOCKING_RULE_TYPE.equals(item.getRouteType())) {
-      response.addValidationError("The groupMapping pattern with ID=" + item.getId()
+      response.addError("The groupMapping pattern with ID=" + item.getId()
           + " have invalid routeType='" + item.getRouteType() + "'. Valid route types are '"
           + CPathMappingItem.INCLUSION_RULE_TYPE + "', '" + CPathMappingItem.EXCLUSION_RULE_TYPE + "' and '"
           + CPathMappingItem.BLOCKING_RULE_TYPE + "'.");
@@ -283,7 +278,7 @@ public class DefaultApplicationConfigurationValidator
 
       for (String repoId : item.getRepositories()) {
         if (!existingReposes.contains(repoId) && !existingShadows.contains(repoId)) {
-          response.addValidationError("The groupMapping pattern with ID=" + item.getId()
+          response.addError("The groupMapping pattern with ID=" + item.getId()
               + " refers to a nonexistent repository with repoID = " + repoId);
         }
       }
@@ -302,15 +297,13 @@ public class DefaultApplicationConfigurationValidator
 
     if (settings.getPort() < 80) {
       settings.setPort(8082);
-
-      response.addValidationWarning("The HTTP Proxy port is below 80? Settings defaulted.");
-
+      response.addWarning("The HTTP Proxy port is below 80? Settings defaulted.");
       response.setModified(true);
     }
 
     if (!CHttpProxySettings.PROXY_POLICY_PASS_THRU.equals(settings.getProxyPolicy())
         && !CHttpProxySettings.PROXY_POLICY_STRICT.equals(settings.getProxyPolicy())) {
-      response.addValidationError("The HTTP Proxy policy settings is invalid: '" + settings.getProxyPolicy()
+      response.addError("The HTTP Proxy policy settings is invalid: '" + settings.getProxyPolicy()
           + "'. Valid policies are '" + CHttpProxySettings.PROXY_POLICY_STRICT + "' and '"
           + CHttpProxySettings.PROXY_POLICY_PASS_THRU + "'.");
     }
@@ -329,7 +322,7 @@ public class DefaultApplicationConfigurationValidator
     }
 
     if (settings.getProxyPort() < 1 || settings.getProxyPort() > 65535) {
-      response.addValidationError("The proxy port must be an integer between 1 and 65535!");
+      response.addError("The proxy port must be an integer between 1 and 65535!");
     }
 
     return response;
@@ -346,23 +339,22 @@ public class DefaultApplicationConfigurationValidator
     ApplicationValidationContext context = (ApplicationValidationContext) response.getContext();
 
     if (StringUtils.isEmpty(settings.getId())) {
-      response.addValidationError("The RepositoryTarget may have no empty/null ID!");
+      response.addError("The RepositoryTarget may have no empty/null ID!");
     }
 
     if (StringUtils.isEmpty(settings.getName())) {
-      response.addValidationError("The RepositoryTarget may have no empty/null Name!");
+      response.addError("The RepositoryTarget may have no empty/null Name!");
     }
 
     if (StringUtils.isEmpty(settings.getContentClass())) {
-      response.addValidationError("Repository target with ID='" + settings.getId()
-          + "' has empty content class!");
+      response.addError("Repository target with ID='" + settings.getId() + "' has empty content class!");
     }
 
     if (context.getExistingRepositoryTargetIds() != null) {
       // check for uniqueness
       for (String id : context.getExistingRepositoryTargetIds()) {
         if (id.equals(settings.getId())) {
-          response.addValidationError("This target ID is already existing!");
+          response.addError("This target ID is already existing!");
         }
       }
     }
@@ -372,14 +364,12 @@ public class DefaultApplicationConfigurationValidator
     if (patterns != null && patterns.size() > 0) {
       for (String pattern : patterns) {
         if (!isValidRegexp(pattern)) {
-          response.addValidationError("Repository target with ID='" + settings.getId()
-              + "' has invalid regexp pattern: " + pattern);
+          response.addError("Repository target with ID='" + settings.getId() + "' has invalid regexp pattern: " + pattern);
         }
       }
     }
     else {
-      response.addValidationError("Repository target with ID='" + settings.getId()
-          + "' has no regexp pattern defined!");
+      response.addError("Repository target with ID='" + settings.getId() + "' has no regexp pattern defined!");
     }
 
     return response;
@@ -395,19 +385,17 @@ public class DefaultApplicationConfigurationValidator
 
     if (StringUtils.isEmpty(settings.getHostname())) {
       ValidationMessage msg = new ValidationMessage("host", "SMTP Host is empty.");
-      response.addValidationError(msg);
+      response.addError(msg);
     }
 
     if (settings.getPort() < 0) {
-      ValidationMessage msg = new ValidationMessage(
-          "port",
-          "SMTP Port is inavlid.  Enter a port greater than 0.");
-      response.addValidationError(msg);
+      ValidationMessage msg = new ValidationMessage("port", "SMTP Port is inavlid.  Enter a port greater than 0.");
+      response.addError(msg);
     }
 
     if (StringUtils.isEmpty(settings.getSystemEmailAddress())) {
       ValidationMessage msg = new ValidationMessage("systemEmailAddress", "System Email Address is empty.");
-      response.addValidationError(msg);
+      response.addError(msg);
     }
 
     return response;

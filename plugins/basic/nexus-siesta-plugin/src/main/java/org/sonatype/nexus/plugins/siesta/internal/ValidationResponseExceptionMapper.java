@@ -40,7 +40,7 @@ public class ValidationResponseExceptionMapper
   @Override
   protected List<ValidationErrorXO> getValidationErrors(final ValidationResponseException exception) {
     ValidationResponse response = exception.getResponse();
-    List<ValidationMessage> errors = response.getValidationErrors();
+    List<ValidationMessage> errors = response.getErrors();
     if (!errors.isEmpty()) {
       return Lists.transform(errors, new Function<ValidationMessage, ValidationErrorXO>()
       {

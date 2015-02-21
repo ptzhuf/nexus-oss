@@ -72,7 +72,7 @@ public abstract class AbstractShadowRepositoryConfiguration
           new ValidationMessage("shadowOf", "Master repository id=\"" + getMasterRepositoryId()
               + "\" not found for ShadowRepository with id=\"" + id + "\"!");
 
-      response.addValidationError(message);
+      response.addError(message);
     }
 
     return response;

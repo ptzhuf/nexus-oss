@@ -117,7 +117,7 @@ extends DirectComponentSupport
     }
     catch (Exception e) {
       def validations = new ValidationResponse()
-      validations.addValidationError(new ValidationMessage('attributes', e.message))
+      validations.addError(new ValidationMessage('attributes', e.message))
       throw new ValidationResponseException(validations)
     }
   }

@@ -338,7 +338,7 @@ extends DirectComponentSupport
         if (e.cause?.message) {
           message += ': ' + e.cause.message
         }
-        validations.addValidationError(new ValidationMessage('email', message))
+        validations.addError(new ValidationMessage('email', message))
         throw new ValidationResponseException(validations)
       }
     }

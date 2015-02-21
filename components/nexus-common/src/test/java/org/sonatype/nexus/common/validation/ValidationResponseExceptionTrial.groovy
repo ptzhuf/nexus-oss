@@ -24,12 +24,12 @@ class ValidationResponseExceptionTrial
   @Test
   void 'string representation'() {
     def response = new ValidationResponse()
-    response.addValidationError(new ValidationMessage('key', 'foo'))
-    response.addValidationError(new ValidationMessage('key', 'bar', new Throwable('TEST')))
-    response.addValidationError(new ValidationMessage('key', 'baz'))
-    response.addValidationWarning(new ValidationMessage('key', 'ick'))
-    response.addValidationWarning(new ValidationMessage('key', 'qux', new Throwable('TEST')))
-    response.addValidationWarning(new ValidationMessage('key', 'poo'))
+    response.addError(new ValidationMessage('key', 'foo'))
+    response.addError(new ValidationMessage('key', 'bar', new Throwable('TEST')))
+    response.addError(new ValidationMessage('key', 'baz'))
+    response.addWarning(new ValidationMessage('key', 'ick'))
+    response.addWarning(new ValidationMessage('key', 'qux', new Throwable('TEST')))
+    response.addWarning(new ValidationMessage('key', 'poo'))
     log new ValidationResponseException('Ooops', response)
   }
 }
