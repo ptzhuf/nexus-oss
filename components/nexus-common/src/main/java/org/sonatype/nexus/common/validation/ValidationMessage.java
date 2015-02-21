@@ -55,11 +55,11 @@ public class ValidationMessage
   public String toString() {
     StringBuilder buff = new StringBuilder();
 
-    buff.append(" o ").append(key).append(" - ").append(message);
+    buff.append(key).append(": ").append(message);
 
     if (cause != null) {
-      buff.append("\nCause:\n");
-      buff.append(Throwables.getStackTraceAsString(cause));
+      buff.append("\n    Cause: ")
+          .append(Throwables.getStackTraceAsString(cause).trim());
     }
 
     return buff.toString();

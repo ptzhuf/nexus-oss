@@ -68,7 +68,7 @@ public class ValidationResponse
     return validationErrors;
   }
 
-  public void addValidationError(ValidationMessage message) {
+  public void addValidationError(final ValidationMessage message) {
     getValidationErrors().add(message);
     this.valid = false;
   }
@@ -77,7 +77,7 @@ public class ValidationResponse
    * @deprecated Avoid validation messages without keys!
    */
   @Deprecated
-  public void addValidationError(String message) {
+  public void addValidationError(final String message) {
     ValidationMessage e = new ValidationMessage(String.valueOf(key++), message);
     addValidationError(e);
   }
@@ -89,7 +89,7 @@ public class ValidationResponse
     return validationWarnings;
   }
 
-  public void addValidationWarning(ValidationMessage message) {
+  public void addValidationWarning(final ValidationMessage message) {
     getValidationWarnings().add(message);
   }
 
@@ -97,7 +97,7 @@ public class ValidationResponse
    * @deprecated Avoid validation messages without keys!
    */
   @Deprecated
-  public void addValidationWarning(String message) {
+  public void addValidationWarning(final String message) {
     ValidationMessage e = new ValidationMessage(String.valueOf(key++), message);
     addValidationWarning(e);
   }
@@ -108,20 +108,10 @@ public class ValidationResponse
    */
   public void append(final ValidationResponse response) {
     for (ValidationMessage message : response.getValidationErrors()) {
-      // FIXME: Sort out if this is important for anything, if so rebuild message with updated key
-      //if (getValidationError(msg.getKey()) != null) {
-      //  msg.setKey(msg.getKey() + "(" + key++ + ")");
-      //}
-
       addValidationError(message);
     }
 
     for (ValidationMessage message : response.getValidationWarnings()) {
-      // FIXME: Sort out if this is important for anything, if so rebuild message with updated key
-      //if (getValidationWarning(msg.getKey()) != null) {
-      //  msg.setKey(msg.getKey() + "(" + key++ + ")");
-      //}
-
       addValidationWarning(message);
     }
 

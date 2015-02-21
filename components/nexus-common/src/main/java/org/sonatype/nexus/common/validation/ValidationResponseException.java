@@ -18,13 +18,15 @@ import javax.annotation.Nonnull;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+// TODO: Consider extending javax.validation.ValidationException?
+
 /**
  * Validation response exception.
  *
  * @since 3.0
  */
 public class ValidationResponseException
-    extends RuntimeException // javax.validation.ValidationException?
+    extends RuntimeException
 {
   private ValidationResponse response;
 
@@ -59,26 +61,23 @@ public class ValidationResponseException
       buff.append(super.getMessage());
     }
 
-    // FIXME: Refine this output and ValidationMessage.toString() for sanity
-
-    if (!response.getValidationErrors().isEmpty()) {
-      buff.append("\nValidation errors:\n");
-
-      for (ValidationMessage message : response.getValidationErrors()) {
-        buff.append(message);
-      }
-      buff.append("\n");
-    }
-
-    if (!response.getValidationWarnings().isEmpty()) {
-      buff.append("\nValidation warnings:\n");
-
-      for (ValidationMessage message : response.getValidationWarnings()) {
-        buff.append(message);
-      }
-      buff.append("\n");
-    }
-
+    append(buff, "errors", response.getValidationErrors());
+    append(buff, "warnings", response.getValidationWarnings());
     return buff.toString();
+  }
+
+  private void append(final StringBuilder buff, final String type, final List<ValidationMessage> messages) {
+    if (!messages.isEmpty()) {
+      buff.append("\n");
+      buff.append(messages.size());
+      buff.append(" ").append(type).append(":\n");
+
+      int c=0;
+      for (ValidationMessage message : messages) {
+        buff.append("[").append(++c).append("] ");
+        buff.append(message);
+        buff.append("\n");
+      }
+    }
   }
 }
