@@ -25,15 +25,12 @@ import org.sonatype.nexus.common.validation.ValidationMessage;
 import org.sonatype.nexus.common.validation.ValidationResponse;
 import org.sonatype.nexus.configuration.model.CHttpProxySettings;
 import org.sonatype.nexus.configuration.model.CPathMappingItem;
-import org.sonatype.nexus.configuration.model.CRemoteAuthentication;
 import org.sonatype.nexus.configuration.model.CRemoteConnectionSettings;
 import org.sonatype.nexus.configuration.model.CRemoteHttpProxySettings;
-import org.sonatype.nexus.configuration.model.CRemoteNexusInstance;
 import org.sonatype.nexus.configuration.model.CRemoteProxySettings;
 import org.sonatype.nexus.configuration.model.CRepository;
 import org.sonatype.nexus.configuration.model.CRepositoryGrouping;
 import org.sonatype.nexus.configuration.model.CRepositoryTarget;
-import org.sonatype.nexus.configuration.model.CRestApiSettings;
 import org.sonatype.nexus.configuration.model.CRouting;
 import org.sonatype.nexus.configuration.model.CSmtpConfiguration;
 import org.sonatype.nexus.configuration.model.Configuration;
@@ -51,9 +48,9 @@ public class DefaultApplicationConfigurationValidator
 {
   private final Random rand = new Random(System.currentTimeMillis());
 
-  public static final String REPOSITORY_ID_PATTERN = "^[a-zA-Z0-9_\\-\\.]+$";
+  private static final String REPOSITORY_ID_PATTERN = "^[a-zA-Z0-9_\\-\\.]+$";
 
-  public String generateId() {
+  private String generateId() {
     return Long.toHexString(System.nanoTime() + rand.nextInt(2008));
   }
 
@@ -67,15 +64,9 @@ public class DefaultApplicationConfigurationValidator
     response.setContext(context);
 
     // global conn settings
-    if (model.getGlobalConnectionSettings() != null) {
-      response.append(validateRemoteConnectionSettings(context, model.getGlobalConnectionSettings()));
-    }
-    else {
+    if (model.getGlobalConnectionSettings() == null) {
       model.setGlobalConnectionSettings(new CRemoteConnectionSettings());
-
-      response.addValidationWarning(
-          "Global connection settings block, which is mandatory, was missing. Reset with defaults.");
-
+      response.addValidationWarning("Global connection settings block, which is mandatory, was missing. Reset with defaults.");
       response.setModified(true);
     }
 
@@ -90,32 +81,20 @@ public class DefaultApplicationConfigurationValidator
       }
     }
 
-    // rest api
-    if (model.getRestApi() != null) {
-      response.append(validateRestApiSettings(context, model.getRestApi()));
-    }
-
     // nexus built-in http proxy
     if (model.getHttpProxy() != null) {
       response.append(validateHttpProxySettings(context, model.getHttpProxy()));
     }
     else {
       model.setHttpProxy(new CHttpProxySettings());
-
       response.addValidationWarning("The HTTP Proxy section was missing from configuration, defaulted it.");
-
       response.setModified(true);
     }
 
     // routing
-    if (model.getRouting() != null) {
-      response.append(validateRouting(context, model.getRouting()));
-    }
-    else {
+    if (model.getRouting() == null) {
       model.setRouting(new CRouting());
-
       response.addValidationWarning("The routing section was missing from configuration, defaulted it.");
-
       response.setModified(true);
     }
 
@@ -131,15 +110,6 @@ public class DefaultApplicationConfigurationValidator
     // check groups (optional section)
     if (model.getRepositoryGrouping() != null) {
       response.append(validateRepositoryGrouping(context, model.getRepositoryGrouping()));
-    }
-
-    // check remote nexus instances (optional section)
-    if (model.getRemoteNexusInstances() != null) {
-      List<CRemoteNexusInstance> instances = model.getRemoteNexusInstances();
-
-      for (CRemoteNexusInstance instance : instances) {
-        response.append(validateRemoteNexusInstance(context, instance));
-      }
     }
 
     // check repo targets (optional section)
@@ -349,32 +319,6 @@ public class DefaultApplicationConfigurationValidator
   }
 
   @Override
-  public ValidationResponse validateRemoteAuthentication(ApplicationValidationContext ctx,
-                                                         CRemoteAuthentication settings)
-  {
-    ValidationResponse response = new ApplicationValidationResponse();
-
-    if (ctx != null) {
-      response.setContext(ctx);
-    }
-
-    return response;
-  }
-
-  @Override
-  public ValidationResponse validateRemoteConnectionSettings(ApplicationValidationContext ctx,
-                                                             CRemoteConnectionSettings settings)
-  {
-    ValidationResponse response = new ApplicationValidationResponse();
-
-    if (ctx != null) {
-      response.setContext(ctx);
-    }
-
-    return response;
-  }
-
-  @Override
   public ValidationResponse validateRemoteHttpProxySettings(ApplicationValidationContext ctx,
                                                             CRemoteHttpProxySettings settings)
   {
@@ -387,8 +331,6 @@ public class DefaultApplicationConfigurationValidator
     if (settings.getProxyPort() < 1 || settings.getProxyPort() > 65535) {
       response.addValidationError("The proxy port must be an integer between 1 and 65535!");
     }
-
-    response.append(validateRemoteAuthentication(ctx, settings.getAuthentication()));
 
     return response;
   }
@@ -438,41 +380,6 @@ public class DefaultApplicationConfigurationValidator
     else {
       response.addValidationError("Repository target with ID='" + settings.getId()
           + "' has no regexp pattern defined!");
-    }
-
-    return response;
-  }
-
-  @Override
-  public ValidationResponse validateRestApiSettings(ApplicationValidationContext ctx, CRestApiSettings settings) {
-    ValidationResponse response = new ApplicationValidationResponse();
-
-    if (ctx != null) {
-      response.setContext(ctx);
-    }
-
-    return response;
-  }
-
-  @Override
-  public ValidationResponse validateRouting(ApplicationValidationContext ctx, CRouting settings) {
-    ValidationResponse response = new ApplicationValidationResponse();
-
-    if (ctx != null) {
-      response.setContext(ctx);
-    }
-
-    return response;
-  }
-
-  @Override
-  public ValidationResponse validateRemoteNexusInstance(ApplicationValidationContext ctx,
-                                                        CRemoteNexusInstance settings)
-  {
-    ValidationResponse response = new ApplicationValidationResponse();
-
-    if (ctx != null) {
-      response.setContext(ctx);
     }
 
     return response;
