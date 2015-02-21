@@ -31,9 +31,9 @@ public class SecuritySettingsValidatorImpl
     ValidationResponse validationResponse = new ValidationResponse();
     validationResponse.setContext(context);
 
-    validationResponse.append(this.validateAnonymousUsername(context, configuration.getAnonymousUsername()));
-    validationResponse.append(this.validateAnonymousPassword(context, configuration.getAnonymousPassword()));
-    validationResponse.append(this.validateRealms(context, configuration.getRealms()));
+    validationResponse.append(validateAnonymousUsername(context, configuration.getAnonymousUsername()));
+    validationResponse.append(validateAnonymousPassword(context, configuration.getAnonymousPassword()));
+    validationResponse.append(validateRealms(context, configuration.getRealms()));
 
     return validationResponse;
   }
