@@ -70,6 +70,7 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
 
 /**
  * This implementation wraps a Shiro SecurityManager, and adds user management.
@@ -127,16 +128,13 @@ public class DefaultSecuritySystem
 
   @Override
   public Subject getSubject() {
-    // this gets the currently bound Subject to the thread
     return SecurityUtils.getSubject();
   }
 
   @Override
   public synchronized void start() {
-    if (started) {
-      throw new IllegalStateException(getClass().getName()
-          + " was already started, same instance is not re-startable!");
-    }
+    checkState(!started, "Already started");
+
     // reload the config
     securitySettingsManager.clearCache();
 
@@ -205,7 +203,7 @@ public class DefaultSecuritySystem
 
   @Override
   public Set<Role> listRoles() {
-    Set<Role> roles = new HashSet<Role>();
+    Set<Role> roles = new HashSet<>();
     for (AuthorizationManager authzManager : authorizationManagers.values()) {
       Set<Role> tmpRoles = authzManager.listRoles();
       if (tmpRoles != null) {
@@ -229,7 +227,7 @@ public class DefaultSecuritySystem
 
   @Override
   public Set<Privilege> listPrivileges() {
-    Set<Privilege> privileges = new HashSet<Privilege>();
+    Set<Privilege> privileges = new HashSet<>();
     for (AuthorizationManager authzManager : authorizationManagers.values()) {
       Set<Privilege> tmpPrivileges = authzManager.listPrivileges();
       if (tmpPrivileges != null) {
@@ -269,7 +267,7 @@ public class DefaultSecuritySystem
                   user.getRoles()));
         }
         catch (UserNotFoundException e) {
-          log.debug("User '{}' is not managed by the usermanager: {}",
+          log.debug("User '{}' is not managed by the user-manager: {}",
               user.getUserId(), tmpUserManager.getSource());
         }
       }
@@ -308,7 +306,7 @@ public class DefaultSecuritySystem
                   user.getRoles()));
         }
         catch (UserNotFoundException e) {
-          log.debug("User '{}' is not managed by the usermanager: {}",
+          log.debug("User '{}' is not managed by the user-manager: {}",
               user.getUserId(), tmpUserManager.getSource());
         }
       }
@@ -337,20 +335,12 @@ public class DefaultSecuritySystem
     checkNotNull(userId, "User ID may not be null");
 
     Subject subject = getSubject();
-    if (subject != null && subject.getPrincipal() != null && userId.equals(subject.getPrincipal().toString())) {
-      throw new IllegalArgumentException(
-          "The user with user ID [" + userId
-              + "] cannot be deleted, as that is the user currently logged into the application."
-      );
+    if (subject.getPrincipal() != null && userId.equals(subject.getPrincipal().toString())) {
+      throw new IllegalArgumentException("Can not delete currently signed in user");
     }
 
     if (isAnonymousAccessEnabled() && userId.equals(getAnonymousUsername())) {
-      throw new IllegalArgumentException(
-          "The user with user ID [" + userId
-              + "] cannot be deleted, since it is marked user used for Anonymous access in Server Administration. "
-              + "To delete this user, disable anonymous access or, "
-              + "change the anonymous username and password to another valid values!"
-      );
+      throw new IllegalArgumentException("Can not delete anonymous user");
     }
 
     UserManager userManager = getUserManager(source);
@@ -380,7 +370,7 @@ public class DefaultSecuritySystem
                   roleIdentifiers));
         }
         catch (UserNotFoundException e) {
-          log.debug("User '{}' is not managed by the usermanager: {}",
+          log.debug("User '{}' is not managed by the user-manager: {}",
               userId, tmpUserManager.getSource());
         }
       }
@@ -446,7 +436,7 @@ public class DefaultSecuritySystem
 
   @Override
   public Set<User> listUsers() {
-    Set<User> users = new HashSet<User>();
+    Set<User> users = new HashSet<>();
 
     for (UserManager tmpUserManager : getUserManagers()) {
       users.addAll(tmpUserManager.listUsers());
@@ -463,7 +453,7 @@ public class DefaultSecuritySystem
 
   @Override
   public Set<User> searchUsers(UserSearchCriteria criteria) {
-    Set<User> users = new HashSet<User>();
+    Set<User> users = new HashSet<>();
 
     // if the source is not set search all realms.
     if (Strings2.isEmpty(criteria.getSource())) {
@@ -504,11 +494,11 @@ public class DefaultSecuritySystem
    * @return the list of UserManagers in the order (as close as possible) to the list of realms.
    */
   private List<UserManager> orderUserManagers() {
-    List<UserManager> orderedLocators = new ArrayList<UserManager>();
+    List<UserManager> orderedLocators = new ArrayList<>();
 
-    List<UserManager> unOrderdLocators = new ArrayList<UserManager>(getUserManagers());
+    List<UserManager> unOrderdLocators = new ArrayList<>(getUserManagers());
 
-    Map<String, UserManager> realmToUserManagerMap = new HashMap<String, UserManager>();
+    Map<String, UserManager> realmToUserManagerMap = new HashMap<>();
 
     for (UserManager userManager : getUserManagers()) {
       if (userManager.getAuthenticationRealmName() != null) {
@@ -551,7 +541,7 @@ public class DefaultSecuritySystem
           }
         }
         catch (UserNotFoundException e) {
-          log.debug("User '{}' is not managed by the usermanager: {}",
+          log.debug("User '{}' is not managed by the user-manager: {}",
               user.getUserId(), tmpUserManager.getSource());
         }
       }
@@ -561,8 +551,7 @@ public class DefaultSecuritySystem
   @Override
   public AuthorizationManager getAuthorizationManager(String source) throws NoSuchAuthorizationManagerException {
     if (!authorizationManagers.containsKey(source)) {
-      throw new NoSuchAuthorizationManagerException("AuthorizationManager with source: '" + source
-          + "' could not be found.");
+      throw new NoSuchAuthorizationManagerException("AuthorizationManager with source: '" + source + "' could not be found.");
     }
 
     return authorizationManagers.get(source);
@@ -598,7 +587,7 @@ public class DefaultSecuritySystem
     }
     catch (NoSuchUserManagerException e) {
       // this should NEVER happen
-      log.warn("User '{}' with source: '{}' but could not find the UserManager for that source.",
+      log.warn("User '{}' with source: '{}' but could not find the user-manager for that source.",
           userId, user.getSource());
     }
 
@@ -711,7 +700,7 @@ public class DefaultSecuritySystem
 
   @Override
   public List<String> getRealms() {
-    return new ArrayList<String>(securitySettingsManager.getRealms());
+    return new ArrayList<>(securitySettingsManager.getRealms());
   }
 
   @Override
@@ -860,22 +849,18 @@ public class DefaultSecuritySystem
       return !oldStatus.equals(anonymousUser.getStatus());
     }
     catch (UserNotFoundException e) {
-      // ignore, anon user maybe manually deleted from XML realm by Nexus admin, is okay (kinda expected)
-      log.debug("Anonymous user not found while trying to disable it (as part of disabling anonymous access)!", e);
+      // could happen normally if anonymous user was removed
+      log.debug("Anonymous user missing; ignoring", e);
       return false;
     }
     catch (NoSuchUserManagerException e) {
-      // ignore, XML realm removed from configuration by Nexus admin, is okay (kinda expected)
-      log.debug("XML Realm not found while trying to disable Anonymous user; as part of disabling anonymous access", e);
+      // could happen normally if the default authc realm was removed from active configuration
+      log.debug("User-manager for anonymous user missing; ignoring", e);
       return false;
     }
     catch (ConfigurationException e) {
-      // do not ignore, and report, as this jeopardizes whole security functionality
-      // we did not perform any _change_ against security sofar (we just did reading from it),
-      // so it is okay to bail out at this point
-      log.warn(
-          "XML Realm reported invalid configuration while trying to disable Anonymous user (as part of disabling anonymous access)!",
-          e);
+      // complain for all other bad things
+      log.error("Failed to configure anonymous user", e);
       throw e;
     }
   }
