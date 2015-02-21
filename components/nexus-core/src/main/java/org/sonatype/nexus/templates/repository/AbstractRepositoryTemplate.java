@@ -35,15 +35,15 @@ public abstract class AbstractRepositoryTemplate
 
   private ConfigurableRepository configurableRepository;
 
-  public AbstractRepositoryTemplate(AbstractRepositoryTemplateProvider provider, String id, String description,
-                                    ContentClass contentClass, Class<?> mainFacet)
+  public AbstractRepositoryTemplate(AbstractRepositoryTemplateProvider provider,
+                                    String id,
+                                    String description,
+                                    ContentClass contentClass,
+                                    Class<?> mainFacet)
   {
     super(provider, id, description);
-
     this.provider = provider;
-
     this.contentClass = contentClass;
-
     if (mainFacet != null) {
       this.mainFacet = mainFacet;
     }
@@ -80,7 +80,7 @@ public abstract class AbstractRepositoryTemplate
       try {
         configurableRepository.configure(getCoreConfiguration());
       }
-      catch (ConfigurationException e) {
+      catch (Exception e) {
         // will not happen, since ConfigurableRepository will not validate!
         // TODO: get rid of this exception from here
       }
@@ -88,17 +88,14 @@ public abstract class AbstractRepositoryTemplate
     return configurableRepository;
   }
 
-  public Repository create()
-      throws ConfigurationException, IOException
-  {
+  public Repository create() throws ConfigurationException, IOException {
     getCoreConfiguration().validateChanges();
 
     // to merge in user changes to CoreConfiguration
     getCoreConfiguration().commitChanges();
 
     // create a repository
-    Repository repository =
-        getTemplateProvider().createRepository(getCoreConfiguration().getConfiguration(false));
+    Repository repository = getTemplateProvider().createRepository(getCoreConfiguration().getConfiguration(false));
 
     // reset the template
     setCoreConfiguration(null);
@@ -127,7 +124,6 @@ public abstract class AbstractRepositoryTemplate
 
   public static class ProviderHint
   {
-
     private final String value;
 
     public ProviderHint(final String value) {
@@ -137,7 +133,5 @@ public abstract class AbstractRepositoryTemplate
     public String getValue() {
       return value;
     }
-
   }
-
 }
