@@ -17,7 +17,6 @@ import java.util.List;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.sonatype.configuration.validation.ValidationRequest;
 import org.sonatype.configuration.validation.ValidationResponse;
 import org.sonatype.nexus.security.settings.SecuritySettings;
 import org.sonatype.nexus.security.settings.SecuritySettingsValidationContext;
@@ -28,13 +27,9 @@ import org.sonatype.nexus.security.settings.SecuritySettingsValidator;
 public class SecuritySettingsValidatorImpl
     implements SecuritySettingsValidator
 {
-  public ValidationResponse validateModel(SecuritySettingsValidationContext context,
-                                          ValidationRequest<SecuritySettings> request)
-  {
+  public ValidationResponse validateModel(SecuritySettingsValidationContext context, SecuritySettings configuration) {
     ValidationResponse validationResponse = new ValidationResponse();
     validationResponse.setContext(context);
-
-    SecuritySettings configuration = request.getConfiguration();
 
     validationResponse.append(this.validateAnonymousUsername(context, configuration.getAnonymousUsername()));
     validationResponse.append(this.validateAnonymousPassword(context, configuration.getAnonymousPassword()));

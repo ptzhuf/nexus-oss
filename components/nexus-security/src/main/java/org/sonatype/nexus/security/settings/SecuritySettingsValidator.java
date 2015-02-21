@@ -14,13 +14,11 @@ package org.sonatype.nexus.security.settings;
 
 import java.util.List;
 
-import org.sonatype.configuration.validation.ValidationRequest;
 import org.sonatype.configuration.validation.ValidationResponse;
 
 public interface SecuritySettingsValidator
 {
-  ValidationResponse validateModel(SecuritySettingsValidationContext context,
-                                   ValidationRequest<SecuritySettings> request);
+  ValidationResponse validateModel(SecuritySettingsValidationContext context, SecuritySettings model);
 
   ValidationResponse validateAnonymousUsername(SecuritySettingsValidationContext context, String anonymousUsername);
 

@@ -26,7 +26,6 @@ import javax.inject.Provider;
 import javax.inject.Singleton;
 
 import org.sonatype.configuration.ConfigurationException;
-import org.sonatype.configuration.validation.ValidationRequest;
 import org.sonatype.configuration.validation.ValidationResponse;
 import org.sonatype.configuration.validation.ValidationResponseException;
 import org.sonatype.nexus.configuration.model.CPathMappingItem;
@@ -355,11 +354,8 @@ public class DefaultApplicationConfiguration
       throws IOException
   {
     if (applyConfiguration()) {
-      // TODO: when NEXUS-2215 is fixed, this should be remove/moved/cleaned
-      // START <<<
       // validate before we do anything
-      ValidationRequest request = new ValidationRequest(configurationSource.getConfiguration());
-      ValidationResponse response = configurationValidator.validateModel(request);
+      ValidationResponse response = configurationValidator.validateModel(configurationSource.getConfiguration());
       if (!response.isValid()) {
         this.log.error("Saving nexus configuration caused unexpected error:\n" + response.toString());
         throw new IOException("Saving nexus configuration caused unexpected error:\n" + response.toString());

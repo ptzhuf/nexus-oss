@@ -10,6 +10,7 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
+
 package org.sonatype.nexus.configuration.validator;
 
 import java.util.List;
@@ -21,7 +22,6 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.sonatype.configuration.validation.ValidationMessage;
-import org.sonatype.configuration.validation.ValidationRequest;
 import org.sonatype.configuration.validation.ValidationResponse;
 import org.sonatype.nexus.configuration.model.CHttpProxySettings;
 import org.sonatype.nexus.configuration.model.CPathMappingItem;
@@ -57,12 +57,10 @@ public class DefaultApplicationConfigurationValidator
     return Long.toHexString(System.nanoTime() + rand.nextInt(2008));
   }
 
-  public ValidationResponse validateModel(ValidationRequest request) {
+  public ValidationResponse validateModel(Configuration model) {
     ValidationResponse response = new ApplicationValidationResponse();
 
     response.setContext(new ApplicationValidationContext());
-
-    Configuration model = (Configuration) request.getConfiguration();
 
     ApplicationValidationContext context = (ApplicationValidationContext) response.getContext();
 
@@ -75,9 +73,8 @@ public class DefaultApplicationConfigurationValidator
     else {
       model.setGlobalConnectionSettings(new CRemoteConnectionSettings());
 
-      response
-          .addValidationWarning(
-              "Global connection settings block, which is mandatory, was missing. Reset with defaults.");
+      response.addValidationWarning(
+          "Global connection settings block, which is mandatory, was missing. Reset with defaults.");
 
       response.setModified(true);
     }

@@ -14,7 +14,6 @@ package org.sonatype.nexus.security.config;
 
 import java.util.ArrayList;
 
-import org.sonatype.configuration.validation.ValidationRequest;
 import org.sonatype.configuration.validation.ValidationResponse;
 
 import org.eclipse.sisu.launch.InjectedTestCase;
@@ -32,9 +31,9 @@ public class DefaultSecurityConfigurationValidatorTest
   }
 
   public void testBad1() throws Exception {
-    ValidationResponse response = configurationValidator.validateModel(new ValidationRequest<>(
+    ValidationResponse response = configurationValidator.validateModel(
         DefaultSecurityConfigurationValidatorTestSecurity.securityModel1()
-    ));
+    );
 
     assertFalse(response.isValid());
 
@@ -47,9 +46,9 @@ public class DefaultSecurityConfigurationValidatorTest
   }
 
   public void testBad2() throws Exception {
-    ValidationResponse response = configurationValidator.validateModel(new ValidationRequest<>(
+    ValidationResponse response = configurationValidator.validateModel(
         DefaultSecurityConfigurationValidatorTestSecurity.securityModel2()
-    ));
+    );
 
     assertFalse(response.isValid());
 
@@ -61,9 +60,9 @@ public class DefaultSecurityConfigurationValidatorTest
   }
 
   public void testBad3() throws Exception {
-    ValidationResponse response = configurationValidator.validateModel(new ValidationRequest<>(
+    ValidationResponse response = configurationValidator.validateModel(
         DefaultSecurityConfigurationValidatorTestSecurity.securityModel3()
-    ));
+    );
 
     assertFalse(response.isValid());
 

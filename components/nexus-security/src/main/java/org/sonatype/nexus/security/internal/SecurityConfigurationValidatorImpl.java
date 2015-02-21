@@ -24,7 +24,6 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.sonatype.configuration.validation.ValidationMessage;
-import org.sonatype.configuration.validation.ValidationRequest;
 import org.sonatype.configuration.validation.ValidationResponse;
 import org.sonatype.nexus.common.text.Strings2;
 import org.sonatype.nexus.security.config.CPrivilege;
@@ -32,7 +31,7 @@ import org.sonatype.nexus.security.config.CRole;
 import org.sonatype.nexus.security.config.CUser;
 import org.sonatype.nexus.security.config.CUserRoleMapping;
 import org.sonatype.nexus.security.config.ConfigurationIdGenerator;
-import org.sonatype.nexus.security.config.MemorySecurityConfiguration;
+import org.sonatype.nexus.security.config.SecurityConfiguration;
 import org.sonatype.nexus.security.config.SecurityConfigurationValidationContext;
 import org.sonatype.nexus.security.config.SecurityConfigurationValidator;
 import org.sonatype.nexus.security.privilege.PrivilegeDescriptor;
@@ -58,11 +57,9 @@ public class SecurityConfigurationValidatorImpl
     this.idGenerator = idGenerator;
   }
 
-  public ValidationResponse validateModel(ValidationRequest<MemorySecurityConfiguration> request) {
+  public ValidationResponse validateModel(final SecurityConfiguration model) {
     ValidationResponse response = new ValidationResponse();
     response.setContext(new SecurityConfigurationValidationContext());
-
-    MemorySecurityConfiguration model = (MemorySecurityConfiguration) request.getConfiguration();
 
     SecurityConfigurationValidationContext context = (SecurityConfigurationValidationContext) response.getContext();
 

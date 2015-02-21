@@ -23,7 +23,6 @@ import javax.inject.Singleton;
 
 import org.sonatype.configuration.ConfigurationException;
 import org.sonatype.configuration.validation.ValidationMessage;
-import org.sonatype.configuration.validation.ValidationRequest;
 import org.sonatype.configuration.validation.ValidationResponse;
 import org.sonatype.configuration.validation.ValidationResponseException;
 import org.sonatype.nexus.SystemStatus;
@@ -93,7 +92,7 @@ public class FileConfigurationSource
 
     upgradeNexusVersion();
 
-    ValidationResponse vResponse = configurationValidator.validateModel(new ValidationRequest(getConfiguration()));
+    ValidationResponse vResponse = configurationValidator.validateModel(getConfiguration());
     dumpValidationErrors(vResponse);
     if (vResponse.isValid()) {
       if (vResponse.isModified()) {
