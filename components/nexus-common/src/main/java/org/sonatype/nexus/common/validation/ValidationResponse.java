@@ -15,6 +15,7 @@ package org.sonatype.nexus.common.validation;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -61,6 +62,7 @@ public class ValidationResponse
     this.modified = modified;
   }
 
+  @Nonnull
   public List<ValidationMessage> getValidationErrors() {
     if (validationErrors == null) {
       validationErrors = new ArrayList<>();
@@ -82,6 +84,7 @@ public class ValidationResponse
     addValidationError(e);
   }
 
+  @Nonnull
   public List<ValidationMessage> getValidationWarnings() {
     if (validationWarnings == null) {
       validationWarnings = new ArrayList<>();
