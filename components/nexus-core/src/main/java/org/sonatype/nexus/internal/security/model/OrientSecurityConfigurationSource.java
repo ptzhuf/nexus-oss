@@ -202,12 +202,9 @@ public class OrientSecurityConfigurationSource
   private class OrientSecurityConfiguration
       implements SecurityConfiguration
   {
-
     @Override
     public List<CUser> getUsers() {
-      if (log.isTraceEnabled()) {
-        log.trace("Retrieving all users");
-      }
+      log.trace("Retrieving all users");
 
       try (ODatabaseDocumentTx db = openDb()) {
         return Lists.newArrayList(userEntityAdapter.get(db));
@@ -217,9 +214,7 @@ public class OrientSecurityConfigurationSource
     @Override
     public CUser getUser(final String id) {
       checkNotNull(id, "user id");
-      if (log.isTraceEnabled()) {
-        log.trace("Retrieving user {}", id);
-      }
+      log.trace("Retrieving user {}", id);
 
       try (ODatabaseDocumentTx db = openDb()) {
         ODocument document = userEntityAdapter.get(db, id);
@@ -234,9 +229,7 @@ public class OrientSecurityConfigurationSource
     public void addUser(final CUser user, final Set<String> roles) {
       checkNotNull(user, "user");
       checkNotNull(user.getId(), "user id");
-      if (log.isTraceEnabled()) {
-        log.trace("Adding user {}", user.getId());
-      }
+      log.trace("Adding user {}", user.getId());
 
       try (ODatabaseDocumentTx db = openDb()) {
         userEntityAdapter.create(db, user);
@@ -248,9 +241,7 @@ public class OrientSecurityConfigurationSource
     public void updateUser(final CUser user, final Set<String> roles) throws UserNotFoundException {
       checkNotNull(user, "user");
       checkNotNull(user.getId(), "user id");
-      if (log.isTraceEnabled()) {
-        log.trace("Updating user {}", user.getId());
-      }
+      log.trace("Updating user {}", user.getId());
 
       try (ODatabaseDocumentTx db = openDb()) {
         ODocument document = userEntityAdapter.get(db, user.getId());
@@ -271,18 +262,14 @@ public class OrientSecurityConfigurationSource
         }
       }
       catch (OConcurrentModificationException e) {
-        throw new ConcurrentModificationException(
-            "User " + user.getId() + " updated in the meantime"
-        );
+        throw new ConcurrentModificationException("User " + user.getId() + " updated in the meantime");
       }
     }
 
     @Override
     public boolean removeUser(final String id) {
       checkNotNull(id, "user id");
-      if (log.isTraceEnabled()) {
-        log.trace("Removing user {}", id);
-      }
+      log.trace("Removing user {}", id);
 
       try (ODatabaseDocumentTx db = openDb()) {
         if (userEntityAdapter.delete(db, id)) {
@@ -292,17 +279,13 @@ public class OrientSecurityConfigurationSource
         return false;
       }
       catch (OConcurrentModificationException e) {
-        throw new ConcurrentModificationException(
-            "User " + id + " updated in the meantime"
-        );
+        throw new ConcurrentModificationException("User " + id + " updated in the meantime");
       }
     }
 
     @Override
     public List<CUserRoleMapping> getUserRoleMappings() {
-      if (log.isTraceEnabled()) {
-        log.trace("Retrieving all user/role mappings");
-      }
+      log.trace("Retrieving all user/role mappings");
 
       try (ODatabaseDocumentTx db = openDb()) {
         return Lists.newArrayList(userRoleMappingEntityAdapter.get(db));
@@ -313,9 +296,7 @@ public class OrientSecurityConfigurationSource
     public CUserRoleMapping getUserRoleMapping(final String userId, final String source) {
       checkNotNull(userId, "user id");
       checkNotNull(source, "source");
-      if (log.isTraceEnabled()) {
-        log.trace("Retrieving user/role mappings of {}/{}", userId, source);
-      }
+      log.trace("Retrieving user/role mappings of {}/{}", userId, source);
 
       try (ODatabaseDocumentTx db = openDb()) {
         ODocument document = userRoleMappingEntityAdapter.get(db, userId, source);
@@ -331,9 +312,7 @@ public class OrientSecurityConfigurationSource
       checkNotNull(mapping, "mapping");
       checkNotNull(mapping.getUserId(), "user id");
       checkNotNull(mapping.getSource(), "source");
-      if (log.isTraceEnabled()) {
-        log.trace("Adding user/role mappings for {}/{}", mapping.getUserId(), mapping.getSource());
-      }
+      log.trace("Adding user/role mappings for {}/{}", mapping.getUserId(), mapping.getSource());
 
       try (ODatabaseDocumentTx db = openDb()) {
         userRoleMappingEntityAdapter.create(db, mapping);
@@ -345,9 +324,7 @@ public class OrientSecurityConfigurationSource
       checkNotNull(mapping, "mapping");
       checkNotNull(mapping.getUserId(), "user id");
       checkNotNull(mapping.getSource(), "source");
-      if (log.isTraceEnabled()) {
-        log.trace("Updating user/role mappings for {}/{}", mapping.getUserId(), mapping.getSource());
-      }
+      log.trace("Updating user/role mappings for {}/{}", mapping.getUserId(), mapping.getSource());
 
       try (ODatabaseDocumentTx db = openDb()) {
         ODocument document = userRoleMappingEntityAdapter.get(db, mapping.getUserId(), mapping.getSource());
@@ -355,16 +332,12 @@ public class OrientSecurityConfigurationSource
           throw new NoSuchRoleMappingException(mapping.getUserId());
         }
         if (mapping.getVersion() != null && !Objects.equals(mapping.getVersion(), valueOf(document.getVersion()))) {
-          throw new ConcurrentModificationException(
-              "User " + mapping.getUserId() + " role mappings updated in the meantime"
-          );
+          throw new ConcurrentModificationException("User " + mapping.getUserId() + " role mappings updated in the meantime");
         }
         userRoleMappingEntityAdapter.write(document, mapping);
       }
       catch (OConcurrentModificationException e) {
-        throw new ConcurrentModificationException(
-            "User " + mapping.getUserId() + " role mappings updated in the meantime"
-        );
+        throw new ConcurrentModificationException("User " + mapping.getUserId() + " role mappings updated in the meantime");
       }
     }
 
@@ -372,25 +345,19 @@ public class OrientSecurityConfigurationSource
     public boolean removeUserRoleMapping(final String userId, final String source) {
       checkNotNull(userId, "user id");
       checkNotNull(source, "source");
-      if (log.isTraceEnabled()) {
-        log.trace("Removing user/role mappings for {}/{}", userId, source);
-      }
+      log.trace("Removing user/role mappings for {}/{}", userId, source);
 
       try (ODatabaseDocumentTx db = openDb()) {
         return userRoleMappingEntityAdapter.delete(db, userId, source);
       }
       catch (OConcurrentModificationException e) {
-        throw new ConcurrentModificationException(
-            "User " + userId + " role mappings updated in the meantime"
-        );
+        throw new ConcurrentModificationException("User " + userId + " role mappings updated in the meantime");
       }
     }
 
     @Override
     public List<CPrivilege> getPrivileges() {
-      if (log.isTraceEnabled()) {
-        log.trace("Retrieving all privileges");
-      }
+      log.trace("Retrieving all privileges");
 
       try (ODatabaseDocumentTx db = openDb()) {
         return Lists.newArrayList(privilegeEntityAdapter.get(db));
@@ -400,9 +367,7 @@ public class OrientSecurityConfigurationSource
     @Override
     public CPrivilege getPrivilege(final String id) {
       checkNotNull(id, "privilege id");
-      if (log.isTraceEnabled()) {
-        log.trace("Retrieving privilege {}", id);
-      }
+      log.trace("Retrieving privilege {}", id);
 
       try (ODatabaseDocumentTx db = openDb()) {
         ODocument document = privilegeEntityAdapter.get(db, id);
@@ -417,9 +382,7 @@ public class OrientSecurityConfigurationSource
     public void addPrivilege(final CPrivilege privilege) {
       checkNotNull(privilege, "privilege");
       checkNotNull(privilege.getId(), "privilege id");
-      if (log.isTraceEnabled()) {
-        log.trace("Adding privilege {}", privilege.getId());
-      }
+      log.trace("Adding privilege {}", privilege.getId());
 
       try (ODatabaseDocumentTx db = openDb()) {
         privilegeEntityAdapter.create(db, privilege);
@@ -430,9 +393,7 @@ public class OrientSecurityConfigurationSource
     public void updatePrivilege(final CPrivilege privilege) throws NoSuchPrivilegeException {
       checkNotNull(privilege, "privilege");
       checkNotNull(privilege.getId(), "privilege id");
-      if (log.isTraceEnabled()) {
-        log.trace("Updating privilege {}", privilege.getId());
-      }
+      log.trace("Updating privilege {}", privilege.getId());
 
       try (ODatabaseDocumentTx db = openDb()) {
         ODocument document = privilegeEntityAdapter.get(db, privilege.getId());
@@ -452,9 +413,7 @@ public class OrientSecurityConfigurationSource
     @Override
     public boolean removePrivilege(final String id) {
       checkNotNull(id, "privilege id");
-      if (log.isTraceEnabled()) {
-        log.trace("Removing privilege {}", id);
-      }
+      log.trace("Removing privilege {}", id);
 
       try (ODatabaseDocumentTx db = openDb()) {
         return privilegeEntityAdapter.delete(db, id);
@@ -466,9 +425,7 @@ public class OrientSecurityConfigurationSource
 
     @Override
     public List<CRole> getRoles() {
-      if (log.isTraceEnabled()) {
-        log.trace("Retrieving all roles");
-      }
+      log.trace("Retrieving all roles");
 
       try (ODatabaseDocumentTx db = openDb()) {
         return Lists.newArrayList(roleEntityAdapter.get(db));
@@ -478,9 +435,7 @@ public class OrientSecurityConfigurationSource
     @Override
     public CRole getRole(final String id) {
       checkNotNull(id, "role id");
-      if (log.isTraceEnabled()) {
-        log.trace("Retrieving role {}", id);
-      }
+      log.trace("Retrieving role {}", id);
 
       try (ODatabaseDocumentTx db = openDb()) {
         ODocument document = roleEntityAdapter.get(db, id);
@@ -495,9 +450,7 @@ public class OrientSecurityConfigurationSource
     public void addRole(final CRole role) {
       checkNotNull(role, "role");
       checkNotNull(role.getId(), "role id");
-      if (log.isTraceEnabled()) {
-        log.trace("Adding role {}", role.getId());
-      }
+      log.trace("Adding role {}", role.getId());
 
       try (ODatabaseDocumentTx db = openDb()) {
         roleEntityAdapter.create(db, role);
@@ -508,9 +461,7 @@ public class OrientSecurityConfigurationSource
     public void updateRole(final CRole role) throws NoSuchRoleException {
       checkNotNull(role, "role");
       checkNotNull(role.getId(), "role id");
-      if (log.isTraceEnabled()) {
-        log.trace("Updating role {}", role.getId());
-      }
+      log.trace("Updating role {}", role.getId());
 
       try (ODatabaseDocumentTx db = openDb()) {
         ODocument document = roleEntityAdapter.get(db, role.getId());
@@ -530,9 +481,7 @@ public class OrientSecurityConfigurationSource
     @Override
     public boolean removeRole(final String id) {
       checkNotNull(id, "role id");
-      if (log.isTraceEnabled()) {
-        log.trace("Removing role {}", id);
-      }
+      log.trace("Removing role {}", id);
 
       try (ODatabaseDocumentTx db = openDb()) {
         return roleEntityAdapter.delete(db, id);
