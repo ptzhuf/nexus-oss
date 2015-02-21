@@ -81,9 +81,7 @@ public class ConfigurableRepository
       return (CRepositoryCoreConfiguration) configuration;
     }
     else {
-      throw new ConfigurationException("The passed configuration object is of class \""
-          + configuration.getClass().getName() + "\" and not the required \"" + CRepository.class.getName()
-          + "\"!");
+      throw new ConfigurationException("The passed configuration object is of class \"" + configuration.getClass().getName() + "\" and not the required \"" + CRepository.class.getName() + "\"!");
     }
   }
 

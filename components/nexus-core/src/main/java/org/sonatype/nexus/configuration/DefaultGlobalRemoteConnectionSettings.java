@@ -42,9 +42,7 @@ public class DefaultGlobalRemoteConnectionSettings
       return new CGlobalRemoteConnectionSettingsCoreConfiguration((ApplicationConfiguration) configuration);
     }
     else {
-      throw new ConfigurationException("The passed configuration object is of class \""
-          + configuration.getClass().getName() + "\" and not the required \""
-          + ApplicationConfiguration.class.getName() + "\"!");
+      throw new ConfigurationException("The passed configuration object is of class \"" + configuration.getClass().getName() + "\" and not the required \"" + ApplicationConfiguration.class.getName() + "\"!");
     }
   }
 
@@ -125,9 +123,7 @@ public class DefaultGlobalRemoteConnectionSettings
   }
 
   @Override
-  public boolean commitChanges()
-      throws ConfigurationException
-  {
+  public boolean commitChanges() throws ConfigurationException {
     boolean wasDirty = super.commitChanges();
     if (wasDirty) {
       eventBus().post(new GlobalRemoteConnectionSettingsChangedEvent(this));

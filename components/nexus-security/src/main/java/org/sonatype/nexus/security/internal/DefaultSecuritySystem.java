@@ -776,8 +776,7 @@ public class DefaultSecuritySystem
   {
     if (enabled) {
       if (Strings.isNullOrEmpty(username) || Strings.isNullOrEmpty(password)) {
-        throw new ConfigurationException(
-            "Anonymous access is getting enabled without valid username and/or password!");
+        throw new ConfigurationException("Anonymous access is getting enabled without valid username and/or password!");
       }
 
       final String oldUsername = getAnonymousUsername();

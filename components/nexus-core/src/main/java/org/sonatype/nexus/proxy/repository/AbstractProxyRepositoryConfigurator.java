@@ -175,12 +175,10 @@ public abstract class AbstractProxyRepositoryConfigurator
       if (result != null) {
         return result;
       }
-      throw new ConfigurationException("Repository " + repoId
-          + " have remote storage with unsupported provider: " + provider);
+      throw new ConfigurationException("Repository " + repoId + " have remote storage with unsupported provider: " + provider);
     }
     catch (IllegalArgumentException e) {
-      throw new ConfigurationException("Repository " + repoId
-          + " have remote storage with unsupported provider: " + provider, e);
+      throw new ConfigurationException("Repository " + repoId + " have remote storage with unsupported provider: " + provider, e);
     }
   }
 }

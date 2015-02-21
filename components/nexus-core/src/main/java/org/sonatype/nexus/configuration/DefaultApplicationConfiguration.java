@@ -454,8 +454,7 @@ public class DefaultApplicationConfiguration
     }
     catch (Exception e) {
       Throwables.propagateIfInstanceOf(e, ConfigurationException.class);
-      throw new ConfigurationException("Cannot instantiate repository " + repositoryModel.getProviderRole() + ":"
-          + repositoryModel.getProviderHint(), e);
+      throw new ConfigurationException("Cannot instantiate repository " + repositoryModel.getProviderRole() + ":" + repositoryModel.getProviderHint(), e);
     }
   }
 
@@ -470,8 +469,10 @@ public class DefaultApplicationConfiguration
     }
   }
 
-  private Repository instantiateRepository(final Configuration configuration, final Class<? extends Repository> klazz,
-                                             final String name, final CRepository repositoryModel)
+  private Repository instantiateRepository(final Configuration configuration,
+                                           final Class<? extends Repository> klazz,
+                                           final String name,
+                                           final CRepository repositoryModel)
       throws ConfigurationException
   {
     checkRepositoryMaxInstanceCountForCreation(klazz, name, repositoryModel);
