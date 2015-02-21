@@ -21,6 +21,9 @@ package org.sonatype.nexus.security.user;
 public abstract class AbstractReadOnlyUserManager
     extends AbstractUserManager
 {
+  /**
+   * @return Always {@code false}
+   */
   @Override
   public boolean supportsWrite() {
     return false;

@@ -18,52 +18,54 @@ import org.sonatype.nexus.security.role.NoSuchRoleException;
 import org.sonatype.nexus.security.role.Role;
 
 /**
- * An abstract AuthorizationManager, that just throws exceptions for all the write methods. Any call to theses methods
- * should be checked by the <code>supportsWrite()</code> method, so this should never be called.
+ * Read-only {@link AuthorizationManager}, which just throws exceptions for all the write methods.
+ *
+ * Any call to theses methods should be checked by the <code>supportsWrite()</code> method,
+ * so this should never be called.
  */
 public abstract class AbstractReadOnlyAuthorizationManager
     implements AuthorizationManager
 {
+  /**
+   * @return Always {@code false}
+   */
   @Override
   public boolean supportsWrite() {
     return false;
   }
 
   @Override
-  public Privilege addPrivilege(Privilege privilege) {
-    throwException();
-    return null;
+  public Privilege addPrivilege(final Privilege privilege) {
+    throw unsupported();
   }
 
   @Override
-  public Role addRole(Role role) {
-    throwException();
-    return null;
+  public Role addRole(final Role role) {
+    throw unsupported();
   }
 
   @Override
-  public void deletePrivilege(String privilegeId) throws NoSuchPrivilegeException {
-    throwException();
+  public void deletePrivilege(final String privilegeId) throws NoSuchPrivilegeException {
+    throw unsupported();
   }
 
   @Override
-  public void deleteRole(String roleId) throws NoSuchRoleException {
-    throwException();
+  public void deleteRole(final String roleId) throws NoSuchRoleException {
+    throw unsupported();
   }
 
   @Override
-  public Privilege updatePrivilege(Privilege privilege) throws NoSuchPrivilegeException {
-    throwException();
-    return null;
+  public Privilege updatePrivilege(final Privilege privilege) throws NoSuchPrivilegeException {
+    throw unsupported();
   }
 
   @Override
-  public Role updateRole(Role role) throws NoSuchRoleException {
-    throwException();
-    return null;
+  public Role updateRole(final Role role) throws NoSuchRoleException {
+    throw unsupported();
   }
 
-  private void throwException() {
+  private IllegalStateException unsupported() {
+    // TODO: Should probably use UnsupportedOperationException
     throw new IllegalStateException("AuthorizationManager: '" + getSource() + "' does not support write operations.");
   }
 }
