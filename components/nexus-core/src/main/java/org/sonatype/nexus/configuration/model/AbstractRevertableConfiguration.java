@@ -106,9 +106,7 @@ public abstract class AbstractRevertableConfiguration<C>
     return isThisDirty();
   }
 
-  public void validateChanges()
-      throws ConfigurationException
-  {
+  public void validateChanges() throws ConfigurationException {
     if (isThisDirty()) {
       checkValidationResponse(doValidateChanges(getChangedConfiguration()));
     }
@@ -141,7 +139,7 @@ public abstract class AbstractRevertableConfiguration<C>
 
   // ==
 
-  private void checkValidationResponse(ValidationResponse response) {
+  protected void checkValidationResponse(ValidationResponse response) {
     if (response != null && !response.isValid()) {
       throw new ValidationResponseException(response);
     }

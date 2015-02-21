@@ -83,7 +83,7 @@ public abstract class AbstractXpp3DomExternalConfigurationHolder
 
   // ==
 
-  private void checkValidationResponse(ValidationResponse response) {
+  protected void checkValidationResponse(ValidationResponse response) {
     if (!response.isValid()) {
       throw new ValidationResponseException(response);
     }
