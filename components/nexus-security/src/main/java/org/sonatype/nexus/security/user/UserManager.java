@@ -29,7 +29,7 @@ public interface UserManager
   String getSource();
 
   /**
-   * The name of the {@link Realm} is assocated with.
+   * The name of the {@link Realm} is associated with.
    */
   String getAuthenticationRealmName();
 
@@ -43,8 +43,9 @@ public interface UserManager
    */
   Set<User> listUsers();
 
+  // FIXME: This is only used by tests
   /**
-   * Retrieve all userids (if managing full object list is to heavy handed)
+   * Retrieve all user ids.
    */
   Set<String> listUserIds();
 
