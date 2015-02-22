@@ -14,8 +14,10 @@ package org.sonatype.nexus.common.hash;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Map;
 
+import com.google.common.hash.Funnels;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hasher;
@@ -69,16 +71,8 @@ public final class Hashes
    */
   public static HashCode hash(final HashFunction function, final InputStream input) throws IOException {
     Hasher hasher = function.newHasher();
-
-    byte[] buff = new byte[1024];
-    int read;
-    while (true) {
-      read = input.read(buff);
-      if (read < 0) {
-        break;
-      }
-      hasher.putBytes(buff, 0, read);
-    }
+    OutputStream output = Funnels.asOutputStream(hasher);
+    ByteStreams.copy(input, output);
     return hasher.hash();
   }
 }
