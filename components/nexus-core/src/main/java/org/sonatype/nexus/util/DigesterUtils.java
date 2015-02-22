@@ -19,10 +19,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import com.google.common.base.Charsets;
-import com.google.common.hash.HashCode;
-import com.google.common.hash.HashFunction;
-import com.google.common.hash.Hasher;
 import com.google.common.hash.Hashing;
+
+import static org.sonatype.nexus.common.hash.Hashes.hash;
 
 /**
  * @deprecated Use guava helpers instead.
@@ -30,33 +29,6 @@ import com.google.common.hash.Hashing;
 @Deprecated
 public class DigesterUtils
 {
-  /**
-   * Apply input-stream bytes to hash-function.
-   */
-  private static HashCode hash(final HashFunction function, final InputStream input) throws IOException {
-    Hasher hasher = function.newHasher();
-
-    byte[] buff = new byte[1024];
-    int read;
-    while (true) {
-      read = input.read(buff);
-      if (read < 0) {
-        break;
-      }
-      hasher.putBytes(buff, 0, read);
-    }
-    return hasher.hash();
-  }
-
-  public static String getSha256Digest(final InputStream input) {
-    try {
-      return hash(Hashing.sha256(), input).toString();
-    }
-    catch (IOException e) {
-      return null;
-    }
-  }
-
   public static String getSha1Digest(final String content) {
     return Hashing.sha1().hashString(content, Charsets.UTF_8).toString();
   }
