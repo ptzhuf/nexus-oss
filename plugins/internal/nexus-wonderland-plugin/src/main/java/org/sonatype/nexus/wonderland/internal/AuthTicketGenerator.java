@@ -52,7 +52,7 @@ public class AuthTicketGenerator
   }
 
   protected String encode(final byte[] bytes) {
-    return BaseEncoding.base64().lowerCase().encode(bytes);
+    return BaseEncoding.base64().encode(bytes);
   }
 
   public String generate(final int size) {
