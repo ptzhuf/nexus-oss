@@ -12,15 +12,15 @@
  */
 package org.sonatype.nexus.util;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import com.google.common.base.Charsets;
+import com.google.common.hash.Hashing;
 import com.google.common.io.BaseEncoding;
 
 // TODO: Update to use Guava's Hasher helpers and remove this ancient helper.
@@ -31,41 +31,24 @@ import com.google.common.io.BaseEncoding;
 @Deprecated
 public class DigesterUtils
 {
-  // Streams
-
-  /**
-   * Hex Encodes the digest value.
-   */
-  public static String getDigestAsString(byte[] digest) {
-    return BaseEncoding.base16().lowerCase().encode(digest);
-  }
-
-  /**
-   * Calculates a digest for a String user the requested algorithm.
-   */
-  public static String getDigest(String alg, InputStream is)
-      throws NoSuchAlgorithmException
-  {
+  public static String getDigest(String alg, InputStream is) throws NoSuchAlgorithmException {
     String result = null;
 
     try {
       try {
         byte[] buffer = new byte[1024];
-
         MessageDigest md = MessageDigest.getInstance(alg);
 
         int numRead;
-
         do {
           numRead = is.read(buffer);
-
           if (numRead > 0) {
             md.update(buffer, 0, numRead);
           }
         }
         while (numRead != -1);
 
-        result = getDigestAsString(md.digest());
+        result = BaseEncoding.base16().lowerCase().encode(md.digest());
       }
       finally {
         is.close();
@@ -79,30 +62,10 @@ public class DigesterUtils
     return result;
   }
 
-  // SHA1
-
-  /**
-   * Calculates a SHA1 digest for a string.
-   */
   public static String getSha1Digest(String content) {
-    try {
-      InputStream is = new ByteArrayInputStream(content.getBytes("UTF-8"));
-
-      return getDigest("SHA1", is);
-    }
-    catch (NoSuchAlgorithmException e) {
-      // will not happen
-      return null;
-    }
-    catch (UnsupportedEncodingException e) {
-      // will not happen
-      return null;
-    }
+    return Hashing.sha1().hashString(content, Charsets.UTF_8).toString();
   }
 
-  /**
-   * Calculates a SHA1 digest for a stream.
-   */
   public static String getSha1Digest(InputStream is) {
     try {
       return getDigest("SHA1", is);
@@ -113,9 +76,6 @@ public class DigesterUtils
     }
   }
 
-  /**
-   * Calculates a SHA1 digest for a file.
-   */
   public static String getSha1Digest(File file) {
     try {
       try (FileInputStream fis = new FileInputStream(file)) {
@@ -130,27 +90,11 @@ public class DigesterUtils
       return null;
     }
   }
-
-  // MD5
-
-  /**
-   * Calculates a SHA1 digest for a stream.
-   */
-  public static String getMd5Digest(InputStream is) {
-    try {
-      return getDigest("MD5", is);
-    }
-    catch (NoSuchAlgorithmException e) {
-      // will not happen
-      return null;
-    }
+  public static String getMd5Digest(byte[] input) {
+    return Hashing.md5().hashBytes(input).toString();
   }
 
-  public static String getMd5Digest(byte[] byteArray) {
-    return getMd5Digest(new ByteArrayInputStream(byteArray));
-  }
-
-  public static String getSha1Digest(byte[] byteArray) {
-    return getSha1Digest(new ByteArrayInputStream(byteArray));
+  public static String getSha1Digest(byte[] input) {
+    return Hashing.sha1().hashBytes(input).toString();
   }
 }
