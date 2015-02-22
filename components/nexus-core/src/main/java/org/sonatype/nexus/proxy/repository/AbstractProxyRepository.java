@@ -58,13 +58,13 @@ import org.sonatype.nexus.proxy.storage.remote.AbstractHTTPRemoteRepositoryStora
 import org.sonatype.nexus.proxy.storage.remote.DefaultRemoteStorageContext;
 import org.sonatype.nexus.proxy.storage.remote.RemoteRepositoryStorage;
 import org.sonatype.nexus.proxy.storage.remote.RemoteStorageContext;
-import org.sonatype.nexus.proxy.utils.ConstantNumberSequence;
-import org.sonatype.nexus.proxy.utils.FibonacciNumberSequence;
-import org.sonatype.nexus.proxy.utils.NumberSequence;
 import org.sonatype.nexus.proxy.utils.RepositoryStringUtils;
 import org.sonatype.nexus.proxy.walker.DefaultWalkerContext;
 import org.sonatype.nexus.proxy.walker.WalkerException;
 import org.sonatype.nexus.proxy.walker.WalkerFilter;
+import org.sonatype.nexus.util.sequence.ConstantNumberSequence;
+import org.sonatype.nexus.util.sequence.FibonacciNumberSequence;
+import org.sonatype.nexus.util.sequence.NumberSequence;
 
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;

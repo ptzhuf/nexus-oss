@@ -10,53 +10,42 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.proxy.utils;
+package org.sonatype.nexus.util.sequence;
+
+import com.google.common.base.Preconditions;
 
 /**
- * A simple linear number sequence (linear equation).
+ * Simple handy class to subclass when you want to wrap another {@link NumberSequence}.
  *
  * @author cstamas
  * @since 2.0
  */
-public class LinearNumberSequence
+public abstract class NumberSequenceWrapper
     implements NumberSequence
 {
-  private final long start;
+  private final NumberSequence numberSequence;
 
-  private final long step;
-
-  private final long multiplier;
-
-  private final long shift;
-
-  private long current;
-
-  public LinearNumberSequence(final long start, final long step, final long multiplier, final long shift) {
-    this.start = start;
-    this.step = step;
-    this.multiplier = multiplier;
-    this.shift = shift;
+  public NumberSequenceWrapper(final NumberSequence numberSequence) {
+    this.numberSequence = Preconditions.checkNotNull(numberSequence);
   }
 
   @Override
   public long next() {
-    current = current + step;
-    return peek();
+    return numberSequence.next();
   }
 
   @Override
   public long prev() {
-    current = current - step;
-    return peek();
+    return numberSequence.prev();
   }
 
   @Override
   public long peek() {
-    return (current * multiplier) + shift;
+    return numberSequence.peek();
   }
 
   @Override
   public void reset() {
-    this.current = start;
+    numberSequence.reset();
   }
 }

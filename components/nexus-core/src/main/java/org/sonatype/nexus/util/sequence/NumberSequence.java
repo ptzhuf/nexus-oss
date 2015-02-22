@@ -10,42 +10,34 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.proxy.utils;
-
-import com.google.common.base.Preconditions;
+package org.sonatype.nexus.util.sequence;
 
 /**
- * Simple handy class to subclass when you want to wrap another {@link NumberSequence}.
+ * A simple interface that gives you a sequence of numbers. That might be simple natural numbers sequence, but anything
+ * else too.
  *
  * @author cstamas
- * @since 2.0
  */
-public abstract class NumberSequenceWrapper
-    implements NumberSequence
+public interface NumberSequence
 {
-  private final NumberSequence numberSequence;
+  /**
+   * Returns the next number in sequence and advances the sequence.
+   */
+  long next();
 
-  public NumberSequenceWrapper(final NumberSequence numberSequence) {
-    this.numberSequence = Preconditions.checkNotNull(numberSequence);
-  }
+  /**
+   * Returns the previous number in sequence and digresses the sequence.
+   */
+  long prev();
 
-  @Override
-  public long next() {
-    return numberSequence.next();
-  }
+  /**
+   * Returns the next number in sequence without advancing the sequence. This method will return always the same
+   * number unless method {@code next()} is called.
+   */
+  long peek();
 
-  @Override
-  public long prev() {
-    return numberSequence.prev();
-  }
-
-  @Override
-  public long peek() {
-    return numberSequence.peek();
-  }
-
-  @Override
-  public void reset() {
-    numberSequence.reset();
-  }
+  /**
+   * Resets the sequence.
+   */
+  void reset();
 }
