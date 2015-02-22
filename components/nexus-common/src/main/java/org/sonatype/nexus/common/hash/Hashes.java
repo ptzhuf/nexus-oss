@@ -17,13 +17,15 @@ import java.io.InputStream;
 import java.util.Map;
 
 import com.google.common.hash.HashCode;
+import com.google.common.hash.HashFunction;
+import com.google.common.hash.Hasher;
 import com.google.common.hash.HashingInputStream;
 import com.google.common.io.ByteStreams;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Helper for computing {@link HashCode}es from {@link InputStream}s.
+ * {@link HashCode} helpers.
  *
  * @since 3.0
  */
@@ -58,5 +60,23 @@ public final class Hashes
       ByteStreams.copy(hashingStream, ByteStreams.nullOutputStream());
       return hashingStream.hashes();
     }
+  }
+
+  /**
+   * Computes the hash of the given stream using the given function.
+   */
+  public static HashCode hash(final HashFunction function, final InputStream input) throws IOException {
+    Hasher hasher = function.newHasher();
+
+    byte[] buff = new byte[1024];
+    int read;
+    while (true) {
+      read = input.read(buff);
+      if (read < 0) {
+        break;
+      }
+      hasher.putBytes(buff, 0, read);
+    }
+    return hasher.hash();
   }
 }
