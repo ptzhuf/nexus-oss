@@ -10,14 +10,20 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.util;
+package org.sonatype.nexus.proxy.utils;
 
-/**
- * Simple condition interface to wrap a boolean decision.
- *
- * @since 2.5
- */
-public interface Condition
+import org.junit.Test;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+
+public class NodeTest
 {
-  boolean isSatisfied();
+  @Test
+  public void getPath() {
+    final Node<Object> root = new Node<Object>(null, "/", null);
+    final Node<Object> node = root.addChild("archetype-catalog.xml", null);
+
+    assertThat(node.getPath(), equalTo("/archetype-catalog.xml"));
+  }
 }
