@@ -12,8 +12,6 @@
  */
 package org.sonatype.nexus.common.text;
 
-import org.sonatype.sisu.goodies.common.TestAccessible;
-
 import com.google.common.base.Charsets;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
@@ -25,12 +23,17 @@ import org.jetbrains.annotations.Nullable;
  */
 public final class Strings2
 {
+  /**
+   * Platform new-line separator.
+   */
   @NonNls
   public static final String NL = System.getProperty("line.separator");
 
+  /**
+   * Password mask.
+   */
   @NonNls
-  @TestAccessible
-  static final String MASK = "****";
+  public static final String MASK = "****";
 
   private Strings2() {}
 
