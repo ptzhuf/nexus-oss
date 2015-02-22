@@ -54,11 +54,13 @@ public class Tokens
     return Strings2.isEmpty(value);
   }
 
-  // FIXME: Depends on factoring out DigesterUtils and Base64
+  // FIXME: Depends on factoring out DigesterUtils
 
   public static String encodeHexString(final byte[] bytes) {
     return new String(DigesterUtils.encodeHex(bytes));
   }
+
+  // FIXME: Depends on factoring out Base64
 
   public static String encodeBase64String(final byte[] bytes) {
     return Strings2.utf8(Base64.encodeBase64(bytes));
