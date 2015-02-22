@@ -38,7 +38,7 @@ public final class Hashes
   /**
    * Computes the hash of the given stream using the given algorithm.
    */
-  public static HashCode hash(HashAlgorithm algorithm, InputStream inputStream) throws IOException {
+  public static HashCode hash(final HashAlgorithm algorithm, final InputStream inputStream) throws IOException {
     checkNotNull(algorithm);
     checkNotNull(inputStream);
 
@@ -51,8 +51,10 @@ public final class Hashes
   /**
    * Computes the hash of the given stream using multiple algorithms in one pass.
    */
-  public static Map<HashAlgorithm, HashCode> hash(Iterable<HashAlgorithm> algorithms, InputStream inputStream)
-      throws IOException {
+  public static Map<HashAlgorithm, HashCode> hash(final Iterable<HashAlgorithm> algorithms,
+                                                  final InputStream inputStream)
+      throws IOException
+  {
     checkNotNull(algorithms);
     checkNotNull(inputStream);
 
