@@ -15,8 +15,6 @@ package org.sonatype.nexus.util;
 import org.sonatype.nexus.common.text.Strings2;
 
 import org.codehaus.plexus.util.Base64;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
 
 // TODO: Update to use Guava's BaseEncoding helpers and free from plexus-utils
 // TODO: Update to use Guava's Hasher helpers and free from DigesterUtils
@@ -31,29 +29,6 @@ import org.jetbrains.annotations.Nullable;
 @Deprecated
 public class Tokens
 {
-  @NonNls
-  public static final String NL = Strings2.NL;
-
-  public static String encode(final String input, final char separator, final int delay) {
-    return Strings2.encode(input, separator, delay);
-  }
-
-  public static String string(final byte[] bytes) {
-    return Strings2.utf8(bytes);
-  }
-
-  public static byte[] bytes(final String string) {
-    return Strings2.utf8(string);
-  }
-
-  public static String mask(final @Nullable String password) {
-    return Strings2.mask(password);
-  }
-
-  public static boolean isEmpty(final @Nullable String value) {
-    return Strings2.isEmpty(value);
-  }
-
   // FIXME: Depends on factoring out DigesterUtils
 
   public static String encodeHexString(final byte[] bytes) {
@@ -71,7 +46,7 @@ public class Tokens
   }
 
   public static String decodeBase64String(final String str) {
-    return Strings2.utf8(Base64.decodeBase64(bytes(str)));
+    return Strings2.utf8(Base64.decodeBase64(Strings2.utf8(str)));
   }
 }
 

@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.sonatype.nexus.common.text.Strings2;
 import org.sonatype.nexus.common.validation.Validate;
 import org.sonatype.nexus.extdirect.DirectComponentSupport;
 import org.sonatype.nexus.rapture.StateContributor;
@@ -122,7 +123,7 @@ public class SecurityComponent
 
     String username = Tokens.decodeBase64String(base64Username);
     String password = Tokens.decodeBase64String(base64Password);
-    log.debug("Authenticate w/username: {}, password: {}", username, Tokens.mask(password));
+    log.debug("Authenticate w/username: {}, password: {}", username, Strings2.mask(password));
 
     // Require current user to be the requested user to authenticate
     subject = securitySystem.getSubject();

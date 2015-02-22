@@ -12,9 +12,10 @@
  */
 package org.sonatype.nexus.common.text;
 
+import javax.annotation.Nullable;
+
 import com.google.common.base.Charsets;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * String helpers.

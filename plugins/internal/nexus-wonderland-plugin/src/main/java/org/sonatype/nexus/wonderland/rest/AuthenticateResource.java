@@ -23,6 +23,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 
+import org.sonatype.nexus.common.text.Strings2;
 import org.sonatype.nexus.util.Tokens;
 import org.sonatype.nexus.wonderland.AuthTicketService;
 import org.sonatype.nexus.wonderland.WonderlandPlugin;
@@ -77,7 +78,7 @@ public class AuthenticateResource
 
     String username = Tokens.decodeBase64String(token.getU());
     String password = Tokens.decodeBase64String(token.getP());
-    log.debug("Authenticate w/username: {}, password: {}", username, Tokens.mask(password));
+    log.debug("Authenticate w/username: {}, password: {}", username, Strings2.mask(password));
 
     // Require current user to be the requested user to authenticate
     Subject subject = SecurityUtils.getSubject();

@@ -16,9 +16,9 @@ import org.eclipse.sisu.Parameters
 import org.sonatype.nexus.SystemStatus
 import org.sonatype.nexus.atlas.SystemInformationGenerator
 import org.sonatype.nexus.common.guice.GlobalComponentLookupHelper
+import org.sonatype.nexus.common.text.Strings2
 import org.sonatype.nexus.configuration.ApplicationDirectories
 import org.sonatype.nexus.plugin.PluginIdentity
-import org.sonatype.nexus.util.Tokens
 import org.sonatype.sisu.goodies.common.ComponentSupport
 import org.sonatype.sisu.goodies.common.Iso8601Date
 
@@ -216,7 +216,7 @@ class SystemInformationGeneratorImpl
     def reportObfuscatedProperties = { properties ->
       return properties.collectEntries { key, value ->
         if (key.toLowerCase(Locale.US).contains('password')) {
-          value = Tokens.mask(value)
+          value = Strings2.mask(value)
         }
         return [key, value]
       }.sort()
