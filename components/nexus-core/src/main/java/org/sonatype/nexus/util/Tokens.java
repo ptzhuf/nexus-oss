@@ -103,10 +103,6 @@ public class Tokens
     return Base64.decodeBase64(bytes);
   }
 
-  public static String decodeBase64String(final byte[] bytes) {
-    return string(Base64.decodeBase64(bytes));
-  }
-
   public static String decodeBase64String(final String str) {
     return string(Base64.decodeBase64(bytes(str)));
   }
