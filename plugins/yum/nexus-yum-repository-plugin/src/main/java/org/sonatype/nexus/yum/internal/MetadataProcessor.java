@@ -39,6 +39,7 @@ import org.sonatype.nexus.proxy.item.PreparedContentLocator;
 import org.sonatype.nexus.proxy.item.StorageFileItem;
 import org.sonatype.nexus.proxy.repository.ProxyRepository;
 import org.sonatype.nexus.proxy.repository.Repository;
+import org.sonatype.nexus.util.DigesterUtils;
 
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
@@ -51,7 +52,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import static javax.xml.xpath.XPathConstants.NODE;
-import static org.sonatype.nexus.util.DigesterUtils.getDigest;
 import static org.sonatype.nexus.yum.Yum.PATH_OF_REPOMD_XML;
 
 /**
@@ -228,7 +228,7 @@ public class MetadataProcessor
       if (primaryHref.contains(primaryChecksum)) {
         repository.deleteItem(false, new ResourceStoreRequest("/" + primaryHref));
         primaryHref = primaryHref.replace(
-            primaryChecksum, getDigest("SHA-256", new ByteArrayInputStream(primaryContent))
+            primaryChecksum, DigesterUtils.getSha256Digest(new ByteArrayInputStream(primaryContent))
         );
       }
       storeItem(repository, primaryHref, primaryContent, "application/x-gzip");
@@ -263,7 +263,7 @@ public class MetadataProcessor
       try (InputStream in = primaryItem.getInputStream();
            CountingInputStream cis = new CountingInputStream(new GZIPInputStream(new BufferedInputStream(in)))) {
         primaryEl.getElementsByTagName("open-checksum").item(0).setTextContent(String.valueOf(
-            getDigest("SHA-256", cis)
+            DigesterUtils.getSha256Digest(cis)
         ));
         primaryEl.getElementsByTagName("open-size").item(0).setTextContent(String.valueOf(
             cis.getCount()
@@ -276,7 +276,7 @@ public class MetadataProcessor
       try (InputStream in = primaryItem.getInputStream();
            CountingInputStream cis = new CountingInputStream(new BufferedInputStream(in))) {
         primaryEl.getElementsByTagName("checksum").item(0).setTextContent(String.valueOf(
-            getDigest("SHA-256", cis)
+            DigesterUtils.getSha256Digest(cis)
         ));
         primaryEl.getElementsByTagName("size").item(0).setTextContent(String.valueOf(
             cis.getCount()

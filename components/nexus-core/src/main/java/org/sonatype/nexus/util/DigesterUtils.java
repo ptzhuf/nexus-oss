@@ -12,89 +12,72 @@
  */
 package org.sonatype.nexus.util;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 import com.google.common.base.Charsets;
+import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
-import com.google.common.io.BaseEncoding;
-
-// TODO: Update to use Guava's Hasher helpers and remove this ancient helper.
 
 /**
- * A util class to calculate various digests on Strings. Usaful for some simple password management.
+ * @deprecated Use guava helpers instead.
  */
 @Deprecated
 public class DigesterUtils
 {
-  public static String getDigest(String alg, InputStream is) throws NoSuchAlgorithmException {
-    String result = null;
-
-    try {
-      try {
-        byte[] buffer = new byte[1024];
-        MessageDigest md = MessageDigest.getInstance(alg);
-
-        int numRead;
-        do {
-          numRead = is.read(buffer);
-          if (numRead > 0) {
-            md.update(buffer, 0, numRead);
-          }
-        }
-        while (numRead != -1);
-
-        result = BaseEncoding.base16().lowerCase().encode(md.digest());
-      }
-      finally {
-        is.close();
-      }
+  /**
+   * Apply input-stream bytes to hash-function.
+   */
+  private static HashFunction apply(final InputStream input, final HashFunction function) throws IOException {
+    byte[] buff = new byte[1024];
+    int read;
+    do {
+      read = input.read(buff);
+      function.hashBytes(buff, 0, read);
     }
-    catch (IOException e) {
-      // hrm
-      result = null;
-    }
-
-    return result;
+    while (read != -1);
+    return function;
   }
 
-  public static String getSha1Digest(String content) {
+  public static String getSha256Digest(final InputStream input) {
+    try {
+      return apply(input, Hashing.sha256()).toString();
+    }
+    catch (IOException e) {
+      return null;
+    }
+  }
+
+  public static String getSha1Digest(final String content) {
     return Hashing.sha1().hashString(content, Charsets.UTF_8).toString();
   }
 
-  public static String getSha1Digest(InputStream is) {
+  public static String getSha1Digest(final InputStream input) {
     try {
-      return getDigest("SHA1", is);
-    }
-    catch (NoSuchAlgorithmException e) {
-      // will not happen
-      return null;
-    }
-  }
-
-  public static String getSha1Digest(File file) {
-    try {
-      try (FileInputStream fis = new FileInputStream(file)) {
-        return getDigest("SHA1", fis);
-      }
-      catch (NoSuchAlgorithmException e) {
-        // will not happen
-        return null;
-      }
+      return apply(input, Hashing.sha1()).toString();
     }
     catch (IOException e) {
       return null;
     }
   }
-  public static String getMd5Digest(byte[] input) {
+
+  public static String getSha1Digest(final File file) {
+    try (InputStream input = new BufferedInputStream(new FileInputStream(file))) {
+      return apply(input, Hashing.sha1()).toString();
+    }
+    catch (IOException e) {
+      return null;
+    }
+  }
+
+  public static String getMd5Digest(final byte[] input) {
     return Hashing.md5().hashBytes(input).toString();
   }
 
-  public static String getSha1Digest(byte[] input) {
+  public static String getSha1Digest(final byte[] input) {
     return Hashing.sha1().hashBytes(input).toString();
   }
 }
