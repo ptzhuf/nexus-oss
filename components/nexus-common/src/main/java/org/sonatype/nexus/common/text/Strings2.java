@@ -37,10 +37,18 @@ public final class Strings2
 
   private Strings2() {}
 
+  /**
+   * Returns {@code true} if given string is null, or after trimming is empty.
+   */
   public static boolean isEmpty(final String value) {
     return value == null || value.trim().isEmpty();
   }
 
+  /**
+   * Returns {@code true} if given string is not empty.
+   *
+   * @see #isEmpty
+   */
   public static boolean isNotEmpty(final String value) {
     return !isEmpty(value);
   }
