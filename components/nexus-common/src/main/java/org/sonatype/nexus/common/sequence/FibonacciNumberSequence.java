@@ -10,17 +10,16 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.util.sequence;
+package org.sonatype.nexus.common.sequence;
 
 /**
- * Class that calculates "fibonacci-like" sequence. For those uninformed, there is only one Fibonacci sequence out
- * there, all others are just alike. Fibonacci sequence per-definition starts with 0, 1, 1... It does not start with
- * 10.
- * Or, the sequence that starts with 10 is NOT a Fibonacci sequence. This implementation avoids the "artificial"
- * leading
- * 0 in the sequence.
+ * Class that calculates "fibonacci-like" sequence.
  *
- * @author cstamas
+ * For those uninformed, there is only one Fibonacci sequence out there, all others are just alike.
+ * Fibonacci sequence per-definition starts with 0, 1, 1... It does not start with 10.
+ * Or, the sequence that starts with 10 is NOT a Fibonacci sequence.
+ *
+ * This implementation avoids the "artificial" leading 0 in the sequence.
  */
 public class FibonacciNumberSequence
     implements NumberSequence

@@ -10,13 +10,10 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.util.sequence;
+package org.sonatype.nexus.common.sequence;
 
 /**
- * A NumberSequence implementation that wraps another sequence and imposes a lower limit to it.
- *
- * @author cstamas
- * @since 2.0
+ * Number sequence that wraps another sequence and imposes a lower limit to it.
  */
 public class LowerLimitNumberSequence
     extends NumberSequenceWrapper

@@ -10,35 +10,33 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.util.sequence;
+package org.sonatype.nexus.common.sequence;
 
 /**
- * A simple sequence that is a constant number sequence.
+ * A simple interface that gives you a sequence of numbers.
  *
- * @author cstamas
+ * That might be simple natural numbers sequence, but anything else too.
  */
-public class ConstantNumberSequence
-    implements NumberSequence
+public interface NumberSequence
 {
-  private final long val;
+  /**
+   * Returns the next number in sequence and advances the sequence.
+   */
+  long next();
 
-  public ConstantNumberSequence(long val) {
-    this.val = val;
-  }
+  /**
+   * Returns the previous number in sequence and digresses the sequence.
+   */
+  long prev();
 
-  public long next() {
-    return peek();
-  }
+  /**
+   * Returns the next number in sequence without advancing the sequence. This method will return always the same
+   * number unless method {@code next()} is called.
+   */
+  long peek();
 
-  public long prev() {
-    return peek();
-  }
-
-  public long peek() {
-    return val;
-  }
-
-  public void reset() {
-    // nothing
-  }
+  /**
+   * Resets the sequence.
+   */
+  void reset();
 }

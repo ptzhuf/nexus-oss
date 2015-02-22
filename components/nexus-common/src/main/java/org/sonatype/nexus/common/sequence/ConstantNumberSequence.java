@@ -10,42 +10,33 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.util.sequence;
-
-import com.google.common.base.Preconditions;
+package org.sonatype.nexus.common.sequence;
 
 /**
- * Simple handy class to subclass when you want to wrap another {@link NumberSequence}.
- *
- * @author cstamas
- * @since 2.0
+ * A simple sequence that is a constant number sequence.
  */
-public abstract class NumberSequenceWrapper
+public class ConstantNumberSequence
     implements NumberSequence
 {
-  private final NumberSequence numberSequence;
+  private final long val;
 
-  public NumberSequenceWrapper(final NumberSequence numberSequence) {
-    this.numberSequence = Preconditions.checkNotNull(numberSequence);
+  public ConstantNumberSequence(long val) {
+    this.val = val;
   }
 
-  @Override
   public long next() {
-    return numberSequence.next();
+    return peek();
   }
 
-  @Override
   public long prev() {
-    return numberSequence.prev();
+    return peek();
   }
 
-  @Override
   public long peek() {
-    return numberSequence.peek();
+    return val;
   }
 
-  @Override
   public void reset() {
-    numberSequence.reset();
+    // nothing
   }
 }
