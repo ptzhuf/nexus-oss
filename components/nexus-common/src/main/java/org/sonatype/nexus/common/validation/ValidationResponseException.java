@@ -54,30 +54,13 @@ public class ValidationResponseException
     return response.getWarnings();
   }
 
+  @Override
   public String getMessage() {
     StringBuilder buff = new StringBuilder();
-
     if (super.getMessage() != null) {
       buff.append(super.getMessage());
     }
-
-    append(buff, "errors", response.getErrors());
-    append(buff, "warnings", response.getWarnings());
+    buff.append(response);
     return buff.toString();
-  }
-
-  private void append(final StringBuilder buff, final String type, final List<ValidationMessage> messages) {
-    if (!messages.isEmpty()) {
-      buff.append("\n");
-      buff.append(messages.size());
-      buff.append(" ").append(type).append(":\n");
-
-      int c=0;
-      for (ValidationMessage message : messages) {
-        buff.append("[").append(++c).append("] ");
-        buff.append(message);
-        buff.append("\n");
-      }
-    }
   }
 }

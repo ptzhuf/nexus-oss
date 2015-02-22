@@ -38,7 +38,7 @@ public class CRepositoryGroupingCoreConfiguration
 
   @Override
   public ValidationResponse doValidateChanges(CRepositoryGrouping changedConfiguration) {
-    CRepositoryGrouping settings = (CRepositoryGrouping) changedConfiguration;
+    CRepositoryGrouping settings = changedConfiguration;
 
     ValidationResponse response = new ApplicationValidationResponse();
 
@@ -47,7 +47,7 @@ public class CRepositoryGroupingCoreConfiguration
     context.addExistingPathMappingIds();
 
     if (settings.getPathMappings() != null) {
-      for (CPathMappingItem item : (List<CPathMappingItem>) settings.getPathMappings()) {
+      for (CPathMappingItem item : settings.getPathMappings()) {
         response.append(validateGroupsSettingPathMappingItem(context, item));
       }
     }
@@ -81,13 +81,8 @@ public class CRepositoryGroupingCoreConfiguration
   public ValidationResponse validateGroupsSettingPathMappingItem(ApplicationValidationContext ctx,
                                                                  CPathMappingItem item)
   {
-    ValidationResponse response = new ApplicationValidationResponse();
-
-    if (ctx != null) {
-      response.setContext(ctx);
-    }
-
-    ApplicationValidationContext context = (ApplicationValidationContext) response.getContext();
+    ApplicationValidationResponse response = new ApplicationValidationResponse(ctx);
+    ApplicationValidationContext context = response.getContext();
 
     if (StringUtils.isEmpty(item.getId())
         || "0".equals(item.getId())
@@ -116,7 +111,7 @@ public class CRepositoryGroupingCoreConfiguration
           + "' must contain at least one Route Pattern.");
     }
 
-    for (String regexp : (List<String>) item.getRoutePatterns()) {
+    for (String regexp : item.getRoutePatterns()) {
       if (!isValidRegexp(regexp)) {
         response.addError("The regexp in Route with ID='" + item.getId() + "' is not valid: "
             + regexp);
@@ -155,7 +150,7 @@ public class CRepositoryGroupingCoreConfiguration
 
       List<String> existingShadows = context.getExistingRepositoryShadowIds();
 
-      for (String repoId : (List<String>) item.getRepositories()) {
+      for (String repoId : item.getRepositories()) {
         if (!existingReposes.contains(repoId) && !existingShadows.contains(repoId)) {
           response.addError("The groupMapping pattern with ID=" + item.getId()
               + " refers to a nonexistent repository with repoID = " + repoId);

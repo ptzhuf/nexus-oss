@@ -42,24 +42,11 @@ public abstract class AbstractShadowRepositoryConfigurator
     try {
       shadowRepository.setMasterRepository(getRepositoryRegistry().getRepository(extConf.getMasterRepositoryId()));
     }
-    catch (IncompatibleMasterRepositoryException e) {
+    catch (IncompatibleMasterRepositoryException | NoSuchRepositoryException e) {
       ValidationMessage message = new ValidationMessage("shadowOf", e.getMessage());
-
       ValidationResponse response = new ApplicationValidationResponse();
-
       response.addError(message);
-
-      throw new ValidationResponseException(response);
-    }
-    catch (NoSuchRepositoryException e) {
-      ValidationMessage message = new ValidationMessage("shadowOf", e.getMessage());
-
-      ValidationResponse response = new ApplicationValidationResponse();
-
-      response.addError(message);
-
       throw new ValidationResponseException(response);
     }
   }
-
 }

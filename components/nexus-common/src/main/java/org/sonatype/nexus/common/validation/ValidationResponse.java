@@ -32,9 +32,6 @@ public class ValidationResponse
 
   // FIXME: Sort out why this is here and how its used, doesn't belong
   // FIXME: This seems to be due to validation handling making changes to the models
-  /**
-   * A flag to mark is the config modified during validation or not.
-   */
   private boolean modified = false;
 
   private List<ValidationMessage> errors;
@@ -42,6 +39,11 @@ public class ValidationResponse
   private List<ValidationMessage> warnings;
 
   private Object context;
+
+  public boolean isEmpty() {
+    return (errors == null || errors.isEmpty()) &&
+        (warnings == null || warnings.isEmpty());
+  }
 
   public boolean isValid() {
     return valid;
@@ -126,5 +128,33 @@ public class ValidationResponse
   @Nullable
   public Object getContext() {
     return context;
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder buff = new StringBuilder();
+    if (getErrors().isEmpty() && getWarnings().isEmpty()) {
+      buff.append("No messages");
+    }
+    else {
+      append(buff, "errors", getErrors());
+      append(buff, "warnings", getWarnings());
+    }
+    return buff.toString();
+  }
+
+  private void append(final StringBuilder buff, final String type, final List<ValidationMessage> messages) {
+    if (messages != null && !messages.isEmpty()) {
+      buff.append("\n");
+      buff.append(messages.size());
+      buff.append(" ").append(type).append(":\n");
+
+      int c=0;
+      for (ValidationMessage message : messages) {
+        buff.append("[").append(++c).append("] ");
+        buff.append(message);
+        buff.append("\n");
+      }
+    }
   }
 }

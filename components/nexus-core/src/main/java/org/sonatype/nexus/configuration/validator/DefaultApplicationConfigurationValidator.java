@@ -55,13 +55,8 @@ public class DefaultApplicationConfigurationValidator
   }
 
   public ValidationResponse validateModel(Configuration model) {
-    ValidationResponse response = new ApplicationValidationResponse();
-
-    response.setContext(new ApplicationValidationContext());
-
-    ApplicationValidationContext context = (ApplicationValidationContext) response.getContext();
-
-    response.setContext(context);
+    ApplicationValidationResponse response = new ApplicationValidationResponse();
+    ApplicationValidationContext context = response.getContext();
 
     // global conn settings
     if (model.getGlobalConnectionSettings() == null) {
@@ -131,13 +126,8 @@ public class DefaultApplicationConfigurationValidator
 
   @Override
   public ValidationResponse validateRepository(ApplicationValidationContext ctx, CRepository repo) {
-    ValidationResponse response = new ApplicationValidationResponse();
-
-    if (ctx != null) {
-      response.setContext(ctx);
-    }
-
-    ApplicationValidationContext context = (ApplicationValidationContext) response.getContext();
+    ApplicationValidationResponse response = new ApplicationValidationResponse(ctx);
+    ApplicationValidationContext context = response.getContext();
 
     if (StringUtils.isEmpty(repo.getId())) {
       response.addError(new ValidationMessage("id", "Repository ID's may not be empty!"));
@@ -193,13 +183,8 @@ public class DefaultApplicationConfigurationValidator
 
   @Override
   public ValidationResponse validateRepositoryGrouping(ApplicationValidationContext ctx, CRepositoryGrouping settings) {
-    ValidationResponse response = new ApplicationValidationResponse();
-
-    if (ctx != null) {
-      response.setContext(ctx);
-    }
-
-    ApplicationValidationContext context = (ApplicationValidationContext) response.getContext();
+    ApplicationValidationResponse response = new ApplicationValidationResponse(ctx);
+    ApplicationValidationContext context = response.getContext();
 
     context.addExistingPathMappingIds();
 
@@ -216,13 +201,8 @@ public class DefaultApplicationConfigurationValidator
   public ValidationResponse validateGroupsSettingPathMappingItem(ApplicationValidationContext ctx,
                                                                  CPathMappingItem item)
   {
-    ValidationResponse response = new ApplicationValidationResponse();
-
-    if (ctx != null) {
-      response.setContext(ctx);
-    }
-
-    ApplicationValidationContext context = (ApplicationValidationContext) response.getContext();
+    ApplicationValidationResponse response = new ApplicationValidationResponse(ctx);
+    ApplicationValidationContext context = response.getContext();
 
     if (StringUtils.isEmpty(item.getId())
         || "0".equals(item.getId())
@@ -239,7 +219,8 @@ public class DefaultApplicationConfigurationValidator
 
     if (StringUtils.isEmpty(item.getGroupId())) {
       item.setGroupId(CPathMappingItem.ALL_GROUPS);
-      response.addWarning("Fixed route without groupId set, set to ALL_GROUPS to keep backward comp, ID='" + item.getId() + "'.");
+      response.addWarning(
+          "Fixed route without groupId set, set to ALL_GROUPS to keep backward comp, ID='" + item.getId() + "'.");
       response.setModified(true);
     }
 
@@ -289,11 +270,7 @@ public class DefaultApplicationConfigurationValidator
 
   @Override
   public ValidationResponse validateHttpProxySettings(ApplicationValidationContext ctx, CHttpProxySettings settings) {
-    ValidationResponse response = new ApplicationValidationResponse();
-
-    if (ctx != null) {
-      response.setContext(ctx);
-    }
+    ApplicationValidationResponse response = new ApplicationValidationResponse(ctx);
 
     if (settings.getPort() < 80) {
       settings.setPort(8082);
@@ -315,11 +292,7 @@ public class DefaultApplicationConfigurationValidator
   public ValidationResponse validateRemoteHttpProxySettings(ApplicationValidationContext ctx,
                                                             CRemoteHttpProxySettings settings)
   {
-    ValidationResponse response = new ApplicationValidationResponse();
-
-    if (ctx != null) {
-      response.setContext(ctx);
-    }
+    ApplicationValidationResponse response = new ApplicationValidationResponse(ctx);
 
     if (settings.getProxyPort() < 1 || settings.getProxyPort() > 65535) {
       response.addError("The proxy port must be an integer between 1 and 65535!");
@@ -330,13 +303,8 @@ public class DefaultApplicationConfigurationValidator
 
   @Override
   public ValidationResponse validateRepositoryTarget(ApplicationValidationContext ctx, CRepositoryTarget settings) {
-    ValidationResponse response = new ApplicationValidationResponse();
-
-    if (ctx != null) {
-      response.setContext(ctx);
-    }
-
-    ApplicationValidationContext context = (ApplicationValidationContext) response.getContext();
+    ApplicationValidationResponse response = new ApplicationValidationResponse(ctx);
+    ApplicationValidationContext context = response.getContext();
 
     if (StringUtils.isEmpty(settings.getId())) {
       response.addError("The RepositoryTarget may have no empty/null ID!");
@@ -377,11 +345,7 @@ public class DefaultApplicationConfigurationValidator
 
   @Override
   public ValidationResponse validateSmtpConfiguration(ApplicationValidationContext ctx, CSmtpConfiguration settings) {
-    ValidationResponse response = new ApplicationValidationResponse();
-
-    if (ctx != null) {
-      response.setContext(ctx);
-    }
+    ApplicationValidationResponse response = new ApplicationValidationResponse(ctx);
 
     if (StringUtils.isEmpty(settings.getHostname())) {
       ValidationMessage msg = new ValidationMessage("host", "SMTP Host is empty.");
@@ -389,7 +353,7 @@ public class DefaultApplicationConfigurationValidator
     }
 
     if (settings.getPort() < 0) {
-      ValidationMessage msg = new ValidationMessage("port", "SMTP Port is inavlid.  Enter a port greater than 0.");
+      ValidationMessage msg = new ValidationMessage("port", "SMTP Port is invalid.  Enter a port greater than 0.");
       response.addError(msg);
     }
 
@@ -415,7 +379,6 @@ public class DefaultApplicationConfigurationValidator
 
     try {
       Pattern.compile(regexp);
-
       return true;
     }
     catch (PatternSyntaxException e) {
