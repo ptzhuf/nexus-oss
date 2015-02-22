@@ -25,9 +25,8 @@ import java.security.NoSuchAlgorithmException;
 
 /**
  * A util class to calculate various digests on Strings. Usaful for some simple password management.
- *
- * @author cstamas
  */
+@Deprecated
 public class DigesterUtils
 {
   // Streams
