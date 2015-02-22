@@ -31,7 +31,7 @@ public class Tokens
 {
   // NOTE: guava apis decode to bytes, we want string input and output here
   public static String decodeBase64String(final String str) {
-    return Strings2.utf8(BaseEncoding.base64().decode(str.toLowerCase()));
+    return Strings2.utf8(BaseEncoding.base64().decode(str));
   }
 }
 
