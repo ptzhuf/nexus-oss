@@ -136,7 +136,7 @@ public class ValidationResponse
   @Override
   public String toString() {
     StringBuilder buff = new StringBuilder();
-    if (getErrors().isEmpty() && getWarnings().isEmpty()) {
+    if (isEmpty()) {
       buff.append("No messages");
     }
     else {
