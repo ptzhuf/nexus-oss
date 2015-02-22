@@ -22,6 +22,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Validation response.
+ *
+ * Container for error and warning {@link ValidationMessage}.
+ *
+ * @see ValidationMessage
+ * @see ValidationResponseException
  */
 public class ValidationResponse
 {
@@ -41,7 +46,7 @@ public class ValidationResponse
   private Object context;
 
   /**
-   * Returns {@code true} if there are no warnings or errors.
+   * Returns {@code true} if there are no warning or error messages.
    */
   public boolean isEmpty() {
     return (errors == null || errors.isEmpty()) &&
@@ -72,6 +77,9 @@ public class ValidationResponse
     return errors;
   }
 
+  /**
+   * Add error message, sets {@link #valid} to {@code false}.
+   */
   public void addError(final ValidationMessage message) {
     checkNotNull(message);
     getErrors().add(message);
@@ -94,6 +102,9 @@ public class ValidationResponse
     return warnings;
   }
 
+  /**
+   * Add warning message.
+   */
   public void addWarning(final ValidationMessage message) {
     checkNotNull(message);
     getWarnings().add(message);

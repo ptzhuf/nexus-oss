@@ -20,6 +20,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Validation message.
+ *
+ * @see ValidationResponse
  */
 public class ValidationMessage
 {
