@@ -261,6 +261,8 @@ extends DirectComponentSupport
       if (isAnonymousUser(userId)) {
         throw new Exception("Password cannot be reset for user ${userId}, since is marked as the Anonymous user")
       }
+
+      // FIXME: This api has been removed, should sort out why this extdirect endpoint still exists
       securitySystem.resetPassword(userId)
     }
     else {
