@@ -57,14 +57,14 @@ public final class Strings2
   }
 
   /**
-   * Converts bytes into a UTF8 encoded string.
+   * Converts bytes into a UTF-8 encoded string.
    */
   public static String utf8(final byte[] bytes) {
     return new String(bytes, Charsets.UTF_8);
   }
 
   /**
-   * Converts a string into UTF8 encoded bytes.
+   * Converts a string into UTF-8 encoded bytes.
    */
   public static byte[] utf8(final String string) {
     return string.getBytes(Charsets.UTF_8);
