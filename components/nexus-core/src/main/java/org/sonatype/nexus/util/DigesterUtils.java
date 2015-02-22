@@ -12,16 +12,7 @@
  */
 package org.sonatype.nexus.util;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
-import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
-
-import static org.sonatype.nexus.common.hash.Hashes.hash;
 
 /**
  * @deprecated Use guava helpers instead.
@@ -29,28 +20,6 @@ import static org.sonatype.nexus.common.hash.Hashes.hash;
 @Deprecated
 public class DigesterUtils
 {
-  public static String getSha1Digest(final String content) {
-    return Hashing.sha1().hashString(content, Charsets.UTF_8).toString();
-  }
-
-  public static String getSha1Digest(final InputStream input) {
-    try {
-      return hash(Hashing.sha1(), input).toString();
-    }
-    catch (IOException e) {
-      return null;
-    }
-  }
-
-  public static String getSha1Digest(final File file) {
-    try (InputStream input = new BufferedInputStream(new FileInputStream(file))) {
-      return hash(Hashing.sha1(), input).toString();
-    }
-    catch (IOException e) {
-      return null;
-    }
-  }
-
   public static String getMd5Digest(final byte[] input) {
     return Hashing.md5().hashBytes(input).toString();
   }
