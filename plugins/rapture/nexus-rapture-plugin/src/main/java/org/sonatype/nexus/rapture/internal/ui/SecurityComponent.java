@@ -29,7 +29,6 @@ import org.sonatype.nexus.extdirect.DirectComponentSupport;
 import org.sonatype.nexus.rapture.StateContributor;
 import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.nexus.security.privilege.Privilege;
-import org.sonatype.nexus.util.Tokens;
 import org.sonatype.nexus.wonderland.AuthTicketService;
 
 import com.google.common.collect.Lists;
@@ -97,8 +96,8 @@ public class SecurityComponent
 
     try {
       securitySystem.login(new UsernamePasswordToken(
-          Tokens.decodeBase64String(base64Username),
-          Tokens.decodeBase64String(base64Password),
+          Strings2.decodeBase64(base64Username),
+          Strings2.decodeBase64(base64Password),
           rememberMe
       ));
     }
@@ -121,8 +120,8 @@ public class SecurityComponent
       authenticate(base64Username, base64Password);
     }
 
-    String username = Tokens.decodeBase64String(base64Username);
-    String password = Tokens.decodeBase64String(base64Password);
+    String username = Strings2.decodeBase64(base64Username);
+    String password = Strings2.decodeBase64(base64Password);
     log.debug("Authenticate w/username: {}, password: {}", username, Strings2.mask(password));
 
     // Require current user to be the requested user to authenticate

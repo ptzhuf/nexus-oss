@@ -15,6 +15,7 @@ package org.sonatype.nexus.common.text;
 import javax.annotation.Nullable;
 
 import com.google.common.base.Charsets;
+import com.google.common.io.BaseEncoding;
 import org.jetbrains.annotations.NonNls;
 
 /**
@@ -79,6 +80,7 @@ public final class Strings2
     return string.getBytes(Charsets.UTF_8);
   }
 
+  // FIXME: Find a better name for this, separatorEncode() or so
   /**
    * Encode separator into input at given delay.
    */
@@ -95,5 +97,19 @@ public final class Strings2
     }
 
     return buff.toString();
+  }
+
+  /**
+   * Decode Base-64 UTF-8 string.
+   */
+  public static String decodeBase64(final String value) {
+    return utf8(BaseEncoding.base64().decode(value));
+  }
+
+  /**
+   * Encode Base-64 UTF-8 string.
+   */
+  public static String encodeBase64(final String value) {
+    return BaseEncoding.base64().encode(utf8(value));
   }
 }

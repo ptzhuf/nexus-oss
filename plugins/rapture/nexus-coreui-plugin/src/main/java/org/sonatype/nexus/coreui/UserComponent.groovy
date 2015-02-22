@@ -23,6 +23,7 @@ import org.apache.shiro.subject.Subject
 import org.eclipse.sisu.inject.BeanLocator
 import org.hibernate.validator.constraints.NotEmpty
 import org.sonatype.micromailer.Address
+import org.sonatype.nexus.common.text.Strings2
 import org.sonatype.nexus.common.validation.Create
 import org.sonatype.nexus.common.validation.Update
 import org.sonatype.nexus.common.validation.Validate
@@ -38,7 +39,6 @@ import org.sonatype.nexus.security.role.RoleIdentifier
 import org.sonatype.nexus.security.user.User
 import org.sonatype.nexus.security.user.UserManager
 import org.sonatype.nexus.security.user.UserSearchCriteria
-import org.sonatype.nexus.util.Tokens
 import org.sonatype.nexus.wonderland.AuthTicketService
 
 import javax.annotation.Nullable
@@ -237,7 +237,7 @@ extends DirectComponentSupport
       if (isAnonymousUser(userId)) {
         throw new Exception("Password cannot be changed for user ${userId}, since is marked as the Anonymous user")
       }
-      securitySystem.changePassword(userId, Tokens.decodeBase64String(password))
+      securitySystem.changePassword(userId, Strings2.decodeBase64(password))
     }
     else {
       throw new IllegalAccessException('Invalid authentication ticket')
