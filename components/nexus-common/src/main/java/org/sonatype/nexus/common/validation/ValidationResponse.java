@@ -40,6 +40,9 @@ public class ValidationResponse
 
   private Object context;
 
+  /**
+   * Returns {@code true} if there are no warnings or errors.
+   */
   public boolean isEmpty() {
     return (errors == null || errors.isEmpty()) &&
         (warnings == null || warnings.isEmpty());
