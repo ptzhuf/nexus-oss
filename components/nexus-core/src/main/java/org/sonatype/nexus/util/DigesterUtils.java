@@ -19,7 +19,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import com.google.common.base.Charsets;
+import com.google.common.hash.HashCode;
 import com.google.common.hash.HashFunction;
+import com.google.common.hash.Hasher;
 import com.google.common.hash.Hashing;
 
 /**
@@ -31,20 +33,24 @@ public class DigesterUtils
   /**
    * Apply input-stream bytes to hash-function.
    */
-  private static HashFunction apply(final InputStream input, final HashFunction function) throws IOException {
+  private static HashCode hash(final HashFunction function, final InputStream input) throws IOException {
+    Hasher hasher = function.newHasher();
+
     byte[] buff = new byte[1024];
     int read;
-    do {
+    while (true) {
       read = input.read(buff);
-      function.hashBytes(buff, 0, read);
+      if (read < 0) {
+        break;
+      }
+      hasher.putBytes(buff, 0, read);
     }
-    while (read != -1);
-    return function;
+    return hasher.hash();
   }
 
   public static String getSha256Digest(final InputStream input) {
     try {
-      return apply(input, Hashing.sha256()).toString();
+      return hash(Hashing.sha256(), input).toString();
     }
     catch (IOException e) {
       return null;
@@ -57,7 +63,7 @@ public class DigesterUtils
 
   public static String getSha1Digest(final InputStream input) {
     try {
-      return apply(input, Hashing.sha1()).toString();
+      return hash(Hashing.sha1(), input).toString();
     }
     catch (IOException e) {
       return null;
@@ -66,7 +72,7 @@ public class DigesterUtils
 
   public static String getSha1Digest(final File file) {
     try (InputStream input = new BufferedInputStream(new FileInputStream(file))) {
-      return apply(input, Hashing.sha1()).toString();
+      return hash(Hashing.sha1(), input).toString();
     }
     catch (IOException e) {
       return null;
