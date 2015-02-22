@@ -97,7 +97,6 @@ public class DefaultApplicationConfigurationValidator
     context.addExistingRepositoryIds();
 
     List<CRepository> reposes = model.getRepositories();
-
     for (CRepository repo : reposes) {
       response.append(validateRepository(context, repo));
     }
@@ -133,31 +132,25 @@ public class DefaultApplicationConfigurationValidator
       response.addError(new ValidationMessage("id", "Repository ID's may not be empty!"));
     }
     else if (!repo.getId().matches(REPOSITORY_ID_PATTERN)) {
-      response.addError(
-          new ValidationMessage("id",
-              "Only letters, digits, underscores(_), hyphens(-), and dots(.) are allowed in Repository ID"));
+      response.addError(new ValidationMessage("id", "Only letters, digits, underscores(_), hyphens(-), and dots(.) are allowed in Repository ID"));
     }
     // if repo id isn't valid, nothing below here will validate properly
     else {
       if (StringUtils.isEmpty(repo.getName())) {
         repo.setName(repo.getId());
-
-        response.addWarning(new ValidationMessage("id", "Repository with ID='" + repo.getId()
-            + "' has no name, defaulted to it's ID."));
-
+        response.addWarning(new ValidationMessage("id", "Repository with ID='" + repo.getId() + "' has no name, defaulted to it's ID."));
         response.setModified(true);
       }
 
       if (!validateLocalStatus(repo.getLocalStatus())) {
         response.addError(
-            new ValidationMessage("id", "LocalStatus of repository with ID='" + repo.getId()) + "' is wrong "
+            new ValidationMessage("id", "LocalStatus of repository with ID='" + repo.getId() + "' is wrong "
                 + repo.getLocalStatus() + "! (Allowed values are: '" + LocalStatus.IN_SERVICE + "' and '"
-                + LocalStatus.OUT_OF_SERVICE + "')");
+                + LocalStatus.OUT_OF_SERVICE + "')"));
       }
       if (context.getExistingRepositoryIds() != null) {
         if (context.getExistingRepositoryIds().contains(repo.getId())) {
-          response.addError(
-              new ValidationMessage("id", "Repository with ID=" + repo.getId() + " already exists!"));
+          response.addError(new ValidationMessage("id", "Repository with ID=" + repo.getId() + " already exists!"));
         }
 
         context.getExistingRepositoryIds().add(repo.getId());
@@ -165,15 +158,13 @@ public class DefaultApplicationConfigurationValidator
 
       if (context.getExistingRepositoryShadowIds() != null) {
         if (context.getExistingRepositoryShadowIds().contains(repo.getId())) {
-          response.addError(new ValidationMessage("id", "Repository " + repo.getId()
-              + " conflicts with existing Shadow with same ID='" + repo.getId() + "'!"));
+          response.addError(new ValidationMessage("id", "Repository " + repo.getId() + " conflicts with existing Shadow with same ID='" + repo.getId() + "'!"));
         }
       }
 
       if (context.getExistingRepositoryGroupIds() != null) {
         if (context.getExistingRepositoryGroupIds().contains(repo.getId())) {
-          response.addError(new ValidationMessage("id", "Repository " + repo.getId()
-              + " conflicts with existing Group with same ID='" + repo.getId() + "'!"));
+          response.addError(new ValidationMessage("id", "Repository " + repo.getId() + " conflicts with existing Group with same ID='" + repo.getId() + "'!"));
         }
       }
     }
@@ -211,16 +202,13 @@ public class DefaultApplicationConfigurationValidator
       String newId = generateId();
 
       item.setId(newId);
-
       response.addWarning("Fixed wrong route ID from '" + item.getId() + "' to '" + newId + "'");
-
       response.setModified(true);
     }
 
     if (StringUtils.isEmpty(item.getGroupId())) {
       item.setGroupId(CPathMappingItem.ALL_GROUPS);
-      response.addWarning(
-          "Fixed route without groupId set, set to ALL_GROUPS to keep backward comp, ID='" + item.getId() + "'.");
+      response.addWarning("Fixed route without groupId set, set to ALL_GROUPS to keep backward comp, ID='" + item.getId() + "'.");
       response.setModified(true);
     }
 
@@ -254,9 +242,7 @@ public class DefaultApplicationConfigurationValidator
 
     if (context.getExistingRepositoryIds() != null && context.getExistingRepositoryShadowIds() != null) {
       List<String> existingReposes = context.getExistingRepositoryIds();
-
       List<String> existingShadows = context.getExistingRepositoryShadowIds();
-
       for (String repoId : item.getRepositories()) {
         if (!existingReposes.contains(repoId) && !existingShadows.contains(repoId)) {
           response.addError("The groupMapping pattern with ID=" + item.getId()
