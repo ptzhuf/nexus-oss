@@ -80,11 +80,10 @@ public final class Strings2
     return string.getBytes(Charsets.UTF_8);
   }
 
-  // FIXME: Find a better name for this, separatorEncode() or so
   /**
    * Encode separator into input at given delay.
    */
-  public static String encode(final String input, final char separator, final int delay) {
+  public static String encodeSeparator(final String input, final char separator, final int delay) {
     StringBuilder buff = new StringBuilder();
 
     int i = 0;
