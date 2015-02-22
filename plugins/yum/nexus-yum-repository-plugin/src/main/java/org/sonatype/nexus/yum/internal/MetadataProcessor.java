@@ -32,6 +32,7 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathFactory;
 
+import org.sonatype.nexus.common.hash.Hashes;
 import org.sonatype.nexus.proxy.ResourceStoreRequest;
 import org.sonatype.nexus.proxy.item.ContentLocator;
 import org.sonatype.nexus.proxy.item.DefaultStorageFileItem;
@@ -39,10 +40,11 @@ import org.sonatype.nexus.proxy.item.PreparedContentLocator;
 import org.sonatype.nexus.proxy.item.StorageFileItem;
 import org.sonatype.nexus.proxy.repository.ProxyRepository;
 import org.sonatype.nexus.proxy.repository.Repository;
-import org.sonatype.nexus.util.DigesterUtils;
 
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
+import com.google.common.hash.HashCode;
+import com.google.common.hash.Hashing;
 import com.google.common.io.CountingInputStream;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -228,7 +230,7 @@ public class MetadataProcessor
       if (primaryHref.contains(primaryChecksum)) {
         repository.deleteItem(false, new ResourceStoreRequest("/" + primaryHref));
         primaryHref = primaryHref.replace(
-            primaryChecksum, DigesterUtils.getSha256Digest(new ByteArrayInputStream(primaryContent))
+            primaryChecksum, Hashing.sha256().hashBytes(primaryContent).toString()
         );
       }
       storeItem(repository, primaryHref, primaryContent, "application/x-gzip");
@@ -262,12 +264,9 @@ public class MetadataProcessor
       );
       try (InputStream in = primaryItem.getInputStream();
            CountingInputStream cis = new CountingInputStream(new GZIPInputStream(new BufferedInputStream(in)))) {
-        primaryEl.getElementsByTagName("open-checksum").item(0).setTextContent(String.valueOf(
-            DigesterUtils.getSha256Digest(cis)
-        ));
-        primaryEl.getElementsByTagName("open-size").item(0).setTextContent(String.valueOf(
-            cis.getCount()
-        ));
+        HashCode checksum = Hashes.hash(Hashing.sha256(), cis);
+        primaryEl.getElementsByTagName("open-checksum").item(0).setTextContent(checksum.toString());
+        primaryEl.getElementsByTagName("open-size").item(0).setTextContent(String.valueOf(cis.getCount()));
       }
 
       primaryItem = (StorageFileItem) repository.retrieveItem(
@@ -275,12 +274,9 @@ public class MetadataProcessor
       );
       try (InputStream in = primaryItem.getInputStream();
            CountingInputStream cis = new CountingInputStream(new BufferedInputStream(in))) {
-        primaryEl.getElementsByTagName("checksum").item(0).setTextContent(String.valueOf(
-            DigesterUtils.getSha256Digest(cis)
-        ));
-        primaryEl.getElementsByTagName("size").item(0).setTextContent(String.valueOf(
-            cis.getCount()
-        ));
+        HashCode checksum = Hashes.hash(Hashing.sha256(), cis);
+        primaryEl.getElementsByTagName("checksum").item(0).setTextContent(checksum.toString());
+        primaryEl.getElementsByTagName("size").item(0).setTextContent(String.valueOf(cis.getCount()));
       }
 
       ((Element) primaryEl.getElementsByTagName("location").item(0)).setAttribute("href", primaryPath);
