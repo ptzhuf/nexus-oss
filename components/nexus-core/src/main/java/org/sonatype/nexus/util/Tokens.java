@@ -14,7 +14,7 @@ package org.sonatype.nexus.util;
 
 import org.sonatype.nexus.common.text.Strings2;
 
-import org.codehaus.plexus.util.Base64;
+import com.google.common.io.BaseEncoding;
 
 // TODO: Update to use Guava's BaseEncoding helpers and free from plexus-utils
 // TODO: Update to use Guava's Hasher helpers and free from DigesterUtils
@@ -29,24 +29,9 @@ import org.codehaus.plexus.util.Base64;
 @Deprecated
 public class Tokens
 {
-  // FIXME: Depends on factoring out DigesterUtils
-
-  public static String encodeHexString(final byte[] bytes) {
-    return new String(DigesterUtils.encodeHex(bytes));
-  }
-
-  // FIXME: Depends on factoring out Base64
-
-  public static String encodeBase64String(final byte[] bytes) {
-    return Strings2.utf8(Base64.encodeBase64(bytes));
-  }
-
-  public static byte[] decodeBase64(final byte[] bytes) {
-    return Base64.decodeBase64(bytes);
-  }
-
+  // NOTE: guava apis decode to bytes, we want string input and output here
   public static String decodeBase64String(final String str) {
-    return Strings2.utf8(Base64.decodeBase64(Strings2.utf8(str)));
+    return Strings2.utf8(BaseEncoding.base64().lowerCase().decode(str.toLowerCase()));
   }
 }
 

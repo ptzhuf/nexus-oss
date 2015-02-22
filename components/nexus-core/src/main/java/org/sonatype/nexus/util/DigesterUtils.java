@@ -21,6 +21,8 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import com.google.common.io.BaseEncoding;
+
 // TODO: Update to use Guava's Hasher helpers and remove this ancient helper.
 
 /**
@@ -35,7 +37,7 @@ public class DigesterUtils
    * Hex Encodes the digest value.
    */
   public static String getDigestAsString(byte[] digest) {
-    return new String(encodeHex(digest));
+    return BaseEncoding.base16().lowerCase().encode(digest);
   }
 
   /**
@@ -144,28 +146,6 @@ public class DigesterUtils
     }
   }
 
-  // --
-
-  private static final char[] DIGITS =
-      {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
-
-  /**
-   * Blatantly copied from commons-codec version 1.3
-   */
-  public static char[] encodeHex(byte[] data) {
-    int l = data.length;
-
-    char[] out = new char[l << 1];
-
-    // two characters form the hex value.
-    for (int i = 0, j = 0; i < l; i++) {
-      out[j++] = DIGITS[(0xF0 & data[i]) >>> 4];
-      out[j++] = DIGITS[0x0F & data[i]];
-    }
-
-    return out;
-  }
-
   public static String getMd5Digest(byte[] byteArray) {
     return getMd5Digest(new ByteArrayInputStream(byteArray));
   }
@@ -173,6 +153,4 @@ public class DigesterUtils
   public static String getSha1Digest(byte[] byteArray) {
     return getSha1Digest(new ByteArrayInputStream(byteArray));
   }
-
-
 }
