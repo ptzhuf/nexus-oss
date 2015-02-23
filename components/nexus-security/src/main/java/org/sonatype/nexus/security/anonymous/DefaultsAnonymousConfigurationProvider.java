@@ -13,51 +13,33 @@
 package org.sonatype.nexus.security.anonymous;
 
 import javax.inject.Named;
+import javax.inject.Provider;
 import javax.inject.Singleton;
 
 import org.sonatype.nexus.security.internal.AuthorizingRealmImpl;
-import org.sonatype.sisu.goodies.common.ComponentSupport;
-import org.sonatype.sisu.goodies.common.TestAccessible;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+// TODO: Find a better naming scheme, this is the initial configuration provider
 
 /**
- * In-memory {@link AnonymousConfigurationStore}.
+ * Defaults {@link AnonymousConfiguration} provider.
  *
  * @since 3.0
  */
-@Named("memory")
+@Named("defaults")
 @Singleton
-public class MemoryAnonymousConfigurationStore
-  extends ComponentSupport
-  implements AnonymousConfigurationStore
+public class DefaultsAnonymousConfigurationProvider
+  implements Provider<AnonymousConfiguration>
 {
   public static final String DEFAULT_USER_ID = "anonymous";
 
   public static final String DEFAULT_REALM_NAME = AuthorizingRealmImpl.NAME;
 
-  private AnonymousConfiguration model;
-
-  public MemoryAnonymousConfigurationStore() {
-    this.model = defaults();
-  }
-
-  @TestAccessible
-  protected AnonymousConfiguration defaults() {
+  @Override
+  public AnonymousConfiguration get() {
     AnonymousConfiguration model = new AnonymousConfiguration();
     model.setEnabled(true);
     model.setUserId(DEFAULT_USER_ID);
     model.setRealmName(DEFAULT_REALM_NAME);
     return model;
-  }
-
-  @Override
-  public synchronized AnonymousConfiguration load() {
-    return model;
-  }
-
-  @Override
-  public synchronized void save(final AnonymousConfiguration configuration) {
-    this.model = checkNotNull(configuration);
   }
 }

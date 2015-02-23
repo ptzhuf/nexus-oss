@@ -18,11 +18,15 @@ import javax.inject.Named;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 
+import org.sonatype.nexus.events.EventSubscriber;
 import org.sonatype.nexus.orient.DatabaseInstance;
+import org.sonatype.nexus.proxy.events.NexusInitializedEvent;
+import org.sonatype.nexus.proxy.events.NexusStoppingEvent;
 import org.sonatype.nexus.security.anonymous.AnonymousConfiguration;
 import org.sonatype.nexus.security.anonymous.AnonymousConfigurationStore;
 import org.sonatype.sisu.goodies.lifecycle.LifecycleSupport;
 
+import com.google.common.eventbus.Subscribe;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 
@@ -33,11 +37,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @since 3.0
  */
-@Named
+@Named("orient")
 @Singleton
 public class OrientAnonymousConfigurationStore
   extends LifecycleSupport
-  implements AnonymousConfigurationStore
+  implements AnonymousConfigurationStore, EventSubscriber
 {
   private final Provider<DatabaseInstance> databaseInstance;
 
@@ -58,7 +62,15 @@ public class OrientAnonymousConfigurationStore
     }
   }
 
-  // TODO: Hookup lifecycle events
+  @Subscribe
+  public void on(final NexusInitializedEvent event) throws Exception {
+    start();
+  }
+
+  @Subscribe
+  public void on(final NexusStoppingEvent event) throws Exception {
+    stop();
+  }
 
   private ODatabaseDocumentTx openDb() {
     ensureStarted();

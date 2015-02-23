@@ -18,6 +18,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 import javax.inject.Singleton;
 
 import org.sonatype.nexus.common.concurrent.Locks;
@@ -43,25 +44,45 @@ public class AnonymousManagerImpl
 {
   private final AnonymousConfigurationStore store;
 
+  private final Provider<AnonymousConfiguration> defaults;
+
   private final ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
 
   private AnonymousConfiguration configuration;
 
   @Inject
-  public AnonymousManagerImpl(final AnonymousConfigurationStore store) {
+  public AnonymousManagerImpl(final AnonymousConfigurationStore store,
+                              final @Named("defaults") Provider<AnonymousConfiguration> defaults)
+  {
     this.store = checkNotNull(store);
+    this.defaults = checkNotNull(defaults);
   }
 
   @Override
   public AnonymousConfiguration getConfiguration() {
     Lock lock = Locks.read(readWriteLock);
     try {
+      // TODO: Read-lock here could cause duplicate load, or duplicate defaults creation race
+      // TODO: Maybe simple lock or synchronized block is simpler, since write here is very rare
       if (configuration == null) {
         configuration = store.load();
-        log.info("Loaded configuration: {}", configuration);
+
+        // use defaults if no configuration was loaded from the store
+        if (configuration == null) {
+          configuration = defaults.get();
+
+          // default config must not be null
+          checkNotNull(configuration);
+
+          log.info("Using default configuration: {}", configuration);
+        }
+        else {
+          log.info("Loaded configuration: {}", configuration);
+        }
       }
 
       // TODO: Should we copy() here too, to prevent modification outside of setConfiguration() ?
+      // TODO: If so, we should provide means to get this w/o cloning for internal use, clone only for external
       return configuration;
     }
     finally {
