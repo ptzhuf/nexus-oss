@@ -25,7 +25,7 @@ public class AnonymousPrincipalCollection
 {
   // TODO: Could be simplified conceptually by implementing PrincipalCollection directly, but lots more impl
 
-  public AnonymousPrincipalCollection(final Object principal, final String realmName) {
+  AnonymousPrincipalCollection(final Object principal, final String realmName) {
     super(principal, realmName);
   }
 }
