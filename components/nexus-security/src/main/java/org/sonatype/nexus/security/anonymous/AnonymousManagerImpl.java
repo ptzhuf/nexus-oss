@@ -18,6 +18,7 @@ import javax.inject.Provider;
 import javax.inject.Singleton;
 
 import org.sonatype.sisu.goodies.common.ComponentSupport;
+import org.sonatype.sisu.goodies.common.Mutex;
 
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
@@ -41,6 +42,8 @@ public class AnonymousManagerImpl
 
   private final Provider<AnonymousConfiguration> defaults;
 
+  private final Mutex lock = new Mutex();
+
   private AnonymousConfiguration configuration;
 
   @Inject
@@ -51,42 +54,61 @@ public class AnonymousManagerImpl
     this.defaults = checkNotNull(defaults);
   }
 
-  @Override
-  public synchronized AnonymousConfiguration getConfiguration() {
-    // TODO: Read-lock here could cause duplicate load, or duplicate defaults creation race
-    // TODO: Maybe simple lock or synchronized block is simpler, since write here is very rare
-    if (configuration == null) {
-      configuration = store.load();
+  /**
+   * Load configuration from store, or use defaults.
+   */
+  private AnonymousConfiguration loadConfiguration() {
+    AnonymousConfiguration model = store.load();
 
-      // use defaults if no configuration was loaded from the store
-      if (configuration == null) {
-        configuration = defaults.get();
+    // use defaults if no configuration was loaded from the store
+    if (model == null) {
+      model = defaults.get();
 
-        // default config must not be null
-        checkNotNull(configuration);
+      // default config must not be null
+      checkNotNull(model);
 
-        log.info("Using default configuration: {}", configuration);
-      }
-      else {
-        log.info("Loaded configuration: {}", configuration);
-      }
+      log.info("Using default configuration: {}", model);
+    }
+    else {
+      log.info("Loaded configuration: {}", model);
     }
 
-    // TODO: Should we copy() here too, to prevent modification outside of setConfiguration() ?
-    // TODO: If so, we should provide means to get this w/o cloning for internal use, clone only for external
-    return configuration;
+    return model;
+  }
+
+  /**
+   * Return configuration loading if needed.
+   */
+  private AnonymousConfiguration getConfigurationInternal() {
+    synchronized (lock) {
+      // load configuration if needed
+      if (configuration == null) {
+        configuration = loadConfiguration();
+      }
+      return configuration;
+    }
+  }
+
+  /**
+   * Return _copy_ of configuration.
+   */
+  @Override
+  public AnonymousConfiguration getConfiguration() {
+    return getConfigurationInternal().copy();
   }
 
   @Override
-  public synchronized void setConfiguration(final AnonymousConfiguration configuration) {
+  public void setConfiguration(final AnonymousConfiguration configuration) {
     checkNotNull(configuration);
 
     AnonymousConfiguration model = configuration.copy();
     // TODO: Validate configuration before saving
 
-    log.info("Saving configuration: {}", model);
-    store.save(model);
-    this.configuration = model;
+    synchronized (lock) {
+      log.info("Saving configuration: {}", model);
+      store.save(model);
+      this.configuration = model;
+    }
 
     // TODO: Sort out authc events to flush credentials
     // TODO: Sort out other User bits which DefaultSecuritySystem.*anonymous* bits are doing
@@ -94,12 +116,12 @@ public class AnonymousManagerImpl
 
   @Override
   public boolean isEnabled() {
-    return getConfiguration().isEnabled();
+    return getConfigurationInternal().isEnabled();
   }
 
   @Override
   public Subject buildSubject() {
-    AnonymousConfiguration config = getConfiguration();
+    AnonymousConfiguration config = getConfigurationInternal();
 
     // custom principals to aid with anonymous subject detection
     PrincipalCollection principals = new AnonymousPrincipalCollection(
