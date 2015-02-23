@@ -271,8 +271,6 @@ public interface SecuritySystem
   // Anonymous
   //
 
-  void setAnonymousAccess(boolean enabled, String username, String password);
-
   boolean isAnonymousAccessEnabled();
 
   String getAnonymousUsername();

@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
 import javax.annotation.Nullable;
@@ -32,6 +31,8 @@ import org.sonatype.nexus.common.throwables.ConfigurationException;
 import org.sonatype.nexus.security.SecurityConfigurationChanged;
 import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.nexus.security.UserPrincipalsExpired;
+import org.sonatype.nexus.security.anonymous.AnonymousConfiguration;
+import org.sonatype.nexus.security.anonymous.AnonymousManager;
 import org.sonatype.nexus.security.authz.AuthorizationConfigurationChanged;
 import org.sonatype.nexus.security.authz.AuthorizationManager;
 import org.sonatype.nexus.security.authz.NoSuchAuthorizationManagerException;
@@ -50,7 +51,6 @@ import org.sonatype.nexus.security.user.UserStatus;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
 import org.sonatype.sisu.goodies.eventbus.EventBus;
 
-import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.eventbus.Subscribe;
 import net.sf.ehcache.CacheManager;
@@ -83,6 +83,8 @@ public class DefaultSecuritySystem
 {
   private static final String ALL_ROLES_KEY = "all";
 
+  private final AnonymousManager anonymousManager;
+
   private final SecuritySettingsManager securitySettingsManager;
 
   private final RealmSecurityManager securityManager;
@@ -104,6 +106,7 @@ public class DefaultSecuritySystem
                                final Map<String, AuthorizationManager> authorizationManagers,
                                final Map<String, Realm> realmMap,
                                final SecuritySettingsManager securitySettingsManager,
+                               final AnonymousManager anonymousManager,
                                final RealmSecurityManager securityManager,
                                final CacheManager cacheManager,
                                final Map<String, UserManager> userManagers)
@@ -112,6 +115,7 @@ public class DefaultSecuritySystem
     this.authorizationManagers = checkNotNull(authorizationManagers);
     this.realmMap = checkNotNull(realmMap);
     this.securitySettingsManager = checkNotNull(securitySettingsManager);
+    this.anonymousManager = checkNotNull(anonymousManager);
     this.securityManager = checkNotNull(securityManager);
     this.cacheManager = checkNotNull(cacheManager);
     this.userManagers = checkNotNull(userManagers);
@@ -342,7 +346,8 @@ public class DefaultSecuritySystem
       throw new IllegalArgumentException("Can not delete currently signed in user");
     }
 
-    if (isAnonymousAccessEnabled() && userId.equals(getAnonymousUsername())) {
+    AnonymousConfiguration anonymousConfiguration = anonymousManager.getConfiguration();
+    if (anonymousConfiguration.isEnabled() && userId.equals(anonymousConfiguration.getUserId())) {
       throw new IllegalArgumentException("Can not delete anonymous user");
     }
 
@@ -720,147 +725,13 @@ public class DefaultSecuritySystem
     return securitySettingsManager.isAnonymousAccessEnabled();
   }
 
-  private void setAnonymousAccessEnabled(boolean enabled) {
-    securitySettingsManager.setAnonymousAccessEnabled(enabled);
-    securitySettingsManager.save();
-  }
-
   @Override
   public String getAnonymousUsername() {
     return securitySettingsManager.getAnonymousUsername();
   }
 
-  private void setAnonymousUsername(String anonymousUsername) {
-    User user = null;
-    try {
-      user = getUser(securitySettingsManager.getAnonymousUsername());
-    }
-    catch (UserNotFoundException e) {
-      // ignore
-    }
-    securitySettingsManager.setAnonymousUsername(anonymousUsername);
-    securitySettingsManager.save();
-    // flush authc, if anon existed before change
-    if (user != null) {
-      eventBus.post(new UserPrincipalsExpired(user.getUserId(), user.getSource()));
-    }
-  }
-
   @Override
   public String getAnonymousPassword() {
     return securitySettingsManager.getAnonymousPassword();
-  }
-
-  private void setAnonymousPassword(String anonymousPassword) {
-    User user = null;
-    try {
-      user = getUser(securitySettingsManager.getAnonymousUsername());
-    }
-    catch (UserNotFoundException e) {
-      // ignore
-    }
-    securitySettingsManager.setAnonymousPassword(anonymousPassword);
-    securitySettingsManager.save();
-    if (user != null) {
-      // flush authc, if anon exists
-      eventBus.post(new UserPrincipalsExpired(user.getUserId(), user.getSource()));
-    }
-  }
-
-  @Override
-  public void setAnonymousAccess(final boolean enabled, final String username, final String password) {
-    if (enabled) {
-      if (Strings.isNullOrEmpty(username) || Strings.isNullOrEmpty(password)) {
-        throw new ConfigurationException("Anonymous access is getting enabled without valid username and/or password!");
-      }
-
-      final String oldUsername = getAnonymousUsername();
-      final String oldPassword = getAnonymousPassword();
-
-      // try to enable the "anonymous" user defined in XML realm, but ignore any problem (users might delete or
-      // already disabled it, or completely removed XML realm) this is needed as below we will try a login
-      final boolean statusChanged = setAnonymousUserEnabled(username, true);
-
-      // detect change
-      if (!Objects.equals(oldUsername, username) || !Objects.equals(oldPassword, password)) {
-        try {
-          // test authc with changed credentials
-          try {
-            // try to "log in" with supplied credentials
-            // the anon user a) should exists
-            getUser(username);
-            // b) the pwd must work
-            authenticate(new UsernamePasswordToken(username, password));
-          }
-          catch (UserNotFoundException e) {
-            final String msg = "User \"" + username + "'\" does not exist.";
-            log.warn("Nexus refused to apply configuration, the supplied anonymous information is wrong: " + msg, e);
-            throw new ConfigurationException(msg, e);
-          }
-          catch (AuthenticationException e) {
-            final String msg = "The password of user \"" + username + "\" is incorrect.";
-            log.warn("Nexus refused to apply configuration, the supplied anonymous information is wrong: " + msg, e);
-            throw new ConfigurationException(msg, e);
-          }
-        }
-        catch (ConfigurationException e) {
-          if (statusChanged) {
-            setAnonymousUserEnabled(username, false);
-          }
-          throw e;
-        }
-
-        // set the changed username/pw
-        setAnonymousUsername(username);
-        setAnonymousPassword(password);
-      }
-
-      setAnonymousAccessEnabled(true);
-    }
-    else {
-      // get existing username from XML realm, if we can (if security config about to be disabled still holds this
-      // info)
-      final String existingUsername = getAnonymousUsername();
-
-      if (!Strings.isNullOrEmpty(existingUsername)) {
-        // try to disable the "anonymous" user defined in XML realm, but ignore any problem (users might delete
-        // or already disabled it, or completely removed XML realm)
-        setAnonymousUserEnabled(existingUsername, false);
-      }
-
-      setAnonymousAccessEnabled(false);
-    }
-
-    // TODO: Save?  ATM relies on setAnonymousAccessEnabled() to save, pita
-  }
-
-  private boolean setAnonymousUserEnabled(final String anonymousUsername, final boolean enabled) {
-    try {
-      final User anonymousUser = getUser(anonymousUsername, UserManager.DEFAULT_SOURCE);
-      final UserStatus oldStatus = anonymousUser.getStatus();
-      if (enabled) {
-        anonymousUser.setStatus(UserStatus.active);
-      }
-      else {
-        anonymousUser.setStatus(UserStatus.disabled);
-      }
-      updateUser(anonymousUser);
-      return !oldStatus.equals(anonymousUser.getStatus());
-    }
-    catch (UserNotFoundException e) {
-      // could happen normally if anonymous user was removed
-      log.debug("Anonymous user missing; ignoring", e);
-      return false;
-    }
-    catch (NoSuchUserManagerException e) {
-      // could happen normally if the default authc realm was removed from active configuration
-      log.debug("User-manager for anonymous user missing; ignoring", e);
-      return false;
-    }
-    catch (ConfigurationException e) {
-      // complain for all other bad things
-      log.error("Failed to configure anonymous user", e);
-      throw e;
-    }
   }
 }
