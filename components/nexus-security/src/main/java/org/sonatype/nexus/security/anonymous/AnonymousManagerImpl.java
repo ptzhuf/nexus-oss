@@ -12,16 +12,11 @@
  */
 package org.sonatype.nexus.security.anonymous;
 
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 
-import org.sonatype.nexus.common.concurrent.Locks;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
 
 import org.apache.shiro.subject.PrincipalCollection;
@@ -46,8 +41,6 @@ public class AnonymousManagerImpl
 
   private final Provider<AnonymousConfiguration> defaults;
 
-  private final ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
-
   private AnonymousConfiguration configuration;
 
   @Inject
@@ -59,56 +52,44 @@ public class AnonymousManagerImpl
   }
 
   @Override
-  public AnonymousConfiguration getConfiguration() {
-    Lock lock = Locks.read(readWriteLock);
-    try {
-      // TODO: Read-lock here could cause duplicate load, or duplicate defaults creation race
-      // TODO: Maybe simple lock or synchronized block is simpler, since write here is very rare
+  public synchronized AnonymousConfiguration getConfiguration() {
+    // TODO: Read-lock here could cause duplicate load, or duplicate defaults creation race
+    // TODO: Maybe simple lock or synchronized block is simpler, since write here is very rare
+    if (configuration == null) {
+      configuration = store.load();
+
+      // use defaults if no configuration was loaded from the store
       if (configuration == null) {
-        configuration = store.load();
+        configuration = defaults.get();
 
-        // use defaults if no configuration was loaded from the store
-        if (configuration == null) {
-          configuration = defaults.get();
+        // default config must not be null
+        checkNotNull(configuration);
 
-          // default config must not be null
-          checkNotNull(configuration);
-
-          log.info("Using default configuration: {}", configuration);
-        }
-        else {
-          log.info("Loaded configuration: {}", configuration);
-        }
+        log.info("Using default configuration: {}", configuration);
       }
+      else {
+        log.info("Loaded configuration: {}", configuration);
+      }
+    }
 
-      // TODO: Should we copy() here too, to prevent modification outside of setConfiguration() ?
-      // TODO: If so, we should provide means to get this w/o cloning for internal use, clone only for external
-      return configuration;
-    }
-    finally {
-      lock.unlock();
-    }
+    // TODO: Should we copy() here too, to prevent modification outside of setConfiguration() ?
+    // TODO: If so, we should provide means to get this w/o cloning for internal use, clone only for external
+    return configuration;
   }
 
   @Override
-  public void setConfiguration(final AnonymousConfiguration configuration) {
+  public synchronized void setConfiguration(final AnonymousConfiguration configuration) {
     checkNotNull(configuration);
 
     AnonymousConfiguration model = configuration.copy();
     // TODO: Validate configuration before saving
 
-    Lock lock = Locks.write(readWriteLock);
-    try {
-      log.info("Saving configuration: {}", model);
-      store.save(model);
-      this.configuration = model;
+    log.info("Saving configuration: {}", model);
+    store.save(model);
+    this.configuration = model;
 
-      // TODO: Sort out authc events to flush credentials
-      // TODO: Sort out other User bits which DefaultSecuritySystem.*anonymous* bits are doing
-    }
-    finally {
-      lock.unlock();
-    }
+    // TODO: Sort out authc events to flush credentials
+    // TODO: Sort out other User bits which DefaultSecuritySystem.*anonymous* bits are doing
   }
 
   @Override
