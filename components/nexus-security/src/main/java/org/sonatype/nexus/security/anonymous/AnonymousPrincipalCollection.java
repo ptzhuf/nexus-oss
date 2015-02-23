@@ -14,9 +14,12 @@ package org.sonatype.nexus.security.anonymous;
 
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
+import org.apache.shiro.subject.Subject;
 
 /**
  * Anonymous {@link PrincipalCollection}.
+ *
+ * Used to help identify if a {@link Subject} is anonymous.
  *
  * @since 3.0
  */

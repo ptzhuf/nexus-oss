@@ -77,7 +77,7 @@ public class AnonymousManagerImpl
   }
 
   /**
-   * Return configuration loading if needed.
+   * Return configuration, loading if needed.
    */
   private AnonymousConfiguration getConfigurationInternal() {
     synchronized (lock) {
@@ -102,16 +102,13 @@ public class AnonymousManagerImpl
     checkNotNull(configuration);
 
     AnonymousConfiguration model = configuration.copy();
-    // TODO: Validate configuration before saving
+    // TODO: Validate configuration before saving?  Or leave to ext.direct?  Should we try and verify the user exists?
 
     log.info("Saving configuration: {}", model);
     synchronized (lock) {
       store.save(model);
       this.configuration = model;
     }
-
-    // TODO: Sort out authc events to flush credentials
-    // TODO: Sort out other User bits which DefaultSecuritySystem.*anonymous* bits are doing
   }
 
   @Override
@@ -123,13 +120,13 @@ public class AnonymousManagerImpl
   public Subject buildSubject() {
     AnonymousConfiguration model = getConfigurationInternal();
 
+    log.info("Building anonymous subject with user-id: {}, realm-name: {}", model.getUserId(), model.getRealmName());
+
     // custom principals to aid with anonymous subject detection
     PrincipalCollection principals = new AnonymousPrincipalCollection(
         model.getUserId(),
         model.getRealmName()
     );
-
-    log.info("Building anonymous subject with principals: {}", principals);
 
     return new Subject.Builder()
         .principals(principals)
