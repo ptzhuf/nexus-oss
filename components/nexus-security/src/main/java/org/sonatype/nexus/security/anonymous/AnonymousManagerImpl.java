@@ -104,8 +104,8 @@ public class AnonymousManagerImpl
     AnonymousConfiguration model = configuration.copy();
     // TODO: Validate configuration before saving
 
+    log.info("Saving configuration: {}", model);
     synchronized (lock) {
-      log.info("Saving configuration: {}", model);
       store.save(model);
       this.configuration = model;
     }
