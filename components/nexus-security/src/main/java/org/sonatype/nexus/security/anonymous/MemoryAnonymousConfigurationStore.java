@@ -17,6 +17,7 @@ import javax.inject.Singleton;
 
 import org.sonatype.nexus.security.internal.AuthorizingRealmImpl;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
+import org.sonatype.sisu.goodies.common.TestAccessible;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -41,7 +42,8 @@ public class MemoryAnonymousConfigurationStore
     this.model = defaults();
   }
 
-  private AnonymousConfiguration defaults() {
+  @TestAccessible
+  protected AnonymousConfiguration defaults() {
     AnonymousConfiguration model = new AnonymousConfiguration();
     model.setEnabled(true);
     model.setUserId(DEFAULT_USER_ID);
