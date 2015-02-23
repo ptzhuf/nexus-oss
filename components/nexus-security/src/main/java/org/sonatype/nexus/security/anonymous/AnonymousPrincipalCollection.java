@@ -12,22 +12,20 @@
  */
 package org.sonatype.nexus.security.anonymous;
 
-import org.apache.shiro.subject.Subject;
+import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.SimplePrincipalCollection;
 
 /**
- * Anonymous manager.
+ * Anonymous {@link PrincipalCollection}.
  *
  * @since 3.0
  */
-public interface AnonymousManager
+public class AnonymousPrincipalCollection
+  extends SimplePrincipalCollection
 {
-  AnonymousConfiguration getConfiguration();
+  // TODO: Could be simplified conceptually by implementing PrincipalCollection directly, but lots more impl
 
-  void setConfiguration(AnonymousConfiguration configuration);
-
-  boolean isEnabled();
-
-  Subject buildSubject();
-
-  boolean isAnonymous(Subject subject);
+  public AnonymousPrincipalCollection(final Object principal, final String realmName) {
+    super(principal, realmName);
+  }
 }

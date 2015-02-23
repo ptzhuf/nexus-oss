@@ -24,7 +24,6 @@ import org.sonatype.nexus.common.concurrent.Locks;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
 
 import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.Subject;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -61,6 +60,8 @@ public class AnonymousManagerImpl
         configuration = store.load();
         log.info("Loaded configuration: {}", configuration);
       }
+
+      // TODO: Should we copy() here too, to prevent modification outside of setConfiguration() ?
       return configuration;
     }
     finally {
@@ -98,9 +99,11 @@ public class AnonymousManagerImpl
   public Subject buildSubject() {
     AnonymousConfiguration config = getConfiguration();
 
-    PrincipalCollection principals = new SimplePrincipalCollection(
+    // custom principals to aid with anonymous subject detection
+    PrincipalCollection principals = new AnonymousPrincipalCollection(
         config.getUserId(),
-        config.getRealmName());
+        config.getRealmName()
+    );
 
     log.info("Building anonymous subject with principals: {}", principals);
 
@@ -110,5 +113,9 @@ public class AnonymousManagerImpl
         .buildSubject();
   }
 
-  // TODO: Add isAnonymous(Subject) helper?  Could potentially use a custom PrincipalCollection to help?
+  @Override
+  public boolean isAnonymous(final Subject subject) {
+    checkNotNull(subject);
+    return subject.getPrincipals() instanceof AnonymousPrincipalCollection;
+  }
 }
