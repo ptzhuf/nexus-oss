@@ -72,13 +72,14 @@ public class AnonymousManagerImpl
   public void setConfiguration(final AnonymousConfiguration configuration) {
     checkNotNull(configuration);
 
+    AnonymousConfiguration model = configuration.copy();
     // TODO: Validate configuration before saving
 
     Lock lock = Locks.write(readWriteLock);
     try {
-      log.info("Saving configuration: {}", configuration);
-      store.save(configuration);
-      this.configuration = configuration.copy();
+      log.info("Saving configuration: {}", model);
+      store.save(model);
+      this.configuration = model;
 
       // TODO: Sort out authc events to flush credentials
       // TODO: Sort out other User bits which DefaultSecuritySystem.*anonymous* bits are doing
