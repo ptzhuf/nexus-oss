@@ -121,12 +121,12 @@ public class AnonymousManagerImpl
 
   @Override
   public Subject buildSubject() {
-    AnonymousConfiguration config = getConfigurationInternal();
+    AnonymousConfiguration model = getConfigurationInternal();
 
     // custom principals to aid with anonymous subject detection
     PrincipalCollection principals = new AnonymousPrincipalCollection(
-        config.getUserId(),
-        config.getRealmName()
+        model.getUserId(),
+        model.getRealmName()
     );
 
     log.info("Building anonymous subject with principals: {}", principals);
