@@ -12,12 +12,15 @@
  */
 package org.sonatype.nexus.security.anonymous;
 
+import com.google.common.base.Throwables;
+
 /**
  * Anonymous configuration.
  *
  * @since 3.0
  */
 public class AnonymousConfiguration
+  implements Cloneable
 {
   private boolean enabled;
 
@@ -47,6 +50,15 @@ public class AnonymousConfiguration
 
   public void setRealmName(final String realmName) {
     this.realmName = realmName;
+  }
+
+  public AnonymousConfiguration copy() {
+    try {
+      return (AnonymousConfiguration) clone();
+    }
+    catch (CloneNotSupportedException e) {
+      throw Throwables.propagate(e);
+    }
   }
 
   @Override

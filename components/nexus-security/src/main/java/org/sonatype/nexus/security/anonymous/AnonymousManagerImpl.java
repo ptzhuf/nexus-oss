@@ -77,11 +77,8 @@ public class AnonymousManagerImpl
     Lock lock = Locks.write(readWriteLock);
     try {
       log.info("Saving configuration: {}", configuration);
-
-      // TODO: Save copy, to prevent modification by reference
-
       store.save(configuration);
-      this.configuration = configuration;
+      this.configuration = configuration.copy();
 
       // TODO: Sort out authc events to flush credentials
       // TODO: Sort out other User bits which DefaultSecuritySystem.*anonymous* bits are doing
