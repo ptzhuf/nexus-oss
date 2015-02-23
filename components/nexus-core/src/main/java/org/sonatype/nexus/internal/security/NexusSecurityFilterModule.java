@@ -17,7 +17,7 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.sonatype.nexus.security.FilterProviderSupport;
-import org.sonatype.nexus.security.authz.AnonymousFilter;
+import org.sonatype.nexus.security.anonymous.AnonymousFilter;
 import org.sonatype.nexus.web.FailureLoggingHttpMethodPermissionFilter;
 
 import com.google.inject.AbstractModule;

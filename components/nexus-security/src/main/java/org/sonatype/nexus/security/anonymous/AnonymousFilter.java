@@ -10,17 +10,14 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.security.authz;
+
+package org.sonatype.nexus.security.anonymous;
 
 import javax.inject.Inject;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-import org.sonatype.nexus.security.internal.AuthorizingRealmImpl;
-import org.sonatype.nexus.security.settings.SecuritySettingsManager;
-
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ThreadContext;
 import org.apache.shiro.web.servlet.AdviceFilter;
@@ -32,6 +29,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Binds special anonymous subject if current subject is guest and anonymous access is enabled.
  *
+ * @see AnonymousManager
  * @since 3.0
  */
 public class AnonymousFilter
@@ -43,32 +41,20 @@ public class AnonymousFilter
 
   private static final Logger log = LoggerFactory.getLogger(AnonymousFilter.class);
 
-  private final SecuritySettingsManager settingsManager;
+  private final AnonymousManager anonymousManager;
 
   @Inject
-  public AnonymousFilter(final SecuritySettingsManager settingsManager) {
-    this.settingsManager = checkNotNull(settingsManager);
+  public AnonymousFilter(final AnonymousManager anonymousManager) {
+    this.anonymousManager = checkNotNull(anonymousManager);
   }
 
   @Override
   protected boolean preHandle(final ServletRequest request, final ServletResponse response) throws Exception {
     Subject subject = SecurityUtils.getSubject();
 
-    if (subject.getPrincipal() == null && settingsManager.isAnonymousAccessEnabled()) {
+    if (subject.getPrincipal() == null && anonymousManager.isEnabled()) {
       request.setAttribute(ORIGINAL_SUBJECT, subject);
-
-      String principal = settingsManager.getAnonymousUsername();
-      // FIXME: Expose realm name in settings
-      String realmName = AuthorizingRealmImpl.NAME;
-      log.trace("Binding anonymous subject: principal={}, realmName={}", principal, realmName);
-
-      subject = new Subject.Builder()
-          .principals(new SimplePrincipalCollection(principal, realmName))
-          .authenticated(false)
-          .buildSubject();
-
-      // TODO: Sort out if we need sessionCreationEnabled(false), this presently causes the UI to freak-out
-
+      subject = anonymousManager.buildSubject();
       ThreadContext.bind(subject);
       log.trace("Bound anonymous subject: {}", subject);
     }
@@ -85,11 +71,5 @@ public class AnonymousFilter
       log.trace("Binding original subject: {}", subject);
       ThreadContext.bind(subject);
     }
-
-    // TODO: Sort out if this is needed here or not
-    //else {
-    //  log.trace("Unbinding subject");
-    //  ThreadContext.unbindSubject();
-    //}
   }
 }
