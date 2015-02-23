@@ -59,7 +59,7 @@ public class AnonymousManagerImpl
     try {
       if (configuration == null) {
         configuration = store.load();
-        log.debug("Loaded configuration: {}", configuration);
+        log.info("Loaded configuration: {}", configuration);
       }
       return configuration;
     }
@@ -76,7 +76,7 @@ public class AnonymousManagerImpl
 
     Lock lock = Locks.write(readWriteLock);
     try {
-      log.debug("Saving configuration: {}", configuration);
+      log.info("Saving configuration: {}", configuration);
 
       // TODO: Save copy, to prevent modification by reference
 
@@ -103,6 +103,8 @@ public class AnonymousManagerImpl
     PrincipalCollection principals = new SimplePrincipalCollection(
         config.getUserId(),
         config.getRealmName());
+
+    log.info("Building anonymous subject with principals: {}", principals);
 
     return new Subject.Builder()
         .principals(principals)
