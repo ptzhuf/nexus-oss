@@ -715,23 +715,4 @@ public class DefaultSecuritySystem
     // update the realms in the security manager
     setSecurityManagerRealms();
   }
-
-  //
-  // Anonymous
-  //
-
-  @Override
-  public boolean isAnonymousAccessEnabled() {
-    return securitySettingsManager.isAnonymousAccessEnabled();
-  }
-
-  @Override
-  public String getAnonymousUsername() {
-    return securitySettingsManager.getAnonymousUsername();
-  }
-
-  @Override
-  public String getAnonymousPassword() {
-    return securitySettingsManager.getAnonymousPassword();
-  }
 }

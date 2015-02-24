@@ -19,7 +19,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -172,11 +171,11 @@ public class ContentServlet
     // honor the localOnly, remoteOnly and asExpired (but remoteOnly and asExpired only for non-anon users)
     // as those two actually makes Nexus perform a remote request
     result.setRequestLocalOnly(isLocal(request, resourceStorePath));
-    if (!Objects.equals(securitySystem.getAnonymousUsername(),
-        result.getRequestContext().get(AccessManager.REQUEST_USER))) {
+    //if (!Objects.equals(securitySystem.getAnonymousUsername(),
+    //    result.getRequestContext().get(AccessManager.REQUEST_USER))) {
       result.setRequestRemoteOnly(REQ_QP_FORCE_REMOTE_VALUE.equals(request.getParameter(REQ_QP_FORCE_PARAMETER)));
       result.setRequestAsExpired(REQ_QP_FORCE_EXPIRED_VALUE.equals(request.getParameter(REQ_QP_FORCE_PARAMETER)));
-    }
+    //}
     result.setExternal(true);
 
     // honor if-modified-since

@@ -266,14 +266,4 @@ public interface SecuritySystem
    * Returns the configured shiro SecurityManager
    */
   RealmSecurityManager getSecurityManager();
-
-  //
-  // Anonymous
-  //
-
-  boolean isAnonymousAccessEnabled();
-
-  String getAnonymousUsername();
-
-  String getAnonymousPassword();
 }

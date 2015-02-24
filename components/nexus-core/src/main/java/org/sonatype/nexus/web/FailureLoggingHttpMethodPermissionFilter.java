@@ -59,9 +59,9 @@ public class FailureLoggingHttpMethodPermissionFilter
   private void recordAuthzFailureEvent(ServletRequest request, ServletResponse response) {
     Subject subject = getSubject(request, response);
 
-    if (securitySystem.getAnonymousUsername().equals(subject.getPrincipal())) {
-      return;
-    }
+    //if (securitySystem.getAnonymousUsername().equals(subject.getPrincipal())) {
+    //  return;
+    //}
 
     HttpServletRequest httpRequest = (HttpServletRequest)request;
 
