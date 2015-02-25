@@ -35,8 +35,10 @@ import org.sonatype.nexus.common.stateguard.StateGuardLifecycleSupport;
 import org.sonatype.nexus.configuration.application.ApplicationDirectories;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Predicate;
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -151,6 +153,7 @@ public class BlobStoreManagerImpl
     store.update(configuration);
     blobStore.stop();
     blobStore = newBlobStore(configuration);
+    blobStore.start();
     track(configuration.getName(), blobStore);
     return blobStore;
   }
@@ -158,7 +161,25 @@ public class BlobStoreManagerImpl
   @Override
   @Guarded(by = STARTED)
   public void delete(final String name) throws Exception {
-
+    checkNotNull(name);
+    
+    log.debug("Deleting BlobStore: {}", name);
+    BlobStore blobStore = blobStore(name);
+    blobStore.stop();
+    Iterable<BlobStoreConfiguration> filtered = Iterables.filter(store.list(), new Predicate<BlobStoreConfiguration>()
+    {
+      @Override
+      public boolean apply(final BlobStoreConfiguration input) {
+        return input.getName().equals(name);
+      }
+    });
+    if(!filtered.iterator().hasNext()) {
+      throw new IllegalStateException("Could not find configuration to delete: " + name);
+    }
+    store.delete(filtered.iterator().next());
+    untrack(name);
+    
+    //TODO - event publishing
   }
 
   @Override
@@ -167,9 +188,9 @@ public class BlobStoreManagerImpl
     checkNotNull(name);
 
     synchronized (stores) {
-      BlobStore store = stores.get(name);
+      BlobStore store = blobStore(name);
 
-      // TODO - remove auto-create functionality, need to know who if any are depending on it
+      // TODO - remove auto-create functionality?
       // blob-store not defined, create
       if (store == null) {
         // create and start

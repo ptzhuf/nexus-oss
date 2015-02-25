@@ -22,15 +22,12 @@ import org.sonatype.nexus.configuration.application.ApplicationDirectories
 import org.sonatype.sisu.litmus.testsupport.TestSupport
 
 import com.google.common.collect.Lists
-import org.hamcrest.Matchers
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import org.mockito.Mock
 
-import static org.hamcrest.MatcherAssert.assertThat
-import static org.hamcrest.Matchers.*
 import static org.mockito.Matchers.any
 import static org.mockito.Matchers.anyString
 import static org.mockito.Mockito.doReturn
@@ -73,10 +70,10 @@ class BlobStoreManagerImplTest
     doReturn(blobStore).when(underTest).newBlobStore(any(BlobStoreConfiguration))
     when(store.list()).thenReturn(
         Lists.newArrayList(new BlobStoreConfiguration(name: 'test', path: temporaryFolder.root.absolutePath)))
-    
+
     underTest.doStart()
-    
-    assert underTest.browse().toList() == [blobStore] 
+
+    assert underTest.browse().toList() == [blobStore]
   }
 
 
@@ -84,12 +81,12 @@ class BlobStoreManagerImplTest
   public void 'Can create a BlobStore'() throws Exception {
     BlobStore blobStore = mock(BlobStore)
     doReturn(blobStore).when(underTest).newBlobStore(any(BlobStoreConfiguration))
-
-    BlobStore createdBlobStore = underTest.create(
-        new BlobStoreConfiguration(name: 'test', path: temporaryFolder.root.absolutePath)
-    )
+    BlobStoreConfiguration configuration = new BlobStoreConfiguration(name: 'test', path: temporaryFolder.root.absolutePath)
+    
+    BlobStore createdBlobStore = underTest.create(configuration)
 
     assert createdBlobStore == blobStore
+    verify(store).create(configuration)
     verify(blobStore).start()
     assert underTest.browse().toList() == [blobStore]
     assert underTest.get('test') == blobStore
@@ -98,27 +95,43 @@ class BlobStoreManagerImplTest
   @Test
   public void 'Can update an existing BlobStore'() throws Exception {
     BlobStore blobStore = mock(BlobStore)
+    BlobStore replacementBlobStore = mock(BlobStore)
     doReturn(blobStore).when(underTest).blobStore('test')
+    BlobStoreConfiguration configuration = new BlobStoreConfiguration(name: 'test',
+        path: temporaryFolder.root.absolutePath)
+    doReturn(replacementBlobStore).when(underTest).newBlobStore(configuration)
     
+    BlobStore updatedBlobStore = underTest.update(configuration)
+    
+    verify(store).update(configuration)
+    verify(replacementBlobStore).start()
+    assert updatedBlobStore == replacementBlobStore
   }
 
   @Test
-  public void testCreate() throws Exception {
-
+  public void 'Can delete an existing BlobStore'() throws Exception {
+    BlobStoreConfiguration configuration = new BlobStoreConfiguration(name: 'test',
+        path: temporaryFolder.root.absolutePath)
+    BlobStore blobStore = mock(BlobStore)
+    doReturn(blobStore).when(underTest).blobStore('test')
+    when(store.list()).thenReturn(Lists.newArrayList(configuration));
+    
+    underTest.delete(configuration.name)
+    
+    verify(blobStore).stop();
+    verify(store).delete(configuration);
   }
-
+  
   @Test
-  public void testUpdate() throws Exception {
-
-  }
-
-  @Test
-  public void testDelete() throws Exception {
-
-  }
-
-  @Test
-  public void testGet() throws Exception {
-
+  public void 'BlobStores will be eagerly created if not already configured'() {
+    doReturn(null).when(underTest).blobStore('test')
+    BlobStore blobStore = mock(BlobStore)
+    doReturn(blobStore).when(underTest).newBlobStore(any(BlobStoreConfiguration))
+    
+    BlobStore autoCreatedBlobStore = underTest.get('test')
+    
+    verify(blobStore).start()
+    verify(store).create(any(BlobStoreConfiguration))
+    assert blobStore == autoCreatedBlobStore
   }
 }
