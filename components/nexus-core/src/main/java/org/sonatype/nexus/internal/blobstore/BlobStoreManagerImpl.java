@@ -34,6 +34,7 @@ import org.sonatype.nexus.common.stateguard.Guarded;
 import org.sonatype.nexus.common.stateguard.StateGuardLifecycleSupport;
 import org.sonatype.nexus.configuration.application.ApplicationDirectories;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
@@ -94,17 +95,6 @@ public class BlobStoreManagerImpl
     }
   }
 
-  private void track(final String name, final BlobStore blobStore)
-  {
-    log.debug("Tracking {}", name);
-    stores.put(name, blobStore);
-  }
-
-  private void untrack(final String name) {
-    log.debug("Untracking: ,{}", name);
-    stores.remove(name);
-  }
-
   @Override
   protected void doStop() throws Exception {
     if (stores.isEmpty()) {
@@ -155,8 +145,14 @@ public class BlobStoreManagerImpl
     String path = checkNotNull(configuration.getPath());
     
     log.debug("Updating BlobStore: {}, {}", name, path);
-    blobStore(name);
-    return null;
+    
+    //TODO - changing the path will leave behind previous content, but is that sensible?
+    BlobStore blobStore = blobStore(name);
+    store.update(configuration);
+    blobStore.stop();
+    blobStore = newBlobStore(configuration);
+    track(configuration.getName(), blobStore);
+    return blobStore;
   }
 
   @Override
@@ -193,7 +189,8 @@ public class BlobStoreManagerImpl
     }
   }
 
-  private BlobStore newBlobStore(final BlobStoreConfiguration blobStoreConfiguration) {
+  @VisibleForTesting
+  BlobStore newBlobStore(final BlobStoreConfiguration blobStoreConfiguration) {
     Path root = Paths.get(blobStoreConfiguration.getPath()).resolve(blobStoreConfiguration.getName());
     Path content = root.resolve("content");
     Path metadata = root.resolve("metadata");
@@ -207,10 +204,22 @@ public class BlobStoreManagerImpl
     );
   }
 
-  private BlobStore blobStore(final String name) {
+  @VisibleForTesting
+  BlobStore blobStore(final String name) {
     BlobStore blobStore = stores.get(name);
     checkState(blobStore != null, "Missing BlobStore: %s", name);
     return blobStore;
+  }
+
+  private void track(final String name, final BlobStore blobStore)
+  {
+    log.debug("Tracking {}", name);
+    stores.put(name, blobStore);
+  }
+
+  private void untrack(final String name) {
+    log.debug("Untracking: ,{}", name);
+    stores.remove(name);
   }
 
 }
