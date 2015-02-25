@@ -10,47 +10,47 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.blobstore.api.configuration;
+package org.sonatype.nexus.internal.blobstore;
 
-import org.sonatype.nexus.orient.entity.Entity;
+import org.junit.Test;
 
-/**
- * @since 3.0
- */
-public class BlobStoreConfiguration
-  extends Entity
+import static org.junit.Assert.*;
+
+public class BlobStoreManagerImplTest
 {
-  /**
-   * The name for the BlobStore.
-   */
-  private String name;
 
-  /**
-   * The path to the root of the BlobStore.
-   */
-  private String path;
-  
-  public String getName() {
-    return name;
+  @Test
+  public void testDoStart() throws Exception {
+
   }
 
-  public void setName(final String name) {
-    this.name = name;
+  @Test
+  public void testDoStop() throws Exception {
+
   }
 
-  public String getPath() {
-    return path;
+  @Test
+  public void testBrowse() throws Exception {
+
   }
 
-  public void setPath(final String path) {
-    this.path = path;
+  @Test
+  public void testCreate() throws Exception {
+
   }
 
-  @Override
-  public String toString() {
-    return "BlobStoreConfiguration{" +
-        "name='" + name + '\'' +
-        ", path='" + path + '\'' +
-        '}';
+  @Test
+  public void testUpdate() throws Exception {
+
+  }
+
+  @Test
+  public void testDelete() throws Exception {
+
+  }
+
+  @Test
+  public void testGet() throws Exception {
+
   }
 }

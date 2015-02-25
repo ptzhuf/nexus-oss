@@ -39,6 +39,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
 import static org.sonatype.nexus.common.stateguard.StateGuardLifecycleSupport.State.STARTED;
 
 /**
@@ -123,21 +124,73 @@ public class BlobStoreManagerImpl
   }
 
   @Override
+  @Guarded(by = STARTED)
   public Iterable<BlobStore> browse() {
     return ImmutableList.copyOf(stores.values());
   }
 
   @Override
-  public BlobStore create(final BlobStoreConfiguration blobStoreConfiguration) throws Exception {
-    checkNotNull(blobStoreConfiguration);
-    log.debug("Creating blob-store: {} with content root: {}", blobStoreConfiguration.getName(),
-        blobStoreConfiguration.getPath());
+  @Guarded(by = STARTED)
+  public BlobStore create(final BlobStoreConfiguration configuration) throws Exception {
+    checkNotNull(configuration);
+    log.debug("Creating blob-store: {} with content root: {}", configuration.getName(),
+        configuration.getPath());
 
-    store.create(blobStoreConfiguration);
+    store.create(configuration);
 
-    BlobStore blobStore = newBlobStore(blobStoreConfiguration);
+    BlobStore blobStore = newBlobStore(configuration);
+    track(configuration.getName(), blobStore);
+    
+    blobStore.start();
+    //TODO - event publishing
 
     return blobStore;
+  }
+
+  @Override
+  @Guarded(by = STARTED)
+  public BlobStore update(final BlobStoreConfiguration configuration) throws Exception {
+    checkNotNull(configuration);
+    String name = checkNotNull(configuration.getName());
+    String path = checkNotNull(configuration.getPath());
+    
+    log.debug("Updating BlobStore: {}, {}", name, path);
+    blobStore(name);
+    return null;
+  }
+
+  @Override
+  @Guarded(by = STARTED)
+  public void delete(final String name) throws Exception {
+
+  }
+
+  @Override
+  @Guarded(by = STARTED)
+  public BlobStore get(final String name) {
+    checkNotNull(name);
+
+    synchronized (stores) {
+      BlobStore store = stores.get(name);
+
+      // TODO - remove auto-create functionality, need to know who if any are depending on it
+      // blob-store not defined, create
+      if (store == null) {
+        // create and start
+        try {
+
+          BlobStoreConfiguration configuration = new BlobStoreConfiguration();
+          configuration.setName(name);
+          configuration.setPath(basedir.toAbsolutePath().toString());
+          store = create(configuration);
+        }
+        catch (Exception e) {
+          throw Throwables.propagate(e);
+        }
+      }
+
+      return store;
+    }
   }
 
   private BlobStore newBlobStore(final BlobStoreConfiguration blobStoreConfiguration) {
@@ -154,46 +207,10 @@ public class BlobStoreManagerImpl
     );
   }
 
-  @Override
-  public BlobStore update(final BlobStoreConfiguration blobStoreConfiguration) throws Exception {
-    return null;
+  private BlobStore blobStore(final String name) {
+    BlobStore blobStore = stores.get(name);
+    checkState(blobStore != null, "Missing BlobStore: %s", name);
+    return blobStore;
   }
-
-  @Override
-  public void delete(final String name) throws Exception {
-
-  }
-
-  @Override
-  @Guarded(by = STARTED)
-  public BlobStore get(final String name) {
-    checkNotNull(name);
-
-    synchronized (stores) {
-      BlobStore store = stores.get(name);
-
-      // blob-store not defined, create
-      if (store == null) {
-        // create and start
-        try {
-
-          //TODO - presumably we want to be able to store 
-          BlobStoreConfiguration configuration = new BlobStoreConfiguration();
-          configuration.setName(name);
-          configuration.setPath(basedir.toAbsolutePath().toString());
-          store = create(configuration);
-        }
-        catch (Exception e) {
-          throw Throwables.propagate(e);
-        }
-
-        // cache
-        stores.put(name, store);
-      }
-
-      return store;
-    }
-  }
-
 
 }
