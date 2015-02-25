@@ -32,7 +32,7 @@ import org.sonatype.nexus.blobstore.file.SimpleFileOperations;
 import org.sonatype.nexus.blobstore.file.VolumeChapterLocationStrategy;
 import org.sonatype.nexus.common.stateguard.Guarded;
 import org.sonatype.nexus.common.stateguard.StateGuardLifecycleSupport;
-import org.sonatype.nexus.configuration.application.ApplicationDirectories;
+import org.sonatype.nexus.configuration.ApplicationDirectories;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Predicate;
