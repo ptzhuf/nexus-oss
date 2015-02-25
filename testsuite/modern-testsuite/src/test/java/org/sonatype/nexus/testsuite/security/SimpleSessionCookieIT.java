@@ -184,7 +184,7 @@ public class SimpleSessionCookieIT
 
       // 1. login with credentials and get session cookie
       // Set-Cookie: NXSESSIONID=98a766bc-bc33-4b3c-9d9f-d3bb85b0cf00; Path=/; Secure; HttpOnly
-      HttpRequestBase loginRequest = new HttpGet(nexusUrl.toExternalForm() + LEGACY_LOGIN_PATH);
+      HttpRequestBase loginRequest = new HttpGet(nexusUrl.toExternalForm() + "siesta/wonderland/session");
       withCommonBrowserHeaders(loginRequest);
       try (CloseableHttpResponse response = client.execute(loginRequest, clientContext())) {
         assertThat(response.getStatusLine().getStatusCode(), is(200));
