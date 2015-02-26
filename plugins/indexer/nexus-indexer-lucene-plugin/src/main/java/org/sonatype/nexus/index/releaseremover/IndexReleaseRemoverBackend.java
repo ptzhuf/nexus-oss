@@ -85,6 +85,7 @@ public class IndexReleaseRemoverBackend
     TaskUtil.checkInterruption();
 
     try {
+      int deletedFiles = 0;
       // collect all known groupIds
       final Set<String> groupIds = Sets.newHashSet();
       indexerManager.shared(repository, new Runnable()
@@ -94,6 +95,9 @@ public class IndexReleaseRemoverBackend
           groupIds.addAll(context.getAllGroups());
         }
       });
+
+      log.trace("groupIds={}", groupIds);
+
       // iterator groupIds
       for (final String groupId : groupIds) {
         TaskUtil.checkInterruption();
@@ -102,11 +106,13 @@ public class IndexReleaseRemoverBackend
         final Query groupIdQ =
             indexerManager.constructQuery(MAVEN.GROUP_ID, new SourcedSearchExpression(groupId));
         try (IteratorSearchResponse searchResponse = indexerManager
-            .searchQueryIterator(groupIdQ, repository.getId(), null, null, null, true, null)) {
+            .searchQueryIterator(groupIdQ, repository.getId(), null, null, null, false, null)) {
           for (ArtifactInfo ai : searchResponse) {
             artifactIds.add(ai.artifactId);
           }
         }
+
+        log.trace("groupId={}, artifactIds={}", groupId, artifactIds);
 
         // iterate all artifactIds
         for (final String artifactId : artifactIds) {
@@ -119,7 +125,7 @@ public class IndexReleaseRemoverBackend
           gaQ.add(groupIdQ, Occur.MUST);
           gaQ.add(artifactIdQ, Occur.MUST);
           try (IteratorSearchResponse searchResponse = indexerManager
-              .searchQueryIterator(gaQ, repository.getId(), null, null, null, true, null)) {
+              .searchQueryIterator(gaQ, repository.getId(), null, null, null, false, null)) {
             for (ArtifactInfo ai : searchResponse) {
               try {
                 versions.add(versionScheme.parseVersion(ai.version));
@@ -129,6 +135,8 @@ public class IndexReleaseRemoverBackend
               }
             }
           }
+
+          log.trace("groupId={}, artifactId={}, versions={}", groupId, artifactId, versions);
 
           // All Vs for GA collected, now do the math
           if (versions.size() > request.getNumberOfVersionsToKeep()) {
@@ -140,7 +148,7 @@ public class IndexReleaseRemoverBackend
             Collections.sort(sortedVersions);
             final List<Version> toDelete =
                 sortedVersions.subList(0, versions.size() - request.getNumberOfVersionsToKeep());
-            log.debug("Will delete these specific versions: {}", toDelete);
+            log.debug("Will delete these {}:{} specific versions: {}", groupId, artifactId, toDelete);
             for (Version version : toDelete) {
               TaskUtil.checkInterruption();
               // we need the "version directory" of this GAV
@@ -150,6 +158,7 @@ public class IndexReleaseRemoverBackend
               try {
                 int deleted = mayDeleteVersion(target, repository, vDirectory);
                 log.debug("Deleted {} files from {}:{}:{} in {}", deleted, groupId, artifactId, version, repository);
+                deletedFiles += deleted;
               }
               catch (Exception e) {
                 log.warn("Could not delete {}:{}:{} in {}, skipping it", groupId, artifactId, version, repository, e);
@@ -158,6 +167,8 @@ public class IndexReleaseRemoverBackend
           }
         }
       }
+      result.setDeletedFileCount(deletedFiles);
+      result.setSuccessful(true);
     }
     catch (NoSuchRepositoryException e) {
       // repository removed/put out of service during run? abort
