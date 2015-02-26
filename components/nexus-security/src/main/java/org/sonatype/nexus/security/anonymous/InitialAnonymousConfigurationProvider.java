@@ -18,16 +18,16 @@ import javax.inject.Singleton;
 
 import org.sonatype.nexus.security.internal.AuthorizingRealmImpl;
 
-// TODO: Find a better naming scheme, this is the initial configuration provider
-
 /**
- * Defaults {@link AnonymousConfiguration} provider.
+ * Initial {@link AnonymousConfiguration} provider.
+ *
+ * Provides the initial configuration of anonymous configuration for fresh server installations.
  *
  * @since 3.0
  */
-@Named("defaults")
+@Named("initial")
 @Singleton
-public class DefaultsAnonymousConfigurationProvider
+public class InitialAnonymousConfigurationProvider
   implements Provider<AnonymousConfiguration>
 {
   public static final String DEFAULT_USER_ID = "anonymous";
