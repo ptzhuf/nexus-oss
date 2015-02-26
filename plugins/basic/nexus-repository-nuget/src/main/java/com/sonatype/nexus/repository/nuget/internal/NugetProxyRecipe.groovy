@@ -16,6 +16,7 @@ import org.sonatype.nexus.repository.Facet
 import org.sonatype.nexus.repository.Format
 import org.sonatype.nexus.repository.Repository
 import org.sonatype.nexus.repository.Type
+import org.sonatype.nexus.repository.httpclient.HttpClientFacet
 import org.sonatype.nexus.repository.types.ProxyType
 import org.sonatype.nexus.repository.view.ConfigurableViewFacet
 import org.sonatype.nexus.repository.view.Router
@@ -47,6 +48,9 @@ class NugetProxyRecipe
   Provider<NugetProxyFacet> proxyFacet
 
   @Inject
+  Provider<HttpClientFacet> httpClientFacet
+
+  @Inject
   public NugetProxyRecipe(@Named(ProxyType.NAME) final Type type,
                           @Named(NugetFormat.NAME) final Format format)
   {
@@ -57,6 +61,7 @@ class NugetProxyRecipe
   void apply(@Nonnull final Repository repository) throws Exception {
     repository.attach(storageFacet.get())
     repository.attach(searchFacet.get())
+    repository.attach(httpClientFacet.get())
     repository.attach(proxyFacet.get())
     repository.attach(galleryFacet.get())
     repository.attach(securityFacet.get())

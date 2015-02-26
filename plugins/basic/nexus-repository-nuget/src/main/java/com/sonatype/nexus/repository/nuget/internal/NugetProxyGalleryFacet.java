@@ -23,6 +23,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import com.sonatype.nexus.repository.nuget.internal.odata.ODataConsumer;
 import com.sonatype.nexus.repository.nuget.internal.odata.ODataUtils;
@@ -40,8 +42,11 @@ import static com.google.common.base.Objects.equal;
 import static java.lang.Math.min;
 
 /**
+ * A proxying nuget gallery facet.
+ *
  * @since 3.0
  */
+@Named("proxy")
 public class NugetProxyGalleryFacet
     extends NugetGalleryFacetImpl
 {
@@ -53,6 +58,7 @@ public class NugetProxyGalleryFacet
 
   private Cache<QueryCacheKey, Integer> cache;
 
+  @Inject
   public NugetProxyGalleryFacet(
       final ComponentMetadataFactory componentMetadataFactory, final NugetFeedFetcher fetcher)
   {
