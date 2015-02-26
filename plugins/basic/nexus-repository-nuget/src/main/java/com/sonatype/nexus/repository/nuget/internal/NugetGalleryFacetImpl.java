@@ -124,7 +124,7 @@ public class NugetGalleryFacetImpl
 
   //@Override
   @Guarded(by = STARTED)
-  public int count(final String path, final Map<String, String> query) {
+  public int count(final String operation, final Map<String, String> query) {
     log.debug("Count: " + query);
 
     final ComponentQuery componentQuery = ODataUtils.query(query, true);
@@ -207,8 +207,14 @@ public class NugetGalleryFacetImpl
 
   @Override
   public void putMetadata(final Map<String, String> metadata) {
-    // TODO: implement
-    throw new UnsupportedOperationException("implement me");
+    try (StorageTx tx = openStorageTx()) {
+      final OrientVertex bucket = tx.getBucket();
+      final OrientVertex component = createOrUpdateComponent(tx, bucket, metadata);
+      putInIndex(component);
+      maintainAggregateInfo(tx,metadata.get(ID));
+
+      tx.commit();
+    }
   }
 
   @VisibleForTesting
@@ -590,7 +596,7 @@ public class NugetGalleryFacetImpl
   }
 
   protected Iterable<Repository> getHostedRepositories() {
-   return Iterables.filter(getRepositories(), not(new HasFacet(ProxyFacet.class)));
+    return Iterables.filter(getRepositories(), not(new HasFacet(ProxyFacet.class)));
   }
 
   protected Iterable<Repository> getProxyRepositories() {

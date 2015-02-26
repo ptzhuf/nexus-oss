@@ -112,8 +112,11 @@ public class NugetFeedFetcher
   @Nullable
   public Integer getCount(final Repository proxy, URI nugetQuery) throws IOException {
     final Payload item = getPayload(proxy, absoluteURI(proxy, nugetQuery), 1);
-    try (InputStream is = item.openInputStream()) {
+    if (item == null) {
+      return 0;
+    }
 
+    try (InputStream is = item.openInputStream()) {
       final String s = CharStreams.toString(new InputStreamReader(is, Charsets.UTF_8)).trim();
       return Integer.parseInt(s);
     }

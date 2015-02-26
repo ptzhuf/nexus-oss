@@ -14,6 +14,7 @@ package com.sonatype.nexus.repository.nuget.internal;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
@@ -31,10 +32,13 @@ import com.sonatype.nexus.repository.nuget.internal.odata.ODataUtils;
 
 import org.sonatype.nexus.repository.Repository;
 import org.sonatype.nexus.repository.search.ComponentMetadataFactory;
+import org.sonatype.nexus.repository.util.NestedAttributesMap;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Throwables;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.http.client.utils.URIBuilder;
 
@@ -50,6 +54,8 @@ import static java.lang.Math.min;
 public class NugetProxyGalleryFacet
     extends NugetGalleryFacetImpl
 {
+  public static final String CONFIG_KEY = "nugetProxy";
+
   private static final int TWO_PAGES = 2 * ODataUtils.PAGE_SIZE;
 
   private static final Pattern COUNT_REGEX = Pattern.compile("<m:count>(\\d*)</m:count>");
@@ -69,14 +75,13 @@ public class NugetProxyGalleryFacet
   @Override
   protected void doConfigure() throws Exception {
     super.doConfigure();
-
-    // TODO: Read the cache settings from configuration
-    int cacheSize = 300;
-    int cacheItemMaxAge = 3600;
+    NestedAttributesMap attributes = getRepository().getConfiguration().attributes(CONFIG_KEY);
+    final int queryCacheSize = attributes.get("queryCacheSize", Integer.class, 300);
+    final int cacheItemMaxAgeSeconds = attributes.get("queryCacheItemMaxAgeSeconds", Integer.class, 3600);
 
     cache = CacheBuilder.newBuilder()
-        .maximumSize(cacheSize)
-        .expireAfterWrite(cacheItemMaxAge, TimeUnit.SECONDS)
+        .maximumSize(queryCacheSize)
+        .expireAfterWrite(cacheItemMaxAgeSeconds, TimeUnit.SECONDS)
         .build();
   }
 
@@ -119,11 +124,10 @@ public class NugetProxyGalleryFacet
     return feedXml.replaceFirst("<m:count>\\d*</m:count>", "<m:count>" + reportedCount + "</m:count>");
   }
 
-
   @Override
-  public int count(final String path, final Map<String, String> parameters) {
-    // How many artifacts are available
-    return passQueryToRemoteRepo(nugetQuery(path, parameters), new CountFetcher(fetcher));
+  public int count(final String operation, final Map<String, String> parameters) {
+    // Remove the leading slash
+    return passQueryToRemoteRepo(nugetQuery(operation, parameters), new CountFetcher(fetcher));
   }
 
   @Override
@@ -135,15 +139,21 @@ public class NugetProxyGalleryFacet
    * Returns a relative URI for the NuGet query, properly encoding the query parameters.
    * e.g. {@code "Search()/$count?filter=whatever"}
    */
-  private URI nugetQuery(String operation, Map<String, String> queryParams) {
+  private URI nugetQuery(final String path, final Map<String, String> queryParams) {
     try {
-      URIBuilder b = new URIBuilder();
-      b.setPath(operation);
+      URIBuilder uri = new URIBuilder();
 
-      for (Entry<String, String> param : queryParams.entrySet()) {
-        b.addParameter(param.getKey(), param.getValue());
+      uri.setPath(path);
+
+      if (!queryParams.isEmpty()) {
+        List<String> paramClauses = Lists.newArrayList();
+        for (Entry<String, String> param : queryParams.entrySet()) {
+          paramClauses.add(param.getKey() + "=" + param.getValue());
+        }
+        uri.setCustomQuery(Joiner.on('&').join(paramClauses));
       }
-      return b.build();
+
+      return uri.build();
     }
     catch (URISyntaxException e) {
       throw Throwables.propagate(e);
@@ -164,7 +174,8 @@ public class NugetProxyGalleryFacet
       // TODO: Determine if we should talk to the remote based on its status
 
       final QueryCacheKey key = new QueryCacheKey(repo.getName(), path);
-      return cache.get(key, creator.createValueLoader(repo, path));
+      final Integer cachedCount = cache.get(key, creator.createValueLoader(repo, path));
+      return cachedCount;
     }
     catch (Exception e) {
       log.warn("{} attempting to contact proxied repository {}.", e.getClass().getSimpleName(), repo.getName());
