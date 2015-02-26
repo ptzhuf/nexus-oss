@@ -34,7 +34,7 @@ public interface ReleaseRemoverBackend
    * Invoked to actually perform release removal.
    */
   void removeReleases(ReleaseRemovalRequest request,
-                                      ReleaseRemovalResult result,
-                                      MavenRepository repository,
-                                      @Nullable Target target) throws IOException;
+                      ReleaseRemovalResult result,
+                      MavenRepository repository,
+                      @Nullable Target target) throws IOException;
 }
