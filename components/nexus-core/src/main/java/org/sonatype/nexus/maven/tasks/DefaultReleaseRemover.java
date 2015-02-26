@@ -57,7 +57,8 @@ public class DefaultReleaseRemover
   private final Map<String, ReleaseRemoverBackend> backends;
 
   @Inject
-  public DefaultReleaseRemover(final RepositoryRegistry repositoryRegistry, final TargetRegistry targetRegistry,
+  public DefaultReleaseRemover(final RepositoryRegistry repositoryRegistry,
+                               final TargetRegistry targetRegistry,
                                final @Named("maven2") ContentClass maven2ContentClass,
                                final Map<String, ReleaseRemoverBackend> backends)
   {

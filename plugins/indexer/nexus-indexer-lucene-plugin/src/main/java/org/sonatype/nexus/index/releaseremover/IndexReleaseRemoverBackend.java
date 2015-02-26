@@ -167,8 +167,7 @@ public class IndexReleaseRemoverBackend
 
   /**
    * Deletes a complete V directory or it's contents selectively, obeying passed in target, if any. Returns the count
-   * of
-   * deleted files.
+   * of deleted files.
    */
   private int mayDeleteVersion(final Target target,
                                final MavenRepository repository,
