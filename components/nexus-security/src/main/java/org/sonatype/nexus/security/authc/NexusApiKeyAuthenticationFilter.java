@@ -10,7 +10,7 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.internal.security;
+package org.sonatype.nexus.security.authc;
 
 import java.util.Map;
 
@@ -19,21 +19,19 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
-import org.sonatype.nexus.security.authc.NexusApiKey;
-import org.sonatype.nexus.security.authc.NexusApiKeyAuthenticationToken;
-import org.sonatype.nexus.web.NexusHttpAuthenticationFilter;
-
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
 import org.apache.shiro.web.util.WebUtils;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+// FIXME: This isn't basic-auth, so shouldn't extend from that base-class?
+
 /**
  * {@link AuthenticatingFilter} that looks for credentials in known {@link NexusApiKey} HTTP headers.
  */
 public class NexusApiKeyAuthenticationFilter
-    extends NexusHttpAuthenticationFilter
+    extends NexusBasicHttpAuthenticationFilter
 {
   private final Map<String, NexusApiKey> apiKeys;
 

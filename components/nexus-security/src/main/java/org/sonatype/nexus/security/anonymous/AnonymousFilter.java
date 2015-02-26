@@ -14,6 +14,8 @@
 package org.sonatype.nexus.security.anonymous;
 
 import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
@@ -32,6 +34,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @see AnonymousManager
  * @since 3.0
  */
+@Named
+@Singleton
 public class AnonymousFilter
     extends AdviceFilter
 {

@@ -18,14 +18,16 @@ import javax.inject.Singleton;
 
 import org.sonatype.nexus.security.FilterProviderSupport;
 import org.sonatype.nexus.security.anonymous.AnonymousFilter;
-import org.sonatype.nexus.web.FailureLoggingHttpMethodPermissionFilter;
+import org.sonatype.nexus.security.authc.NexusApiKeyAuthenticationFilter;
+import org.sonatype.nexus.security.authc.NexusAuthenticationFilter;
+import org.sonatype.nexus.security.authz.NexusHttpMethodPermissionFilter;
 
 import com.google.inject.AbstractModule;
 
 import static org.sonatype.nexus.security.FilterProviderSupport.filterKey;
 
 /**
- * Sets up Nexus's security filter configuration; this is a @Named module so it will be auto-installed by Sisu.
+ * Sets up Nexus's security filter configuration.
  */
 @Named
 public class NexusSecurityFilterModule
@@ -33,12 +35,17 @@ public class NexusSecurityFilterModule
 {
   @Override
   protected void configure() {
-    bind(filterKey(AnonymousFilter.NAME)).to(AnonymousFilter.class).in(Singleton.class);
+    bind(filterKey(AnonymousFilter.NAME)).to(AnonymousFilter.class);
+    bind(filterKey(NexusHttpMethodPermissionFilter.NAME)).to(NexusHttpMethodPermissionFilter.class);
 
+    // FIXME: Sort out, and deal with naming the "authcBasic" are presently auth-token bits
     bind(filterKey("authcBasic")).toProvider(AuthcBasicFilterProvider.class);
-    bind(filterKey("perms")).to(FailureLoggingHttpMethodPermissionFilter.class).in(Singleton.class);
+
+    // FIXME: This likely should be normalized with the auth-token bits
     bind(filterKey("authcApiKey")).toProvider(AuthcApiKeyFilterProvider.class);
   }
+
+  // FIXME: Probably do not need provider here at all anymore
 
   @Singleton
   static class AuthcBasicFilterProvider
@@ -47,8 +54,6 @@ public class NexusSecurityFilterModule
     @Inject
     AuthcBasicFilterProvider(final NexusAuthenticationFilter filter) {
       super(filter);
-      filter.setApplicationName("Sonatype Nexus Repository Manager API");
-      filter.setFakeAuthScheme(Boolean.toString(false));
     }
   }
 
@@ -59,7 +64,6 @@ public class NexusSecurityFilterModule
     @Inject
     AuthcApiKeyFilterProvider(final NexusApiKeyAuthenticationFilter filter) {
       super(filter);
-      filter.setApplicationName("Sonatype Nexus Repository Manager API (X-...-ApiKey auth)");
     }
   }
 }
