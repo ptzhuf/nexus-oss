@@ -13,18 +13,32 @@
 package org.sonatype.nexus.security.anonymous;
 
 import javax.annotation.Nullable;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
+import org.sonatype.sisu.goodies.common.ComponentSupport;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * {@link AnonymousConfiguration} store.
- *
- * @since 3.0
+ * In-memory {@link AnonymousConfigurationStore}.
  */
-public interface AnonymousConfigurationStore
+@Named
+@Singleton
+public class MemoryAnonymousConfigurationStore
+  extends ComponentSupport
+  implements AnonymousConfigurationStore
 {
-  // TODO: Sort out exceptions, both of these should have some expected exceptions
+  private AnonymousConfiguration model;
 
+  @Override
   @Nullable
-  AnonymousConfiguration load();
+  public synchronized AnonymousConfiguration load() {
+    return model;
+  }
 
-  void save(AnonymousConfiguration configuration);
+  @Override
+  public synchronized void save(final AnonymousConfiguration configuration) {
+    this.model = checkNotNull(configuration);
+  }
 }

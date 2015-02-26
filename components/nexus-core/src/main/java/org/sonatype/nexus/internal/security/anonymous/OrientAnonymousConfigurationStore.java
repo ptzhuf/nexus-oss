@@ -87,6 +87,7 @@ public class OrientAnonymousConfigurationStore
   }
 
   @Override
+  @Nullable
   public AnonymousConfiguration load() {
     try (ODatabaseDocumentTx db = openDb()) {
       ODocument doc = get(db);
