@@ -30,7 +30,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @Named
 public class HttpClientFacetImpl
     extends FacetSupport
-  implements HttpClientFacet
+    implements HttpClientFacet
 {
   public static final String CONFIG_KEY = "httpclient";
 
@@ -38,7 +38,7 @@ public class HttpClientFacetImpl
 
   private final HttpClientConfigMarshaller marshaller;
 
-  private HttpClient httpClient;
+  private FilteredHttpClient httpClient;
 
   @Inject
   public HttpClientFacetImpl(final HttpClientFactory factory,
@@ -54,10 +54,15 @@ public class HttpClientFacetImpl
   }
 
   @Override
+  public RemoteConnectionStatus getStatus() {
+    return httpClient.getStatus();
+  }
+
+  @Override
   protected void doConfigure() throws Exception {
     NestedAttributesMap attributes = getRepository().getConfiguration().attributes(CONFIG_KEY);
     HttpClientConfig config = marshaller.unmarshall(attributes);
-    httpClient = factory.create(config);
+    httpClient = new FilteredHttpClient(factory.create(config), config);
     log.debug("Created HTTP client: {}", httpClient);
   }
 
