@@ -22,6 +22,8 @@ import org.junit.Assert;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
+// FIXME: Remove tests are disabled
+
 /**
  * Tests for {@link SecuritySettingsManager}.
  */
@@ -34,11 +36,6 @@ public class SecuritySettingsManagerTest
 
     Assert.assertNotNull(config);
 
-    Assert.assertEquals("anonymous-pass", config.getAnonymousPassword());
-    Assert.assertEquals("anonymous-user", config.getAnonymousUsername());
-
-    Assert.assertEquals(false, config.isAnonymousAccessEnabled());
-
     List<String> realms = config.getRealms();
     assertThat(realms, containsInAnyOrder(
         "MockRealmA", "MockRealmB", "ExceptionThrowingMockRealm", "FakeRealm1", "FakeRealm2"));
@@ -47,22 +44,10 @@ public class SecuritySettingsManagerTest
   //@Test
   public void testWrite() throws Exception {
     SecuritySettingsManager config = this.lookup(SecuritySettingsManager.class);
-
-    config.setAnonymousAccessEnabled(true);
-    config.setAnonymousPassword("new-pass");
-    config.setAnonymousUsername("new-user");
-
     List<String> realms = Collections.singletonList("FakeRealm1");
     config.setRealms(realms);
-
     config.save();
-
     config.clearCache();
-
-    Assert.assertEquals("new-pass", config.getAnonymousPassword());
-    Assert.assertEquals("new-user", config.getAnonymousUsername());
-
-    Assert.assertEquals(true, config.isAnonymousAccessEnabled());
 
     realms = config.getRealms();
     Assert.assertEquals(1, realms.size());

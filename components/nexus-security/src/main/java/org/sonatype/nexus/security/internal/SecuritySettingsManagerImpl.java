@@ -66,36 +66,6 @@ public class SecuritySettingsManagerImpl
   }
 
   @Override
-  public boolean isAnonymousAccessEnabled() {
-    return getModel().isAnonymousAccessEnabled();
-  }
-
-  @Override
-  public void setAnonymousAccessEnabled(final boolean enabled) {
-    getModel().setAnonymousAccessEnabled(enabled);
-  }
-
-  @Override
-  public String getAnonymousPassword() {
-    return getModel().getAnonymousPassword();
-  }
-
-  @Override
-  public void setAnonymousPassword(final String password) {
-    getModel().setAnonymousPassword(password);
-  }
-
-  @Override
-  public String getAnonymousUsername() {
-    return getModel().getAnonymousUsername();
-  }
-
-  @Override
-  public void setAnonymousUsername(final String username) {
-    getModel().setAnonymousUsername(username);
-  }
-
-  @Override
   public List<String> getRealms() {
     return Collections.unmodifiableList(getModel().getRealms());
   }

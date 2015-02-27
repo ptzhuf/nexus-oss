@@ -21,37 +21,7 @@ import com.google.common.collect.Lists;
  */
 public class SecuritySettings
 {
-  private boolean anonymousAccessEnabled = false;
-
-  private String anonymousUsername;
-
-  private String anonymousPassword;
-
   private List<String> realms;
-
-  public boolean isAnonymousAccessEnabled() {
-    return anonymousAccessEnabled;
-  }
-
-  public void setAnonymousAccessEnabled(final boolean enabled) {
-    this.anonymousAccessEnabled = enabled;
-  }
-
-  public String getAnonymousUsername() {
-    return anonymousUsername;
-  }
-
-  public void setAnonymousUsername(final String username) {
-    this.anonymousUsername = username;
-  }
-
-  public String getAnonymousPassword() {
-    return anonymousPassword;
-  }
-
-  public void setAnonymousPassword(final String password) {
-    this.anonymousPassword = password;
-  }
 
   public List<String> getRealms() {
     if (realms == null) {

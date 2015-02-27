@@ -19,18 +19,6 @@ import java.util.List;
  */
 public interface SecuritySettingsManager
 {
-  void setAnonymousAccessEnabled(boolean enabled);
-
-  boolean isAnonymousAccessEnabled();
-
-  void setAnonymousUsername(String username);
-
-  String getAnonymousUsername();
-
-  void setAnonymousPassword(String password);
-
-  String getAnonymousPassword();
-
   void setRealms(List<String> realms);
 
   List<String> getRealms();

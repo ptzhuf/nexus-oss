@@ -32,9 +32,6 @@ class StaticSecuritySettingsSource
 {
   StaticSecuritySettingsSource() {
     super(new SecuritySettings(
-        anonymousAccessEnabled: true,
-        anonymousUsername: 'anonymous',
-        anonymousPassword: 'anonymous',
         realms: [
             AuthenticatingRealmImpl.NAME,
             AuthorizingRealmImpl.NAME
