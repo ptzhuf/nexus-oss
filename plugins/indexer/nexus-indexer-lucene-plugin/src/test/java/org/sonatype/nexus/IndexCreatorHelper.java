@@ -15,9 +15,9 @@ package org.sonatype.nexus;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.sonatype.nexus.test.NexusTestSupport;
+
 import org.apache.maven.index.context.IndexCreator;
-import org.codehaus.plexus.PlexusContainer;
-import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 
 /**
  * Creators that can be used in tests.
@@ -30,8 +30,8 @@ public class IndexCreatorHelper
 
   private List<IndexCreator> m_minCreators = new ArrayList<IndexCreator>();
 
-  public IndexCreatorHelper(PlexusContainer testCaseContainer)
-      throws ComponentLookupException
+  public IndexCreatorHelper(NexusTestSupport testCaseContainer)
+      throws Exception
   {
     IndexCreator min = testCaseContainer.lookup(IndexCreator.class, "min");
     IndexCreator jar = testCaseContainer.lookup(IndexCreator.class, "jarContent");

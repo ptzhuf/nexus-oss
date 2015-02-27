@@ -27,7 +27,6 @@ import org.sonatype.nexus.proxy.targets.DefaultTargetRegistry;
 import org.sonatype.nexus.proxy.targets.TargetRegistry;
 
 import org.apache.commons.io.FileUtils;
-import org.codehaus.plexus.logging.Logger;
 import org.codehaus.plexus.util.DirectoryWalkListener;
 import org.codehaus.plexus.util.DirectoryWalker;
 
@@ -56,8 +55,6 @@ public abstract class AbstractMavenRepoContentTests
       throws Exception
   {
     super.setUp();
-
-    getLoggerManager().setThresholds(Logger.LEVEL_DEBUG);
 
     startNx();
 

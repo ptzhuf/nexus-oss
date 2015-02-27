@@ -18,8 +18,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import org.sonatype.nexus.proxy.registry.RepositoryTypeDescriptor;
-
 import org.codehaus.plexus.DefaultPlexusContainer;
 import org.eclipse.sisu.plexus.PlexusAnnotatedBeanModule;
 import org.eclipse.sisu.plexus.PlexusBeanModule;

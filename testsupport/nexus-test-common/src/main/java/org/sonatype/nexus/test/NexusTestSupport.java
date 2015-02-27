@@ -33,11 +33,8 @@ import org.codehaus.plexus.DefaultPlexusContainer;
 import org.codehaus.plexus.PlexusConstants;
 import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.PlexusContainerException;
-import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.codehaus.plexus.context.Context;
 import org.codehaus.plexus.context.DefaultContext;
-import org.codehaus.plexus.logging.Logger;
-import org.codehaus.plexus.logging.LoggerManager;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.After;
@@ -123,26 +120,18 @@ public abstract class NexusTestSupport
       context.put("plexus.home", f.getAbsolutePath());
     }
 
-    final String config = getCustomConfigurationName();
     final ContainerConfiguration containerConfiguration =
         new DefaultContainerConfiguration().setName("test").setContext(context.getContextData());
 
-    if (config != null) {
-      containerConfiguration.setContainerConfiguration(config);
-    }
-    else {
-      final String resource = getConfigurationName(null);
-      containerConfiguration.setContainerConfiguration(resource);
-    }
+    final String resource = getClass().getName().replace('.', '/') + ".xml";
+    containerConfiguration.setContainerConfiguration(resource);
 
-    customizeContainerConfiguration(containerConfiguration);
+    containerConfiguration.setAutoWiring(true);
+    containerConfiguration.setClassPathScanning(PlexusConstants.SCANNING_INDEX);
 
     try {
       List<Module> modules = Lists.newLinkedList();
-      Module[] customModules = getTestCustomModules();
-      if (customModules != null) {
-        modules.addAll(Lists.newArrayList(customModules));
-      }
+
       customizeModules(modules);
 
       container = new DefaultPlexusContainer(containerConfiguration, modules.toArray(new Module[modules.size()]));
@@ -153,25 +142,8 @@ public abstract class NexusTestSupport
     }
   }
 
-  /**
-   * @deprecated Use {@link #customizeModules(List)} instead.
-   */
-  @Deprecated
-  protected Module[] getTestCustomModules() {
-    return null;
-  }
-
   protected void customizeModules(final List<Module> modules) {
     // empty
-  }
-
-  /**
-   * @deprecated Avoid usage of Plexus apis.
-   */
-  @Deprecated
-  protected void customizeContainerConfiguration(final ContainerConfiguration containerConfiguration) {
-    containerConfiguration.setAutoWiring(true);
-    containerConfiguration.setClassPathScanning(PlexusConstants.SCANNING_INDEX);
   }
 
   /**
@@ -235,44 +207,12 @@ public abstract class NexusTestSupport
    * @deprecated Avoid usage of Plexus apis.
    */
   @Deprecated
-  protected PlexusContainer getContainer() {
+  private PlexusContainer getContainer() {
     if (container == null) {
       setupContainer();
     }
 
     return container;
-  }
-
-  /**
-   * @deprecated Avoid usage of Plexus apis (this is used to access plexus xml configuration files).
-   */
-  @Deprecated
-  protected InputStream getConfiguration() throws Exception {
-    return getConfiguration(null);
-  }
-
-  /**
-   * @deprecated Avoid usage of Plexus apis (this is used to access plexus xml configuration files).
-   */
-  @Deprecated
-  protected InputStream getConfiguration(final String subname) throws Exception {
-    return getResourceAsStream(getConfigurationName(subname));
-  }
-
-  /**
-   * @deprecated Avoid usage of Plexus apis (this is used to access plexus xml configuration files).
-   */
-  @Deprecated
-  protected String getCustomConfigurationName() {
-    return null;
-  }
-
-  /**
-   * @deprecated Avoid usage of Plexus apis (this is used to access plexus xml configuration files).
-   */
-  @Deprecated
-  protected String getConfigurationName(final String subname) {
-    return getClass().getName().replace('.', '/') + ".xml";
   }
 
   protected InputStream getResourceAsStream(final String resource) {
@@ -287,34 +227,12 @@ public abstract class NexusTestSupport
   // Container access
   // ----------------------------------------------------------------------
 
-  /**
-   * @deprecated Avoid usage of Plexus apis (string role/hint lookup is plexus specific).
-   */
-  protected Object lookup(final String componentKey) throws Exception {
-    return getContainer().lookup(componentKey);
-  }
-
-  /**
-   * @deprecated Avoid usage of Plexus apis (string role/hint lookup is plexus specific).
-   */
-  @Deprecated
-  protected Object lookup(final String role, final String roleHint) throws Exception {
-    return getContainer().lookup(role, roleHint);
-  }
-
-  protected <T> T lookup(final Class<T> componentClass) throws Exception {
+  public <T> T lookup(final Class<T> componentClass) throws Exception {
     return getContainer().lookup(componentClass);
   }
 
-  protected <T> T lookup(final Class<T> componentClass, final String roleHint) throws Exception {
+  public <T> T lookup(final Class<T> componentClass, final String roleHint) throws Exception {
     return getContainer().lookup(componentClass, roleHint);
-  }
-
-  /**
-   * @deprecated Avoid usage of Plexus apis.
-   */
-  protected void release(final Object component) throws Exception {
-    getContainer().release(component);
   }
 
   // ----------------------------------------------------------------------
@@ -337,30 +255,6 @@ public abstract class NexusTestSupport
 
   public String getBasedir() {
     return util.getBaseDir().getAbsolutePath();
-  }
-
-  /**
-   * @deprecated Avoid usage of Plexus apis.
-   */
-  protected LoggerManager getLoggerManager() throws ComponentLookupException {
-    LoggerManager loggerManager = getContainer().lookup(LoggerManager.class);
-    // system property helps configure logger - see NXCM-3230
-    String testLogLevel = System.getProperty("test.log.level");
-    if (testLogLevel != null) {
-      if (testLogLevel.equalsIgnoreCase("DEBUG")) {
-        loggerManager.setThresholds(Logger.LEVEL_DEBUG);
-      }
-      else if (testLogLevel.equalsIgnoreCase("INFO")) {
-        loggerManager.setThresholds(Logger.LEVEL_INFO);
-      }
-      else if (testLogLevel.equalsIgnoreCase("WARN")) {
-        loggerManager.setThresholds(Logger.LEVEL_WARN);
-      }
-      else if (testLogLevel.equalsIgnoreCase("ERROR")) {
-        loggerManager.setThresholds(Logger.LEVEL_ERROR);
-      }
-    }
-    return loggerManager;
   }
 
   // ========================= CUSTOM NEXUS =====================

@@ -39,10 +39,10 @@ import org.apache.maven.index.NexusIndexer;
 import org.apache.maven.index.context.IndexingContext;
 import org.apache.maven.index.packer.IndexPacker;
 import org.apache.maven.index.packer.IndexPackingRequest;
-import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.junit.Rule;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertTrue;
 
 // This is an IT just because it runs longer then 15 seconds
 public class ReindexIT
@@ -163,7 +163,7 @@ public class ReindexIT
    */
   protected void reindexRemoteRepositoryAndPublish(File repositoryRoot, String repositoryId,
                                                    boolean deleteIndexFiles, int shiftDays)
-      throws IOException, ComponentLookupException
+      throws Exception
   {
     File indexDirectory = getIndexFamilyDirectory(repositoryId);
 
@@ -171,7 +171,7 @@ public class ReindexIT
 
     IndexingContext ctx =
         nexusIndexer.addIndexingContextForced(repositoryId + "-temp", repositoryId, repositoryRoot, directory,
-            null, null, new IndexCreatorHelper(getContainer()).getFullCreators());
+            null, null, new IndexCreatorHelper(this).getFullCreators());
 
     // shifting if needed (very crude way to do it, but heh)
     shiftContextInTime(ctx, shiftDays);
