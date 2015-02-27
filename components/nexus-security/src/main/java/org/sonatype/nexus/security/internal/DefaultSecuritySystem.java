@@ -28,7 +28,6 @@ import javax.inject.Singleton;
 
 import org.sonatype.nexus.common.text.Strings2;
 import org.sonatype.nexus.common.throwables.ConfigurationException;
-import org.sonatype.nexus.security.SecurityConfigurationChanged;
 import org.sonatype.nexus.security.SecuritySystem;
 import org.sonatype.nexus.security.UserPrincipalsExpired;
 import org.sonatype.nexus.security.anonymous.AnonymousConfiguration;
@@ -37,9 +36,10 @@ import org.sonatype.nexus.security.authz.AuthorizationConfigurationChanged;
 import org.sonatype.nexus.security.authz.AuthorizationManager;
 import org.sonatype.nexus.security.authz.NoSuchAuthorizationManagerException;
 import org.sonatype.nexus.security.privilege.Privilege;
+import org.sonatype.nexus.security.realm.RealmConfiguration;
+import org.sonatype.nexus.security.realm.RealmManager;
 import org.sonatype.nexus.security.role.Role;
 import org.sonatype.nexus.security.role.RoleIdentifier;
-import org.sonatype.nexus.security.settings.SecuritySettingsManager;
 import org.sonatype.nexus.security.user.InvalidCredentialsException;
 import org.sonatype.nexus.security.user.NoSuchUserManagerException;
 import org.sonatype.nexus.security.user.RoleMappingUserManager;
@@ -51,8 +51,6 @@ import org.sonatype.nexus.security.user.UserStatus;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
 import org.sonatype.sisu.goodies.eventbus.EventBus;
 
-import com.google.common.collect.Lists;
-import com.google.common.eventbus.Subscribe;
 import net.sf.ehcache.CacheManager;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -60,14 +58,12 @@ import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationException;
-import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.mgt.RealmSecurityManager;
-import org.apache.shiro.realm.AuthenticatingRealm;
-import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.util.Initializable;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
@@ -83,51 +79,49 @@ public class DefaultSecuritySystem
 {
   private static final String ALL_ROLES_KEY = "all";
 
-  private final AnonymousManager anonymousManager;
-
-  private final SecuritySettingsManager securitySettingsManager;
-
-  private final RealmSecurityManager securityManager;
+  private final EventBus eventBus;
 
   private final CacheManager cacheManager;
 
-  private final Map<String, UserManager> userManagers;
+  private final RealmSecurityManager realmSecurityManager;
 
-  private final Map<String, Realm> realmMap;
+  private final RealmManager realmManager;
+
+  private final AnonymousManager anonymousManager;
 
   private final Map<String, AuthorizationManager> authorizationManagers;
 
-  private final EventBus eventBus;
+  private final Map<String, UserManager> userManagers;
 
   private volatile boolean started;
 
   @Inject
   public DefaultSecuritySystem(final EventBus eventBus,
-                               final Map<String, AuthorizationManager> authorizationManagers,
-                               final Map<String, Realm> realmMap,
-                               final SecuritySettingsManager securitySettingsManager,
-                               final AnonymousManager anonymousManager,
-                               final RealmSecurityManager securityManager,
                                final CacheManager cacheManager,
+                               final RealmSecurityManager realmSecurityManager,
+                               final RealmManager realmManager,
+                               final AnonymousManager anonymousManager,
+                               final Map<String, AuthorizationManager> authorizationManagers,
                                final Map<String, UserManager> userManagers)
   {
     this.eventBus = checkNotNull(eventBus);
-    this.authorizationManagers = checkNotNull(authorizationManagers);
-    this.realmMap = checkNotNull(realmMap);
-    this.securitySettingsManager = checkNotNull(securitySettingsManager);
-    this.anonymousManager = checkNotNull(anonymousManager);
-    this.securityManager = checkNotNull(securityManager);
     this.cacheManager = checkNotNull(cacheManager);
+    this.realmSecurityManager = checkNotNull(realmSecurityManager);
+    this.realmManager = checkNotNull(realmManager);
+    this.anonymousManager = checkNotNull(anonymousManager);
+    this.authorizationManagers = checkNotNull(authorizationManagers);
     this.userManagers = checkNotNull(userManagers);
 
-    SecurityUtils.setSecurityManager(securityManager);
+    // FIXME: Why not on start?  Seems on start is too late?
+    SecurityUtils.setSecurityManager(realmSecurityManager);
+
     eventBus.register(this);
     started = false;
   }
 
   @Override
-  public RealmSecurityManager getSecurityManager() {
-    return securityManager;
+  public RealmSecurityManager getRealmSecurityManager() {
+    return realmSecurityManager;
   }
 
   @Override
@@ -136,41 +130,35 @@ public class DefaultSecuritySystem
   }
 
   @Override
-  public synchronized void start() {
+  public synchronized void start() throws Exception {
     checkState(!started, "Already started");
 
-    // reload the config
-    securitySettingsManager.clearCache();
-
-    // setup the CacheManager ( this could be injected if we where less coupled with ehcache)
-    // The plexus wrapper can interpolate the config
-    EhCacheManager ehCacheManager = new EhCacheManager();
-    ehCacheManager.setCacheManager(cacheManager);
-    securityManager.setCacheManager(ehCacheManager);
-
-    if (org.apache.shiro.util.Initializable.class.isInstance(getSecurityManager())) {
-      ((org.apache.shiro.util.Initializable) getSecurityManager()).init();
+    // prepare security manager
+    if (realmSecurityManager instanceof Initializable) {
+      ((Initializable)realmSecurityManager).init();
     }
-    setSecurityManagerRealms();
+
+    // FIXME: Sort out overlap in responsibility between lifecycle here and RealmManagerImpl
+
+    // prepare shiro cache
+    EhCacheManager shiroCacheManager = new EhCacheManager();
+    shiroCacheManager.setCacheManager(cacheManager);
+    realmSecurityManager.setCacheManager(shiroCacheManager);
+
+    realmManager.start();
+
     started = true;
   }
 
   @Override
-  public synchronized void stop() {
-    if (securityManager.getRealms() != null) {
-      for (Realm realm : securityManager.getRealms()) {
-        if (AuthenticatingRealm.class.isInstance(realm)) {
-          ((AuthenticatingRealm) realm).setAuthenticationCache(null);
-        }
-        if (AuthorizingRealm.class.isInstance(realm)) {
-          ((AuthorizingRealm) realm).setAuthorizationCache(null);
-        }
-      }
-    }
+  public synchronized void stop() throws Exception {
+    // FIXME: We never guard started=true ?!
 
-    // we need to kill caches on stop
-    securityManager.destroy();
-    // cacheManagerComponent.shutdown();
+    realmManager.stop();
+
+    realmSecurityManager.destroy();
+
+    // TODO: Unset security manager?
 
     // FIXME: We never set started=false ?!
   }
@@ -184,7 +172,7 @@ public class DefaultSecuritySystem
 
   @Override
   public AuthenticationInfo authenticate(AuthenticationToken token) throws AuthenticationException {
-    return securityManager.authenticate(token);
+    return realmSecurityManager.authenticate(token);
   }
 
   @Override
@@ -194,17 +182,17 @@ public class DefaultSecuritySystem
 
   @Override
   public boolean isPermitted(PrincipalCollection principal, String permission) {
-    return securityManager.isPermitted(principal, permission);
+    return realmSecurityManager.isPermitted(principal, permission);
   }
 
   @Override
   public boolean[] isPermitted(PrincipalCollection principal, List<String> permissions) {
-    return securityManager.isPermitted(principal, permissions.toArray(new String[permissions.size()]));
+    return realmSecurityManager.isPermitted(principal, permissions.toArray(new String[permissions.size()]));
   }
 
   @Override
   public void checkPermission(PrincipalCollection principal, String permission) throws AuthorizationException {
-    securityManager.checkPermission(principal, permission);
+    realmSecurityManager.checkPermission(principal, permission);
   }
 
   @Override
@@ -515,7 +503,7 @@ public class DefaultSecuritySystem
     }
 
     // get the sorted order of realms from the realm locator
-    Collection<Realm> realms = securityManager.getRealms();
+    Collection<Realm> realms = realmSecurityManager.getRealms();
 
     for (Realm realm : realms) {
       // now user the realm.name to find the UserManager
@@ -569,7 +557,7 @@ public class DefaultSecuritySystem
     // first authenticate the user
     try {
       UsernamePasswordToken authenticationToken = new UsernamePasswordToken(userId, oldPassword);
-      if (securityManager.authenticate(authenticationToken) == null) {
+      if (realmSecurityManager.authenticate(authenticationToken) == null) {
         throw new InvalidCredentialsException();
       }
     }
@@ -611,108 +599,16 @@ public class DefaultSecuritySystem
     return userManagers.get(source);
   }
 
-  // ==
-
-  @Subscribe
-  public void onEvent(final UserPrincipalsExpired event) {
-    // TODO: we could do this better, not flushing whole cache for single user being deleted
-    clearAuthcRealmCaches();
-  }
-
-  @Subscribe
-  public void onEvent(final AuthorizationConfigurationChanged event) {
-    // TODO: we could do this better, not flushing whole cache for single user roles being updated
-    clearAuthzRealmCaches();
-  }
-
-  @Subscribe
-  public void onEvent(final SecurityConfigurationChanged event) {
-    clearAuthcRealmCaches();
-    clearAuthzRealmCaches();
-    securitySettingsManager.clearCache();
-    setSecurityManagerRealms();
-  }
-
-  //
-  // Realms
-  //
-
-  private void clearIfNonNull(@Nullable final Cache cache) {
-    if (cache != null) {
-      cache.clear();
-    }
-  }
-
-  /**
-   * Looks up registered {@link AuthenticatingRealm}s, and clears their authc caches if they have it set.
-   */
-  private void clearAuthcRealmCaches() {
-    // NOTE: we don't need to iterate all the Sec Managers, they use the same Realms, so one is fine.
-    final Collection<Realm> realms = securityManager.getRealms();
-    if (realms != null) {
-      for (Realm realm : realms) {
-        if (realm instanceof AuthenticatingRealm) {
-          clearIfNonNull(((AuthenticatingRealm) realm).getAuthenticationCache());
-        }
-      }
-    }
-  }
-
-  /**
-   * Looks up registered {@link AuthorizingRealm}s, and clears their authz caches if they have it set.
-   */
-  private void clearAuthzRealmCaches() {
-    // NOTE: we don't need to iterate all the Sec Managers, they use the same Realms, so one is fine.
-    final Collection<Realm> realms = securityManager.getRealms();
-    if (realms != null) {
-      for (Realm realm : realms) {
-        if (realm instanceof AuthorizingRealm) {
-          clearIfNonNull(((AuthorizingRealm) realm).getAuthorizationCache());
-        }
-      }
-    }
-  }
-
-  private void setSecurityManagerRealms() {
-    Collection<Realm> realms = getRealmsFromConfigSource();
-    log.debug("Security manager realms: {}", realms);
-    securityManager.setRealms(Lists.newArrayList(realms));
-  }
-
-  private Collection<Realm> getRealmsFromConfigSource() {
-    List<Realm> result = new ArrayList<>();
-    List<String> realmIds = securitySettingsManager.getRealms();
-
-    for (String realmId : realmIds) {
-      if (realmMap.containsKey(realmId)) {
-        result.add(realmMap.get(realmId));
-      }
-      else {
-        log.debug("Failed to look up realm as a component, trying reflection");
-        // If that fails, will simply use reflection to load
-        try {
-          result.add((Realm) getClass().getClassLoader().loadClass(realmId).newInstance());
-        }
-        catch (Exception e) {
-          log.error("Unable to lookup security realms", e);
-        }
-      }
-    }
-
-    return result;
-  }
 
   @Override
   public List<String> getRealms() {
-    return new ArrayList<>(securitySettingsManager.getRealms());
+    return realmManager.getConfiguration().getRealmNames();
   }
 
   @Override
-  public void setRealms(List<String> realms) {
-    securitySettingsManager.setRealms(realms);
-    securitySettingsManager.save();
-
-    // update the realms in the security manager
-    setSecurityManagerRealms();
+  public void setRealms(final List<String> realms) {
+    RealmConfiguration model = new RealmConfiguration();
+    model.setRealmNames(realms);
+    realmManager.setConfiguration(model);
   }
 }

@@ -20,6 +20,7 @@ import javax.annotation.Nullable;
 import org.sonatype.nexus.security.authz.AuthorizationManager;
 import org.sonatype.nexus.security.authz.NoSuchAuthorizationManagerException;
 import org.sonatype.nexus.security.privilege.Privilege;
+import org.sonatype.nexus.security.realm.RealmManager;
 import org.sonatype.nexus.security.role.Role;
 import org.sonatype.nexus.security.role.RoleIdentifier;
 import org.sonatype.nexus.security.user.InvalidCredentialsException;
@@ -47,12 +48,12 @@ public interface SecuritySystem
   /**
    * Starts the SecuritySystem. Before this method is called the state is unknown.
    */
-  void start();
+  void start() throws Exception;
 
   /**
    * Stops the SecuritySystem. Provides a way to clean up resources.
    */
-  void stop();
+  void stop() throws Exception;
 
   // *********************
   // * authentication
@@ -251,19 +252,19 @@ public interface SecuritySystem
   // //
 
   /**
-   * Get the currently configured realms.
-   *
-   * @return The currently configured realms.
+   * @deprecated use {@link RealmManager} instead.
    */
+  @Deprecated
   List<String> getRealms();
 
   /**
-   * Set the currently configured realms.
+   * @deprecated use {@link RealmManager} instead.
    */
+  @Deprecated
   void setRealms(List<String> realms);
 
   /**
    * Returns the configured shiro SecurityManager
    */
-  RealmSecurityManager getSecurityManager();
+  RealmSecurityManager getRealmSecurityManager();
 }

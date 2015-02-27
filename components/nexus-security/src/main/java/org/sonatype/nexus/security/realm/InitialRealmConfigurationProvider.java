@@ -10,6 +10,7 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
+
 package org.sonatype.nexus.security.realm;
 
 import javax.inject.Named;
@@ -29,15 +30,15 @@ import com.google.common.collect.Lists;
 @Named("initial")
 @Singleton
 public class InitialRealmConfigurationProvider
-  implements Provider<RealmConfiguration>
+    implements Provider<RealmConfiguration>
 {
   @Override
   public RealmConfiguration get() {
     RealmConfiguration configuration = new RealmConfiguration();
-    configuration.setRealms(Lists.newArrayList(
+    configuration.setRealmNames(Lists.newArrayList(
         AuthenticatingRealmImpl.NAME,
-        AuthorizingRealmImpl.NAME)
-    );
+        AuthorizingRealmImpl.NAME
+    ));
     return configuration;
   }
 }

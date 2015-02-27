@@ -12,15 +12,33 @@
  */
 package org.sonatype.nexus.security.realm;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 
-import org.sonatype.sisu.goodies.common.ComponentSupport;
+import org.sonatype.nexus.common.stateguard.Guarded;
+import org.sonatype.nexus.common.stateguard.StateGuardLifecycleSupport;
+import org.sonatype.nexus.security.SecurityConfigurationChanged;
+import org.sonatype.nexus.security.UserPrincipalsExpired;
+import org.sonatype.nexus.security.authz.AuthorizationConfigurationChanged;
 import org.sonatype.sisu.goodies.common.Mutex;
+import org.sonatype.sisu.goodies.eventbus.EventBus;
+
+import com.google.common.collect.Lists;
+import com.google.common.eventbus.Subscribe;
+import org.apache.shiro.cache.Cache;
+import org.apache.shiro.mgt.RealmSecurityManager;
+import org.apache.shiro.realm.AuthenticatingRealm;
+import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.realm.Realm;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static org.sonatype.nexus.common.stateguard.StateGuardLifecycleSupport.State.STARTED;
 
 /**
  * Default {@link RealmManager}.
@@ -30,22 +48,235 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @Named
 @Singleton
 public class RealmManagerImpl
-  extends ComponentSupport
+  extends StateGuardLifecycleSupport
   implements RealmManager
 {
+  private final EventBus eventBus;
+
   private final RealmConfigurationStore store;
 
   private final Provider<RealmConfiguration> defaults;
+
+  private final RealmSecurityManager realmSecurityManager;
+
+  private final Map<String, Realm> availableRealms;
 
   private final Mutex lock = new Mutex();
 
   private RealmConfiguration configuration;
 
   @Inject
-  public RealmManagerImpl(final RealmConfigurationStore store,
-                          final @Named("initial") Provider<RealmConfiguration> defaults)
+  public RealmManagerImpl(final EventBus eventBus,
+                          final RealmConfigurationStore store,
+                          final @Named("initial") Provider<RealmConfiguration> defaults,
+                          final RealmSecurityManager realmSecurityManager,
+                          final Map<String, Realm> availableRealms)
   {
+    this.eventBus = checkNotNull(eventBus);
     this.store = checkNotNull(store);
     this.defaults = checkNotNull(defaults);
+    this.realmSecurityManager = checkNotNull(realmSecurityManager);
+    this.availableRealms = checkNotNull(availableRealms);
+  }
+
+  //
+  // Lifecycle
+  //
+
+  @Override
+  protected void doStart() throws Exception {
+    installRealms();
+
+    eventBus.register(this);
+  }
+
+  @Override
+  protected void doStop() throws Exception {
+    eventBus.unregister(this);
+
+    configuration = null;
+
+    // reset shiro caches
+    Collection<Realm> realms = realmSecurityManager.getRealms();
+    if (realms != null) {
+      for (Realm realm : realms) {
+        if (realm instanceof AuthenticatingRealm) {
+          ((AuthenticatingRealm) realm).setAuthenticationCache(null);
+        }
+        if (realm instanceof AuthorizingRealm) {
+          ((AuthorizingRealm) realm).setAuthorizationCache(null);
+        }
+      }
+    }
+  }
+
+  //
+  // Configuration
+  //
+
+  /**
+   * Load configuration from store, or use defaults.
+   */
+  private RealmConfiguration loadConfiguration() {
+    RealmConfiguration model = store.load();
+
+    // use defaults if no configuration was loaded from the store
+    if (model == null) {
+      model = defaults.get();
+
+      // default config must not be null
+      checkNotNull(model);
+
+      log.info("Using default configuration: {}", model);
+    }
+    else {
+      log.info("Loaded configuration: {}", model);
+    }
+
+    return model;
+  }
+
+  /**
+   * Return configuration, loading if needed.
+   */
+  private RealmConfiguration getConfigurationInternal() {
+    synchronized (lock) {
+      if (configuration == null) {
+        configuration = loadConfiguration();
+      }
+      return configuration;
+    }
+  }
+
+  /**
+   * Return _copy_ of configuration.
+   */
+  @Override
+  @Guarded(by = STARTED)
+  public RealmConfiguration getConfiguration() {
+    return getConfigurationInternal().copy();
+  }
+
+  @Override
+  @Guarded(by = STARTED)
+  public void setConfiguration(final RealmConfiguration configuration) {
+    checkNotNull(configuration);
+
+    RealmConfiguration model = configuration.copy();
+    // TODO: Validate configuration before saving?  Or leave to ext.direct?
+
+    log.info("Saving configuration: {}", model);
+    synchronized (lock) {
+      store.save(model);
+      this.configuration = model;
+    }
+
+    installRealms();
+  }
+
+  //
+  // Realm installation
+  //
+
+  /**
+   * Resolve and install realm components.
+   */
+  private void installRealms() {
+    List<Realm> realms = resolveRealms();
+    log.debug("Installing realms: {}", realms);
+    realmSecurityManager.setRealms(realms);
+  }
+
+  /**
+   * Resolve configured realm components.
+   */
+  private List<Realm> resolveRealms() {
+    List<Realm> result = Lists.newArrayList();
+    RealmConfiguration model = getConfigurationInternal();
+
+    for (String realmName : model.getRealmNames()) {
+      Realm realm = availableRealms.get(realmName);
+
+      // FIXME: Resolve what purpose this is for, looks like legacy?
+      if (realm == null) {
+        log.debug("Failed to look up realm '{}' as a component, trying reflection", realmName);
+        // If that fails, will simply use reflection to load
+        try {
+          realm = (Realm) getClass().getClassLoader().loadClass(realmName).newInstance();
+        }
+        catch (Exception e) {
+          log.error("Unable to lookup security realms", e);
+        }
+      }
+
+      if (realm != null) {
+        result.add(realm);
+      }
+    }
+
+    return result;
+  }
+
+  //
+  // Event handling
+  //
+
+  @Subscribe
+  public void onEvent(final UserPrincipalsExpired event) {
+    // TODO: we could do this better, not flushing whole cache for single user being deleted
+    clearAuthcRealmCaches();
+  }
+
+  @Subscribe
+  public void onEvent(final AuthorizationConfigurationChanged event) {
+    // TODO: we could do this better, not flushing whole cache for single user roles being updated
+    clearAuthzRealmCaches();
+  }
+
+  @Subscribe
+  public void onEvent(final SecurityConfigurationChanged event) {
+    clearAuthcRealmCaches();
+    clearAuthzRealmCaches();
+    // FIXME: What is the purpose of nulling the configuration model here?
+    //securitySettingsManager.clearCache();
+    installRealms();
+  }
+
+  /**
+   * Looks up registered {@link AuthenticatingRealm}s, and clears their authc caches if they have it set.
+   */
+  private void clearAuthcRealmCaches() {
+    // NOTE: we don't need to iterate all the Sec Managers, they use the same Realms, so one is fine.
+    Collection<Realm> realms = realmSecurityManager.getRealms();
+    if (realms != null) {
+      for (Realm realm : realms) {
+        if (realm instanceof AuthenticatingRealm) {
+          Cache cache = ((AuthenticatingRealm) realm).getAuthenticationCache();
+          if (cache != null) {
+            log.debug("Clearing cache: {}", cache);
+            cache.clear();
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Looks up registered {@link AuthorizingRealm}s, and clears their authz caches if they have it set.
+   */
+  private void clearAuthzRealmCaches() {
+    // NOTE: we don't need to iterate all the Sec Managers, they use the same Realms, so one is fine.
+    Collection<Realm> realms = realmSecurityManager.getRealms();
+    if (realms != null) {
+      for (Realm realm : realms) {
+        if (realm instanceof AuthorizingRealm) {
+          Cache cache = ((AuthorizingRealm) realm).getAuthorizationCache();
+          if (cache != null) {
+            log.debug("Clearing cache: {}", cache);
+            cache.clear();
+          }
+        }
+      }
+    }
   }
 }

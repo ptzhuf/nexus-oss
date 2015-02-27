@@ -14,27 +14,47 @@ package org.sonatype.nexus.security.realm;
 
 import java.util.List;
 
+import com.google.common.base.Throwables;
+import com.google.common.collect.Lists;
+
 /**
  * Realm configuration.
  *
  * @since 3.0
  */
 public class RealmConfiguration
+  implements Cloneable
 {
-  private List<String> realms;
+  private List<String> realmNames;
 
-  public List<String> getRealms() {
-    return realms;
+  public List<String> getRealmNames() {
+    if (realmNames == null) {
+      realmNames = Lists.newArrayList();
+    }
+    return realmNames;
   }
 
-  public void setRealms(final List<String> realms) {
-    this.realms = realms;
+  public void setRealmNames(final List<String> realmNames) {
+    this.realmNames = realmNames;
+  }
+
+  public RealmConfiguration copy() {
+    try {
+      RealmConfiguration copy = (RealmConfiguration) clone();
+      if (realmNames != null) {
+        copy.realmNames = Lists.newArrayList(realmNames);
+      }
+      return copy;
+    }
+    catch (CloneNotSupportedException e) {
+      throw Throwables.propagate(e);
+    }
   }
 
   @Override
   public String toString() {
     return getClass().getSimpleName() + "{" +
-        "realms=" + realms +
+        "realmNames=" + realmNames +
         '}';
   }
 }

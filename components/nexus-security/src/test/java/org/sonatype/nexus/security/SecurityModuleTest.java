@@ -59,7 +59,7 @@ public class SecurityModuleTest
   }
 
   @Test
-  public void testInjectionIsSetupCorrectly() {
+  public void testInjectionIsSetupCorrectly() throws Exception {
     SecuritySystem securitySystem = injector.getInstance(SecuritySystem.class);
     // See DefaultSecuritySystem, that applies cache
     // TODO: this should be done with Guice binding?
@@ -69,8 +69,8 @@ public class SecurityModuleTest
 
     RealmSecurityManager realmSecurityManager = injector.getInstance(RealmSecurityManager.class);
 
-    assertThat(securitySystem.getSecurityManager(), sameInstance(securityManager));
-    assertThat(securitySystem.getSecurityManager(), sameInstance(realmSecurityManager));
+    assertThat(securitySystem.getRealmSecurityManager(), sameInstance(securityManager));
+    assertThat(securitySystem.getRealmSecurityManager(), sameInstance(realmSecurityManager));
 
     assertThat(securityManager, instanceOf(DefaultSecurityManager.class));
     DefaultSecurityManager defaultSecurityManager = (DefaultSecurityManager) securityManager;

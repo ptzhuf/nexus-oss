@@ -138,7 +138,7 @@ public class SecurityComponent
 
     // Ask the sec-manager to authenticate, this won't alter the current subject
     try {
-      securitySystem.getSecurityManager().authenticate(new UsernamePasswordToken(username, password));
+      securitySystem.getRealmSecurityManager().authenticate(new UsernamePasswordToken(username, password));
     }
     catch (AuthenticationException e) {
       throw new Exception("Authentication failed", e);

@@ -54,6 +54,10 @@ public class AnonymousManagerImpl
     this.defaults = checkNotNull(defaults);
   }
 
+  //
+  // Configuration
+  //
+
   /**
    * Load configuration from store, or use defaults.
    */
@@ -81,7 +85,6 @@ public class AnonymousManagerImpl
    */
   private AnonymousConfiguration getConfigurationInternal() {
     synchronized (lock) {
-      // load configuration if needed
       if (configuration == null) {
         configuration = loadConfiguration();
       }
@@ -110,6 +113,10 @@ public class AnonymousManagerImpl
       this.configuration = model;
     }
   }
+
+  //
+  // Helpers
+  //
 
   @Override
   public boolean isEnabled() {

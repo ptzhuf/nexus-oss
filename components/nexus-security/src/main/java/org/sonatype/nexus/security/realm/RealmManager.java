@@ -12,11 +12,17 @@
  */
 package org.sonatype.nexus.security.realm;
 
+import org.sonatype.sisu.goodies.lifecycle.Lifecycle;
+
 /**
  * Realm manager.
  *
  * @since 3.0
  */
 public interface RealmManager
+  extends Lifecycle
 {
+  RealmConfiguration getConfiguration();
+
+  void setConfiguration(RealmConfiguration configuration);
 }
