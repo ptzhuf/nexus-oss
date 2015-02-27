@@ -10,35 +10,31 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.security.anonymous;
+package org.sonatype.nexus.security.realm;
 
-import javax.annotation.Nullable;
-import javax.inject.Named;
-import javax.inject.Singleton;
-
-import org.sonatype.sisu.goodies.common.ComponentSupport;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.List;
 
 /**
- * In-memory {@link AnonymousConfigurationStore}.
+ * Realm configuration.
+ *
+ * @since 3.0
  */
-@Named("memory")
-@Singleton
-public class MemoryAnonymousConfigurationStore
-  extends ComponentSupport
-  implements AnonymousConfigurationStore
+public class RealmConfiguration
 {
-  private AnonymousConfiguration model;
+  private List<String> realms;
 
-  @Override
-  @Nullable
-  public synchronized AnonymousConfiguration load() {
-    return model;
+  public List<String> getRealms() {
+    return realms;
+  }
+
+  public void setRealms(final List<String> realms) {
+    this.realms = realms;
   }
 
   @Override
-  public synchronized void save(final AnonymousConfiguration configuration) {
-    this.model = checkNotNull(configuration);
+  public String toString() {
+    return getClass().getSimpleName() + "{" +
+        "realms=" + realms +
+        '}';
   }
 }
