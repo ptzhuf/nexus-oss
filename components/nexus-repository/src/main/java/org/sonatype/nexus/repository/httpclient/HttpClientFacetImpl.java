@@ -15,12 +15,14 @@ package org.sonatype.nexus.repository.httpclient;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.sonatype.nexus.common.stateguard.Guarded;
 import org.sonatype.nexus.repository.FacetSupport;
 import org.sonatype.nexus.repository.util.NestedAttributesMap;
 
 import org.apache.http.client.HttpClient;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static org.sonatype.nexus.repository.FacetSupport.State.STARTED;
 
 /**
  * Default {@link HttpClientFacet} implementation.
@@ -49,11 +51,13 @@ public class HttpClientFacetImpl
   }
 
   @Override
+  @Guarded(by = STARTED)
   public HttpClient getHttpClient() {
     return checkNotNull(httpClient);
   }
 
   @Override
+  @Guarded(by = STARTED)
   public RemoteConnectionStatus getStatus() {
     return httpClient.getStatus();
   }
