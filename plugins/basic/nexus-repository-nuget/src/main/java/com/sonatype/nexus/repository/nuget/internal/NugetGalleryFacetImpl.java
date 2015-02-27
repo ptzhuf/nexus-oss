@@ -429,7 +429,9 @@ public class NugetGalleryFacetImpl
       nugetAttributes.set(P_IS_LATEST_VERSION, component.equals(latestVersion));
       nugetAttributes.set(P_IS_ABSOLUTE_LATEST_VERSION, component.equals(absoluteLatestVersion));
 
-      nugetAttributes.set(P_DOWNLOAD_COUNT, totalDownloadCount);
+      if (isRepoAuthoritative()) {
+        nugetAttributes.set(P_DOWNLOAD_COUNT, totalDownloadCount);
+      }
     }
   }
 

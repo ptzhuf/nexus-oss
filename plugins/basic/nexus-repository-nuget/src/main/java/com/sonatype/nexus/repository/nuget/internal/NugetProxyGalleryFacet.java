@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -41,6 +42,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.util.concurrent.UncheckedExecutionException;
 import org.apache.http.client.utils.URIBuilder;
 
 import static com.google.common.base.MoreObjects.firstNonNull;
@@ -191,10 +193,14 @@ public class NugetProxyGalleryFacet
       final Integer cachedCount = cache.get(key, remoteCall.build(repo, path));
       return cachedCount;
     }
+    catch (ExecutionException | UncheckedExecutionException e) {
+      log.warn("{} attempting to contact proxied repository {}.", e.getCause().getClass().getSimpleName(),
+          repo.getName());
+    }
     catch (Exception e) {
       log.warn("{} attempting to contact proxied repository {}.", e.getClass().getSimpleName(), repo.getName());
-      return 0;
     }
+    return 0;
   }
 
   @Nullable
