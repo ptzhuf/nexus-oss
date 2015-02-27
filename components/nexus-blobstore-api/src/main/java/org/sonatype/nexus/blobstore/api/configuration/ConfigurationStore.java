@@ -14,7 +14,10 @@ package org.sonatype.nexus.blobstore.api.configuration;
 
 import java.util.List;
 
+import org.sonatype.sisu.goodies.lifecycle.Lifecycle;
+
 public interface ConfigurationStore
+  extends Lifecycle  
 {
   List<BlobStoreConfiguration> list();
 

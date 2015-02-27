@@ -17,6 +17,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
+import javax.inject.Singleton;
 
 import org.sonatype.nexus.common.stateguard.Guarded;
 import org.sonatype.nexus.common.stateguard.StateGuardLifecycleSupport;
@@ -28,6 +29,11 @@ import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.sonatype.nexus.common.stateguard.StateGuardLifecycleSupport.State.STARTED;
 
+/**
+ * @since 3.0
+ */
+@Named
+@Singleton
 public class ConfigurationStoreImpl
     extends StateGuardLifecycleSupport
     implements ConfigurationStore

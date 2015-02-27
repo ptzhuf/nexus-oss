@@ -72,7 +72,9 @@ public class BlobStoreManagerImpl
   }
 
   @Override
-  protected void doStart() throws Exception {
+  protected void doStart() throws Exception { 
+    //TODO - appropriate place to insist on starting the store before this? new BlobStoreLifecycle impl, add to RepositoryLifecycle or...
+    store.start();
     List<BlobStoreConfiguration> configurations = store.list();
     if (configurations.isEmpty()) {
       log.debug("No BlobStores configured");
@@ -188,7 +190,7 @@ public class BlobStoreManagerImpl
     checkNotNull(name);
 
     synchronized (stores) {
-      BlobStore store = blobStore(name);
+      BlobStore store = stores.get(name);
 
       // TODO - remove auto-create functionality?
       // blob-store not defined, create
