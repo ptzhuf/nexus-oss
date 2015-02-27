@@ -10,35 +10,39 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package com.sonatype.nexus.repository.nuget.internal;
+package org.sonatype.nexus.pax.exam;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
+import javax.inject.Inject;
 
-import org.sonatype.sisu.litmus.testsupport.TestSupport;
+import org.sonatype.nexus.SystemState;
+import org.sonatype.nexus.SystemStatus;
 
-import org.apache.commons.fileupload.util.Streams;
 import org.junit.Test;
+import org.ops4j.pax.exam.Configuration;
+import org.ops4j.pax.exam.Option;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static org.ops4j.pax.exam.CoreOptions.options;
 
-public class TempStreamSupplierTest
-    extends TestSupport
+/**
+ * Sanity test of the Pax-Exam test infrastructure.
+ * 
+ * @since 3.0
+ */
+public class SanityIT
+    extends AbstractNexusPaxExamIT
 {
-  final String content = "foo";
-
-  @Test
-  public void testGetTwice() throws Exception {
-    TempStreamSupplier underTest = new TempStreamSupplier(content());
-
-    try (InputStream i1 = underTest.get(); InputStream i2 = underTest.get()) {
-      assertThat(Streams.asString(i1), is(content));
-      assertThat(Streams.asString(i2), is(content));
-    }
+  @Configuration
+  public static Option[] config() {
+    return options(nexusDistribution("org.sonatype.nexus.assemblies", "nexus-base-template"));
   }
 
-  private InputStream content() {
-    return new ByteArrayInputStream(content.getBytes());
+  @Inject
+  private SystemStatus status;
+
+  @Test
+  public void testNexusStarts() {
+    assertThat(SystemState.STARTED, is(status.getState()));
   }
 }
