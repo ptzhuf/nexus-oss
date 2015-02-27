@@ -14,6 +14,7 @@ package com.sonatype.nexus.repository.nuget.internal;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -42,6 +43,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.http.client.utils.URIBuilder;
 
+import static com.google.common.base.MoreObjects.firstNonNull;
 import static com.google.common.base.Objects.equal;
 import static java.lang.Math.min;
 
@@ -132,7 +134,19 @@ public class NugetProxyGalleryFacet
 
   @Override
   public String entry(final String base, final String id, final String version) {
-    return super.entry(base, id, version);
+    String entryXml = super.entry(base, id, version);
+
+    if (entryXml == null) {
+      final String remoteQuery = "Packages(Id='" + id + "',Version='" + version + "')";
+
+      passQueryToRemoteRepo(nugetQuery(remoteQuery), new FeedLoader(fetcher, this));
+      entryXml = super.entry(base, id, version);
+    }
+    return entryXml;
+  }
+
+  private URI nugetQuery(final String path) {
+    return nugetQuery(path, Collections.<String, String>emptyMap());
   }
 
   /**
@@ -162,11 +176,11 @@ public class NugetProxyGalleryFacet
 
   /**
    * Determines which of the repository IDs correspond to remote proxies, and queries (or populates) the count cache
-   * using the supplied {@link RemoteQueryFactory}.
+   * using the supplied {@link RemoteCallFactory}.
    *
    * @return the package count from the remote repo
    */
-  private int passQueryToRemoteRepo(final URI path, final RemoteQueryFactory creator)
+  private int passQueryToRemoteRepo(final URI path, final RemoteCallFactory remoteCall)
   {
     final Repository repo = getRepository();
 
@@ -174,7 +188,7 @@ public class NugetProxyGalleryFacet
       // TODO: Determine if we should talk to the remote based on its status
 
       final QueryCacheKey key = new QueryCacheKey(repo.getName(), path);
-      final Integer cachedCount = cache.get(key, creator.createValueLoader(repo, path));
+      final Integer cachedCount = cache.get(key, remoteCall.build(repo, path));
       return cachedCount;
     }
     catch (Exception e) {
@@ -213,30 +227,25 @@ public class NugetProxyGalleryFacet
   /**
    * A factory to create {@link Callable}s to populate the count cache.
    */
-  private static abstract class RemoteQueryFactory
+  private static abstract class RemoteCallFactory
   {
     protected final NugetFeedFetcher fetcher;
 
-    protected RemoteQueryFactory(final NugetFeedFetcher fetcher) {
+    protected RemoteCallFactory(final NugetFeedFetcher fetcher) {
       this.fetcher = fetcher;
     }
 
     /**
      * Create a value loader to populate the query/count cache in the case where there's no value currently cached.
      */
-    public abstract Callable<Integer> createValueLoader(final Repository remote, final URI path);
-
-    /**
-     * Guava caches do not allow nulls, see {@link Cache#get}.
-     */
-    protected Integer nullToZero(Integer input) {return input == null ? 0 : input;}
+    public abstract Callable<Integer> build(final Repository remote, final URI path);
   }
 
   /**
    * Queries the remote repository for feed information, storing entries in the supplied nuget gallery.
    */
   private static class FeedLoader
-      extends RemoteQueryFactory
+      extends RemoteCallFactory
   {
     private final NugetWritableGallery gallery;
 
@@ -245,21 +254,19 @@ public class NugetProxyGalleryFacet
       this.gallery = gallery;
     }
 
-    public Callable<Integer> createValueLoader(final Repository remote, final URI nugetQuery)
+    public Callable<Integer> build(final Repository remote, final URI nugetQuery)
     {
       return new Callable<Integer>()
       {
         @Override
         public Integer call() throws Exception {
-          Integer remoteCount = fetcher.cachePackageFeed(remote, nugetQuery, 2, true, new ODataConsumer()
+          return firstNonNull(fetcher.cachePackageFeed(remote, nugetQuery, 2, true, new ODataConsumer()
           {
             @Override
             public void consume(final Map<String, String> data) {
               gallery.putMetadata(data);
             }
-          });
-
-          return nullToZero(remoteCount);
+          }), 0);
         }
       };
     }
@@ -269,23 +276,24 @@ public class NugetProxyGalleryFacet
    * Queries remote repositories for a simple count of entries.
    */
   private static class CountFetcher
-      extends RemoteQueryFactory
+      extends RemoteCallFactory
   {
     private CountFetcher(final NugetFeedFetcher fetcher) {
       super(fetcher);
     }
 
-    public Callable<Integer> createValueLoader(final Repository remote, final URI nugetQuery)
+    public Callable<Integer> build(final Repository remote, final URI nugetQuery)
     {
       return new Callable<Integer>()
       {
         @Override
         public Integer call() throws Exception {
-          return nullToZero(fetcher.getCount(remote, nugetQuery));
+          return firstNonNull(fetcher.getCount(remote, nugetQuery), 0);
         }
       };
     }
   }
+
 
   private static class QueryCacheKey
   {
