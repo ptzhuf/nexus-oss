@@ -15,7 +15,6 @@ package org.sonatype.nexus.repository.httpclient;
 import java.io.Closeable;
 import java.io.IOException;
 import java.net.URI;
-import java.util.Set;
 
 import javax.net.ssl.SSLPeerUnverifiedException;
 
@@ -24,7 +23,6 @@ import org.sonatype.nexus.common.sequence.NumberSequence;
 import org.sonatype.sisu.goodies.common.ComponentSupport;
 import org.sonatype.sisu.goodies.common.Time;
 
-import com.google.common.collect.Sets;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
@@ -55,7 +53,7 @@ public class FilteredHttpClient
 
   private final boolean blocked;
 
-  private final Set<HttpHost> httpHosts;
+  private HttpHost mainTarget;
 
   private DateTime blockedUntil;
 
@@ -73,17 +71,20 @@ public class FilteredHttpClient
     this.delegate = checkNotNull(delegate);
     blocked = checkNotNull(config).getConnectionConfig().isBlocked();
     autoBlock = config.getConnectionConfig().shouldAutoBlock();
-    httpHosts = Sets.newHashSet();
     status = new RemoteConnectionStatus(blocked ? "Remote Manually Blocked" : "Unknown");
     // TODO shall we use config.getConnectionConfig().getTimeout() * 2 as in NX2?
     autoBlockSequence = new FibonacciNumberSequence(Time.seconds(40).toMillis());
   }
 
   private <T> T filter(final HttpHost target, final Filterable<T> filterable) throws IOException {
-    if (!httpHosts.isEmpty() && !httpHosts.contains(target)) {
-      log.warn("Http client used for more then one host: {}", httpHosts);
+    // main target is the first accessed target
+    if (mainTarget == null) {
+      mainTarget = target;
     }
-    httpHosts.add(target);
+    // we only filter requests to our main target
+    if (!target.equals(mainTarget)) {
+      return filterable.call();
+    }
     if (blocked) {
       throw new IOException("Remote Manually Blocked");
     }
