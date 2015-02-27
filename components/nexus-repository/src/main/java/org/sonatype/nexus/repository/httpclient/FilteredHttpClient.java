@@ -12,7 +12,9 @@
  */
 package org.sonatype.nexus.repository.httpclient;
 
+import java.io.Closeable;
 import java.io.IOException;
+import java.net.URI;
 
 import javax.net.ssl.SSLPeerUnverifiedException;
 
@@ -24,14 +26,18 @@ import org.sonatype.sisu.goodies.common.Time;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpHead;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.utils.URIUtils;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.ConnectionPoolTimeoutException;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HttpContext;
 import org.joda.time.DateTime;
+import org.joda.time.Duration;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -40,7 +46,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class FilteredHttpClient
     extends ComponentSupport
-    implements HttpClient
+    implements HttpClient, Closeable
 {
 
   private final HttpClient delegate;
@@ -48,6 +54,8 @@ public class FilteredHttpClient
   private boolean blocked;
 
   private DateTime blockedUntil;
+
+  private Thread checkThread;
 
   private final boolean autoBlock;
 
@@ -66,7 +74,7 @@ public class FilteredHttpClient
     this.autoBlockSequence = new FibonacciNumberSequence(Time.seconds(40).toMillis());
   }
 
-  private <T> T filter(final Filterable<T> filterable) throws IOException {
+  private <T> T filter(final HttpHost target, final Filterable<T> filterable) throws IOException {
     if (blocked) {
       throw new IOException("Remote Manually Blocked");
     }
@@ -80,6 +88,8 @@ public class FilteredHttpClient
         synchronized (this) {
           if (blockedUntil != null) {
             blockedUntil = null;
+            checkThread.interrupt();
+            checkThread = null;
             autoBlockSequence.reset();
           }
         }
@@ -94,6 +104,14 @@ public class FilteredHttpClient
             // avoid some other thread already increased the sequence
             if (blockedUntil == null || blockedUntil.isBeforeNow()) {
               blockedUntil = DateTime.now().plus(autoBlockSequence.next());
+              if (checkThread != null) {
+                checkThread.interrupt();
+              }
+              String uri = target.toURI();
+              // TODO maybe find different means to schedule status checking
+              checkThread = new Thread(new CheckStatus(uri, blockedUntil), "Check Status " + uri);
+              checkThread.setDaemon(true);
+              checkThread.start();
             }
           }
           status = new RemoteConnectionStatus("Remote Auto Blocked and Unavailable", getReason(e));
@@ -144,7 +162,7 @@ public class FilteredHttpClient
 
   @Override
   public HttpResponse execute(final HttpUriRequest request) throws IOException {
-    return filter(new Filterable<HttpResponse>()
+    return filter(determineTarget(request), new Filterable<HttpResponse>()
     {
       @Override
       public HttpResponse call() throws IOException {
@@ -158,7 +176,7 @@ public class FilteredHttpClient
                               final HttpContext context)
       throws IOException
   {
-    return filter(new Filterable<HttpResponse>()
+    return filter(determineTarget(request), new Filterable<HttpResponse>()
     {
       @Override
       public HttpResponse call() throws IOException {
@@ -172,7 +190,7 @@ public class FilteredHttpClient
                               final HttpRequest request)
       throws IOException
   {
-    return filter(new Filterable<HttpResponse>()
+    return filter(target, new Filterable<HttpResponse>()
     {
       @Override
       public HttpResponse call() throws IOException {
@@ -187,7 +205,7 @@ public class FilteredHttpClient
                               final HttpContext context)
       throws IOException
   {
-    return filter(new Filterable<HttpResponse>()
+    return filter(target, new Filterable<HttpResponse>()
     {
       @Override
       public HttpResponse call() throws IOException {
@@ -201,7 +219,7 @@ public class FilteredHttpClient
                        final ResponseHandler<? extends T> responseHandler)
       throws IOException
   {
-    return filter(new Filterable<T>()
+    return filter(determineTarget(request), new Filterable<T>()
     {
       @Override
       public T call() throws IOException {
@@ -216,7 +234,7 @@ public class FilteredHttpClient
                        final HttpContext context)
       throws IOException
   {
-    return filter(new Filterable<T>()
+    return filter(determineTarget(request), new Filterable<T>()
     {
       @Override
       public T call() throws IOException {
@@ -231,7 +249,7 @@ public class FilteredHttpClient
                        final ResponseHandler<? extends T> responseHandler)
       throws IOException
   {
-    return filter(new Filterable<T>()
+    return filter(target, new Filterable<T>()
     {
       @Override
       public T call() throws IOException {
@@ -246,7 +264,7 @@ public class FilteredHttpClient
                        final ResponseHandler<? extends T> responseHandler,
                        final HttpContext context) throws IOException
   {
-    return filter(new Filterable<T>()
+    return filter(target, new Filterable<T>()
     {
       @Override
       public T call() throws IOException {
@@ -255,9 +273,72 @@ public class FilteredHttpClient
     });
   }
 
+  private static HttpHost determineTarget(final HttpUriRequest request) throws ClientProtocolException {
+    HttpHost target = null;
+    final URI requestURI = request.getURI();
+    if (requestURI.isAbsolute()) {
+      target = URIUtils.extractHost(requestURI);
+      if (target == null) {
+        throw new ClientProtocolException("URI does not specify a valid host name: " + requestURI);
+      }
+    }
+    return target;
+  }
+
+  @Override
+  public void close() throws IOException {
+    if (checkThread != null) {
+      checkThread.interrupt();
+    }
+    if (delegate instanceof Closeable) {
+      ((Closeable) delegate).close();
+    }
+  }
+
+  @Override
+  public String toString() {
+    return delegate.toString();
+  }
+
   private static interface Filterable<T>
   {
     T call() throws IOException;
+  }
+
+  private class CheckStatus
+      implements Runnable
+  {
+
+    private final String uri;
+
+    private final DateTime fireAt;
+
+    private CheckStatus(final String uri, final DateTime fireAt) {
+      this.uri = uri;
+      this.fireAt = fireAt;
+    }
+
+    @Override
+    public void run() {
+      if (fireAt.isAfterNow()) {
+        try {
+          long durationTillFire = new Duration(DateTime.now(), fireAt).getMillis();
+          if (durationTillFire > 0) {
+            log.debug("Wait until {} to check status of {}", fireAt, uri);
+            Thread.sleep(durationTillFire);
+            log.debug("Time is up. Checking status of {}", uri);
+            execute(new HttpHead(uri));
+          }
+        }
+        catch (InterruptedException e) {
+          log.debug("Stopped checking status of {}", uri);
+        }
+        catch (IOException e) {
+          // ignore as we just want to access the host
+        }
+      }
+    }
+
   }
 
 }

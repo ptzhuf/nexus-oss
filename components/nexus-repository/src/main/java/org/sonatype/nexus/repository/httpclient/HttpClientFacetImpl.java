@@ -71,7 +71,9 @@ public class HttpClientFacetImpl
   }
 
   @Override
-  protected void doDestroy() throws Exception {
+  protected void doStop() throws Exception {
+    log.debug("Closing HTTP client: {}", httpClient);
+    httpClient.close();
     httpClient = null;
   }
 }
