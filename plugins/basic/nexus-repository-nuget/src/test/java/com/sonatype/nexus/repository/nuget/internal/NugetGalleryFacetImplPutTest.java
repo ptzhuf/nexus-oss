@@ -21,15 +21,22 @@ import java.util.SortedSet;
 
 import com.sonatype.nexus.repository.nuget.internal.odata.ODataFeedUtils;
 
+import org.sonatype.nexus.repository.Repository;
+
 import org.sonatype.nexus.common.time.Clock;
 import org.sonatype.nexus.repository.search.ComponentMetadataFactory;
+import org.sonatype.nexus.repository.storage.ComponentCreatedEvent;
+import org.sonatype.nexus.repository.storage.ComponentEvent;
+import org.sonatype.nexus.repository.storage.ComponentUpdatedEvent;
 import org.sonatype.nexus.repository.storage.StorageTx;
 import org.sonatype.nexus.repository.util.NestedAttributesMap;
+import org.sonatype.sisu.goodies.eventbus.EventBus;
 import org.sonatype.sisu.litmus.testsupport.TestSupport;
 
 import com.google.common.base.Throwables;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.orientechnologies.orient.core.id.ORID;
 import com.tinkerpop.blueprints.impls.orient.OrientVertex;
 import org.eclipse.aether.util.version.GenericVersionScheme;
 import org.eclipse.aether.version.InvalidVersionSpecificationException;
@@ -37,10 +44,13 @@ import org.eclipse.aether.version.Version;
 import org.eclipse.aether.version.VersionScheme;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import static com.sonatype.nexus.repository.nuget.internal.NugetFormat.NAME;
 import static com.sonatype.nexus.repository.nuget.internal.NugetProperties.*;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
@@ -49,15 +59,34 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class NugetGalleryFacetImplPutTest
     extends TestSupport
 {
+  @Mock
+  private ComponentMetadataFactory componentMetadataFactory;
+  
+  @Mock 
+  private EventBus eventBus;
+  
+  @Mock
+  private Repository repository;
+
   @Test
   public void putCreatesPackageMetadataAndBlob() throws Exception {
+    putPackageMetadataAndBlob(true, ComponentCreatedEvent.class);
+  }
+
+  @Test
+  public void putUpdatesPackageMetadataAndBlob() throws Exception {
+    putPackageMetadataAndBlob(false, ComponentUpdatedEvent.class);
+  }
+
+  private void putPackageMetadataAndBlob(final boolean isNew,
+                                         final Class eventClass) throws Exception {
     final NugetGalleryFacetImpl galleryFacet = buildSpy();
 
     final StorageTx tx = mock(StorageTx.class);
@@ -66,14 +95,24 @@ public class NugetGalleryFacetImplPutTest
 
     final InputStream packageStream = getClass().getResourceAsStream("/SONATYPE.TEST.1.0.nupkg");
 
-    doNothing().when(galleryFacet)
-        .createOrUpdatePackage(any(StorageTx.class), any(Map.class), any(InputStream.class));
-
     doNothing().when(galleryFacet).maintainAggregateInfo(any(StorageTx.class), eq("SONATYPE.TEST"));
 
+    OrientVertex component = mock(OrientVertex.class);
+    ORID orid = mock(ORID.class);
+    doReturn(component).when(galleryFacet)
+        .createOrUpdatePackage(any(StorageTx.class), any(Map.class), any(InputStream.class));
+    when(component.getIdentity()).thenReturn(orid);
+    when(orid.isNew()).thenReturn(isNew);
+    
     galleryFacet.put(packageStream);
 
     verify(galleryFacet).maintainAggregateInfo(tx, "SONATYPE.TEST");
+    ArgumentCaptor<ComponentEvent> o = ArgumentCaptor.forClass(ComponentEvent.class);
+    verify(eventBus, times(1)).post(o.capture());
+    ComponentEvent actual = o.getValue();
+    assertThat(actual, instanceOf(eventClass));
+    assertThat(actual.getVertex(), is(component));
+    assertThat(actual.getRepository(), is(repository));
   }
 
   @Test
@@ -178,9 +217,14 @@ public class NugetGalleryFacetImplPutTest
   }
 
   private NugetGalleryFacetImpl buildSpy() {
-    final NugetGalleryFacetImpl galleryFacet = Mockito.spy(new NugetGalleryFacetImpl(
-        mock(ComponentMetadataFactory.class)
-    ));
+    final NugetGalleryFacetImpl galleryFacet = Mockito.spy(new NugetGalleryFacetImpl(componentMetadataFactory)
+    {
+      @Override
+      protected Repository getRepository() {
+        return repository;
+      }
+    });
+    galleryFacet.installDependencies(eventBus);
     doReturn(true).when(galleryFacet).isRepoAuthoritative();
     return galleryFacet;
   }
