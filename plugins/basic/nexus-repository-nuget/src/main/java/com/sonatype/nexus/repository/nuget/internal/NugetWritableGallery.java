@@ -10,21 +10,14 @@
  * of Sonatype, Inc. Apache Maven is a trademark of the Apache Software Foundation. M2eclipse is a trademark of the
  * Eclipse Foundation. All other trademarks are the property of their respective owners.
  */
-package org.sonatype.nexus.repository.httpclient;
+package com.sonatype.nexus.repository.nuget.internal;
 
-import org.sonatype.nexus.repository.Facet;
-import org.sonatype.nexus.repository.view.Payload;
-
-import org.apache.http.client.HttpClient;
+import java.util.Map;
 
 /**
- * HTTP client facet.
- *
  * @since 3.0
  */
-@Facet.Exposed
-public interface HttpClientFacet
-  extends Facet
+public interface NugetWritableGallery
 {
-  HttpClient getHttpClient();
+  void putMetadata(Map<String, String> metadata);
 }

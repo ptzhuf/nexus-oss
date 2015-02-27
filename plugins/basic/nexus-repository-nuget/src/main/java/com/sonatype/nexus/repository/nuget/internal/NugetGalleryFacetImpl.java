@@ -32,6 +32,7 @@ import com.sonatype.nexus.repository.nuget.internal.odata.NugetPackageUtils;
 import com.sonatype.nexus.repository.nuget.internal.odata.ODataFeedUtils;
 import com.sonatype.nexus.repository.nuget.internal.odata.ODataTemplates;
 import com.sonatype.nexus.repository.nuget.internal.odata.ODataUtils;
+import com.sonatype.nexus.repository.nuget.internal.util.TempStreamSupplier;
 
 import org.sonatype.nexus.blobstore.api.Blob;
 import org.sonatype.nexus.blobstore.api.BlobRef;
@@ -42,6 +43,7 @@ import org.sonatype.nexus.common.time.Clock;
 import org.sonatype.nexus.repository.FacetSupport;
 import org.sonatype.nexus.repository.MissingFacetException;
 import org.sonatype.nexus.repository.Repository;
+import org.sonatype.nexus.repository.proxy.ProxyFacet;
 import org.sonatype.nexus.repository.search.ComponentMetadataFactory;
 import org.sonatype.nexus.repository.search.SearchFacet;
 import org.sonatype.nexus.repository.storage.ComponentCreatedEvent;
@@ -49,13 +51,14 @@ import org.sonatype.nexus.repository.storage.ComponentDeletedEvent;
 import org.sonatype.nexus.repository.storage.ComponentUpdatedEvent;
 import org.sonatype.nexus.repository.storage.StorageFacet;
 import org.sonatype.nexus.repository.storage.StorageTx;
+import org.sonatype.nexus.repository.types.HostedType;
 import org.sonatype.nexus.repository.util.NestedAttributesMap;
-import org.sonatype.nexus.repository.view.Parameters;
 import org.sonatype.nexus.repository.view.Payload;
 import org.sonatype.nexus.repository.view.payloads.StreamPayload;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Joiner;
+import com.google.common.base.Predicate;
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
@@ -70,6 +73,7 @@ import org.odata4j.producer.InlineCount;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.base.Predicates.not;
 import static com.google.common.base.Strings.nullToEmpty;
 import static com.sonatype.nexus.repository.nuget.internal.NugetProperties.*;
 import static java.util.Arrays.asList;
@@ -125,8 +129,7 @@ public class NugetGalleryFacetImpl
 
   //@Override
   @Guarded(by = STARTED)
-  public int count(final String path, final Parameters parameters) {
-    Map<String, String> query = asMap(parameters);
+  public int count(final String operation, final Map<String, String> query) {
     log.debug("Count: " + query);
 
     final ComponentQuery componentQuery = ODataUtils.query(query, true);
@@ -153,9 +156,7 @@ public class NugetGalleryFacetImpl
 
   //@Override
   @Guarded(by = STARTED)
-  public String feed(final String base, final String operation, final Parameters parameters) {
-    Map<String, String> query = asMap(parameters);
-
+  public String feed(final String base, final String operation, final Map<String, String> query) {
     log.debug("Select: " + query);
 
     final StringBuilder xml = new StringBuilder();
@@ -178,7 +179,6 @@ public class NugetGalleryFacetImpl
 
       // NXCM-4502 add inlinecount only if requested
       if (inlineCountRequested(query)) {
-        // TODO: We need a count query, as this has an order by
         int inlineCount = executeCount(componentCountQuery, storageTx);
         xml.append(interpolateTemplate(ODataTemplates.NUGET_INLINECOUNT,
             ImmutableMap.of("COUNT", String.valueOf(inlineCount))
@@ -209,12 +209,16 @@ public class NugetGalleryFacetImpl
     return xml.append("</feed>").toString();
   }
 
-  private Map<String, String> asMap(final Parameters parameters) {
-    Map<String, String> query = Maps.newHashMap();
-    for (String param : parameters.names()) {
-      query.put(param, parameters.get(param));
+  @Override
+  public void putMetadata(final Map<String, String> metadata) {
+    try (StorageTx tx = openStorageTx()) {
+      final OrientVertex bucket = tx.getBucket();
+      final OrientVertex component = createOrUpdateComponent(tx, bucket, metadata);
+      putInIndex(component);
+      maintainAggregateInfo(tx, metadata.get(ID));
+
+      tx.commit();
     }
-    return query;
   }
 
   @VisibleForTesting
@@ -391,6 +395,7 @@ public class NugetGalleryFacetImpl
   {
     final OrientVertex bucket = storageTx.getBucket();
     final OrientVertex component = createOrUpdateComponent(storageTx, bucket, recordMetadata);
+    putInIndex(component);
 
     createOrUpdateAsset(storageTx, bucket, component, packageStream);
     putInIndex(component);
@@ -440,7 +445,9 @@ public class NugetGalleryFacetImpl
       nugetAttributes.set(P_IS_LATEST_VERSION, component.equals(latestVersion));
       nugetAttributes.set(P_IS_ABSOLUTE_LATEST_VERSION, component.equals(absoluteLatestVersion));
 
-      nugetAttributes.set(P_DOWNLOAD_COUNT, totalDownloadCount);
+      if (isRepoAuthoritative()) {
+        nugetAttributes.set(P_DOWNLOAD_COUNT, totalDownloadCount);
+      }
     }
   }
 
@@ -523,22 +530,37 @@ public class NugetGalleryFacetImpl
     return component;
   }
 
+  /**
+   * Is this repository an authoritative source for the packages and metadata it contains?
+   */
+  @VisibleForTesting
+  boolean isRepoAuthoritative() {
+    return HostedType.NAME.equals(getRepository().getType().getValue());
+  }
+
   @VisibleForTesting
   void setDerivedAttributes(final Map<String, String> incomingMetadata,
                             final NestedAttributesMap storedMetadata, final boolean republishing)
   {
     // Force the version download count to zero if it wasn't provided nor previously set
-    if (!republishing) {
+    if (!republishing && isRepoAuthoritative()) {
       storedMetadata.set(P_DOWNLOAD_COUNT, 0);
       storedMetadata.set(P_VERSION_DOWNLOAD_COUNT, 0);
     }
-
-    // TODO: Make sure this is maintained correctly in the case of republished packages
+    else {
+      storedMetadata.set(P_DOWNLOAD_COUNT, Integer.parseInt(incomingMetadata.get(DOWNLOAD_COUNT)));
+      storedMetadata.set(P_VERSION_DOWNLOAD_COUNT, Integer.parseInt(incomingMetadata.get(VERSION_DOWNLOAD_COUNT)));
+    }
 
     final Date now = new Date(clock.millis());
-
-    storedMetadata.set(P_CREATED, now);
-    storedMetadata.set(P_PUBLISHED, now);
+    if (!republishing && isRepoAuthoritative()) {
+      storedMetadata.set(P_CREATED, now);
+      storedMetadata.set(P_PUBLISHED, now);
+    }
+    else {
+      storedMetadata.set(P_CREATED, ODataUtils.toDate(incomingMetadata.get(CREATED)));
+      storedMetadata.set(P_PUBLISHED, ODataUtils.toDate(incomingMetadata.get(PUBLISHED)));
+    }
     storedMetadata.set(P_LAST_UPDATED, now);
 
     // Populate keywords for case-insensitive search
@@ -601,10 +623,17 @@ public class NugetGalleryFacetImpl
         query.getQuerySuffix());
   }
 
-
-  private List<Repository> getRepositories() {
+  protected List<Repository> getRepositories() {
     // TODO: Consider groups
     return asList(getRepository());
+  }
+
+  protected Iterable<Repository> getHostedRepositories() {
+    return Iterables.filter(getRepositories(), not(new HasFacet(ProxyFacet.class)));
+  }
+
+  protected Iterable<Repository> getProxyRepositories() {
+    return Iterables.filter(getRepositories(), new HasFacet(ProxyFacet.class));
   }
 
   @VisibleForTesting
@@ -640,6 +669,26 @@ public class NugetGalleryFacetImpl
       }
       catch (InvalidVersionSpecificationException e) {
         throw Throwables.propagate(e);
+      }
+    }
+  }
+
+  private static class HasFacet
+      implements Predicate<Repository>
+  {
+    private final Class<ProxyFacet> facetClass;
+
+    public HasFacet(final Class<ProxyFacet> facetClass) {this.facetClass = facetClass;}
+
+    @Override
+    public boolean apply(final Repository input) {
+      try {
+
+        input.facet(facetClass);
+        return true;
+      }
+      catch (MissingFacetException e) {
+        return false;
       }
     }
   }
