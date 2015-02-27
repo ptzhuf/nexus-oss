@@ -59,7 +59,7 @@ public class NugetPushHandler
 
           return HttpResponses.created(new StringPayload(EMPTY_HTMLDOC, Charsets.UTF_8, "text/html"));
         default:
-          return HttpResponses.methodNotAllowed(action, HttpMethods.PUT /* TODO: , HttpMethods.GET */);
+          return HttpResponses.methodNotAllowed(action, HttpMethods.PUT);
       }
     }
     catch (Exception e) {

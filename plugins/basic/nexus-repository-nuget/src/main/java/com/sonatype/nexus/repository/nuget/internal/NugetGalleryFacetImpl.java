@@ -47,6 +47,7 @@ import org.sonatype.nexus.repository.search.ComponentMetadataFactory;
 import org.sonatype.nexus.repository.search.SearchFacet;
 import org.sonatype.nexus.repository.storage.StorageFacet;
 import org.sonatype.nexus.repository.storage.StorageTx;
+import org.sonatype.nexus.repository.types.HostedType;
 import org.sonatype.nexus.repository.util.NestedAttributesMap;
 import org.sonatype.nexus.repository.view.Payload;
 import org.sonatype.nexus.repository.view.payloads.StreamPayload;
@@ -124,7 +125,7 @@ public class NugetGalleryFacetImpl
 
   //@Override
   @Guarded(by = STARTED)
-  public int count(final String path, final Map<String, String> query) {
+  public int count(final String operation, final Map<String, String> query) {
     log.debug("Count: " + query);
 
     final ComponentQuery componentQuery = ODataUtils.query(query, true);
@@ -174,7 +175,6 @@ public class NugetGalleryFacetImpl
 
       // NXCM-4502 add inlinecount only if requested
       if (inlineCountRequested(query)) {
-        // TODO: We need a count query, as this has an order by
         int inlineCount = executeCount(componentCountQuery, storageTx);
         xml.append(interpolateTemplate(ODataTemplates.NUGET_INLINECOUNT,
             ImmutableMap.of("COUNT", String.valueOf(inlineCount))
@@ -207,8 +207,14 @@ public class NugetGalleryFacetImpl
 
   @Override
   public void putMetadata(final Map<String, String> metadata) {
-    // TODO: implement
-    throw new UnsupportedOperationException("implement me");
+    try (StorageTx tx = openStorageTx()) {
+      final OrientVertex bucket = tx.getBucket();
+      final OrientVertex component = createOrUpdateComponent(tx, bucket, metadata);
+      putInIndex(component);
+      maintainAggregateInfo(tx, metadata.get(ID));
+
+      tx.commit();
+    }
   }
 
   @VisibleForTesting
@@ -423,7 +429,9 @@ public class NugetGalleryFacetImpl
       nugetAttributes.set(P_IS_LATEST_VERSION, component.equals(latestVersion));
       nugetAttributes.set(P_IS_ABSOLUTE_LATEST_VERSION, component.equals(absoluteLatestVersion));
 
-      nugetAttributes.set(P_DOWNLOAD_COUNT, totalDownloadCount);
+      if (isRepoAuthoritative()) {
+        nugetAttributes.set(P_DOWNLOAD_COUNT, totalDownloadCount);
+      }
     }
   }
 
@@ -506,22 +514,37 @@ public class NugetGalleryFacetImpl
     return component;
   }
 
+  /**
+   * Is this repository an authoritative source for the packages and metadata it contains?
+   */
+  protected boolean isRepoAuthoritative() {
+    return HostedType.NAME.equals(getRepository().getType().getValue());
+  }
+
   @VisibleForTesting
   void setDerivedAttributes(final Map<String, String> incomingMetadata,
                             final NestedAttributesMap storedMetadata, final boolean republishing)
   {
     // Force the version download count to zero if it wasn't provided nor previously set
-    if (!republishing) {
+    if (!republishing && isRepoAuthoritative()) {
       storedMetadata.set(P_DOWNLOAD_COUNT, 0);
       storedMetadata.set(P_VERSION_DOWNLOAD_COUNT, 0);
     }
-
-    // TODO: Make sure this is maintained correctly in the case of republished packages
+    else {
+      final int value = Integer.parseInt(incomingMetadata.get(DOWNLOAD_COUNT));
+      storedMetadata.set(P_DOWNLOAD_COUNT, value);
+      storedMetadata.set(P_VERSION_DOWNLOAD_COUNT, Integer.parseInt(incomingMetadata.get(VERSION_DOWNLOAD_COUNT)));
+    }
 
     final Date now = new Date(clock.millis());
-
-    storedMetadata.set(P_CREATED, now);
-    storedMetadata.set(P_PUBLISHED, now);
+    if (!republishing && isRepoAuthoritative()) {
+      storedMetadata.set(P_CREATED, now);
+      storedMetadata.set(P_PUBLISHED, now);
+    }
+    else {
+      storedMetadata.set(P_CREATED, ODataUtils.toDate(incomingMetadata.get(CREATED)));
+      storedMetadata.set(P_PUBLISHED, ODataUtils.toDate(incomingMetadata.get(PUBLISHED)));
+    }
     storedMetadata.set(P_LAST_UPDATED, now);
 
     // Populate keywords for case-insensitive search
@@ -590,7 +613,7 @@ public class NugetGalleryFacetImpl
   }
 
   protected Iterable<Repository> getHostedRepositories() {
-   return Iterables.filter(getRepositories(), not(new HasFacet(ProxyFacet.class)));
+    return Iterables.filter(getRepositories(), not(new HasFacet(ProxyFacet.class)));
   }
 
   protected Iterable<Repository> getProxyRepositories() {

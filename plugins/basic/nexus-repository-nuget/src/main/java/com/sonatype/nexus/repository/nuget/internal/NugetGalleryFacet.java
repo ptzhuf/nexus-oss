@@ -68,8 +68,8 @@ public interface NugetGalleryFacet
   /**
    * Returns the number of matching packages
    *
-   * @param path       typically a feed name followed by "/$count"
+   * @param operation       typically a feed name followed by "/$count"
    * @param parameters OData query parameters
    */
-  public int count(final String path, final Map<String, String> parameters);
+  public int count(final String operation, final Map<String, String> parameters);
 }

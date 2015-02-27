@@ -52,7 +52,9 @@ public class NugetFeedHandler
         return xmlPayload(200, feed);
 
       case FEED_COUNT_PATTERN:
-        final int count = facet.count(context.getRequest().getPath(), asMap(queryParameters));
+        // Remove the leading slash to derive the operation
+        final String operation = context.getRequest().getPath().substring(1);
+        final int count = facet.count(operation, asMap(queryParameters));
         return HttpResponses.ok(new StringPayload(Integer.toString(count), Charsets.UTF_8, "text/plain"));
 
       case PACKAGE_ENTRY_PATTERN:
