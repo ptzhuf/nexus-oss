@@ -32,6 +32,7 @@ import com.sonatype.nexus.repository.nuget.internal.odata.NugetPackageUtils;
 import com.sonatype.nexus.repository.nuget.internal.odata.ODataFeedUtils;
 import com.sonatype.nexus.repository.nuget.internal.odata.ODataTemplates;
 import com.sonatype.nexus.repository.nuget.internal.odata.ODataUtils;
+import com.sonatype.nexus.repository.nuget.internal.util.TempStreamSupplier;
 
 import org.sonatype.nexus.blobstore.api.Blob;
 import org.sonatype.nexus.blobstore.api.BlobRef;
@@ -517,7 +518,8 @@ public class NugetGalleryFacetImpl
   /**
    * Is this repository an authoritative source for the packages and metadata it contains?
    */
-  protected boolean isRepoAuthoritative() {
+  @VisibleForTesting
+  boolean isRepoAuthoritative() {
     return HostedType.NAME.equals(getRepository().getType().getValue());
   }
 
@@ -531,8 +533,7 @@ public class NugetGalleryFacetImpl
       storedMetadata.set(P_VERSION_DOWNLOAD_COUNT, 0);
     }
     else {
-      final int value = Integer.parseInt(incomingMetadata.get(DOWNLOAD_COUNT));
-      storedMetadata.set(P_DOWNLOAD_COUNT, value);
+      storedMetadata.set(P_DOWNLOAD_COUNT, Integer.parseInt(incomingMetadata.get(DOWNLOAD_COUNT)));
       storedMetadata.set(P_VERSION_DOWNLOAD_COUNT, Integer.parseInt(incomingMetadata.get(VERSION_DOWNLOAD_COUNT)));
     }
 

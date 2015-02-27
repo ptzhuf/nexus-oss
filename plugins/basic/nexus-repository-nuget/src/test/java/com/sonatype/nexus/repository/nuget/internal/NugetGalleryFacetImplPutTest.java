@@ -19,6 +19,8 @@ import java.util.Date;
 import java.util.Map;
 import java.util.SortedSet;
 
+import com.sonatype.nexus.repository.nuget.internal.odata.ODataFeedUtils;
+
 import org.sonatype.nexus.common.time.Clock;
 import org.sonatype.nexus.repository.search.ComponentMetadataFactory;
 import org.sonatype.nexus.repository.storage.StorageTx;
@@ -38,15 +40,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import static com.sonatype.nexus.repository.nuget.internal.NugetFormat.NAME;
-import static com.sonatype.nexus.repository.nuget.internal.NugetProperties.P_CREATED;
-import static com.sonatype.nexus.repository.nuget.internal.NugetProperties.P_DOWNLOAD_COUNT;
-import static com.sonatype.nexus.repository.nuget.internal.NugetProperties.P_IS_ABSOLUTE_LATEST_VERSION;
-import static com.sonatype.nexus.repository.nuget.internal.NugetProperties.P_IS_LATEST_VERSION;
-import static com.sonatype.nexus.repository.nuget.internal.NugetProperties.P_IS_PRERELEASE;
-import static com.sonatype.nexus.repository.nuget.internal.NugetProperties.P_LAST_UPDATED;
-import static com.sonatype.nexus.repository.nuget.internal.NugetProperties.P_PUBLISHED;
-import static com.sonatype.nexus.repository.nuget.internal.NugetProperties.P_VERSION;
-import static com.sonatype.nexus.repository.nuget.internal.NugetProperties.P_VERSION_DOWNLOAD_COUNT;
+import static com.sonatype.nexus.repository.nuget.internal.NugetProperties.*;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
@@ -64,9 +58,7 @@ public class NugetGalleryFacetImplPutTest
 {
   @Test
   public void putCreatesPackageMetadataAndBlob() throws Exception {
-    final NugetGalleryFacetImpl galleryFacet = Mockito.spy(new NugetGalleryFacetImpl(
-        mock(ComponentMetadataFactory.class)
-    ));
+    final NugetGalleryFacetImpl galleryFacet = buildSpy();
 
     final StorageTx tx = mock(StorageTx.class);
 
@@ -86,9 +78,7 @@ public class NugetGalleryFacetImplPutTest
 
   @Test
   public void derivedAttributesSetForNewComponents() {
-    final NugetGalleryFacetImpl galleryFacet = Mockito.spy(new NugetGalleryFacetImpl(
-        mock(ComponentMetadataFactory.class)
-    ));
+    final NugetGalleryFacetImpl galleryFacet = buildSpy();
     final Clock clock = new TestableClock();
     galleryFacet.clock = clock;
 
@@ -105,21 +95,25 @@ public class NugetGalleryFacetImplPutTest
 
   @Test
   public void derivedAttributesSetForRepublishedComponents() {
-    final NugetGalleryFacetImpl galleryFacet = Mockito.spy(new NugetGalleryFacetImpl(
-        mock(ComponentMetadataFactory.class)
-    ));
+    final NugetGalleryFacetImpl galleryFacet = buildSpy();
     final Clock clock = new TestableClock();
     galleryFacet.clock = clock;
 
     final Map<String, String> incomingMap = Maps.newHashMap();
+    incomingMap.put(DOWNLOAD_COUNT, "20");
+    incomingMap.put(VERSION_DOWNLOAD_COUNT, "12");
+    final String feedDate = ODataFeedUtils.datetime(clock.millis());
+    incomingMap.put(CREATED, feedDate);
+    incomingMap.put(PUBLISHED, feedDate);
+
     final NestedAttributesMap storedAttributes = mock(NestedAttributesMap.class);
     galleryFacet.setDerivedAttributes(incomingMap, storedAttributes, true);
 
     verify(storedAttributes).set(eq(P_CREATED), eq(clock.dateTime().toDate()));
     verify(storedAttributes).set(eq(P_PUBLISHED), eq(clock.dateTime().toDate()));
     verify(storedAttributes).set(eq(P_LAST_UPDATED), eq(clock.dateTime().toDate()));
-    verify(storedAttributes, never()).set(eq(P_DOWNLOAD_COUNT), any());
-    verify(storedAttributes, never()).set(eq(P_VERSION_DOWNLOAD_COUNT), any());
+    verify(storedAttributes).set(eq(P_DOWNLOAD_COUNT), eq(20));
+    verify(storedAttributes).set(eq(P_VERSION_DOWNLOAD_COUNT), eq(12));
   }
 
   // single pre-release
@@ -134,9 +128,9 @@ public class NugetGalleryFacetImplPutTest
 
     final OrientVertex preRelease = buildVersionMock(tx, "2.1.8-greenbell", true);
 
-    final NugetGalleryFacetImpl galleryFacet = Mockito.spy(new NugetGalleryFacetImpl(
-        mock(ComponentMetadataFactory.class)
-    ));
+    final NugetGalleryFacetImpl galleryFacet = buildSpy();
+
+
     galleryFacet.maintainAggregateInfo(tx, Arrays.asList(preRelease));
 
     verifyVersionFlags(tx.getAttributes(preRelease).child(NAME), false, true);
@@ -148,9 +142,7 @@ public class NugetGalleryFacetImplPutTest
 
     final OrientVertex release = buildVersionMock(tx, "2.1.8", false);
 
-    final NugetGalleryFacetImpl galleryFacet = Mockito.spy(new NugetGalleryFacetImpl(
-        mock(ComponentMetadataFactory.class)
-    ));
+    final NugetGalleryFacetImpl galleryFacet = buildSpy();
     galleryFacet.maintainAggregateInfo(tx, Arrays.asList(release));
 
     verifyVersionFlags(tx.getAttributes(release).child(NAME), true, true);
@@ -164,9 +156,7 @@ public class NugetGalleryFacetImplPutTest
     // TODO: Aether doesn't correctly order 2.1.7-greenbell and 2.1.7
     final OrientVertex preRelease = buildVersionMock(tx, "2.1.7-greenbell", true);
 
-    final NugetGalleryFacetImpl galleryFacet = Mockito.spy(new NugetGalleryFacetImpl(
-        mock(ComponentMetadataFactory.class)
-    ));
+    final NugetGalleryFacetImpl galleryFacet = buildSpy();
     galleryFacet.maintainAggregateInfo(tx, Arrays.asList(release, preRelease));
 
     verifyVersionFlags(tx.getAttributes(release).child(NAME), true, true);
@@ -180,13 +170,19 @@ public class NugetGalleryFacetImplPutTest
     final OrientVertex preRelease = buildVersionMock(tx, "2.1.9-greenbell", true);
     final OrientVertex release = buildVersionMock(tx, "2.1.8", false);
 
-    final NugetGalleryFacetImpl galleryFacet = Mockito.spy(new NugetGalleryFacetImpl(
-        mock(ComponentMetadataFactory.class)
-    ));
+    final NugetGalleryFacetImpl galleryFacet = buildSpy();
     galleryFacet.maintainAggregateInfo(tx, Arrays.asList(release, preRelease));
 
     verifyVersionFlags(tx.getAttributes(preRelease).child(NAME), false, true);
     verifyVersionFlags(tx.getAttributes(release).child(NAME), true, false);
+  }
+
+  private NugetGalleryFacetImpl buildSpy() {
+    final NugetGalleryFacetImpl galleryFacet = Mockito.spy(new NugetGalleryFacetImpl(
+        mock(ComponentMetadataFactory.class)
+    ));
+    doReturn(true).when(galleryFacet).isRepoAuthoritative();
+    return galleryFacet;
   }
 
   private OrientVertex buildVersionMock(final StorageTx tx, final String version, final boolean isPrerelease) {
@@ -214,7 +210,8 @@ public class NugetGalleryFacetImplPutTest
   }
 
   /**
-   * NOTE: Aether doesn't seem to respect the idea that 2.1.7-garfunkel should be before 2.1.7, so nupkg version ordering
+   * NOTE: Aether doesn't seem to respect the idea that 2.1.7-garfunkel should be before 2.1.7, so nupkg version
+   * ordering
    * may be wonky.
    */
   @Test
