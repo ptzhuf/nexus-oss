@@ -39,9 +39,9 @@ public abstract class AbstractSecurityTestCase
 
   protected final TestUtil util = new TestUtil(this);
 
-  protected File PLEXUS_HOME = util.resolveFile("target/plexus_home");
+  private File PLEXUS_HOME = util.resolveFile("target/plexus_home");
 
-  protected File CONFIG_DIR = new File(PLEXUS_HOME, "etc");
+  private File CONFIG_DIR = new File(PLEXUS_HOME, "etc");
 
   @Override
   public void configure(Properties properties) {

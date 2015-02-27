@@ -76,13 +76,9 @@ public class SecurityModuleTest
     DefaultSecurityManager defaultSecurityManager = (DefaultSecurityManager) securityManager;
 
     assertThat(defaultSecurityManager.getSessionManager(), instanceOf(NexusDefaultSessionManager.class));
-    NexusDefaultSessionManager sessionManager =
-        (NexusDefaultSessionManager) defaultSecurityManager.getSessionManager();
+    NexusDefaultSessionManager sessionManager = (NexusDefaultSessionManager) defaultSecurityManager.getSessionManager();
     assertThat(sessionManager.getSessionDAO(), instanceOf(EnterpriseCacheSessionDAO.class));
-    assertThat(
-        ((EhCacheManager) ((EnterpriseCacheSessionDAO) sessionManager.getSessionDAO()).getCacheManager())
-            .getCacheManager(),
-        sameInstance(injector.getInstance(CacheManagerComponent.class).getCacheManager()));
+    assertThat(((EhCacheManager) ((EnterpriseCacheSessionDAO) sessionManager.getSessionDAO()).getCacheManager()).getCacheManager(), sameInstance(injector.getInstance(CacheManagerComponent.class).getCacheManager()));
   }
 
   @After

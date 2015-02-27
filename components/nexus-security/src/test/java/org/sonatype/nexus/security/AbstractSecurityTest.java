@@ -16,18 +16,27 @@ import java.io.File;
 import java.util.Properties;
 
 import org.sonatype.nexus.common.io.DirSupport;
+import org.sonatype.nexus.security.settings.PreconfiguredSecuritySettingsSource;
+import org.sonatype.nexus.security.settings.SecuritySettingsSource;
+import org.sonatype.sisu.litmus.testsupport.TestUtil;
 
 import com.google.inject.Binder;
+import com.google.inject.name.Names;
 import net.sf.ehcache.CacheManager;
 import org.apache.shiro.util.ThreadContext;
+import org.eclipse.sisu.launch.InjectedTestCase;
 import org.eclipse.sisu.space.BeanScanning;
 
 public abstract class AbstractSecurityTest
-    extends SecurityTestSupport
+    extends InjectedTestCase
 {
-  protected File PLEXUS_HOME = util.resolveFile("target/plexus-home/");
+  // FIXME: Convert to junit4
 
-  protected File APP_CONF = new File(PLEXUS_HOME, "etc");
+  protected final TestUtil util = new TestUtil(this);
+
+  private File PLEXUS_HOME = util.resolveFile("target/plexus-home/");
+
+  private File APP_CONF = new File(PLEXUS_HOME, "etc");
 
   @Override
   public void configure(Properties properties) {
@@ -37,7 +46,12 @@ public abstract class AbstractSecurityTest
 
   @Override
   public void configure(final Binder binder) {
-    super.configure(binder);
+    binder.install(new SecurityModule());
+
+    binder.bind(SecuritySettingsSource.class)
+        .annotatedWith(Names.named("default"))
+        .toInstance(new PreconfiguredSecuritySettingsSource(SecurityTestSupportSecurity.security()));
+
     binder.install(new SecurityModule());
   }
 
