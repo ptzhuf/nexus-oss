@@ -177,7 +177,7 @@ public class IndexReleaseRemoverBackend
   {
     // delete only file items that matched target, if any
     try {
-      Collection<StorageItem> potentiallyDeletable = repository.list(new ResourceStoreRequest(vDirectory));
+      final Collection<StorageItem> potentiallyDeletable = repository.list(new ResourceStoreRequest(vDirectory));
       final List<StorageItem> mustNotBeDeleted = Lists.newArrayList();
       final List<StorageItem> mustBeDeleted = Lists.newArrayList();
       for (StorageItem item : potentiallyDeletable) {
