@@ -31,6 +31,7 @@ import org.sonatype.nexus.index.DefaultIndexerManager.Runnable;
 import org.sonatype.nexus.maven.tasks.ReleaseRemovalRequest;
 import org.sonatype.nexus.maven.tasks.ReleaseRemovalResult;
 import org.sonatype.nexus.maven.tasks.ReleaseRemoverBackend;
+import org.sonatype.nexus.proxy.ItemNotFoundException;
 import org.sonatype.nexus.proxy.NoSuchRepositoryException;
 import org.sonatype.nexus.proxy.ResourceStoreRequest;
 import org.sonatype.nexus.proxy.item.StorageCollectionItem;
@@ -96,8 +97,6 @@ public class IndexReleaseRemoverBackend
         }
       });
 
-      log.trace("groupIds={}", groupIds);
-
       // iterator groupIds
       for (final String groupId : groupIds) {
         TaskUtil.checkInterruption();
@@ -111,8 +110,6 @@ public class IndexReleaseRemoverBackend
             artifactIds.add(ai.artifactId);
           }
         }
-
-        log.trace("groupId={}, artifactIds={}", groupId, artifactIds);
 
         // iterate all artifactIds
         for (final String artifactId : artifactIds) {
@@ -136,19 +133,13 @@ public class IndexReleaseRemoverBackend
             }
           }
 
-          log.trace("groupId={}, artifactId={}, versions={}", groupId, artifactId, versions);
-
           // All Vs for GA collected, now do the math
           if (versions.size() > request.getNumberOfVersionsToKeep()) {
-            log.debug("Will delete {} versions of artifact with g={} a={}",
-                versions.size() - request.getNumberOfVersionsToKeep(),
-                groupId, artifactId);
-
             final List<Version> sortedVersions = Lists.newArrayList(versions);
             Collections.sort(sortedVersions);
             final List<Version> toDelete =
                 sortedVersions.subList(0, versions.size() - request.getNumberOfVersionsToKeep());
-            log.debug("Will delete these {}:{} specific versions: {}", groupId, artifactId, toDelete);
+            log.debug("Will delete {}:{} versions: {}", groupId, artifactId, toDelete);
             for (Version version : toDelete) {
               TaskUtil.checkInterruption();
               // we need the "version directory" of this GAV
@@ -185,31 +176,44 @@ public class IndexReleaseRemoverBackend
                                final String vDirectory) throws Exception
   {
     // delete only file items that matched target, if any
-    Collection<StorageItem> potentiallyDeletable = repository.list(new ResourceStoreRequest(vDirectory));
-    final List<StorageItem> mustNotBeDeleted = Lists.newArrayList();
-    final List<StorageItem> mustBeDeleted = Lists.newArrayList();
-    for (StorageItem item : potentiallyDeletable) {
-      if (item instanceof StorageCollectionItem) {
-        mustNotBeDeleted.add(item);
-        continue;
+    try {
+      Collection<StorageItem> potentiallyDeletable = repository.list(new ResourceStoreRequest(vDirectory));
+      final List<StorageItem> mustNotBeDeleted = Lists.newArrayList();
+      final List<StorageItem> mustBeDeleted = Lists.newArrayList();
+      for (StorageItem item : potentiallyDeletable) {
+        if (item instanceof StorageCollectionItem) {
+          mustNotBeDeleted.add(item);
+          continue;
+        }
+        if (target != null && !target.isPathContained(repository.getRepositoryContentClass(), item.getPath())) {
+          mustNotBeDeleted.add(item);
+          continue;
+        }
+        mustBeDeleted.add(item);
       }
-      if (target != null && !target.isPathContained(repository.getRepositoryContentClass(), item.getPath())) {
-        mustNotBeDeleted.add(item);
-        continue;
+      if (mustNotBeDeleted.isEmpty()) {
+        // delete vDirectory
+        repository.deleteItem(new ResourceStoreRequest(vDirectory));
+        return potentiallyDeletable.size();
       }
-      mustBeDeleted.add(item);
+      else {
+        int deleted = 0;
+        // delete each item one by one
+        for (StorageItem item : mustBeDeleted) {
+          try {
+            repository.deleteItemWithChecksums(new ResourceStoreRequest(item.getResourceStoreRequest()));
+            deleted = deleted + 1;
+          }
+          catch (ItemNotFoundException e) {
+            // ignore and continue with rest
+          }
+        }
+        return deleted;
+      }
     }
-    if (mustNotBeDeleted.isEmpty()) {
-      // delete vDirectory
-      repository.deleteItem(new ResourceStoreRequest(vDirectory));
-      return potentiallyDeletable.size();
-    }
-    else {
-      // delete each item one by one
-      for (StorageItem item : mustBeDeleted) {
-        repository.deleteItemWithChecksums(new ResourceStoreRequest(item.getResourceStoreRequest()));
-      }
-      return mustBeDeleted.size();
+    catch (ItemNotFoundException e) {
+      // ignore this, user might deleted vDirectory since run started
+      return 0;
     }
   }
 
