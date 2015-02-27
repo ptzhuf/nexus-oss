@@ -15,6 +15,7 @@ package org.sonatype.nexus.security.anonymous;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 import javax.inject.Singleton;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -45,10 +46,10 @@ public class AnonymousFilter
 
   private static final Logger log = LoggerFactory.getLogger(AnonymousFilter.class);
 
-  private final AnonymousManager anonymousManager;
+  private final Provider<AnonymousManager> anonymousManager;
 
   @Inject
-  public AnonymousFilter(final AnonymousManager anonymousManager) {
+  public AnonymousFilter(final Provider<AnonymousManager> anonymousManager) {
     this.anonymousManager = checkNotNull(anonymousManager);
   }
 
@@ -56,9 +57,9 @@ public class AnonymousFilter
   protected boolean preHandle(final ServletRequest request, final ServletResponse response) throws Exception {
     Subject subject = SecurityUtils.getSubject();
 
-    if (subject.getPrincipal() == null && anonymousManager.isEnabled()) {
+    if (subject.getPrincipal() == null && anonymousManager.get().isEnabled()) {
       request.setAttribute(ORIGINAL_SUBJECT, subject);
-      subject = anonymousManager.buildSubject();
+      subject = anonymousManager.get().buildSubject();
       ThreadContext.bind(subject);
       log.trace("Bound anonymous subject: {}", subject);
     }
