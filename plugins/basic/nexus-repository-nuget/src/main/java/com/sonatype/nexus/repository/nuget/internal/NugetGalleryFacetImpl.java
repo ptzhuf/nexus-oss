@@ -289,13 +289,12 @@ public class NugetGalleryFacetImpl
       recordMetadata.put(CREATED, creationTime);
       recordMetadata.put(LAST_UPDATED, creationTime);
       recordMetadata.put(PUBLISHED, creationTime);
-      OrientVertex component = null;
+      OrientVertex component;
       try (InputStream in = tempStream.get()) {
         component = createOrUpdatePackage(storageTx, recordMetadata, in);
       }
 
       String id = recordMetadata.get(ID);
-      String version = recordMetadata.get(VERSION);
       maintainAggregateInfo(storageTx, id);
 
       boolean isNew = component.getIdentity().isNew();  // must check before commit
