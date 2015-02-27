@@ -39,7 +39,7 @@ import static org.sonatype.nexus.repository.FacetSupport.State.STARTED;
  *
  * @since 3.0
  */
-@Named
+@Named("default")
 public class NegativeCacheFacetImpl
     extends FacetSupport
     implements NegativeCacheFacet
