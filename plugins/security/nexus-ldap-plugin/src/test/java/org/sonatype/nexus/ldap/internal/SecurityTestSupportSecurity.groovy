@@ -22,8 +22,6 @@ class SecurityTestSupportSecurity
 
   static SecuritySettings securityWithLdapRealm() {
     return new SecuritySettings(
-        anonymousAccessEnabled: false,
-        anonymousUsername: 'anonymous',
         realms: [
             'NexusAuthenticatingRealm',
             'NexusAuthorizingRealm'

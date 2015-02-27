@@ -19,12 +19,8 @@ import org.sonatype.nexus.security.settings.SecuritySettings
  */
 class SecurityTestSupportSecurity
 {
-
   static SecuritySettings security() {
     return new SecuritySettings(
-        anonymousAccessEnabled: false,
-        anonymousUsername: 'anonymous-user',
-        anonymousPassword: 'anonymous-pass',
         realms: [
             'MockRealmA',
             'ExceptionThrowingMockRealm',
@@ -34,6 +30,5 @@ class SecurityTestSupportSecurity
         ]
     )
   }
-
 }
 

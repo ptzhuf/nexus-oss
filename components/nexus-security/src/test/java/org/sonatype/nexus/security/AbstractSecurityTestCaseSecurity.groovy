@@ -25,8 +25,6 @@ class AbstractSecurityTestCaseSecurity
 
   static SecuritySettings security() {
     return new SecuritySettings(
-        anonymousAccessEnabled: false,
-        anonymousUsername: 'anonymous',
         realms: [
             'NexusAuthenticatingRealm',
             'NexusAuthorizingRealm'
