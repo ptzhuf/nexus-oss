@@ -194,6 +194,8 @@ public class RealmManagerImpl
     List<Realm> result = Lists.newArrayList();
     RealmConfiguration model = getConfigurationInternal();
 
+    log.debug("Available realms: {}", availableRealms);
+
     for (String realmName : model.getRealmNames()) {
       Realm realm = availableRealms.get(realmName);
 

@@ -12,15 +12,16 @@
  */
 package org.sonatype.nexus.security;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.sonatype.nexus.security.settings.PreconfiguredSecuritySettingsSource;
-import org.sonatype.nexus.security.settings.SecuritySettingsSource;
+import org.sonatype.nexus.security.realm.RealmConfiguration;
 import org.sonatype.sisu.ehcache.CacheManagerComponent;
 import org.sonatype.sisu.litmus.testsupport.TestSupport;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Binder;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -93,13 +94,18 @@ public class SecurityModuleTest
   }
 
   private Module getTestModule() {
-    return new AbstractModule()
+    return new Module()
     {
       @Override
-      protected void configure() {
-        bind(SecuritySettingsSource.class)
-            .annotatedWith(Names.named("default"))
-            .toInstance(new PreconfiguredSecuritySettingsSource(SecurityTestSupportSecurity.security()));
+      public void configure(final Binder binder) {
+        RealmConfiguration realmConfiguration = new RealmConfiguration();
+        realmConfiguration.setRealmNames(Arrays.asList(
+            "MockRealmA",
+            "MockRealmB"
+        ));
+        binder.bind(RealmConfiguration.class)
+            .annotatedWith(Names.named("initial"))
+            .toInstance(realmConfiguration);
       }
     };
   }

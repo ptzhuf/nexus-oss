@@ -13,11 +13,11 @@
 package org.sonatype.nexus.security;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Properties;
 
 import org.sonatype.nexus.common.io.DirSupport;
-import org.sonatype.nexus.security.settings.PreconfiguredSecuritySettingsSource;
-import org.sonatype.nexus.security.settings.SecuritySettingsSource;
+import org.sonatype.nexus.security.realm.RealmConfiguration;
 import org.sonatype.sisu.litmus.testsupport.TestUtil;
 
 import com.google.inject.Binder;
@@ -48,11 +48,14 @@ public abstract class AbstractSecurityTest
   public void configure(final Binder binder) {
     binder.install(new SecurityModule());
 
-    binder.bind(SecuritySettingsSource.class)
-        .annotatedWith(Names.named("default"))
-        .toInstance(new PreconfiguredSecuritySettingsSource(SecurityTestSupportSecurity.security()));
-
-    binder.install(new SecurityModule());
+    RealmConfiguration realmConfiguration = new RealmConfiguration();
+    realmConfiguration.setRealmNames(Arrays.asList(
+        "MockRealmA",
+        "MockRealmB"
+    ));
+    binder.bind(RealmConfiguration.class)
+        .annotatedWith(Names.named("initial"))
+        .toInstance(realmConfiguration);
   }
 
   @Override
@@ -68,12 +71,20 @@ public abstract class AbstractSecurityTest
   protected void tearDown() throws Exception {
     try {
       getSecuritySystem().stop();
+    }
+    catch (Exception e) {
+      util.getLog().warn("Failed to stop security-system", e);
+    }
+
+    try {
       lookup(CacheManager.class).shutdown();
     }
-    finally {
-      ThreadContext.remove();
-      super.tearDown();
+    catch (Exception e) {
+      util.getLog().warn("Failed to shutdown cache-manager", e);
     }
+
+    ThreadContext.remove();
+    super.tearDown();
   }
 
   @Override
