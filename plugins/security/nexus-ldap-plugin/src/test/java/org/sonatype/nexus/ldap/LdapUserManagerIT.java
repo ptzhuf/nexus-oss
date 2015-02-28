@@ -19,7 +19,6 @@ import java.util.Set;
 
 import org.sonatype.ldaptestsuite.LdapServer;
 import org.sonatype.nexus.ldap.internal.LdapITSupport;
-import org.sonatype.nexus.ldap.internal.SecurityTestSupportSecurity;
 import org.sonatype.nexus.ldap.internal.persist.entity.LdapConfiguration;
 import org.sonatype.nexus.ldap.internal.persist.entity.Mapping;
 import org.sonatype.nexus.security.SecuritySystem;
@@ -27,7 +26,6 @@ import org.sonatype.nexus.security.config.MemorySecurityConfiguration;
 import org.sonatype.nexus.security.internal.AuthenticatingRealmImpl;
 import org.sonatype.nexus.security.role.Role;
 import org.sonatype.nexus.security.role.RoleIdentifier;
-import org.sonatype.nexus.security.settings.SecuritySettings;
 import org.sonatype.nexus.security.user.User;
 import org.sonatype.nexus.security.user.UserManager;
 import org.sonatype.nexus.security.user.UserSearchCriteria;
@@ -50,11 +48,6 @@ public class LdapUserManagerIT
   @Override
   protected SecuritySystem getBoundSecuritySystem() {
     return null;
-  }
-
-  @Override
-  protected SecuritySettings getSecurityConfig() {
-    return SecurityTestSupportSecurity.securityWithLdapRealm();
   }
 
   @Override
