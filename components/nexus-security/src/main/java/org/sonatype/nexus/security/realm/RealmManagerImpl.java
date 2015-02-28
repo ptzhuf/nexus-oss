@@ -220,6 +220,41 @@ public class RealmManagerImpl
   }
 
   //
+  // Helpers
+  //
+
+  @Override
+  public boolean isRealmEnabled(final String realmName) {
+    checkNotNull(realmName);
+    return getConfigurationInternal().getRealmNames().contains(realmName);
+  }
+
+  @Override
+  public void enableRealm(final String realmName) {
+    checkNotNull(realmName);
+
+    log.debug("Enabling realm: {}", realmName);
+    RealmConfiguration model = getConfiguration();
+    if (!model.getRealmNames().contains(realmName)) {
+      model.getRealmNames().add(realmName);
+      setConfiguration(model);
+    }
+    else {
+      log.debug("Realm already enabled: {}", realmName);
+    }
+  }
+
+  @Override
+  public void disableRealm(final String realmName) {
+    checkNotNull(realmName);
+
+    log.debug("Disabling realm: {}", realmName);
+    RealmConfiguration model = getConfiguration();
+    model.getRealmNames().remove(realmName);
+    setConfiguration(model);
+  }
+
+  //
   // Event handling
   //
 

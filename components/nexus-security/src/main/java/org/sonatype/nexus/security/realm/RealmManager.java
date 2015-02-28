@@ -25,4 +25,10 @@ public interface RealmManager
   RealmConfiguration getConfiguration();
 
   void setConfiguration(RealmConfiguration configuration);
+
+  boolean isRealmEnabled(String realmName);
+
+  void enableRealm(String realmName);
+
+  void disableRealm(String realmName);
 }
